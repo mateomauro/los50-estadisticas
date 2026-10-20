@@ -256,3 +256,4 @@
 .rivales-e__barra { display: flex; gap: 2px; height: 24px; border-radius: 6px; overflow: hidden; }
 .rivales-e__barra i { flex: 1 1 0; min-width: 24px; display: grid; place-items: center; font: 700 13px/1 var(--base); font-style: normal; color: #fff; }
 .rivales-e__barra .g { background: var(--verde); } .rivales-e__barra .e { background: #9aa3b2; } .rivales-e__barra .p { background: var(--rojo-graf); }
+.chip--cat { display: inline-block; margin-bottom: 3px; padding: 2px 8px; font-size: 12px; }

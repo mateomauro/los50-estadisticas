@@ -58,6 +58,7 @@ svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width:
 }
 .top__titulo span { color: #8fb4f5; font-weight: 600; margin-left: 4px; }
 .top__sub { margin: 4px 0 0; font-size: 14px; color: #c3cad6; }
+.top__act { margin: 2px 0 0; font-size: 12.5px; color: #8fb4f5; }
 
 /* ---------- filtros ---------- */
 .filtros {

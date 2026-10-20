@@ -2,7 +2,8 @@
 
 Estadísticas del Club Los 50 de Tandil sacadas de las planillas oficiales de la base de datos de la UAR (bd.uar.com.ar).
 
-- **web/**: la página (portada, Jugadores y Entrenadores con clave). Netlify la publica cada vez que cambia.
+- **web/**: la página (portada, Jugadores y Entrenadores con clave), publicada gratis en Cloudflare Pages:
+  **https://clublos50.pages.dev**. La actualización automática la vuelve a publicar cada vez que cambian los datos.
 - **Actualización automática**: GitHub la corre los lunes, martes y miércoles a las 9:00 (`.github/workflows/actualizar.yml`).
   Baja solo lo nuevo, regenera todo y deja un informe con los partidos de la semana. Si falta alguna planilla o hay algo
   para revisar con el club, abre un aviso en la pestaña *Issues* (llega por mail).
@@ -17,6 +18,8 @@ Nunca están en el código. En GitHub van en *Settings → Secrets and variables
 | `UAR_USER` | usuario de la BD UAR |
 | `UAR_PASS` | contraseña de la BD UAR |
 | `CLAVE_ENTRENADORES` | clave de la sección Entrenadores de la web |
+| `CLOUDFLARE_API_TOKEN` | token de Cloudflare para publicar la web |
+| `CLOUDFLARE_ACCOUNT_ID` | cuenta de Cloudflare |
 
 En la compu van en un archivo `.env` (que no se sube).
 

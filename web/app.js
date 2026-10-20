@@ -529,6 +529,9 @@
 
   // ---------- inicio ----------
   $("#actualizado").textContent = D.actualizado;
+  // arriba: cuándo se actualizó y cuál es el último partido oficial cargado (para saber si los datos están al día)
+  const ultimo = D.partidos.filter((p) => p[8] === "o" && p[2]).sort((a, b) => b[2].localeCompare(a[2]))[0];
+  $("#act-top").textContent = `Actualizado el ${D.actualizado}` + (ultimo ? ` · último partido: ${fecha(ultimo[2])}` : "");
   leerURL();
   render();
   if (S.jug) { history.replaceState({}, "", url(null)); history.pushState({ ficha: true }, "", url()); mostrarFicha(); }

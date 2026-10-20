@@ -211,6 +211,11 @@
         <ul class="elegir-lista">${D.cats.filter((c) => !PS.includes(c)).map(boton).join("")}</ul>
       </section>
       <section class="sec">
+        <h2 class="h2">Últimos partidos cargados</h2>
+        <p class="sub">Datos al ${esc(D.act)}. Si un partido del fin de semana no aparece, todavía no cargaron su planilla en la BD UAR.</p>
+        <ol class="resultados">${D.partidos.slice(0, 5).map((p) => partidoHTML(p, true)).join("")}</ol>
+      </section>
+      <section class="sec">
         <h2 class="h2">Todo el club</h2>
         <ul class="elegir-lista elegir-lista--club">
           <li><button type="button" class="elegir elegir--club" data-ir="club"><span class="elegir__ic">${IC.gente}</span>
@@ -362,9 +367,9 @@
     const i = n.indexOf(",");
     return i < 0 ? `<b>${esc(n)}</b>` : `<b>${esc(n.slice(0, i))}</b>, ${esc(n.slice(i + 1).trim())}`;
   }
-  const partidoHTML = (p) => `<li class="res">
+  const partidoHTML = (p, conCat) => `<li class="res">
       <span class="res__fecha">${fecha(p.fecha)}<small>${p.cond === "L" ? "Local" : "Visitante"}</small></span>
-      <span class="res__cuerpo"><span class="res__rival">${esc(p.rival)}</span></span>
+      <span class="res__cuerpo">${conCat ? `<span class="chip chip--cat">${esc(p.cat)}</span>` : ""}<span class="res__rival">${esc(p.rival)}</span></span>
       <span class="res__marcador res--${p.res}"><b class="num">${p.pf}–${p.pc}</b><i>${({ G: "Ganó", E: "Empató", P: "Perdió" })[p.res]}</i></span></li>`;
 
   // todo el club: siguen jugando, camino a Primera, nacimiento y peso
