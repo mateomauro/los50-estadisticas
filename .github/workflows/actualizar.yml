@@ -63,4 +63,5 @@ jobs:
         if: hashFiles('aviso.md') != ''
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh issue create --title "Los 50: hay algo para revisar ($(TZ=America/Argentina/Buenos_Aires date +%d/%m))" --body-file aviso.md
+        run: |
+          gh issue create --title "Los 50 - hay algo para revisar ($(TZ=America/Argentina/Buenos_Aires date +%d/%m))" --body-file aviso.md
