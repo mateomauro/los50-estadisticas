@@ -1,0 +1,616 @@
+[
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-dejo-pasar-otra-chance-frente-a-universitario",
+  "fecha_nota": "2015-06-21",
+  "partidos": [
+   {
+    "fecha_partido": "2015-06-20",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Regional Pampeano B",
+    "instancia": "2da fecha",
+    "rival": "Racing (Chivilcoy)",
+    "condicion": "Visitante",
+    "tantos_los50": 13,
+    "tantos_rival": 19,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-no-pudo-en-la-final-frente-a-argentino-de-rojas",
+  "fecha_nota": "2015-06-22",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/tandil-xv-se-reune-hoy-en-los-50-para-su-segunda-practica",
+  "fecha_nota": "2015-06-24",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-juega-en-bahia-buscando-su-primer-triunfo",
+  "fecha_nota": "2015-07-03",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-consiguio-una-valiosa-victoria-ante-argentino",
+  "fecha_nota": "2015-07-05",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-enfrenta-un-duro-desafio-ante-mar-del-plata-club",
+  "fecha_nota": "2015-07-10",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/no-alcanzo-el-esfuerzo-de-los-cardos-ante-mar-del-plata",
+  "fecha_nota": "2015-07-12",
+  "partidos": [
+   {
+    "fecha_partido": "2015-07-11",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Regional Pampeano B",
+    "instancia": "4ta fecha",
+    "rival": "Estudiantes (Olavarría)",
+    "condicion": "Local",
+    "tantos_los50": 52,
+    "tantos_rival": 5,
+    "formacion": [
+     "Mauro Bilbao",
+     "Angel Sanz",
+     "Andrés Mercanti",
+     "Juan M. Quaranta",
+     "Tomás Quaranta",
+     "Joaquín Fagonde",
+     "Esteban Varela",
+     "José Giménez",
+     "Francisco Bustamante",
+     "Jacinto Arrondo",
+     "Nahuel Botto",
+     "Marcelo Lorenzo",
+     "Nicolás Di Fonzo",
+     "Matías Radetich",
+     "Tomás Lasarte"
+    ],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "conversion",
+      "cantidad": 6
+     },
+     {
+      "jugador": "Mauro Bilbao",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "José Jiménez",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Angel Sanz",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Tomás Lasarte",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "try",
+      "cantidad": 2
+     },
+     {
+      "jugador": null,
+      "tipo": "try penal",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "La nota no deja claro si Arrondo también anotó try; los puntos listados no suman 52."
+   },
+   {
+    "fecha_partido": "2015-07-11",
+    "categoria": "Pre-Intermedia",
+    "categoria_inferida": true,
+    "torneo": "Copa Imágenes Colón",
+    "instancia": null,
+    "rival": "Necochea RC",
+    "condicion": null,
+    "tantos_los50": 33,
+    "tantos_rival": 28,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Categoría supuesta: la Copa Imágenes Colón la juegan las preintermedias de los clubes que disputan el Regional."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-enfrenta-de-local-otro-compromiso-exigente",
+  "fecha_nota": "2015-07-18",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-otra-vez-con-las-manos-vacias-en-casa",
+  "fecha_nota": "2015-07-19",
+  "partidos": [
+   {
+    "fecha_partido": "2015-07-18",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Regional Pampeano B",
+    "instancia": null,
+    "rival": "Santa Rosa RC",
+    "condicion": "Visitante",
+    "tantos_los50": 23,
+    "tantos_rival": 32,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/triunfo-de-los-50-y-traspie-de-los-cardos",
+  "fecha_nota": "2015-07-26",
+  "partidos": [
+   {
+    "fecha_partido": "2015-07-25",
+    "categoria": "Pre-Intermedia",
+    "categoria_inferida": true,
+    "torneo": "Copa Imágenes Colón",
+    "instancia": "9na fecha",
+    "rival": "San Ignacio",
+    "condicion": "Local",
+    "tantos_los50": 17,
+    "tantos_rival": 7,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Benjamín Billorou",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Marcos Phillips",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Diego Heter",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Matías Arnatou",
+      "tipo": "conversion",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": "Categoría supuesta: la Copa Imágenes Colón la juegan las preintermedias de los clubes que disputan el Regional."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-de-visitante",
+  "fecha_nota": "2015-08-01",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-sufrio-una-ajustada-derrota",
+  "fecha_nota": "2015-08-02",
+  "partidos": [
+   {
+    "fecha_partido": "2015-08-01",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Regional Pampeano B",
+    "instancia": "6ta fecha",
+    "rival": "Universitario (Bahía Blanca)",
+    "condicion": "Local",
+    "tantos_los50": 16,
+    "tantos_rival": 13,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2015-08-01",
+    "categoria": "Intermedia",
+    "categoria_inferida": false,
+    "torneo": "Regional Pampeano B",
+    "instancia": "6ta fecha",
+    "rival": "Universitario (Bahía Blanca)",
+    "condicion": "Local",
+    "tantos_los50": 23,
+    "tantos_rival": 13,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Resultado de intermedia."
+   },
+   {
+    "fecha_partido": "2015-08-01",
+    "categoria": "Pre-Intermedia",
+    "categoria_inferida": true,
+    "torneo": "Copa Imágenes Colón",
+    "instancia": "10ma fecha",
+    "rival": "Miramar RC",
+    "condicion": "Local",
+    "tantos_los50": 26,
+    "tantos_rival": 6,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Categoría supuesta: la Copa Imágenes Colón la juegan las preintermedias de los clubes que disputan el Regional."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-ante-san-ignacio-por-la-primera-victoria-de-local",
+  "fecha_nota": "2015-08-08",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/la-tormenta-electrica-freno-el-buen-comienzo-de-los-cardos",
+  "fecha_nota": "2015-08-09",
+  "partidos": [
+   {
+    "fecha_partido": "2015-08-08",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Regional Pampeano B",
+    "instancia": "7ma fecha",
+    "rival": "Los Miuras",
+    "condicion": "Visitante",
+    "tantos_los50": 22,
+    "tantos_rival": 32,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2015-08-08",
+    "categoria": "Pre-Intermedia",
+    "categoria_inferida": true,
+    "torneo": "Copa Imágenes Colón",
+    "instancia": null,
+    "rival": "Unión del Sur B",
+    "condicion": "Visitante",
+    "tantos_los50": 5,
+    "tantos_rival": 55,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Categoría supuesta: la Copa Imágenes Colón la juegan las preintermedias de los clubes que disputan el Regional. Condición deducida del orden del programa."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-completa-frente-a-san-ignacio",
+  "fecha_nota": "2015-08-14",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-sufrio-una-ajustada-derrota-en-casa",
+  "fecha_nota": "2015-08-15",
+  "partidos": [
+   {
+    "fecha_partido": "2015-08-14",
+    "categoria": "Pre-Intermedia",
+    "categoria_inferida": true,
+    "torneo": "Copa Imágenes Colón",
+    "instancia": "12ma fecha",
+    "rival": "Uncas",
+    "condicion": "Visitante",
+    "tantos_los50": 12,
+    "tantos_rival": 40,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Categoría supuesta: la Copa Imágenes Colón la juegan las preintermedias de los clubes que disputan el Regional. Fecha deducida de la nota previa (se jugó el viernes 14)."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-visita-a-sporting",
+  "fecha_nota": "2015-08-21",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-estuvo-cerca-de-dar-el-golpe-en-la-villa-marista",
+  "fecha_nota": "2015-08-22",
+  "partidos": [
+   {
+    "fecha_partido": "2015-08-21",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Regional Pampeano B",
+    "instancia": "8va fecha",
+    "rival": "Pueyrredón",
+    "condicion": "Local",
+    "tantos_los50": 17,
+    "tantos_rival": 16,
+    "formacion": [
+     "Juan Pedro Zugbi",
+     "Angel Sanz",
+     "Andrés Mercanti",
+     "Juan Quaranta",
+     "Tomás Quaranta",
+     "Joaquín Fagonte",
+     "Carmelo Zelayeta",
+     "José Giménez",
+     "Marcos Philip",
+     "Jacinto Arrondo",
+     "Nahuel Botto",
+     "Guillermo Perazzone",
+     "Nicolás Di Fonzo",
+     "Matías Radetich",
+     "Tomás Lasarte"
+    ],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Tomás Lasarte",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "penal",
+      "cantidad": 4
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2015-08-21",
+    "categoria": "Pre-Intermedia",
+    "categoria_inferida": true,
+    "torneo": "Copa Imágenes Colón",
+    "instancia": "13ra fecha",
+    "rival": "Pueyrredón",
+    "condicion": "Local",
+    "tantos_los50": 28,
+    "tantos_rival": 7,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Categoría supuesta: la Copa Imágenes Colón la juegan las preintermedias de los clubes que disputan el Regional. Condición deducida del programa (dirige Los 50)."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-se-juega-la-ultima-carta-frente-a-universitario",
+  "fecha_nota": "2015-08-28",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-y-otra-derrota-que-lo-deja-complicado",
+  "fecha_nota": "2015-08-30",
+  "partidos": [
+   {
+    "fecha_partido": "2015-08-29",
+    "categoria": "Pre-Intermedia",
+    "categoria_inferida": true,
+    "torneo": "Copa Imágenes Colón",
+    "instancia": null,
+    "rival": "Biguá",
+    "condicion": "Visitante",
+    "tantos_los50": 6,
+    "tantos_rival": 68,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Categoría supuesta: la Copa Imágenes Colón la juegan las preintermedias de los clubes que disputan el Regional. La nota dice que 'Los 50 derrotó a Universitario 50-10', probablemente error por Los Cardos; no se incluyó."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/igualdad-de-los-cardos-que-resigno-sus-chances",
+  "fecha_nota": "2015-09-06",
+  "partidos": [
+   {
+    "fecha_partido": "2015-09-05",
+    "categoria": "Pre-Intermedia",
+    "categoria_inferida": true,
+    "torneo": "Copa Imágenes Colón",
+    "instancia": "15ta fecha",
+    "rival": "Villa Gesell RC",
+    "condicion": null,
+    "tantos_los50": 5,
+    "tantos_rival": 35,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Categoría supuesta: la Copa Imágenes Colón la juegan las preintermedias de los clubes que disputan el Regional."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/uncas-recibe-a-los-cardos",
+  "fecha_nota": "2015-09-12",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-ante-mar-del-plata-que-puede-asegurarse-el-titulo",
+  "fecha_nota": "2015-09-18",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-no-pudo-impedir-la-consagracion-de-mar-del-plata",
+  "fecha_nota": "2015-09-19",
+  "partidos": [
+   {
+    "fecha_partido": "2015-09-18",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Regional Pampeano B",
+    "instancia": "Cuartos de final",
+    "rival": "Los Miuras",
+    "condicion": "Visitante",
+    "tantos_los50": 13,
+    "tantos_rival": 7,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Joaquín Fagonde",
+      "tipo": "try",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "penal",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2015-09-18",
+    "categoria": "Pre-Intermedia",
+    "categoria_inferida": true,
+    "torneo": "Copa Imágenes Colón",
+    "instancia": null,
+    "rival": "Sporting",
+    "condicion": "Visitante",
+    "tantos_los50": 15,
+    "tantos_rival": 51,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Categoría supuesta: la Copa Imágenes Colón la juegan las preintermedias de los clubes que disputan el Regional. Condición deducida del programa."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-visita-a-el-nacional-buscando-un-lugar-en-la-final",
+  "fecha_nota": "2015-09-26",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-quiere-salir-del-fondo-frente-a-comercial",
+  "fecha_nota": "2015-10-03",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/con-suspenso-los-cardos-pudo-conservar-la-plaza-para-la-union",
+  "fecha_nota": "2015-10-04",
+  "partidos": [
+   {
+    "fecha_partido": "2015-10-03",
+    "categoria": "Pre-Intermedia",
+    "categoria_inferida": true,
+    "torneo": "Copa Imágenes Colón",
+    "instancia": null,
+    "rival": "Mar del Plata Club",
+    "condicion": "Visitante",
+    "tantos_los50": 12,
+    "tantos_rival": 26,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Categoría supuesta: la Copa Imágenes Colón la juegan las preintermedias de los clubes que disputan el Regional. Condición deducida del programa."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/villa-gesell-sera-el-rival-de-uncas-en-semifinales",
+  "fecha_nota": "2015-10-25",
+  "partidos": [
+   {
+    "fecha_partido": "2015-10-24",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Copa Imágenes Colón - Menores de 17 (Copa de Oro)",
+    "instancia": "Cuartos de final",
+    "rival": "Sporting",
+    "condicion": null,
+    "tantos_los50": 12,
+    "tantos_rival": 19,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 17."
+   },
+   {
+    "fecha_partido": "2015-10-24",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Copa Imágenes Colón - Menores de 16 (Copa de Plata)",
+    "instancia": "Fecha 9",
+    "rival": "Pueyrredón",
+    "condicion": null,
+    "tantos_los50": 22,
+    "tantos_rival": 20,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 16; fecha del partido supuesta."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/bruni-y-quaranta-dos-caminos-paralelos-al-rugby-de-la-urba",
+  "fecha_nota": "2015-10-26",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/el-sub-14-de-uncas-se-consagro-en-el-provincial",
+  "fecha_nota": "2015-11-18",
+  "partidos": []
+ }
+]

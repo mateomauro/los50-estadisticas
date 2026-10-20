@@ -1,0 +1,626 @@
+[
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-recibe-a-los-pinos",
+  "fecha_nota": "2011-03-26",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/el-seven-apertura",
+  "fecha_nota": "2011-03-26",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/comenzo-en-seven-apertura",
+  "fecha_nota": "2011-03-27",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-quiere-mirarse-al-espejo-de-la-ultima-temporada-1",
+  "fecha_nota": "2011-04-02",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/rugby-infantil-y-juvenil",
+  "fecha_nota": "2011-04-02",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/una-clinica-de-jugadores-de-los-50-en-el-penal-de-barker",
+  "fecha_nota": "2011-04-07",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-corto-el-invicto-de-mar-del-plata-desarrollo",
+  "fecha_nota": "2011-04-07",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/comienza-el-campeonato-local-de-primera-e-intermedia",
+  "fecha_nota": "2011-04-10",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/el-clasico-los-50-vs-los-cardos-se-juega-en-la-segunda-fecha",
+  "fecha_nota": "2011-04-13",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/juegan-los-cardos-y-los-50",
+  "fecha_nota": "2011-04-16",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/con-un-arranque-complicado-los-50-intentara-consolidarse",
+  "fecha_nota": "2011-04-27",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/uncas-busca-la-transicion-y-apunta-al-reclasificatorio",
+  "fecha_nota": "2011-04-27",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-recibe-a-los-cardos-en-el-clasico-de-la-ciudad",
+  "fecha_nota": "2011-05-07",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-supo-sufrir-para-armar-su-fiesta-perfecta",
+  "fecha_nota": "2011-05-08",
+  "partidos": [
+   {
+    "fecha_partido": "2011-05-07",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Clasificatorio de la Unión de Rugby de Mar del Plata",
+    "instancia": "2da fecha",
+    "rival": "Los Cardos",
+    "condicion": "Local",
+    "tantos_los50": 10,
+    "tantos_rival": 8,
+    "formacion": [
+     "Emiliano Salas",
+     "Cristian Pasarelli",
+     "Juan Manuel Vismara",
+     "Tomás Quaranta",
+     "Juan Manuel Quaranta",
+     "Joaquín Fagonde",
+     "Alejandro Paskvan",
+     "Bernardo Quaranta",
+     "Nicolás González",
+     "Germán Pérez",
+     "Nicolás Sanferreiter",
+     "Marcelo Lorenzo",
+     "Felipe Vitullo",
+     "Martín Molina",
+     "Guillermo Perazzone"
+    ],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Marcelo Lorenzo",
+      "tipo": "penal",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Marcelo Lorenzo",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Marcelo Lorenzo",
+      "tipo": "conversion",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [
+     {
+      "jugador": "Alejandro Paskvan",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "Nicolás González",
+      "tipo": "amarilla"
+     }
+    ],
+    "puntos_completos": true,
+    "nota": "Los 50 no hizo cambios (los forwards jugaron 80 minutos sin reemplazos)."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/voces-y-protagonistas-de-una-tarde-feliz-para-los-50",
+  "fecha_nota": "2011-05-11",
+  "partidos": [
+   {
+    "fecha_partido": "2011-05-07",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Clasificatorio de la Unión de Rugby de Mar del Plata",
+    "instancia": "2da fecha",
+    "rival": "Los Cardos",
+    "condicion": "Local",
+    "tantos_los50": 5,
+    "tantos_rival": 71,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 19, clásico en la previa del partido de Primera."
+   },
+   {
+    "fecha_partido": "2011-05-07",
+    "categoria": "Intermedia",
+    "categoria_inferida": false,
+    "torneo": "Clasificatorio de la Unión de Rugby de Mar del Plata",
+    "instancia": "2da fecha",
+    "rival": "Los Cardos",
+    "condicion": "Local",
+    "tantos_los50": 0,
+    "tantos_rival": 37,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Clásico de intermedia en la previa del partido de Primera."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-logro-un-valioso-triunfo-frente-a-comercial",
+  "fecha_nota": "2011-05-15",
+  "partidos": [
+   {
+    "fecha_partido": "2011-05-14",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Clasificatorio de la Unión de Rugby de Mar del Plata",
+    "instancia": "3ra fecha",
+    "rival": "Comercial",
+    "condicion": "Visitante",
+    "tantos_los50": 15,
+    "tantos_rival": 13,
+    "formacion": [
+     "Cristian Pasarelli",
+     "Emiliano Salas",
+     "Juan Manuel Vismara",
+     "Juan Manuel Quaranta",
+     "Tomás Quaranta",
+     "Joaquín Fagonde",
+     "Alejandro Paskvan",
+     "Bernardo Quaranta",
+     "Nicolás González",
+     "Camilo Vila",
+     "Matías Radetich",
+     "Martín Molina",
+     "Marcelo Lorenzo",
+     "Nicolás Sanferreiter",
+     "Guillermo Perazzone"
+    ],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Cristian Pasarelli",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Nicolás González",
+      "tipo": "conversion",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Nicolás González",
+      "tipo": "penal",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-ante-un-partido-clave-para-consolidarse",
+  "fecha_nota": "2011-05-21",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-estuvo-cerca-de-quebrar-a-mar-del-plata",
+  "fecha_nota": "2011-05-22",
+  "partidos": [
+   {
+    "fecha_partido": "2011-05-21",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Clasificatorio de la Unión de Rugby de Mar del Plata",
+    "instancia": "4ta fecha",
+    "rival": "Mar del Plata Club",
+    "condicion": "Local",
+    "tantos_los50": 20,
+    "tantos_rival": 26,
+    "formacion": [
+     "Emiliano Salas",
+     "Paulo Luiz",
+     "Juan Manuel Vismara",
+     "Juan Manuel Quaranta",
+     "Tomás Quaranta",
+     "Joaquín Fagonde",
+     "Alejandro Paskvan",
+     "Bernardo Quaranta",
+     "Nicolás González",
+     "Germán Pérez",
+     "Martín Molina",
+     "Marcelo Lorenzo",
+     "Felipe Vitullo",
+     "Nicolás Sanferreiter",
+     "Guillermo Perazzone"
+    ],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Nicolás Sanferreiter",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Felipe Vitullo",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Marcelo Lorenzo",
+      "tipo": "conversion",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Marcelo Lorenzo",
+      "tipo": "penal",
+      "cantidad": 2
+     }
+    ],
+    "tarjetas": [
+     {
+      "jugador": "Juan Manuel Quaranta",
+      "tipo": "amarilla"
+     }
+    ],
+    "puntos_completos": true,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/el-gran-locro-de-los-50",
+  "fecha_nota": "2011-05-25",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/con-escaso-margen-de-error-los-cardos-busca-una-reaccion",
+  "fecha_nota": "2011-05-25",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-viaja-para-un-encuentro-en-olivos",
+  "fecha_nota": "2011-05-27",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-va-por-un-triunfo-con-bonus-ante-union-del-sur",
+  "fecha_nota": "2011-05-28",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-y-los-50-se-presentaron-con-triunfo",
+  "fecha_nota": "2011-05-29",
+  "partidos": [
+   {
+    "fecha_partido": "2011-05-28",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Clasificatorio de la Unión de Rugby de Mar del Plata",
+    "instancia": "5ta fecha",
+    "rival": "Pueyrredón",
+    "condicion": "Visitante",
+    "tantos_los50": 14,
+    "tantos_rival": 0,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-y-los-cardos-locales-y-obligados-a-sumar-bonus",
+  "fecha_nota": "2011-06-04",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-apabullo-a-jockey-y-sigue-a-la-expectativa",
+  "fecha_nota": "2011-06-05",
+  "partidos": [
+   {
+    "fecha_partido": "2011-06-04",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Clasificatorio de la Unión de Rugby de Mar del Plata",
+    "instancia": "6ta fecha",
+    "rival": "Jockey",
+    "condicion": "Local",
+    "tantos_los50": 72,
+    "tantos_rival": 11,
+    "formacion": [
+     "Cristian Pasarelli",
+     "Emiliano Salas",
+     "Juan Manuel Vismara",
+     "Tomás Quaranta",
+     "Juan Manuel Quaranta",
+     "Joaquín Fagonde",
+     "Alejandro Paskvan",
+     "Bernardo Quaranta",
+     "Nicolás González",
+     "Germán Pérez",
+     "Martín Molina",
+     "Marcelo Lorenzo",
+     "Felipe Vitullo",
+     "Nicolás Sanferreiter",
+     "Guillermo Perazzone"
+    ],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Emiliano Salas",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Joaquín Fagonde",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Marcelo Lorenzo",
+      "tipo": "try",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Marcelo Lorenzo",
+      "tipo": "penal",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Marcelo Lorenzo",
+      "tipo": "conversion",
+      "cantidad": 7
+     },
+     {
+      "jugador": "Bernardo Quaranta",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Nicolás González",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Martín Molina",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Felipe Vitullo",
+      "tipo": "try",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "try",
+      "cantidad": 2
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-y-los-cardos-ante-desafios-clave-de-visitantes",
+  "fecha_nota": "2011-06-11",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/mar-del-plata-marco-la-diferencia-sobre-los-50",
+  "fecha_nota": "2011-06-15",
+  "partidos": [
+   {
+    "fecha_partido": "2011-06-12",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Mar del Plata",
+    "condicion": null,
+    "tantos_los50": 12,
+    "tantos_rival": 40,
+    "formacion": [
+     "Agustín Rodríguez",
+     "Pablo Carciochi",
+     "Lautaro Sarti",
+     "Ignacio Pillado",
+     "Tomás Varales",
+     "Francisco Araujo",
+     "Rodrigo De Urquiza",
+     "Martín Bidegaín",
+     "Wenceslao Goñi",
+     "Federico Uranga",
+     "Ian Morán Caro",
+     "Tomás Aimino",
+     "Iago Galvalisi",
+     "Leonardo Zárate",
+     "Federico Arteaga"
+    ],
+    "ingresaron": [
+     "Juan Cruz Ramos",
+     "Agustín Cejas",
+     "Damián Cabrera",
+     "Julián Quero"
+    ],
+    "puntos": [
+     {
+      "jugador": "Tomás Aimino",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Federico Uranga",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Federico Uranga",
+      "tipo": "conversion",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": "Menores de 15. Fecha deducida: la nota habla de la jornada de juveniles del domingo en La Rural, sin precisar el día del M15; la condición de local se supone por esa jornada."
+   },
+   {
+    "fecha_partido": "2011-06-12",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": null,
+    "condicion": "Local",
+    "tantos_los50": 10,
+    "tantos_rival": 14,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 17. Rival no nombrado, probablemente Mar del Plata; perdió con un try en la última jugada."
+   },
+   {
+    "fecha_partido": "2011-06-12",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Mar del Plata",
+    "condicion": "Local",
+    "tantos_los50": 10,
+    "tantos_rival": 78,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 16."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/el-hockey-menor-de-uncas-en-azul",
+  "fecha_nota": "2011-06-17",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/compromisos-decisivos-para-los-50-y-los-cardos",
+  "fecha_nota": "2011-06-18",
+  "partidos": [
+   {
+    "fecha_partido": "2011-06-11",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Clasificatorio de la Unión de Rugby de Mar del Plata",
+    "instancia": "7ma fecha",
+    "rival": "Universitario",
+    "condicion": "Visitante",
+    "tantos_los50": null,
+    "tantos_rival": null,
+    "formacion": [
+     "Cristian Pasarelli",
+     "Emiliano Salas",
+     "Juan Manuel Vismara",
+     "Juan Manuel Quaranta",
+     "Tomás Quaranta",
+     "Joaquín Fagonde",
+     "Alejandro Paskvan",
+     "Bernardo Quaranta",
+     "Nicolás González",
+     "Germán Pérez Diez",
+     "Martín Molina",
+     "Marcelo Lorenzo",
+     "Felipe Vitullo",
+     "Nicolás Sanferreiter",
+     "Guillermo Perazzone"
+    ],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Solo se menciona una 'gran victoria' sobre Universitario, sin marcador; formación tomada de la nota previa que dice repetirla."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-tuvo-un-sabado-positivo-y-alcanzo-a-los-50",
+  "fecha_nota": "2011-06-19",
+  "partidos": [
+   {
+    "fecha_partido": "2011-06-18",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Clasificatorio de la Unión de Rugby de Mar del Plata",
+    "instancia": "8va fecha",
+    "rival": "Unión del Sur",
+    "condicion": "Visitante",
+    "tantos_los50": 17,
+    "tantos_rival": 18,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Felipe Vitullo",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Juan Manuel Quaranta",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Alejandro Paskvan",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Marcelo Lorenzo",
+      "tipo": "conversion",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": "Un solo try convertido por Lorenzo; la nota no dice cuál. La nota escribe 'Pasvan' por Paskvan."
+   }
+  ]
+ }
+]

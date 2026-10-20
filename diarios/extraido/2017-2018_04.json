@@ -1,0 +1,818 @@
+[
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-50-reacciono-y-se-quedo-con-el-festejo-en-el-clasico",
+  "fecha_nota": "2018-07-08",
+  "partidos": [
+   {
+    "fecha_partido": "2018-07-07",
+    "categoria": "Primera",
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": "3ra fecha",
+    "rival": "Los Cardos",
+    "condicion": "Local",
+    "tantos_los50": 22,
+    "tantos_rival": 17,
+    "formacion": [
+     "Manuel Ibáñez",
+     "Juan Pedro Zugbi",
+     "Juan Manuel Vismara",
+     "Leonardo Canale",
+     "Leonardo Pérez",
+     "Esteban Varela",
+     "Martín Rosendo",
+     "José Jiménez",
+     "Nicolás Di Fonzo",
+     "Tomás Lasarte",
+     "Nahuel Botto",
+     "Luciano Sacchetto",
+     "Máximo Lasarte",
+     "Juan Bertucci",
+     "Martín Homps"
+    ],
+    "ingresaron": [
+     "Ignacio Arbulu"
+    ],
+    "puntos": [
+     {
+      "jugador": "Juan Manuel Vismara",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "José Jiménez",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Juan Bertucci",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Martín Homps",
+      "tipo": "conversion",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Martín Homps",
+      "tipo": "penal",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [
+     {
+      "jugador": "Juan Manuel Vismara",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "Nahuel Botto",
+      "tipo": "amarilla"
+     }
+    ],
+    "puntos_completos": true,
+    "nota": "La nota dice 22-17 y en la lista de resultados figura 23-17; los tantos detallados suman 22"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-50-y-los-cardos-ante-rivales-complicados",
+  "fecha_nota": "2018-07-13",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/uncas-sede-de-un-curso-de-referato",
+  "fecha_nota": "2018-07-13",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/derrotas-de-los-cardos-y-los-50-en-la-cuarta-fecha",
+  "fecha_nota": "2018-07-15",
+  "partidos": [
+   {
+    "fecha_partido": "2018-07-14",
+    "categoria": "Primera",
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": "4ta fecha",
+    "rival": "Argentino de Bahía Blanca",
+    "condicion": "Visitante",
+    "tantos_los50": 29,
+    "tantos_rival": 42,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "José Jiménez",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Juan Bertucci",
+      "tipo": "try",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Nicolás Di Fonzo",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Martín Homps",
+      "tipo": "penal",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Martín Homps",
+      "tipo": "conversion",
+      "cantidad": 3
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/uncas-gano-en-santa-rosa",
+  "fecha_nota": "2018-07-15",
+  "partidos": [
+   {
+    "fecha_partido": "2018-07-14",
+    "categoria": "Primera",
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": "4ta fecha",
+    "rival": "Argentino de Bahía Blanca",
+    "condicion": "Visitante",
+    "tantos_los50": 29,
+    "tantos_rival": 42,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/en-la-ultima-jugada-uncas-desato-la-fiesta-en-los-laureles",
+  "fecha_nota": "2018-07-21",
+  "partidos": [
+   {
+    "fecha_partido": "2018-07-21",
+    "categoria": "Primera",
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": "5ta fecha",
+    "rival": "Pueyrredón",
+    "condicion": "Local",
+    "tantos_los50": 28,
+    "tantos_rival": 10,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Tomás Lasarte",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "José Jiménez",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Luciano Sacchetto",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Juan Bertucci",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Martín Homps",
+      "tipo": "conversion",
+      "cantidad": 4
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": "La fecha de la nota es 21/7 pero habla de 'hoy' para partidos del día siguiente; el partido fue el sábado 21/7 según la previa"
+   },
+   {
+    "fecha_partido": "2018-07-21",
+    "categoria": "Desconocida",
+    "torneo": "Copa Imágenes MDQ Plata",
+    "instancia": null,
+    "rival": "Pueyrredón",
+    "condicion": null,
+    "tantos_los50": 51,
+    "tantos_rival": 17,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Resultado listado sin categoría; probablemente Intermedia (el mismo día Primera jugó el Regional B)"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/uncas-festejo-en-la-ultima-jugada",
+  "fecha_nota": "2018-07-21",
+  "partidos": [
+   {
+    "fecha_partido": "2018-07-21",
+    "categoria": "Primera",
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": "5ta fecha",
+    "rival": "Pueyrredón",
+    "condicion": "Local",
+    "tantos_los50": 28,
+    "tantos_rival": 10,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Tomás Lasarte",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "José Jiménez",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Luciano Sacchetto",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Juan Bertucci",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Martín Homps",
+      "tipo": "conversion",
+      "cantidad": 4
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/uncas-y-los-cardos-en-un-duelo-decisivo",
+  "fecha_nota": "2018-07-21",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/victoria-de-los-50-frente-a-bigua",
+  "fecha_nota": "2018-07-28",
+  "partidos": [
+   {
+    "fecha_partido": "2018-07-28",
+    "categoria": "Primera",
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": "6ta fecha",
+    "rival": "Biguá",
+    "condicion": "Local",
+    "tantos_los50": 9,
+    "tantos_rival": 6,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Martín Homps",
+      "tipo": "penal",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Tomás Lasarte",
+      "tipo": "penal",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-50-enfrenta-un-partido-clave-de-local-ante-bigua",
+  "fecha_nota": "2018-07-28",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-50-vencio-a-bigua-y-esta-a-un-paso-de-la-clasificacion",
+  "fecha_nota": "2018-07-29",
+  "partidos": [
+   {
+    "fecha_partido": "2018-07-28",
+    "categoria": "Primera",
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": "6ta fecha",
+    "rival": "Biguá",
+    "condicion": "Local",
+    "tantos_los50": 9,
+    "tantos_rival": 6,
+    "formacion": [
+     "Manuel Ibáñez",
+     "Juan Pablo Zugby",
+     "Juan Manuel Vismara",
+     "Leonardo Canale",
+     "Leonardo Pérez",
+     "Martín Rosendo",
+     "Esteban Varela",
+     "José Jiménez",
+     "Nicolás Di Fonzo",
+     "Nicolás González",
+     "Juan Bertucci",
+     "Luciano Sacchetto",
+     "Nahuel Botto",
+     "Matías Radetich",
+     "Martín Homps"
+    ],
+    "ingresaron": [
+     "Tomás Lasarte",
+     "Máximo Lasarte",
+     "Cristian Passarelli"
+    ],
+    "puntos": [
+     {
+      "jugador": "Martín Homps",
+      "tipo": "penal",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Tomás Lasarte",
+      "tipo": "penal",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [
+     {
+      "jugador": "Leonardo Pérez",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "Leonardo Canale",
+      "tipo": "amarilla"
+     }
+    ],
+    "puntos_completos": true,
+    "nota": "El texto dice 9-3 en el título/arranque pero luego 9-6 y la lista de resultados 9-6; se usa 9-6"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/uncas-gano-en-bahia-y-se-clasifico",
+  "fecha_nota": "2018-07-29",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/uncas-se-hizo-fuerte-en-bahia-blanca-y-se-clasifico",
+  "fecha_nota": "2018-07-30",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-m13-y-m14-se-sumaran-al-centro-de-rugby-de-tandil",
+  "fecha_nota": "2018-08-10",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/uncas-festejo-en-el-clasico-con-los-50",
+  "fecha_nota": "2018-08-11",
+  "partidos": [
+   {
+    "fecha_partido": "2018-08-11",
+    "categoria": "Primera",
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": "Última fecha de la primera fase",
+    "rival": "Uncas",
+    "condicion": "Visitante",
+    "tantos_los50": 20,
+    "tantos_rival": 36,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/uncas-busca-quedar-arriba-en-un-duelo-clave-con-los-50",
+  "fecha_nota": "2018-08-11",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/uncas-tuvo-su-merecido-festejo-frente-a-los-50",
+  "fecha_nota": "2018-08-12",
+  "partidos": [
+   {
+    "fecha_partido": "2018-08-11",
+    "categoria": "Primera",
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": "Última fecha de la primera fase",
+    "rival": "Uncas",
+    "condicion": "Visitante",
+    "tantos_los50": 20,
+    "tantos_rival": 36,
+    "formacion": [
+     "Manuel Ibáñez",
+     "Juan Pedro Zugby",
+     "Juan Manuel Vismara",
+     "Leonardo Canale",
+     "Leonardo Pérez",
+     "Martín Rosendo",
+     "Esteban Varela",
+     "José Jiménez",
+     "Nicolás Di Fonzo",
+     "Nicolás González",
+     "Nahuel Botto",
+     "Luciano Sacchetto",
+     "Máximo Lasarte",
+     "Juan Bertucci",
+     "Tomás Lasarte"
+    ],
+    "ingresaron": [
+     "Guillermo Melucci",
+     "Camilo Vila",
+     "Cristian Passarelli",
+     "Francisco Conforti"
+    ],
+    "puntos": [
+     {
+      "jugador": "Tomás Lasarte",
+      "tipo": "penal",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Sin jugador (scrum)",
+      "tipo": "try penal",
+      "cantidad": 1
+     },
+     {
+      "jugador": "José Jiménez",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Nicolás Di Fonzo",
+      "tipo": "try",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": "El try penal no tiene jugador asignado"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/uncas-y-los-50-encaran-la-segunda-fase-del-torneo",
+  "fecha_nota": "2018-08-13",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-50-y-los-cardos-dieron-su-primer-paso-con-firmeza",
+  "fecha_nota": "2018-08-18",
+  "partidos": [
+   {
+    "fecha_partido": "2018-08-18",
+    "categoria": "Primera",
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": "1ra fecha zona Campeonato",
+    "rival": "Universitario de Bahía Blanca",
+    "condicion": "Local",
+    "tantos_los50": 10,
+    "tantos_rival": 8,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2018-08-18",
+    "categoria": "Juveniles",
+    "torneo": "Torneo Regional Pampeano B M19",
+    "instancia": "1ra fecha zona Campeonato",
+    "rival": "Universitario de Bahía Blanca",
+    "condicion": "Local",
+    "tantos_los50": 19,
+    "tantos_rival": 26,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2018-08-18",
+    "categoria": "Desconocida",
+    "torneo": "Copa Imágenes MDQ Plata",
+    "instancia": null,
+    "rival": "Necochea",
+    "condicion": null,
+    "tantos_los50": 29,
+    "tantos_rival": 22,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Sin categoría; fecha asumida como el sábado de la fecha"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-50-y-los-cardos-van-por-el-triunfo-como-locales",
+  "fecha_nota": "2018-08-18",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/uncas-es-visitante-frente-a-argentino-de-bahia-blanca",
+  "fecha_nota": "2018-08-19",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/uncas-tropezo-en-el-sur",
+  "fecha_nota": "2018-08-20",
+  "partidos": [
+   {
+    "fecha_partido": "2018-08-18",
+    "categoria": "Primera",
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": "1ra fecha zona Campeonato",
+    "rival": "Universitario de Bahía Blanca",
+    "condicion": "Local",
+    "tantos_los50": 10,
+    "tantos_rival": 8,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/uncas-recibe-a-los-cardos-en-otro-duelo-tandilense",
+  "fecha_nota": "2018-08-25",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/uncas-resolvio-a-su-favor-un-duelo-parejo-ante-los-cardos",
+  "fecha_nota": "2018-08-25",
+  "partidos": [
+   {
+    "fecha_partido": "2018-08-25",
+    "categoria": "Primera",
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": "2da fecha zona Campeonato",
+    "rival": "Argentino de Bahía Blanca",
+    "condicion": "Visitante",
+    "tantos_los50": 17,
+    "tantos_rival": 36,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2018-08-25",
+    "categoria": "Juveniles",
+    "torneo": "Torneo Regional Pampeano B M19",
+    "instancia": "2da fecha zona Campeonato",
+    "rival": "Argentino de Bahía Blanca",
+    "condicion": "Visitante",
+    "tantos_los50": 5,
+    "tantos_rival": 83,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha asumida igual a la de Primera"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/derrotas-de-los-cardos-y-los-50",
+  "fecha_nota": "2018-09-01",
+  "partidos": [
+   {
+    "fecha_partido": "2018-09-01",
+    "categoria": "Primera",
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": "3ra fecha zona Campeonato",
+    "rival": "Biguá",
+    "condicion": "Local",
+    "tantos_los50": 15,
+    "tantos_rival": 43,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Luciano Sacchetto",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Matías Radetich",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Martín Homps",
+      "tipo": "conversion",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Martín Homps",
+      "tipo": "penal",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Los tantos detallados suman 17, no 15"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-y-los-50-juegan-de-local-por-la-tercera-fecha",
+  "fecha_nota": "2018-09-01",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/una-jornada-negativa-para-los-cardos-y-los-50",
+  "fecha_nota": "2018-09-02",
+  "partidos": [
+   {
+    "fecha_partido": "2018-09-01",
+    "categoria": "Primera",
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": "3ra fecha zona Campeonato",
+    "rival": "Biguá",
+    "condicion": "Local",
+    "tantos_los50": 15,
+    "tantos_rival": 43,
+    "formacion": [
+     "Angel Sanz",
+     "Juan Pedro Zugbi",
+     "Juan Manuel Vismara",
+     "Leonardo Canale",
+     "Pablo Acosta",
+     "Martín Rosendo",
+     "Nicolás Varela",
+     "José Jiménez",
+     "Nicolás Di Fonzo",
+     "Martín Homps",
+     "Nahuel Botto",
+     "Luciano Sacchetto",
+     "Máximo Lasarte",
+     "Joaquín Melo",
+     "Matías Radetich"
+    ],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Luciano Sacchetto",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Matías Radetich",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Martín Homps",
+      "tipo": "conversion",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Martín Homps",
+      "tipo": "penal",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Los tantos detallados suman 17, no 15"
+   },
+   {
+    "fecha_partido": "2018-09-01",
+    "categoria": "Desconocida",
+    "torneo": "Copa Imágenes MDQ Plata",
+    "instancia": null,
+    "rival": "Campo de Pato",
+    "condicion": null,
+    "tantos_los50": 26,
+    "tantos_rival": 53,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Sin categoría; fecha asumida como el sábado de la fecha"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/uncas-logro-un-valioso-triunfo-en-bahia-blanca",
+  "fecha_nota": "2018-09-03",
+  "partidos": [
+   {
+    "fecha_partido": "2018-09-01",
+    "categoria": "Primera",
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": "3ra fecha zona Campeonato",
+    "rival": "Biguá",
+    "condicion": null,
+    "tantos_los50": 15,
+    "tantos_rival": 43,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/resultados-del-rugby-juvenil-10a",
+  "fecha_nota": "2018-09-05",
+  "partidos": [
+   {
+    "fecha_partido": null,
+    "categoria": "Juveniles",
+    "torneo": "Regional Pampeano M19",
+    "instancia": null,
+    "rival": "Biguá",
+    "condicion": null,
+    "tantos_los50": 15,
+    "tantos_rival": 50,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": null,
+    "categoria": "Juveniles",
+    "torneo": "Torneo Intermedio M15",
+    "instancia": null,
+    "rival": "Unión del Sur",
+    "condicion": null,
+    "tantos_los50": 32,
+    "tantos_rival": 29,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": null,
+    "categoria": "Juveniles",
+    "torneo": "Torneo Intermedio M16",
+    "instancia": null,
+    "rival": "Pueyrredón",
+    "condicion": null,
+    "tantos_los50": 5,
+    "tantos_rival": 14,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-recibe-a-los-50-en-una-nueva-version-del-clasico",
+  "fecha_nota": "2018-09-08",
+  "partidos": []
+ }
+]

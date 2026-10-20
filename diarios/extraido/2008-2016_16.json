@@ -1,0 +1,835 @@
+[
+ {
+  "url": "https://www.eleco.com.ar/interes-general/rugby-vuelve-la-accion-con-un-certamen-clave-para-2014",
+  "fecha_nota": "2013-09-04",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/rugby-arranco-la-definicion-del-bloque",
+  "fecha_nota": "2013-09-04",
+  "partidos": [
+   {
+    "fecha_partido": "2013-09-01",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Bloque de juveniles - Copa de Plata (URMDP)",
+    "instancia": "Menores de 15",
+    "rival": "Comercial",
+    "condicion": null,
+    "tantos_los50": 19,
+    "tantos_rival": 20,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha deducida del calendario de próximas fechas publicado en la nota"
+   },
+   {
+    "fecha_partido": "2013-09-01",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Bloque de juveniles - Copa de Plata (URMDP)",
+    "instancia": "Menores de 16",
+    "rival": "Comercial",
+    "condicion": null,
+    "tantos_los50": 10,
+    "tantos_rival": 35,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha deducida del calendario de próximas fechas publicado en la nota"
+   },
+   {
+    "fecha_partido": "2013-09-01",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Bloque de juveniles - Copa de Plata (URMDP)",
+    "instancia": "Menores de 17",
+    "rival": "Comercial",
+    "condicion": null,
+    "tantos_los50": 15,
+    "tantos_rival": 13,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha deducida del calendario de próximas fechas publicado en la nota"
+   },
+   {
+    "fecha_partido": "2013-08-31",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Oficial de M-19 (URMDP)",
+    "instancia": "Menores de 19",
+    "rival": "Unión del Sur",
+    "condicion": null,
+    "tantos_los50": 31,
+    "tantos_rival": 25,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha deducida del calendario de próximas fechas publicado en la nota"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-sin-rival-para-el-sabado",
+  "fecha_nota": "2013-09-05",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-tiene-tribunas-nuevas",
+  "fecha_nota": "2013-09-06",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/uncas-el-unico-tandilense-que-debuta-en-el-certamen",
+  "fecha_nota": "2013-09-07",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/uncas-aplasto-a-bigua-en-su-presentacion-en-el-certamen",
+  "fecha_nota": "2013-09-08",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-y-los-50-debutan-en-un-clasico-con-mucho-en-juego",
+  "fecha_nota": "2013-09-11",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/resultados-juveniles-del-rugby",
+  "fecha_nota": "2013-09-11",
+  "partidos": [
+   {
+    "fecha_partido": "2013-09-07",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Oficial de M-19 (URMDP)",
+    "instancia": "Menores de 19",
+    "rival": "Bigué",
+    "condicion": null,
+    "tantos_los50": 7,
+    "tantos_rival": 48,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha deducida del calendario de próximas fechas publicado en la nota"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-y-los-50-animan-un-clasico-con-doble-motivacion",
+  "fecha_nota": "2013-09-14",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-se-dio-el-gran-gusto-de-ganar-una-final-anticipada",
+  "fecha_nota": "2013-09-15",
+  "partidos": [
+   {
+    "fecha_partido": "2013-09-14",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Reclasificatorio URMDP (Zona B)",
+    "instancia": "2da fecha",
+    "rival": "Los Cardos",
+    "condicion": "Visitante",
+    "tantos_los50": 21,
+    "tantos_rival": 16,
+    "formacion": [
+     "Andrés Mercanti",
+     "Cristian Passarelli",
+     "Mauro Bilbao",
+     "Juan Manuel Quaranta",
+     "Tomás Quaranta",
+     "Juan Rossi",
+     "Bernardo Quaranta",
+     "Leonardo Canale",
+     "Camilo Vila",
+     "Nicolás Di Fonzo",
+     "Santiago Puchuri",
+     "Guillermo Perazzone",
+     "Luciano Sachetto",
+     "Matías Radetich",
+     "Tomás Lasarte"
+    ],
+    "ingresaron": [
+     "Joaquín Fagonde",
+     "Ignacio Arbulu",
+     "Federico Cantet"
+    ],
+    "puntos": [
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "penal",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "drop",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Bernardo Quaranta",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Tomás Quaranta",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "conversion",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Nicolás Di Fonzo",
+      "tipo": "drop",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [
+     {
+      "jugador": "Mauro Bilbao",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "Tomás Lasarte",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "Bernardo Quaranta",
+      "tipo": "amarilla"
+     }
+    ],
+    "puntos_completos": true,
+    "nota": "Jugado en Los Laureles (cancha de Los Cardos). Cambios: Fagonde por T. Quaranta, Arbulu por Rossi, Cantet por Canale."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/ferrari-y-lampon-analizaron-un-clasico-inolvidable-para-los-50",
+  "fecha_nota": "2013-09-18",
+  "partidos": [
+   {
+    "fecha_partido": "2013-09-14",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Reclasificatorio URMDP (Zona B)",
+    "instancia": "2da fecha",
+    "rival": "Los Cardos",
+    "condicion": "Visitante",
+    "tantos_los50": 21,
+    "tantos_rival": 16,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Nota de análisis de los entrenadores; solo confirma el resultado 21-16 en Los Laureles."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/resultados-de-los-juveniles-de-rugby",
+  "fecha_nota": "2013-09-18",
+  "partidos": [
+   {
+    "fecha_partido": "2013-09-15",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Bloque de juveniles - Copa de Plata (URMDP)",
+    "instancia": "Menores de 15",
+    "rival": "Uncas",
+    "condicion": null,
+    "tantos_los50": 23,
+    "tantos_rival": 3,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha deducida del calendario de próximas fechas publicado en la nota"
+   },
+   {
+    "fecha_partido": "2013-09-15",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Bloque de juveniles - Copa de Plata (URMDP)",
+    "instancia": "Menores de 16",
+    "rival": "Uncas",
+    "condicion": null,
+    "tantos_los50": 45,
+    "tantos_rival": 3,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha deducida del calendario de próximas fechas publicado en la nota"
+   },
+   {
+    "fecha_partido": "2013-09-14",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Oficial de M-19 (URMDP)",
+    "instancia": "Menores de 19",
+    "rival": "Sporting",
+    "condicion": null,
+    "tantos_los50": 7,
+    "tantos_rival": 47,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha deducida del calendario de próximas fechas publicado en la nota"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/uncas-se-presenta-como-local-y-los-cardos-afuera",
+  "fecha_nota": "2013-09-21",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/categoricas-victorias-de-uncas-y-los-cardos",
+  "fecha_nota": "2013-09-22",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/rugby-una-cuarta-fecha-que-puede-empezar-a-definir-las-zonas",
+  "fecha_nota": "2013-09-25",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/rugby-una-fecha-que-hoy-puede-ser-decisiva-para-los-tandilenses",
+  "fecha_nota": "2013-09-29",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/ganaron-los-cardos-y-los-50-pero-todo-se-define-en-la-ultima",
+  "fecha_nota": "2013-09-30",
+  "partidos": [
+   {
+    "fecha_partido": "2013-09-29",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Reclasificatorio URMDP (Zona B)",
+    "instancia": "3ra fecha",
+    "rival": "Pueyrredón",
+    "condicion": "Local",
+    "tantos_los50": 29,
+    "tantos_rival": 13,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "conversion",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "penal",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Tomás Lasarte",
+      "tipo": "try",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Matías Toletti",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Nicolás González",
+      "tipo": "conversion",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "roja"
+     }
+    ],
+    "puntos_completos": true,
+    "nota": "Jugado en La Rural. Perazzone fue expulsado. Cuarto try (bonus) a dos minutos del final."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/universitario-los-50-en-duelo-que-definira-el-futuro-de-varios",
+  "fecha_nota": "2013-10-02",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/la-actualidad-del-juvenil-de-rugby",
+  "fecha_nota": "2013-10-02",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-y-los-cardos-se-clasificaron-a-semifinales",
+  "fecha_nota": "2013-10-06",
+  "partidos": [
+   {
+    "fecha_partido": "2013-10-05",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Reclasificatorio URMDP (Zona B)",
+    "instancia": "4ta fecha (última de zona)",
+    "rival": "Universitario",
+    "condicion": "Visitante",
+    "tantos_los50": 16,
+    "tantos_rival": 19,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Derrota con punto bonus (menos de 7 tantos); Los 50 clasificó primero de la Zona B. Sin detalle de anotadores."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/rugby-resultados-de-los-juveniles-2",
+  "fecha_nota": "2013-10-09",
+  "partidos": [
+   {
+    "fecha_partido": "2013-10-06",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Bloque de juveniles - Copa de Plata (URMDP)",
+    "instancia": "Menores de 15",
+    "rival": "San Ignacio",
+    "condicion": null,
+    "tantos_los50": 9,
+    "tantos_rival": 0,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha deducida del calendario de próximas fechas publicado en la nota"
+   },
+   {
+    "fecha_partido": "2013-10-06",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Bloque de juveniles - Copa de Plata (URMDP)",
+    "instancia": "Menores de 16",
+    "rival": "San Ignacio",
+    "condicion": null,
+    "tantos_los50": 3,
+    "tantos_rival": 15,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha deducida del calendario de próximas fechas publicado en la nota"
+   },
+   {
+    "fecha_partido": "2013-10-06",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Bloque de juveniles - Copa de Plata (URMDP)",
+    "instancia": "Menores de 17",
+    "rival": "San Ignacio",
+    "condicion": null,
+    "tantos_los50": 12,
+    "tantos_rival": 41,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha deducida del calendario de próximas fechas publicado en la nota"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-y-los-cardos-quieren-asegurar-un-lugar-en-el-grupo-i",
+  "fecha_nota": "2013-10-12",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-y-los-50-lograron-su-merecido-lugar-en-el-grupo-i",
+  "fecha_nota": "2013-10-13",
+  "partidos": [
+   {
+    "fecha_partido": "2013-10-12",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Reclasificatorio URMDP",
+    "instancia": "Semifinal",
+    "rival": "Unión del Sur",
+    "condicion": "Local",
+    "tantos_los50": 27,
+    "tantos_rival": 20,
+    "formacion": [
+     "Cristian Passarelli",
+     "Mauro Bilbao",
+     "Andrés Mercanti",
+     "Leonardo Canale",
+     "Juan Quaranta",
+     "Joaquín Fagonde",
+     "Bernardo Quaranta",
+     "Juan Rossi",
+     "Camilo Vila",
+     "Nicolás González",
+     "Santiago Puchuri",
+     "Guillermo Perazzone",
+     "Luciano Sacchetto",
+     "Matías Radetich",
+     "Tomás Lasarte"
+    ],
+    "ingresaron": [
+     "Federico Cantet",
+     "Nicolás Homps",
+     "Nicolás Di Fonzo",
+     "Juan I. Potes",
+     "Emiliano Salas"
+    ],
+    "puntos": [
+     {
+      "jugador": "Tomás Lasarte",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Camilo Vila",
+      "tipo": "try",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Tomás Lasarte",
+      "tipo": "conversion",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Puntos detallados suman 22 de 27; la nota no detalla el resto (el 20-0 del primer tiempo con tres tries incluye 5 puntos sin asignar). Cambios: Cantet por Fagonde, Homps por Radetich, Di Fonzo por González, Potes por Bilbao, Salas por Rossi."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/rugby-resultados-de-los-juveniles",
+  "fecha_nota": "2013-10-16",
+  "partidos": [
+   {
+    "fecha_partido": "2013-10-13",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Bloque de juveniles - Copa de Plata (URMDP)",
+    "instancia": "Menores de 15",
+    "rival": "Unión del Sur",
+    "condicion": null,
+    "tantos_los50": 17,
+    "tantos_rival": 7,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha deducida del calendario de próximas fechas publicado en la nota"
+   },
+   {
+    "fecha_partido": "2013-10-13",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Bloque de juveniles - Copa de Plata (URMDP)",
+    "instancia": "Menores de 16",
+    "rival": "Unión del Sur",
+    "condicion": null,
+    "tantos_los50": 21,
+    "tantos_rival": 27,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha deducida del calendario de próximas fechas publicado en la nota"
+   },
+   {
+    "fecha_partido": "2013-10-12",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Oficial de M-19 (URMDP)",
+    "instancia": "Menores de 19",
+    "rival": "Los Cardos",
+    "condicion": null,
+    "tantos_los50": 26,
+    "tantos_rival": 24,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha deducida del calendario de próximas fechas publicado en la nota"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/rugby-de-leonardis-sera-el-arbitro-de-la-final-del-reclasificatorio",
+  "fecha_nota": "2013-10-18",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-y-los-50-en-un-choque-con-el-titulo-en-juego",
+  "fecha_nota": "2013-10-19",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/juveniles-los-cardos-da-pelea-en-el-bloque",
+  "fecha_nota": "2013-10-23",
+  "partidos": [
+   {
+    "fecha_partido": "2013-10-19",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Bloque de juveniles - Copa de Plata (URMDP)",
+    "instancia": "Menores de 15",
+    "rival": "Bigué",
+    "condicion": "Local",
+    "tantos_los50": 55,
+    "tantos_rival": 0,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Condición deducida (Los 50 recibía el Bloque en La Rural); fecha adelantada al sábado por el Día de la Madre"
+   },
+   {
+    "fecha_partido": "2013-10-19",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Bloque de juveniles - Copa de Plata (URMDP)",
+    "instancia": "Menores de 16",
+    "rival": "Bigué",
+    "condicion": "Local",
+    "tantos_los50": 5,
+    "tantos_rival": 45,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Condición deducida (Los 50 recibía el Bloque en La Rural); fecha adelantada al sábado por el Día de la Madre"
+   },
+   {
+    "fecha_partido": "2013-10-19",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Bloque de juveniles - Copa de Plata (URMDP)",
+    "instancia": "Menores de 17",
+    "rival": "Bigué",
+    "condicion": "Local",
+    "tantos_los50": 36,
+    "tantos_rival": 17,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Condición deducida (Los 50 recibía el Bloque en La Rural); fecha adelantada al sábado por el Día de la Madre"
+   },
+   {
+    "fecha_partido": "2013-10-19",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Oficial de M-19 (URMDP)",
+    "instancia": "Menores de 19",
+    "rival": "Pueyrredón",
+    "condicion": "Local",
+    "tantos_los50": 3,
+    "tantos_rival": 60,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "En La Rural; fecha adelantada al sábado"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-se-consagro-en-un-clasico-distinto-a-otros",
+  "fecha_nota": "2013-10-23",
+  "partidos": [
+   {
+    "fecha_partido": "2013-10-19",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Reclasificatorio URMDP",
+    "instancia": "Final",
+    "rival": "Los Cardos",
+    "condicion": "Visitante",
+    "tantos_los50": null,
+    "tantos_rival": null,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "La nota solo dice que Los Cardos se consagró y que Los 50 perdió; no da el resultado."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-recibe-la-primera-etapa-del-seven",
+  "fecha_nota": "2013-11-09",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-y-uncas-pasaron-a-los-cuartos-de-final-de-oro",
+  "fecha_nota": "2013-11-11",
+  "partidos": [
+   {
+    "fecha_partido": null,
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven URMDP - primera etapa",
+    "instancia": "Zona 4 - Primera",
+    "rival": "Uncas",
+    "condicion": "Local",
+    "tantos_los50": 5,
+    "tantos_rival": 26,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Seven en La Rural (sábado 9 o domingo 10 de noviembre de 2013, no precisado). Los 50 sin sus jugadores principales (jugaban un seven en Chile)."
+   },
+   {
+    "fecha_partido": null,
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven URMDP - primera etapa",
+    "instancia": "Zona 4 - Primera",
+    "rival": "Campo de Pato",
+    "condicion": "Local",
+    "tantos_los50": 30,
+    "tantos_rival": 17,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Seven en La Rural (sábado 9 o domingo 10 de noviembre de 2013, no precisado). Los 50 sin sus jugadores principales (jugaban un seven en Chile)."
+   },
+   {
+    "fecha_partido": null,
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven URMDP - primera etapa",
+    "instancia": "Zona 4 - Primera",
+    "rival": "Los Cardos",
+    "condicion": "Local",
+    "tantos_los50": 14,
+    "tantos_rival": 33,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Seven en La Rural (sábado 9 o domingo 10 de noviembre de 2013, no precisado). Los 50 sin sus jugadores principales (jugaban un seven en Chile)."
+   },
+   {
+    "fecha_partido": null,
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven URMDP - primera etapa",
+    "instancia": "Zona 4 - Intermedia",
+    "rival": "Uncas",
+    "condicion": "Local",
+    "tantos_los50": 12,
+    "tantos_rival": 24,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Seven en La Rural (sábado 9 o domingo 10 de noviembre de 2013, no precisado). Los 50 sin sus jugadores principales (jugaban un seven en Chile)."
+   },
+   {
+    "fecha_partido": null,
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven URMDP - primera etapa",
+    "instancia": "Zona 4 - Intermedia",
+    "rival": "Campo de Pato",
+    "condicion": "Local",
+    "tantos_los50": 24,
+    "tantos_rival": 12,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Seven en La Rural (sábado 9 o domingo 10 de noviembre de 2013, no precisado). Los 50 sin sus jugadores principales (jugaban un seven en Chile)."
+   },
+   {
+    "fecha_partido": null,
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven URMDP - primera etapa",
+    "instancia": "Zona 4 - Intermedia",
+    "rival": "Los Cardos",
+    "condicion": "Local",
+    "tantos_los50": 0,
+    "tantos_rival": 64,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Seven en La Rural (sábado 9 o domingo 10 de noviembre de 2013, no precisado). Los 50 sin sus jugadores principales (jugaban un seven en Chile)."
+   },
+   {
+    "fecha_partido": null,
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven URMDP - primera etapa",
+    "instancia": "Zona 4 - Preintermedia",
+    "rival": "Los Cardos",
+    "condicion": "Local",
+    "tantos_los50": 0,
+    "tantos_rival": 26,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Seven en La Rural (sábado 9 o domingo 10 de noviembre de 2013, no precisado). Los 50 sin sus jugadores principales (jugaban un seven en Chile)."
+   }
+  ]
+ }
+]

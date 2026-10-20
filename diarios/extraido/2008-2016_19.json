@@ -1,0 +1,893 @@
+[
+ {
+  "url": "https://www.eleco.com.ar/interes-general/rugby-resultados-de-juveniles",
+  "fecha_nota": "2014-07-16",
+  "partidos": [
+   {
+    "fecha_partido": "2014-07-12",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Torneo Oficial URMdP M-17",
+    "instancia": null,
+    "rival": "Villa Gesell",
+    "condicion": null,
+    "tantos_los50": 36,
+    "tantos_rival": 12,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-y-los-50-no-pudieron-como-visitantes",
+  "fecha_nota": "2014-07-20",
+  "partidos": [
+   {
+    "fecha_partido": "2014-07-19",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Torneo Oficial URMdP Grupo 1",
+    "instancia": null,
+    "rival": "Sporting",
+    "condicion": "Visitante",
+    "tantos_los50": 8,
+    "tantos_rival": 41,
+    "formacion": [
+     "Cristian Passarelli",
+     "Juan Pedro Zugbi",
+     "Andrés Mercanti",
+     "Leonardo Canale",
+     "Bernardo Quaranta",
+     "Juan Rossi",
+     "Esteban Varela",
+     "Federico Cantet",
+     "Camilo Vila",
+     "Nicolás Di Fonzo",
+     "Máximo Lasarte",
+     "Guillermo Perazzone",
+     "Luciano Sachetto",
+     "Matías Radetich",
+     "Tomás Lasarte"
+    ],
+    "ingresaron": [
+     "Emiliano Salas",
+     "Joaquín Fagonde",
+     "Nicolás Homps",
+     "Ignacio Arbulu"
+    ],
+    "puntos": [
+     {
+      "jugador": "Tomás Lasarte",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Tomás Lasarte",
+      "tipo": "penal",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": "La nota no dice la categoría; se asume Primera."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-y-los-cardos-cierran-con-el-clasico",
+  "fecha_nota": "2014-07-26",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-fue-mas-y-se-quedo-con-el-festejo",
+  "fecha_nota": "2014-07-27",
+  "partidos": [
+   {
+    "fecha_partido": "2014-07-26",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Torneo Oficial URMdP Grupo 1",
+    "instancia": null,
+    "rival": "Los Cardos",
+    "condicion": "Local",
+    "tantos_los50": 18,
+    "tantos_rival": 3,
+    "formacion": [
+     "Andrés Mercanti",
+     "Cristian Passarelli",
+     "Juan Manuel Vismara",
+     "Leonardo Canale",
+     "Bernardo Quaranta",
+     "Juan Rossi",
+     "Esteban Varela",
+     "Federico Cantet",
+     "Camilo Vila",
+     "Nicolás Di Fonzo",
+     "Máximo Lasarte",
+     "Guillermo Perazzone",
+     "Luciano Sachetto",
+     "Matías Radetich",
+     "Jacinto Arrondo"
+    ],
+    "ingresaron": [
+     "Matías Toletti",
+     "Joaquín Fagonde",
+     "Tomás Lasarte"
+    ],
+    "puntos": [
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "penal",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Tomás Lasarte",
+      "tipo": "try",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Tomás Lasarte",
+      "tipo": "conversion",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Tomás Lasarte",
+      "tipo": "penal",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [
+     {
+      "jugador": "Juan Rossi",
+      "tipo": "amarilla"
+     }
+    ],
+    "puntos_completos": true,
+    "nota": "Clásico, último partido del Oficial."
+   },
+   {
+    "fecha_partido": "2014-07-26",
+    "categoria": "Intermedia",
+    "categoria_inferida": false,
+    "torneo": "Torneo Oficial URMdP",
+    "instancia": null,
+    "rival": "Los Cardos",
+    "condicion": null,
+    "tantos_los50": 29,
+    "tantos_rival": 7,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Duelo preliminar del clásico: la nota solo da el resultado y no nombra al rival (se asume Los Cardos por contexto)."
+   },
+   {
+    "fecha_partido": "2014-07-26",
+    "categoria": "Pre-Intermedia",
+    "categoria_inferida": false,
+    "torneo": "Torneo Oficial URMdP",
+    "instancia": null,
+    "rival": "Los Cardos",
+    "condicion": null,
+    "tantos_los50": 18,
+    "tantos_rival": 5,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Duelo preliminar del clásico: la nota solo da el resultado y no nombra al rival (se asume Los Cardos por contexto)."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/el-fixture-del-regional-pampeano-4fb",
+  "fecha_nota": "2014-07-28",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-jugara-la-copa-waiting-reservada-para-preintermedias",
+  "fecha_nota": "2014-08-01",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-y-los-cardos-abren-el-torneo-en-bahia-blanca",
+  "fecha_nota": "2014-08-02",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-fue-contundente-frente-al-campeon-bahiense",
+  "fecha_nota": "2014-08-03",
+  "partidos": [
+   {
+    "fecha_partido": "2014-08-02",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Regional Pampeano A",
+    "instancia": "1ra fecha",
+    "rival": "Sportiva",
+    "condicion": "Visitante",
+    "tantos_los50": 3,
+    "tantos_rival": 36,
+    "formacion": [
+     "Andrés Mercanti",
+     "Cristian Passarelli",
+     "Juan Manuel Vismara",
+     "Leonardo Canale",
+     "Bernardo Quaranta",
+     "Juan Rossi",
+     "Esteban Varela",
+     "Federico Cantet",
+     "Camilo Vila",
+     "Nicolás Di Fonzo",
+     "Máximo Lasarte",
+     "Guillermo Perazzone",
+     "Luciano Sachetto",
+     "Matías Radetich",
+     "Tomás Lasarte"
+    ],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Tomás Lasarte",
+      "tipo": "penal",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/rugby-el-fixture-de-m-15-y-m-16",
+  "fecha_nota": "2014-08-06",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/rugby-el-programa-para-las-categorias-m-17-y-m-19",
+  "fecha_nota": "2014-08-08",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-recibe-a-san-ignacio-y-los-50-a-uni-de-bahia-blanca",
+  "fecha_nota": "2014-08-09",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-le-gano-la-pulseada-a-san-ignacio",
+  "fecha_nota": "2014-08-10",
+  "partidos": [
+   {
+    "fecha_partido": "2014-08-09",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Regional Pampeano A",
+    "instancia": "2da fecha",
+    "rival": "Universitario (Bahía Blanca)",
+    "condicion": "Local",
+    "tantos_los50": 30,
+    "tantos_rival": 25,
+    "formacion": [
+     "Juan Manuel Vismara",
+     "Juan Pedro Zugbi",
+     "Andrés Mercanti",
+     "Ignacio Arbulu",
+     "Leonardo Canale",
+     "Federico Cantet",
+     "Bernardo Quaranta",
+     "Juan Rossi",
+     "Camilo Vila",
+     "Nicolás Di Fonzo",
+     "Máximo Lasarte",
+     "Guillermo Perazzone",
+     "Luciano Sacchetto",
+     "Matías Radetich",
+     "Tomás Lasarte"
+    ],
+    "ingresaron": [
+     "Jacinto Arrondo"
+    ],
+    "puntos": [
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "penal",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Tomás Lasarte",
+      "tipo": "penal",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "penal",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Luciano Sachetto",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "try",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "conversion",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "conversion",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "Bernardo Quaranta",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "Matías Radetich",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "Andrés Mercanti",
+      "tipo": "amarilla"
+     }
+    ],
+    "puntos_completos": false,
+    "nota": "El detalle de tantos suma 28 y la nota da 30-25; falta detalle de 2 puntos. Arrondo entró por Tomás Lasarte (por el texto)."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/rugby-resultados-y-posiciones-de-las-categorias-juveniles",
+  "fecha_nota": "2014-08-13",
+  "partidos": [
+   {
+    "fecha_partido": "2014-08-10",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Torneo Oficial URMdP M-15",
+    "instancia": "1ra fecha",
+    "rival": "San Ignacio",
+    "condicion": null,
+    "tantos_los50": 6,
+    "tantos_rival": 0,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2014-08-10",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Torneo Oficial URMdP M-16",
+    "instancia": "1ra fecha",
+    "rival": "San Ignacio",
+    "condicion": null,
+    "tantos_los50": 17,
+    "tantos_rival": 10,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2014-08-09",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Torneo Oficial URMdP M-17",
+    "instancia": "2da fecha",
+    "rival": "Miramar",
+    "condicion": null,
+    "tantos_los50": 34,
+    "tantos_rival": 0,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2014-08-09",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Torneo Oficial URMdP M-19",
+    "instancia": "2da fecha",
+    "rival": "Pueyrredón",
+    "condicion": null,
+    "tantos_los50": 14,
+    "tantos_rival": 22,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/el-capitulo-cuatro-del-clasico-los-cardos-los-50",
+  "fecha_nota": "2014-08-16",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-termino-marcando-la-diferencia-frente-a-los-50",
+  "fecha_nota": "2014-08-17",
+  "partidos": [
+   {
+    "fecha_partido": "2014-08-16",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Regional Pampeano A",
+    "instancia": "3ra fecha",
+    "rival": "Los Cardos",
+    "condicion": "Visitante",
+    "tantos_los50": 10,
+    "tantos_rival": 34,
+    "formacion": [
+     "Juan Manuel Vismara",
+     "Juan Pedro Zugbi",
+     "Andrés Mercanti",
+     "Leonardo Canale",
+     "Ignacio Arbulu",
+     "Esteban Varela",
+     "Bernardo Quaranta",
+     "Juan Rossi",
+     "Camilo Vila",
+     "Nicolás Di Fonzo",
+     "Marcos Philip",
+     "Guillermo Perazzone",
+     "Luciano Sachetto",
+     "Matías Radetich",
+     "Jacinto Arrondo"
+    ],
+    "ingresaron": [
+     "Cristian Passarelli",
+     "Matías Toletti",
+     "Nicolás Homps",
+     "Francisco Ubeda",
+     "Joaquín Fagonde"
+    ],
+    "puntos": [
+     {
+      "jugador": "Luciano Sachetto",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "conversion",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "penal",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [
+     {
+      "jugador": "Esteban Varela",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "Nicolás Di Fonzo",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "Matías Radetich",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "Bernardo Quaranta",
+      "tipo": "amarilla"
+     }
+    ],
+    "puntos_completos": true,
+    "nota": "Clásico."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/rugby-resultados-y-tablas-juveniles",
+  "fecha_nota": "2014-08-20",
+  "partidos": [
+   {
+    "fecha_partido": "2014-08-17",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Torneo Oficial URMdP M-15",
+    "instancia": "2da fecha",
+    "rival": "Biguá",
+    "condicion": null,
+    "tantos_los50": 19,
+    "tantos_rival": 12,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2014-08-17",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Torneo Oficial URMdP M-16",
+    "instancia": "2da fecha",
+    "rival": "Biguá",
+    "condicion": null,
+    "tantos_los50": 19,
+    "tantos_rival": 5,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2014-08-16",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Torneo Oficial URMdP M-17",
+    "instancia": "3ra fecha",
+    "rival": "Biguá",
+    "condicion": null,
+    "tantos_los50": 28,
+    "tantos_rival": 12,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2014-08-16",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Torneo Oficial URMdP M-19",
+    "instancia": "3ra fecha",
+    "rival": "Los Cardos",
+    "condicion": null,
+    "tantos_los50": 13,
+    "tantos_rival": 20,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-juega-de-local-y-los-cardos-lo-hace-afuera",
+  "fecha_nota": "2014-08-23",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-recibe-a-comercial-y-los-cardos-juega-en-bahia",
+  "fecha_nota": "2014-08-30",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-gano-en-bahia-y-sigue-entre-los-punteros",
+  "fecha_nota": "2014-08-31",
+  "partidos": [
+   {
+    "fecha_partido": "2014-08-30",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Regional Pampeano A",
+    "instancia": "5ta fecha",
+    "rival": "Comercial",
+    "condicion": "Local",
+    "tantos_los50": 5,
+    "tantos_rival": 36,
+    "formacion": [
+     "Juan Manuel Vismara",
+     "Juan Pedro Zugbi",
+     "Andrés Mercanti",
+     "Leonardo Canale",
+     "Francisco Ubeda",
+     "Juan Rossi",
+     "Ignacio Arbulu",
+     "Esteban Varela",
+     "Camilo Vila",
+     "Nicolás Di Fonzo",
+     "Martín Molina",
+     "Guillermo Perazzone",
+     "Luciano Sachetto",
+     "Matías Radetich",
+     "Jacinto Arrondo"
+    ],
+    "ingresaron": [
+     "Matías Toletti",
+     "Nicolás González",
+     "Nicolás Homps",
+     "Cristian Passarelli"
+    ],
+    "puntos": [
+     {
+      "jugador": "Matías Radetich",
+      "tipo": "try",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-va-por-un-triunfo-que-lo-mantenga-bien-arriba",
+  "fecha_nota": "2014-09-06",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-prolongo-su-racha-frente-a-comercial",
+  "fecha_nota": "2014-09-07",
+  "partidos": [
+   {
+    "fecha_partido": "2014-09-06",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Regional Pampeano A",
+    "instancia": "6ta fecha",
+    "rival": "Mar del Plata Club",
+    "condicion": "Visitante",
+    "tantos_los50": 0,
+    "tantos_rival": 38,
+    "formacion": [
+     "Juan Manuel Vismara",
+     "Juan Pedro Zugbi",
+     "Andrés Mercanti",
+     "Leonardo Canale",
+     "Francisco Ubeda",
+     "Juan Rossi",
+     "Bernardo Quaranta",
+     "Esteban Varela",
+     "Nicolás González",
+     "Jacinto Arrondo",
+     "Marcos Philip",
+     "Guillermo Perazzone",
+     "Luciano Sachetto",
+     "Matías Radetich",
+     "Camilo Vila"
+    ],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/rugby-juvenil-resultados-posiciones-y-reprogramacion-de-fechas",
+  "fecha_nota": "2014-09-11",
+  "partidos": [
+   {
+    "fecha_partido": "2014-09-07",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Torneo Oficial URMdP M-15",
+    "instancia": "5ta fecha",
+    "rival": "Comercial",
+    "condicion": null,
+    "tantos_los50": 12,
+    "tantos_rival": 43,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2014-09-07",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Torneo Oficial URMdP M-16",
+    "instancia": "5ta fecha",
+    "rival": "Comercial",
+    "condicion": null,
+    "tantos_los50": 19,
+    "tantos_rival": 26,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-tiene-un-duelo-decisivo-ante-mar-del-plata",
+  "fecha_nota": "2014-09-13",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-dejo-escapar-una-victoria-fundamental",
+  "fecha_nota": "2014-09-14",
+  "partidos": [
+   {
+    "fecha_partido": "2014-09-13",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Regional Pampeano A",
+    "instancia": "7ma fecha",
+    "rival": "Sporting",
+    "condicion": "Local",
+    "tantos_los50": 7,
+    "tantos_rival": 48,
+    "formacion": [
+     "Juan Manuel Vismara",
+     "Juan Pedro Zugbi",
+     "Andrés Mercanti",
+     "Francisco Ubeda",
+     "Bernardo Quaranta",
+     "Juan Rossi",
+     "Esteban Varela",
+     "Leonardo Canale",
+     "Camilo Vila",
+     "Nicolás di Fonzo",
+     "Marcos Philip",
+     "Guillermo Perazzone",
+     "Luciano Sachetto",
+     "Matías Radetich",
+     "Jacinto Arrondo"
+    ],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Luciano Sachetto",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "conversion",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-ante-otro-duelo-clave-para-sus-aspiraciones",
+  "fecha_nota": "2014-09-20",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-no-pudo-con-la-dinamica-de-sporting",
+  "fecha_nota": "2014-09-21",
+  "partidos": [
+   {
+    "fecha_partido": "2014-09-20",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Regional Pampeano A",
+    "instancia": "8va fecha",
+    "rival": "San Ignacio",
+    "condicion": "Visitante",
+    "tantos_los50": 0,
+    "tantos_rival": 47,
+    "formacion": [
+     "Mauro Bilbao",
+     "Juan Pedro Zugbi",
+     "Andrés Mercanti",
+     "Ignacio Arbulu",
+     "Francisco Ubeda",
+     "Juan Rossi",
+     "Esteban Varela",
+     "Bernardo Quaranta",
+     "Camilo Vila",
+     "Nicolás Homps",
+     "Guillermo Melucci",
+     "Guillermo Perazzone",
+     "Luciano Sachetto",
+     "Matías Radetich",
+     "Jacinto Arrondo"
+    ],
+    "ingresaron": [
+     "Germán Pérez Diez",
+     "Francisco Bustamante",
+     "Matías Toletti",
+     "Gabriel Bernazza",
+     "Carmelo Zalayeta"
+    ],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-se-pone-al-dia-pensando-en-la-clasificacion",
+  "fecha_nota": "2014-09-27",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-perdio-y-sus-chances-se-achicaron-2",
+  "fecha_nota": "2014-09-28",
+  "partidos": [
+   {
+    "fecha_partido": "2014-09-27",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Regional Pampeano A",
+    "instancia": null,
+    "rival": "Argentino (Bahía Blanca)",
+    "condicion": "Local",
+    "tantos_los50": 12,
+    "tantos_rival": 26,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Nota sin detalle de tantos ni formación; no dice instancia (posible fecha reprogramada)."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-perdio-y-sus-chances-se-achicaron",
+  "fecha_nota": "2014-09-28",
+  "partidos": [
+   {
+    "fecha_partido": "2014-09-27",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Regional Pampeano A",
+    "instancia": null,
+    "rival": "Argentino (Bahía Blanca)",
+    "condicion": "Local",
+    "tantos_los50": 12,
+    "tantos_rival": 26,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Nota sin detalle de tantos ni formación; no dice instancia (posible fecha reprogramada)."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/rugby-mercanti-otro-tandilense-que-se-suma-al-seleccionado",
+  "fecha_nota": "2014-09-29",
+  "partidos": []
+ }
+]

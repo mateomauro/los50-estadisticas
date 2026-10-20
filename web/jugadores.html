@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Los 50 · Jugadores</title>
+  <meta name="description" content="Estadísticas del plantel superior del Club Los 50 de Tandil: partidos, tries, puntos y tarjetas por jugador.">
+  <meta name="theme-color" content="#0B0D12">
+  <link rel="icon" type="image/png" href="img/favicon.png">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#lista">Ir a la lista de jugadores</a>
+
+  <header class="top">
+    <div class="top__in">
+      <a class="top__home" href="index.html" aria-label="Volver al inicio">
+        <img class="top__escudo" src="img/escudo-160.webp" width="160" height="173" alt="">
+      </a>
+      <div class="top__textos">
+        <h1 class="top__titulo">Los 50 <span>Jugadores</span></h1>
+        <p class="top__sub">Plantel superior · <span id="rango"></span></p>
+      </div>
+      <a class="top__inicio" href="index.html">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>Inicio</a>
+    </div>
+    <nav class="fuentes" id="fuentes" role="group" aria-label="De dónde salen los datos"></nav>
+  </header>
+
+  <section class="filtros" aria-label="Filtros">
+    <div class="filtros__in">
+      <div class="seg" role="group" aria-label="Categoría" id="cats"></div>
+
+      <div class="fila">
+        <label class="buscar">
+          <span class="sr">Buscar jugador</span>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="q" type="search" placeholder="Buscar jugador" autocomplete="off" enterkeyhint="search">
+        </label>
+        <label class="temp">
+          <span class="temp__lbl">Temporada</span>
+          <select id="temp"></select>
+        </label>
+      </div>
+
+      <div class="orden">
+        <span class="orden__lbl" id="orden-lbl">Ordenar por</span>
+        <div class="chips" role="group" aria-labelledby="orden-lbl" id="chips"></div>
+      </div>
+    </div>
+  </section>
+
+  <main id="lista" class="lista" tabindex="-1">
+    <div class="vistas" id="vistas" role="group" aria-label="Qué ver">
+      <button type="button" data-vista="jugadores" aria-pressed="true">Jugadores</button>
+      <button type="button" data-vista="resultados" aria-pressed="false">Resultados del equipo</button>
+    </div>
+    <p class="aviso" id="aviso" hidden></p>
+    <p class="resumen" id="resumen" aria-live="polite"></p>
+    <div class="balance" id="balance" hidden></div>
+    <ol class="resultados" id="resultados" hidden></ol>
+    <ol class="cards" id="cards"></ol>
+    <div class="tabla-wrap" id="tabla-wrap">
+      <table class="tabla" id="tabla"><thead></thead><tbody></tbody></table>
+    </div>
+    <div class="vacio" id="vacio" hidden>
+      <p id="vacio-txt">No encontramos jugadores con ese nombre.</p>
+      <button type="button" class="btn" id="limpiar">Borrar búsqueda</button>
+    </div>
+  </main>
+
+  <footer class="pie">
+    <p><b>Oficial:</b> planillas cargadas en la base de datos de la UAR. Actualizado el <span id="actualizado"></span>.
+      Partidos jugados = de titular + entrando desde el banco.</p>
+    <p><b>Diarios:</b> notas de El Eco de Tandil. Datos parciales y no oficiales: solo partidos publicados.</p>
+  </footer>
+
+  <dialog class="ficha" id="ficha" aria-labelledby="ficha-nombre">
+    <div class="ficha__hoja">
+      <div class="ficha__agarre" aria-hidden="true"></div>
+      <header class="ficha__top">
+        <div>
+          <h2 id="ficha-nombre" class="ficha__nombre"></h2>
+          <p class="ficha__meta" id="ficha-meta"></p>
+        </div>
+        <button type="button" class="cerrar" id="cerrar" aria-label="Cerrar ficha">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </header>
+      <div class="ficha__cuerpo" id="ficha-cuerpo"></div>
+    </div>
+  </dialog>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

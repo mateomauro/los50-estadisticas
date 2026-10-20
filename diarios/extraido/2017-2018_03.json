@@ -1,0 +1,671 @@
+[
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-se-consagro-del-seven-en-m17-y-m19",
+  "fecha_nota": "2017-12-03",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/la-ciudad/la-colonia-de-los-50-pone-todas-las-fichas-a-la-natacion",
+  "fecha_nota": "2018-01-16",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/se-prepara-una-nueva-edicion-del-seven-fernando-varela",
+  "fecha_nota": "2018-01-18",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/presentan-la-29na-edicion-del-seven-fernando-varela",
+  "fecha_nota": "2018-01-31",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/presentaron-la-29na-edicion-del-seven-fernando-varela",
+  "fecha_nota": "2018-02-01",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/se-pone-en-marcha-hoy-el-29no-seven-fernando-varela",
+  "fecha_nota": "2018-02-03",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/el-seven-fernando-varela-cumplio-su-primera-jornada",
+  "fecha_nota": "2018-02-04",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-en-mar-del-plata",
+  "fecha_nota": "2018-02-24",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-ante-bigornia",
+  "fecha_nota": "2018-03-17",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-logro-una-victoria-contundente-frente-a-bigornia",
+  "fecha_nota": "2018-03-18",
+  "partidos": [
+   {
+    "fecha_partido": "2018-03-17",
+    "categoria": "Primera",
+    "torneo": "Preparación Grupo 2",
+    "instancia": null,
+    "rival": "Biguá",
+    "condicion": "Local",
+    "tantos_los50": 10,
+    "tantos_rival": 21,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Categoría no indicada en la nota; se asume Primera. Los 50 cayó 21-10 ante Biguá: nota dice 'cayó como local ante Biguá por 21-10', por lo que el resultado es Biguá 21, Los 50 10."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-50-y-los-cardos-se-metieron-en-semifinales",
+  "fecha_nota": "2018-03-24",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-va-por-un-lugar-en-cuartos-de-final",
+  "fecha_nota": "2018-03-25",
+  "partidos": [
+   {
+    "fecha_partido": "2018-03-24",
+    "categoria": "Primera",
+    "torneo": "Preparación Grupo 2",
+    "instancia": "2da fecha",
+    "rival": "Unión del Sur",
+    "condicion": "Visitante",
+    "tantos_los50": 24,
+    "tantos_rival": 43,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha deducida (sábado anterior); categoría no indicada, se asume Primera."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-50-gano-el-clasico-y-se-consagro-en-mar-del-plata",
+  "fecha_nota": "2018-03-26",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/resultados-de-la-union-de-rugby-de-mar-del-plata",
+  "fecha_nota": "2018-04-08",
+  "partidos": [
+   {
+    "fecha_partido": "2018-04-07",
+    "categoria": "Intermedia",
+    "torneo": "Preparación Grupo 2",
+    "instancia": null,
+    "rival": "Biguá",
+    "condicion": "Visitante",
+    "tantos_los50": 24,
+    "tantos_rival": 10,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2018-04-07",
+    "categoria": "Primera",
+    "torneo": "Preparación Grupo 2",
+    "instancia": null,
+    "rival": "Biguá",
+    "condicion": "Visitante",
+    "tantos_los50": 26,
+    "tantos_rival": 34,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/caidas-de-los-tandilenses-en-la-union-de-rugby-de-mar-del-plata",
+  "fecha_nota": "2018-04-15",
+  "partidos": [
+   {
+    "fecha_partido": "2018-04-14",
+    "categoria": "Primera",
+    "torneo": "Preparación Grupo 2",
+    "instancia": null,
+    "rival": "Unión del Sur",
+    "condicion": "Local",
+    "tantos_los50": 27,
+    "tantos_rival": 40,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2018-04-14",
+    "categoria": "Intermedia",
+    "torneo": "Preparación Grupo 2",
+    "instancia": null,
+    "rival": "Unión del Sur",
+    "condicion": "Local",
+    "tantos_los50": 11,
+    "tantos_rival": 19,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-debuta-de-local-uncas-y-los-50-a-mar-del-plata",
+  "fecha_nota": "2018-04-21",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/derrotas-tandilenses-en-el-comienzo-del-torneo-de-rugby",
+  "fecha_nota": "2018-04-22",
+  "partidos": [
+   {
+    "fecha_partido": "2018-04-21",
+    "categoria": "Primera",
+    "torneo": "Súper 12",
+    "instancia": "1ra fecha, zona 1",
+    "rival": "Unión del Sur",
+    "condicion": "Visitante",
+    "tantos_los50": 22,
+    "tantos_rival": 26,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2018-04-21",
+    "categoria": "Intermedia",
+    "torneo": "Súper 12",
+    "instancia": "1ra fecha, zona 1",
+    "rival": "Unión del Sur",
+    "condicion": "Visitante",
+    "tantos_los50": 27,
+    "tantos_rival": 68,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2018-04-21",
+    "categoria": "Pre-Intermedia",
+    "torneo": "Súper 12",
+    "instancia": "1ra fecha, zona 1",
+    "rival": "Unión del Sur",
+    "condicion": "Visitante",
+    "tantos_los50": 24,
+    "tantos_rival": 22,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-se-quedo-con-el-duelo-frente-a-uncas",
+  "fecha_nota": "2018-04-29",
+  "partidos": [
+   {
+    "fecha_partido": "2018-04-28",
+    "categoria": "Primera",
+    "torneo": "Súper 12",
+    "instancia": "2da fecha, zona 1",
+    "rival": "Universitario",
+    "condicion": null,
+    "tantos_los50": 20,
+    "tantos_rival": 32,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha deducida; condición no indicada."
+   },
+   {
+    "fecha_partido": "2018-04-28",
+    "categoria": "Intermedia",
+    "torneo": "Súper 12",
+    "instancia": "2da fecha, zona 1",
+    "rival": "Universitario",
+    "condicion": null,
+    "tantos_los50": 19,
+    "tantos_rival": 29,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha deducida; condición no indicada."
+   },
+   {
+    "fecha_partido": "2018-04-28",
+    "categoria": "Pre-Intermedia",
+    "torneo": "Súper 12",
+    "instancia": "2da fecha, zona 1",
+    "rival": "Universitario",
+    "condicion": null,
+    "tantos_los50": 29,
+    "tantos_rival": 31,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha deducida; condición no indicada."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-50-renueva-su-apuesta-a-las-divisiones-infantiles",
+  "fecha_nota": "2018-05-02",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-recibe-a-bigua-para-completar-la-4ta-fecha",
+  "fecha_nota": "2018-05-05",
+  "partidos": [
+   {
+    "fecha_partido": "2018-05-01",
+    "categoria": "Juveniles",
+    "torneo": "Súper 12",
+    "instancia": null,
+    "rival": "Comercial",
+    "condicion": "Visitante",
+    "tantos_los50": null,
+    "tantos_rival": null,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "M19; solo dice que Los 50 perdió con Comercial como visitante el martes anterior; sin marcador. Torneo asumido."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-los-50-y-uncas-con-compromisos-de-visitante",
+  "fecha_nota": "2018-05-12",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-se-hizo-fuerte-de-visitante-ante-san-ignacio",
+  "fecha_nota": "2018-05-13",
+  "partidos": [
+   {
+    "fecha_partido": "2018-05-12",
+    "categoria": "Primera",
+    "torneo": "Súper 12",
+    "instancia": "4ta fecha, zona 1",
+    "rival": "Necochea RC",
+    "condicion": "Visitante",
+    "tantos_los50": 29,
+    "tantos_rival": 24,
+    "formacion": [
+     "Manuel Ibáñez",
+     "Juan Pedro Zugbi",
+     "Juan Sanz",
+     "Leonardo Canale",
+     "Federico Schroh",
+     "Martín Rosendo",
+     "Joaquín Fagonde",
+     "José Jiménez",
+     "Nicolás Di Fonzo",
+     "Nicolás Homps",
+     "Joaquín Melo",
+     "Tomás Lasarte",
+     "Nahuel Botto",
+     "Matías Radetich",
+     "Martín Homps"
+    ],
+    "ingresaron": [
+     "Juan Bertucci",
+     "Juan Manuel Vismara",
+     "Emiliano Salas"
+    ],
+    "puntos": [
+     {
+      "jugador": "Nahuel Botto",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Matías Radetich",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Juan Bertucci",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Martín Homps",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Martín Homps",
+      "tipo": "conversion",
+      "cantidad": 3
+     },
+     {
+      "jugador": "Martín Homps",
+      "tipo": "penal",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2018-05-12",
+    "categoria": "Intermedia",
+    "torneo": "Súper 12",
+    "instancia": "4ta fecha, zona 1",
+    "rival": "Necochea RC",
+    "condicion": "Visitante",
+    "tantos_los50": 40,
+    "tantos_rival": 10,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-fue-contundente-y-se-metio-en-las-semifinales",
+  "fecha_nota": "2018-05-20",
+  "partidos": [
+   {
+    "fecha_partido": "2018-05-19",
+    "categoria": "Primera",
+    "torneo": "Súper 12",
+    "instancia": null,
+    "rival": "Sporting",
+    "condicion": "Local",
+    "tantos_los50": 17,
+    "tantos_rival": 31,
+    "formacion": [
+     "Manuel Ibáñez",
+     "Angel Sanz",
+     "Juan Manuel Vismara",
+     "Leonardo Canale",
+     "Federico Schord",
+     "Joaquín Fagonde",
+     "Luciano Mauro",
+     "José Jiménez",
+     "Camilo Vila",
+     "Nicolás Homps",
+     "Matías Radetich",
+     "Mateo Schettino",
+     "Nahuel Botto",
+     "Juan Bertucci",
+     "Tomás Lasarte"
+    ],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Matías Radetich",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Tomás Lasarte",
+      "tipo": "penal",
+      "cantidad": 4
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": "Fecha deducida (sábado anterior)."
+   },
+   {
+    "fecha_partido": "2018-05-19",
+    "categoria": "Intermedia",
+    "torneo": "Súper 12",
+    "instancia": null,
+    "rival": "Sporting",
+    "condicion": null,
+    "tantos_los50": 29,
+    "tantos_rival": 73,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha deducida; condición no indicada."
+   },
+   {
+    "fecha_partido": "2018-05-19",
+    "categoria": "Pre-Intermedia",
+    "torneo": "Súper 12",
+    "instancia": null,
+    "rival": "Sporting",
+    "condicion": null,
+    "tantos_los50": 0,
+    "tantos_rival": 57,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha deducida; condición no indicada."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-visita-a-sporting-por-un-lugar-en-la-definicion",
+  "fecha_nota": "2018-06-02",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-no-pudo-sostener-el-ritmo-frente-a-sporting",
+  "fecha_nota": "2018-06-03",
+  "partidos": [
+   {
+    "fecha_partido": "2018-06-02",
+    "categoria": "Primera",
+    "torneo": "Súper 12",
+    "instancia": "Semifinal 9° al 12° puesto",
+    "rival": "Pueyrredón",
+    "condicion": "Local",
+    "tantos_los50": 36,
+    "tantos_rival": 30,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Manuel Ibáñez",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Nicolás González",
+      "tipo": "try",
+      "cantidad": 2
+     },
+     {
+      "jugador": "José Jiménez",
+      "tipo": "try",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Tomás Lasarte",
+      "tipo": "conversion",
+      "cantidad": 4
+     },
+     {
+      "jugador": "Tomás Lasarte",
+      "tipo": "penal",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2018-06-02",
+    "categoria": "Intermedia",
+    "torneo": "Súper 12",
+    "instancia": null,
+    "rival": "Uncas",
+    "condicion": null,
+    "tantos_los50": 19,
+    "tantos_rival": 54,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Resultado listado en la nota; instancia y condición no indicadas."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-va-por-el-3er-puesto-y-hay-duelo-entre-los-50-y-uncas",
+  "fecha_nota": "2018-06-09",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/el-sabado-comienza-el-regional-pampeano-b",
+  "fecha_nota": "2018-06-14",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-y-los-50-arrancaron-con-victorias",
+  "fecha_nota": "2018-06-17",
+  "partidos": [
+   {
+    "fecha_partido": "2018-06-16",
+    "categoria": "Primera",
+    "torneo": "Regional Pampeano B",
+    "instancia": "1ra fecha",
+    "rival": "Los Miuras",
+    "condicion": "Local",
+    "tantos_los50": 42,
+    "tantos_rival": 5,
+    "formacion": [
+     "Manuel Ibáñez",
+     "Juan Pedro Zugbi",
+     "Juan Manuel Vismara",
+     "Leonardo Canale",
+     "Ignacio Arbulu",
+     "Joaquín Fagonde",
+     "Hugo Oxobi",
+     "José Jiménez",
+     "Nicolás Di Fonzo",
+     "Tomás Lasarte",
+     "Matías Radetich",
+     "Nahuel Botto",
+     "Máximo Lasarte",
+     "Juan Bertucci",
+     "Martín Homps"
+    ],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Juan Bertucci",
+      "tipo": "try",
+      "cantidad": 2
+     },
+     {
+      "jugador": "José Jiménez",
+      "tipo": "try",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Pablo Acosta",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Luciano Saccheto",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Martín Homps",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Martín Homps",
+      "tipo": "conversion",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Máximo Lasarte",
+      "tipo": "drop",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": "Fecha deducida (sábado anterior)."
+   },
+   {
+    "fecha_partido": "2018-06-16",
+    "categoria": "Desconocida",
+    "torneo": "Copa de Plata",
+    "instancia": null,
+    "rival": "Pampas",
+    "condicion": null,
+    "tantos_los50": 34,
+    "tantos_rival": 7,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Listado en 'Copa de Plata' sin categoría explícita; condición no indicada."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/policiales/robaron-la-utileria-de-uncas-rugby-club-y-se-llevaron-50-mil-pesos-en-materiales",
+  "fecha_nota": "2018-06-30",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-50-y-los-cardos-animan-el-clasico-tandilense-en-la-rural",
+  "fecha_nota": "2018-07-07",
+  "partidos": []
+ }
+]

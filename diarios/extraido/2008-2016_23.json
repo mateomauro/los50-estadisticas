@@ -1,0 +1,675 @@
+[
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-y-los-cardos-a-cuartos-de-final-en-junin",
+  "fecha_nota": "2016-07-02",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-va-por-la-primera-victoria-en-casa",
+  "fecha_nota": "2016-07-02",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-va-por-el-tercer-puesto-en-junin",
+  "fecha_nota": "2016-07-03",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-entro-en-el-desorden-y-apenas-empato",
+  "fecha_nota": "2016-07-03",
+  "partidos": [
+   {
+    "fecha_partido": "2016-07-02",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Regional Pampeano C",
+    "instancia": "3ra fecha",
+    "rival": "Estudiantes (Olavarría)",
+    "condicion": "Visitante",
+    "tantos_los50": 17,
+    "tantos_rival": 3,
+    "formacion": [
+     "Juan Manuel Vismara",
+     "Angel Sanz",
+     "Juan Pedro Zugbi",
+     "Francisco Ubeda",
+     "Martín Urraco",
+     "Leonardo Canale",
+     "Luciano Mauro",
+     "José Jiménez",
+     "Francisco Bustamante",
+     "Jacinto Arrondo",
+     "Matías Radetich",
+     "Nicolás Di Fonzo",
+     "Luciano Sachetto",
+     "Nahuel Botto",
+     "Camilo Vila"
+    ],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Nahuel Botto",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "José Jiménez",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Francisco Bustamante",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "conversion",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2016-07-02",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Copa Imágenes MDQ - Menores de 19",
+    "instancia": null,
+    "rival": "Pueyrredón",
+    "condicion": null,
+    "tantos_los50": 7,
+    "tantos_rival": 10,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Solo resultado"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-termino-cuarto-y-los-cardos-fue-sexto",
+  "fecha_nota": "2016-07-04",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/resultados-de-la-fecha-del-rugby-juvenil",
+  "fecha_nota": "2016-07-05",
+  "partidos": [
+   {
+    "fecha_partido": "2016-07-03",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Bloque de juveniles URMdP (etapa clasificatoria)",
+    "instancia": "penúltima fecha",
+    "rival": "Uncas",
+    "condicion": null,
+    "tantos_los50": 19,
+    "tantos_rival": 5,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 15"
+   },
+   {
+    "fecha_partido": "2016-07-03",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Bloque de juveniles URMdP (etapa clasificatoria)",
+    "instancia": "penúltima fecha",
+    "rival": "Uncas",
+    "condicion": null,
+    "tantos_los50": 31,
+    "tantos_rival": 0,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 16"
+   },
+   {
+    "fecha_partido": "2016-07-03",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Bloque de juveniles URMdP (etapa clasificatoria)",
+    "instancia": "penúltima fecha",
+    "rival": "Uncas",
+    "condicion": null,
+    "tantos_los50": null,
+    "tantos_rival": null,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 17; la nota dice solo 'Los 50 GP vs. Uncas PP' (sin tantos; GP/PP probablemente ganó/perdió por presentación)"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-completa-la-2da-fecha-frente-a-mar-del-plata",
+  "fecha_nota": "2016-07-09",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-no-pudo-frente-a-mar-del-plata",
+  "fecha_nota": "2016-07-10",
+  "partidos": [
+   {
+    "fecha_partido": "2016-07-09",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Copa Imágenes MDQ",
+    "instancia": null,
+    "rival": "Unión del Sur",
+    "condicion": "Local",
+    "tantos_los50": 41,
+    "tantos_rival": 7,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "PS: Plantel Superior; categoría inferida como Primera"
+   },
+   {
+    "fecha_partido": "2016-07-09",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Copa Imágenes MDQ - Menores de 19",
+    "instancia": null,
+    "rival": "Unión del Sur",
+    "condicion": "Local",
+    "tantos_los50": 52,
+    "tantos_rival": 12,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-juega-de-local-frente-al-puntero-e-invicto",
+  "fecha_nota": "2016-07-23",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-derrotado-por-el-puntero-sporting",
+  "fecha_nota": "2016-07-24",
+  "partidos": [
+   {
+    "fecha_partido": "2016-07-23",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Regional Pampeano C",
+    "instancia": null,
+    "rival": "Villa Gesell",
+    "condicion": "Local",
+    "tantos_los50": 31,
+    "tantos_rival": 5,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-necesita-una-victoria-ante-san-ignacio",
+  "fecha_nota": "2016-07-30",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-choco-contra-sus-propias-limitaciones",
+  "fecha_nota": "2016-07-31",
+  "partidos": [
+   {
+    "fecha_partido": "2016-07-30",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Regional Pampeano C",
+    "instancia": null,
+    "rival": "Remo",
+    "condicion": "Visitante",
+    "tantos_los50": 53,
+    "tantos_rival": 0,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2016-07-30",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Copa Imágenes MDQ",
+    "instancia": null,
+    "rival": "Comercial",
+    "condicion": "Visitante",
+    "tantos_los50": 25,
+    "tantos_rival": 10,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "PS: Plantel Superior; categoría inferida como Primera"
+   },
+   {
+    "fecha_partido": "2016-07-30",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Copa Imágenes MDQ - Menores de 19",
+    "instancia": null,
+    "rival": "Comercial",
+    "condicion": "Visitante",
+    "tantos_los50": 20,
+    "tantos_rival": 20,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Condición según programa de la nota previa"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-en-bahia-2c1",
+  "fecha_nota": "2016-08-06",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-no-tuvo-chances-ante-sportiva",
+  "fecha_nota": "2016-08-07",
+  "partidos": [
+   {
+    "fecha_partido": "2016-08-06",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Regional Pampeano C",
+    "instancia": null,
+    "rival": "Cazadores (Tres Arroyos)",
+    "condicion": "Visitante",
+    "tantos_los50": 35,
+    "tantos_rival": 34,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2016-08-06",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Copa Imágenes MDQ",
+    "instancia": null,
+    "rival": "Sporting",
+    "condicion": "Local",
+    "tantos_los50": 8,
+    "tantos_rival": 24,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "PS: Plantel Superior; categoría inferida como Primera"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/triunfos-de-uncas-y-los-50-en-la-copa-imagenes-mdq",
+  "fecha_nota": "2016-08-14",
+  "partidos": [
+   {
+    "fecha_partido": "2016-08-13",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Copa Imágenes MDQ",
+    "instancia": null,
+    "rival": "Mar del Plata Club",
+    "condicion": "Visitante",
+    "tantos_los50": 40,
+    "tantos_rival": 17,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "PS: Plantel Superior; categoría inferida como Primera"
+   },
+   {
+    "fecha_partido": "2016-08-13",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Copa Imágenes MDQ - Menores de 19",
+    "instancia": null,
+    "rival": "Mar del Plata Club",
+    "condicion": null,
+    "tantos_los50": 5,
+    "tantos_rival": 43,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Rival 'Mar del Plata' (presumiblemente Mar del Plata Club)"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-sufrio-una-dura-derrota-ante-mar-del-plata",
+  "fecha_nota": "2016-08-21",
+  "partidos": [
+   {
+    "fecha_partido": "2016-08-20",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Regional Pampeano C",
+    "instancia": null,
+    "rival": "Uncas",
+    "condicion": null,
+    "tantos_los50": 23,
+    "tantos_rival": 45,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Máximo Lasarte",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "conversion",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "penal",
+      "cantidad": 3
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2016-08-20",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Copa Imágenes MDQ - Menores de 19",
+    "instancia": null,
+    "rival": "Biguá",
+    "condicion": null,
+    "tantos_los50": 12,
+    "tantos_rival": 34,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-ante-otro-duelo-clave-para-la-clasificacion",
+  "fecha_nota": "2016-09-03",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-se-quedo-con-otra-victoria-importante",
+  "fecha_nota": "2016-09-04",
+  "partidos": [
+   {
+    "fecha_partido": "2016-09-03",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Regional Pampeano C",
+    "instancia": null,
+    "rival": "Estudiantes (Olavarría)",
+    "condicion": "Local",
+    "tantos_los50": 46,
+    "tantos_rival": 0,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Camilo Vila",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Pablo Barreiro",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Nicolás Di Fonzo",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Nicolás González",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "José Jiménez",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": null,
+      "tipo": "try penal",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Camilo Vila",
+      "tipo": "conversion",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "conversion",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "penal",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Los puntos descriptos suman más que 46 (inconsistencia de la nota)"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-va-a-comercial-para-un-encuentro-decisivo",
+  "fecha_nota": "2016-09-10",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/gastaldi-el-consejo-de-la-uar-se-reunira-en-los-cardos",
+  "fecha_nota": "2016-09-16",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-ante-sporting",
+  "fecha_nota": "2016-09-24",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/derrota-de-los-cardos-en-su-visita-a-sporting",
+  "fecha_nota": "2016-09-25",
+  "partidos": [
+   {
+    "fecha_partido": "2016-09-24",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Regional Pampeano C",
+    "instancia": "Semifinal",
+    "rival": "Kamikazes (Colón)",
+    "condicion": "Visitante",
+    "tantos_los50": 27,
+    "tantos_rival": 17,
+    "formacion": [
+     "Mauro Bilbao",
+     "Angel Sanz",
+     "Juan Pedro Zugbi",
+     "Ignacio Arbulu",
+     "Francisco Ubeda",
+     "Leonardo Canale",
+     "José Jiménez",
+     "Joaquín Fagonde",
+     "José Urquiza",
+     "Nicolás Di Fonzo",
+     "Nahuel Botto",
+     "Máximo Lasarte",
+     "Luciano Sacchetto",
+     "Matías Radetich",
+     "Camilo Vila"
+    ],
+    "ingresaron": [
+     "Ezequiel Cabrera",
+     "Diego Heter",
+     "Nicolás González",
+     "Francisco Bustamante"
+    ],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-buscara-la-clasificacion-al-tdi-a",
+  "fecha_nota": "2016-10-01",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/el-campeon-de-la-urba-de-visita-en-los-cardos",
+  "fecha_nota": "2016-11-12",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-estuvo-a-la-altura-en-el-amistoso-ante-belgrano",
+  "fecha_nota": "2016-11-13",
+  "partidos": [
+   {
+    "fecha_partido": "2016-11-12",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Copa Imágenes MDQ - Copa de Oro",
+    "instancia": "Semifinal (no accedió a la final de Oro)",
+    "rival": "Mar del Plata Club",
+    "condicion": "Local",
+    "tantos_los50": 19,
+    "tantos_rival": 28,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "PS: Plantel Superior; categoría inferida como Primera; instancia deducida"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-termino-cuarto-en-el-provincial-sub-14",
+  "fecha_nota": "2016-11-15",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/mar-del-plata-club-fue-campeon-del-seven-oficial",
+  "fecha_nota": "2016-11-30",
+  "partidos": [
+   {
+    "fecha_partido": null,
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Oficial de Mayores URMdP",
+    "instancia": "Zona 3",
+    "rival": "Campo de Pato",
+    "condicion": null,
+    "tantos_los50": 22,
+    "tantos_rival": 12,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": null,
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Oficial de Mayores URMdP",
+    "instancia": "Zona 3",
+    "rival": "Sporting",
+    "condicion": null,
+    "tantos_los50": 14,
+    "tantos_rival": 48,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": null,
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Oficial de Mayores URMdP",
+    "instancia": "Zona 3",
+    "rival": "Pueyrredón",
+    "condicion": null,
+    "tantos_los50": 12,
+    "tantos_rival": 19,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/en-hockey-uncas-se-adueno-de-la-mayor-cantidad-de-titulos",
+  "fecha_nota": "2016-12-22",
+  "partidos": []
+ }
+]

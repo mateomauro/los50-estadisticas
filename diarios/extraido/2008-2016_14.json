@@ -1,0 +1,745 @@
+[
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-hizo-el-ultimo-ensayo-de-cara-al-debut",
+  "fecha_nota": "2013-04-03",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/triunfo-de-los-cardos-y-caida-de-los-50-en-el-inicio",
+  "fecha_nota": "2013-04-07",
+  "partidos": [
+   {
+    "fecha_partido": "2013-04-06",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Clasificatorio Unión de Rugby de Mar del Plata",
+    "instancia": "1ra fecha",
+    "rival": "Mar del Plata Club",
+    "condicion": "Visitante",
+    "tantos_los50": 3,
+    "tantos_rival": 33,
+    "formacion": [
+     "Cristian Passarelli",
+     "Juan Pedro Zugbi",
+     "Emiliano Salas",
+     "Andrés Mercanti",
+     "Juan Manuel Quaranta",
+     "Leonardo Canale",
+     "Alejandro Paskvan",
+     "Juan Rossi",
+     "Camilo Vila",
+     "Juan Di Fonzo",
+     "Matías Radetich",
+     "Luciano Sachetto",
+     "Santiago Puchuri",
+     "Nicolás Homps",
+     "Lasarte"
+    ],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Tomás Lasarte",
+      "tipo": "penal",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-y-los-50-preparan-el-debut-en-casa",
+  "fecha_nota": "2013-04-10",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-y-los-50-juegan-de-locales-en-los-laureles",
+  "fecha_nota": "2013-04-13",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-se-animo-y-supero-con-claridad-a-universitario",
+  "fecha_nota": "2013-04-14",
+  "partidos": [
+   {
+    "fecha_partido": "2013-04-13",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Clasificatorio Unión de Rugby de Mar del Plata",
+    "instancia": "2da fecha",
+    "rival": "Universitario",
+    "condicion": "Local",
+    "tantos_los50": 37,
+    "tantos_rival": 18,
+    "formacion": [
+     "Cristian Passarelli",
+     "Juan Pedro Zugbi",
+     "Emiliano Salas",
+     "Juan Quaranta",
+     "Andrés Mercanti",
+     "Leonardo Canale",
+     "Alejandro Paskvan",
+     "Juan Rossi",
+     "Vila",
+     "Di Fonzo",
+     "Nicolás Homps",
+     "Luciano Sachetto",
+     "Santiago Puchuri",
+     "Radetich",
+     "Lasarte"
+    ],
+    "ingresaron": [
+     "Paulo Luiz",
+     "Ignacio Arbulu",
+     "Guillermo Perazzone"
+    ],
+    "puntos": [
+     {
+      "jugador": "Juan Manuel Quaranta",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Camilo Vila",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Nicolás Di Fonzo",
+      "tipo": "try",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Matías Radetich",
+      "tipo": "try",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Tomás Lasarte",
+      "tipo": "conversion",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Tomás Lasarte",
+      "tipo": "penal",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "La nota detalla 6 tries, 1 conversión y 1 penal (35 pts); faltan 2 puntos (probablemente 2 conversiones no detalladas). Local por localía: la cancha de La Rural estaba suspendida y jugó en cancha de Los Cardos."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-y-los-50-en-una-fecha-que-puede-ser-clave",
+  "fecha_nota": "2013-04-20",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-y-los-cardos-volvieron-con-triunfos-de-mar-del-plata",
+  "fecha_nota": "2013-04-21",
+  "partidos": [
+   {
+    "fecha_partido": "2013-04-20",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Clasificatorio Unión de Rugby de Mar del Plata",
+    "instancia": "3ra fecha",
+    "rival": "Unión del Sur",
+    "condicion": "Visitante",
+    "tantos_los50": 44,
+    "tantos_rival": 27,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Alejandro Paskvan",
+      "tipo": "try",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Juan Manuel Quaranta",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Andrés Mercanti",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "try",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "penal",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "conversion",
+      "cantidad": 4
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-y-los-cardos-ajustan-los-ultimos-detalles-para-el-clasico",
+  "fecha_nota": "2013-05-03",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-y-los-cardos-le-dan-forma-a-otro-clasico-local",
+  "fecha_nota": "2013-05-04",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-lo-festejo-con-el-ultimo-aliento",
+  "fecha_nota": "2013-05-05",
+  "partidos": [
+   {
+    "fecha_partido": "2013-05-04",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Clasificatorio Unión de Rugby de Mar del Plata",
+    "instancia": "5ta fecha",
+    "rival": "Los Cardos",
+    "condicion": "Local",
+    "tantos_los50": 19,
+    "tantos_rival": 21,
+    "formacion": [
+     "Cristian Passarelli",
+     "Juan Pedro Zugbi",
+     "Andrés Mercanti",
+     "Juan Manuel Quaranta",
+     "Leonardo Canale",
+     "Juan Rossi",
+     "Alejandro Paskvan",
+     "Federico Cantet",
+     "Camilo Vila",
+     "Nicolás Difonso",
+     "Santiago Puchuri",
+     "Guillermo Perazzone",
+     "Luciano Sachetto",
+     "Matías Radetich",
+     "Tomás Lasarte"
+    ],
+    "ingresaron": [
+     "Matías Toletti",
+     "Emiliano Salas",
+     "Joaquín Fagonde"
+    ],
+    "puntos": [
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "penal",
+      "cantidad": 4
+     },
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "conversion",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [
+     {
+      "jugador": "Cristian Passarelli",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "Juan Manuel Quaranta",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "Alejandro Paskvan",
+      "tipo": "amarilla"
+     }
+    ],
+    "puntos_completos": true,
+    "nota": "Clásico ante Los Cardos. Formación tomada de la síntesis (orden de la nota, no necesariamente por puesto)."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-y-los-50-buscaran-puntos-importantes-de-visitante",
+  "fecha_nota": "2013-05-11",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/para-los-cardos-y-los-50-dos-compromisos-decisivos",
+  "fecha_nota": "2013-05-18",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-se-dio-el-gran-gusto-de-vencer-al-duro-sporting",
+  "fecha_nota": "2013-05-19",
+  "partidos": [
+   {
+    "fecha_partido": "2013-05-18",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Clasificatorio Unión de Rugby de Mar del Plata",
+    "instancia": "7ma fecha",
+    "rival": "Sporting",
+    "condicion": "Local",
+    "tantos_los50": 23,
+    "tantos_rival": 20,
+    "formacion": [
+     "Andrés Mercanti",
+     "Juan Pedro Zugbi",
+     "Cristian Passarelli",
+     "Leonardo Canale",
+     "Juan Manuel Quaranta",
+     "Juan Rossi",
+     "Alejandro Paskvan",
+     "Federico Cantet",
+     "Camilo Vila",
+     "Nicolás Difonso",
+     "Santiago Puchuri",
+     "Guillermo Perazzone",
+     "Luciano Sachetto",
+     "Matías Radetich",
+     "Tomás Lasarte"
+    ],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Santiago Puchuri",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Matías Radetich",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "conversion",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "penal",
+      "cantidad": 3
+     }
+    ],
+    "tarjetas": [
+     {
+      "jugador": "Leonardo Canale",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "Andrés Mercanti",
+      "tipo": "amarilla"
+     }
+    ],
+    "puntos_completos": true,
+    "nota": "Primera victoria oficial de Los 50 sobre Sporting. Distribución de conversiones/penales de Perazzone deducida de la suma (2 conv + 3 penales)."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/radetich-y-una-corrida-para-la-historia-de-los-50",
+  "fecha_nota": "2013-05-22",
+  "partidos": [
+   {
+    "fecha_partido": "2013-05-18",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Clasificatorio Unión de Rugby de Mar del Plata",
+    "instancia": "7ma fecha",
+    "rival": "Sporting",
+    "condicion": "Local",
+    "tantos_los50": 23,
+    "tantos_rival": 20,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Matías Radetich",
+      "tipo": "try",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Nota de testimonio de Radetich sobre el try de corrida de toda la cancha; no detalla otros puntos."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/nueva-fecha-de-los-juveniles-de-rugby",
+  "fecha_nota": "2013-05-23",
+  "partidos": [
+   {
+    "fecha_partido": null,
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Bloque Juveniles Unión de Rugby de Mar del Plata",
+    "instancia": "Zona A",
+    "rival": "Comercial",
+    "condicion": null,
+    "tantos_los50": 12,
+    "tantos_rival": 50,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Categoría M-15. Fecha y condición no indicadas (el orden del resultado en la nota lista primero al otro equipo)."
+   },
+   {
+    "fecha_partido": null,
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Bloque Juveniles Unión de Rugby de Mar del Plata",
+    "instancia": "Zona A",
+    "rival": "Comercial",
+    "condicion": null,
+    "tantos_los50": 26,
+    "tantos_rival": 14,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Categoría M-16. Fecha y condición no indicadas (el orden del resultado en la nota lista primero al otro equipo)."
+   },
+   {
+    "fecha_partido": null,
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Bloque Juveniles Unión de Rugby de Mar del Plata",
+    "instancia": "Zona A",
+    "rival": "Comercial",
+    "condicion": null,
+    "tantos_los50": 14,
+    "tantos_rival": 13,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Categoría M-17. Fecha y condición no indicadas (el orden del resultado en la nota lista primero al otro equipo)."
+   },
+   {
+    "fecha_partido": null,
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Juveniles M-19 Unión de Rugby de Mar del Plata",
+    "instancia": null,
+    "rival": "Sporting",
+    "condicion": null,
+    "tantos_los50": 10,
+    "tantos_rival": 31,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Categoría M-19. Fecha y condición no indicadas (el orden del resultado en la nota lista primero al otro equipo)."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-y-los-50-van-por-todo-como-visitantes",
+  "fecha_nota": "2013-05-25",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-y-los-50-se-miran-de-reojo-por-la-clasificacion",
+  "fecha_nota": "2013-05-29",
+  "partidos": [
+   {
+    "fecha_partido": "2013-05-25",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Clasificatorio Unión de Rugby de Mar del Plata",
+    "instancia": "8va fecha",
+    "rival": "Comercial",
+    "condicion": "Visitante",
+    "tantos_los50": null,
+    "tantos_rival": null,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "La nota solo dice que fue una derrota ajustada en Sierra de los Padres; no da resultado."
+   },
+   {
+    "fecha_partido": "2013-05-25",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Juveniles M-19 Unión de Rugby de Mar del Plata",
+    "instancia": null,
+    "rival": "Comercial",
+    "condicion": null,
+    "tantos_los50": 19,
+    "tantos_rival": 26,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Categoría M-19; condición no indicada."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-y-los-50-se-juegan-por-un-lugar-en-las-semifinales",
+  "fecha_nota": "2013-06-01",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/las-derrotas-le-dieron-a-los-cardos-el-pase-a-semifinales",
+  "fecha_nota": "2013-06-02",
+  "partidos": [
+   {
+    "fecha_partido": "2013-06-01",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Clasificatorio Unión de Rugby de Mar del Plata",
+    "instancia": "9na fecha",
+    "rival": "San Ignacio",
+    "condicion": "Local",
+    "tantos_los50": 11,
+    "tantos_rival": 20,
+    "formacion": [
+     "Cristian Passarelli",
+     "Juan Pedro Zugbi",
+     "Andrés Mercanti",
+     "Juan Rossi",
+     "Leonardo Canale",
+     "Joaquín Fagonde",
+     "Alejandro Paskvan",
+     "Federico Cantet",
+     "Camilo Vila",
+     "Nicolás Difonso",
+     "Nicolás Homps",
+     "Luciano Sachetto",
+     "Santiago Puchuri",
+     "Matías Radetich",
+     "Tomás Lasarte"
+    ],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Nicolás Difonso",
+      "tipo": "drop",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Tomás Lasarte",
+      "tipo": "penal",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Andrés Mercanti",
+      "tipo": "try",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-se-rearma-para-un-duelo-decisivo",
+  "fecha_nota": "2013-06-05",
+  "partidos": [
+   {
+    "fecha_partido": "2013-06-01",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Clasificatorio Unión de Rugby de Mar del Plata",
+    "instancia": "9na fecha",
+    "rival": "San Ignacio",
+    "condicion": "Local",
+    "tantos_los50": 11,
+    "tantos_rival": 20,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Solo menciona el resultado."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/dramis-sera-el-arbitro-del-duelo-comercial-los-cardos",
+  "fecha_nota": "2013-06-07",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-se-juega-un-lugar-en-la-final",
+  "fecha_nota": "2013-06-08",
+  "partidos": [
+   {
+    "fecha_partido": "2013-06-01",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Clasificatorio Unión de Rugby de Mar del Plata",
+    "instancia": "9na fecha",
+    "rival": "San Ignacio",
+    "condicion": "Local",
+    "tantos_los50": 11,
+    "tantos_rival": 20,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Solo menciona el resultado (20-11) de la fecha anterior; el partido del 8/6 es previa."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-no-tuvo-oportunidad-en-la-semifinal",
+  "fecha_nota": "2013-06-09",
+  "partidos": [
+   {
+    "fecha_partido": "2013-06-08",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Copa Santa Bárbara",
+    "instancia": "5º y 6º puesto",
+    "rival": "San Ignacio",
+    "condicion": "Visitante",
+    "tantos_los50": 0,
+    "tantos_rival": 53,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": "Jugó con muchas ausencias; mezcla de Primera e Intermedia. Condición Visitante deducida (viajó a Mar del Plata Club)."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/se-viene-el-regional-pampeano",
+  "fecha_nota": "2013-06-12",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-por-el-premio-consuelo-ante-mar-del-plata",
+  "fecha_nota": "2013-06-12",
+  "partidos": [
+   {
+    "fecha_partido": null,
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Juveniles M-19 Unión de Rugby de Mar del Plata",
+    "instancia": null,
+    "rival": "Los Cardos",
+    "condicion": null,
+    "tantos_los50": 6,
+    "tantos_rival": 26,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Categoría M-19, clásico tandilense; fecha y condición no indicadas."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/fixture-del-regional-pampeano-a",
+  "fecha_nota": "2013-06-13",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/encuentro-en-los-50",
+  "fecha_nota": "2013-06-15",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-tampoco-tuvo-el-consuelo-de-ser-tercero",
+  "fecha_nota": "2013-06-16",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-visita-al-campeon-y-los-50-debuta-en-su-cancha",
+  "fecha_nota": "2013-06-22",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/el-debut-de-los-50-fue-con-un-triunfo-en-casa",
+  "fecha_nota": "2013-06-23",
+  "partidos": [
+   {
+    "fecha_partido": "2013-06-22",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Regional Pampeano A",
+    "instancia": "1ra fecha",
+    "rival": "Universitario (Bahía Blanca)",
+    "condicion": "Local",
+    "tantos_los50": 35,
+    "tantos_rival": 22,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Luciano Sacchetto",
+      "tipo": "try",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Tomás Lasarte",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Matías Radetich",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Juan Quaranta",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "conversion",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "penal",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "drop",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": null
+   }
+  ]
+ }
+]

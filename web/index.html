@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Los 50 · Estadísticas</title>
+  <meta name="description" content="Estadísticas del Club Los 50 de Tandil: jugadores del plantel superior y análisis para entrenadores.">
+  <meta name="theme-color" content="#0B0D12">
+  <link rel="icon" type="image/png" href="img/favicon.png">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    /* Links viejos (?j=..., ?cat=..., etc.) eran de la página de jugadores: se mandan ahí. */
+    if (/[?&](j|cat|fuente|vista|temp|orden|q)=/.test(location.search)) location.replace("jugadores.html" + location.search + location.hash);
+    /* Animación de entrada: INTRO = "1", "2" o "3" (null = sin animación).
+       Se muestra una vez por visita; ?intro=N la fuerza (para probar). */
+    (function () {
+      var INTRO = "2"; // elegida por el club: marcador 0 → 50
+      try {
+        var p = new URLSearchParams(location.search);
+        var auto = INTRO && !sessionStorage.getItem("los50-intro") && !matchMedia("(prefers-reduced-motion: reduce)").matches;
+        var v = p.get("intro") || (auto ? INTRO : null);
+        if (v === "1" || v === "2" || v === "3") { window.INTRO = v; document.documentElement.classList.add("intro-pendiente"); }
+      } catch (e) { /* sin animación */ }
+    })();
+  </script>
+</head>
+<body class="portada">
+  <main class="portada__in">
+    <header class="portada__top">
+      <img class="top__escudo portada__escudo" src="img/escudo-400.webp" width="400" height="433" alt="Escudo del Club Los 50 de Tandil">
+      <h1 class="portada__titulo">Los 50 <span>Estadísticas</span></h1>
+      <p class="portada__sub">Club Los 50 · Tandil</p>
+    </header>
+
+    <nav class="opciones" aria-label="Elegí una sección">
+      <a class="opcion" href="jugadores.html">
+        <span class="opcion__ic" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c.6-3.4 3-5.4 6-5.4s5.4 2 6 5.4"/><circle cx="17" cy="9" r="2.5"/><path d="M16.5 14.7c2.3.2 4 1.9 4.5 4.6"/></svg>
+        </span>
+        <span class="opcion__txt"><b>Jugadores</b><small>Partidos, tries y puntos del plantel superior</small></span>
+        <svg class="opcion__flecha" aria-hidden="true" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
+      </a>
+      <a class="opcion opcion--priv" href="entrenadores.html">
+        <span class="opcion__ic" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
+        </span>
+        <span class="opcion__txt"><b>Entrenadores</b><small>Cómo viene cada categoría, de M13 a Primera</small></span>
+        <span class="opcion__clave" aria-label="Con clave">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Con clave
+        </span>
+      </a>
+    </nav>
+  </main>
+  <footer class="portada__pie">Datos oficiales de la base de la UAR</footer>
+  <script src="intro.js"></script>
+</body>
+</html>

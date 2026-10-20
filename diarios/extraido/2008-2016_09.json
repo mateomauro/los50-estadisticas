@@ -1,0 +1,574 @@
+[
+ {
+  "url": "https://www.eleco.com.ar/interes-general/chorny-trabaja-con-todas-las-divisiones-de-los-50",
+  "fecha_nota": "2011-06-21",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-y-los-cardos-mano-a-mano-por-un-solo-lugar",
+  "fecha_nota": "2011-06-22",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/una-charla-en-los-50",
+  "fecha_nota": "2011-06-24",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-no-pudo-ganar-y-le-abrio-la-puerta-a-los-cardos",
+  "fecha_nota": "2011-06-26",
+  "partidos": [
+   {
+    "fecha_partido": "2011-06-25",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Clasificatorio de la Unión de Rugby de Mar del Plata (Copa Santa Bárbara)",
+    "instancia": "última fecha",
+    "rival": "San Ignacio",
+    "condicion": "Local",
+    "tantos_los50": 19,
+    "tantos_rival": 20,
+    "formacion": [
+     "Cristian Pasarelli",
+     "Emiliano Salas",
+     "Juan Manuel Vismara",
+     "Leonardo Canale",
+     "Juan Manuel Quaranta",
+     "Joaquín Fagonde",
+     "Alejandro Paskvan",
+     "Bernardo Quaranta",
+     "Nicolás González",
+     "Germán Pérez Diez",
+     "Martín Molina",
+     "Marcelo Lorenzo",
+     "Felipe Vitullo",
+     "Nicolás Sanferreiter",
+     "Guillermo Perazzone"
+    ],
+    "ingresaron": [
+     "Nicolás Homps"
+    ],
+    "puntos": [
+     {
+      "jugador": "Leonardo Canale",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Alejandro Paskvan",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Felipe Vitullo",
+      "tipo": "try",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Tres tries (15) de 19 tantos; la nota no detalla quién hizo los otros 4. Homps ingresó por Marcelo Lorenzo (según la alineación 'Marcelo Lorenzo (Nicolás Homps)')."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/berges-vuelve-a-los-50",
+  "fecha_nota": "2011-06-29",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-espera-la-gran-cita-con-el-equipo-definido",
+  "fecha_nota": "2011-06-29",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-viaja-hoy-para-esperar-las-definiciones",
+  "fecha_nota": "2011-07-01",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-va-por-el-premio-consuelo-frente-a-san-ignacio",
+  "fecha_nota": "2011-07-09",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-fue-mas-y-se-quedo-con-el-tercer-puesto",
+  "fecha_nota": "2011-07-10",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/uncas-le-presento-una-dura-batalla-a-comercial",
+  "fecha_nota": "2011-07-13",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/el-tiempo-de-otro-desafio-en-rugby",
+  "fecha_nota": "2011-07-13",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/las-designaciones-para-el-regional-pampeano-a",
+  "fecha_nota": "2011-07-15",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-hace-su-debut-en-el-regional-pampeano-a",
+  "fecha_nota": "2011-07-16",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-no-tuvo-una-buena-presentacion-en-bahia-blanca",
+  "fecha_nota": "2011-07-17",
+  "partidos": [
+   {
+    "fecha_partido": "2011-07-16",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Regional Pampeano A",
+    "instancia": "1ra fecha, Zona A",
+    "rival": "Argentino (Bahía Blanca)",
+    "condicion": "Visitante",
+    "tantos_los50": 0,
+    "tantos_rival": 18,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-sintio-el-peso-del-debut-en-bahia-blanca",
+  "fecha_nota": "2011-07-20",
+  "partidos": [
+   {
+    "fecha_partido": "2011-07-16",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Regional Pampeano A",
+    "instancia": "1ra fecha, Zona A",
+    "rival": "Argentino (Bahía Blanca)",
+    "condicion": "Visitante",
+    "tantos_los50": 0,
+    "tantos_rival": 18,
+    "formacion": [],
+    "ingresaron": [
+     "Juan Rossi"
+    ],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": "Rossi ingresó por Bernardo Quaranta (golpe en el cuello). Tomás Quaranta salió lesionado. Dos tarjetas amarillas en contra de Los 50 sin nombres."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-tiene-un-duro-debut-ante-mar-del-plata",
+  "fecha_nota": "2011-07-23",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-y-uncas-se-preparan-para-el-sabado",
+  "fecha_nota": "2011-07-27",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-y-los-50-ante-la-necesidad-de-recuperarse",
+  "fecha_nota": "2011-07-30",
+  "partidos": [
+   {
+    "fecha_partido": null,
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Clasificatorio de la Unión de Rugby de Mar del Plata (Copa Santa Bárbara)",
+    "instancia": null,
+    "rival": "Mar del Plata Club",
+    "condicion": "Local",
+    "tantos_los50": 20,
+    "tantos_rival": 26,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Resultado mencionado como antecedente en una previa (partido en La Rural); sin fecha ni detalles."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-logro-un-triunfo-aplastante-sobre-comercial",
+  "fecha_nota": "2011-07-31",
+  "partidos": [
+   {
+    "fecha_partido": "2011-07-30",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Regional Pampeano A",
+    "instancia": "3ra fecha, Zona A",
+    "rival": "Mar del Plata Club",
+    "condicion": "Visitante",
+    "tantos_los50": 6,
+    "tantos_rival": 10,
+    "formacion": [
+     "Juan Manuel Vismara",
+     "Juan Rossi",
+     "Emiliano Salas",
+     "Juan Manuel Quaranta",
+     "Leonardo Canale",
+     "Joaquín Fagonde",
+     "Alejandro Paskvan",
+     "Bernardo Quaranta",
+     "Nicolás Sanferreiter",
+     "Camilo Vila",
+     "Martín Molina",
+     "Germán Pérez Diez",
+     "Felipe Vitullo",
+     "Germán Collivignarelli",
+     "Guillermo Perazzone"
+    ],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "penal",
+      "cantidad": 2
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": "Los 50 sumó un punto bonus."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/marcelo-chorny-brindara-hoy-una-clinica-en-los-50",
+  "fecha_nota": "2011-08-04",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-quiere-asegurar-la-clasificacion-ante-argentino",
+  "fecha_nota": "2011-08-06",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-sufrio-lucho-y-pudo-definirlo-en-el-final",
+  "fecha_nota": "2011-08-07",
+  "partidos": [
+   {
+    "fecha_partido": "2011-08-06",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Regional Pampeano A",
+    "instancia": "4ta fecha, Zona A",
+    "rival": "Comercial",
+    "condicion": "Visitante",
+    "tantos_los50": 7,
+    "tantos_rival": 38,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "conversion",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-lo-dio-vuelta-y-festejo-el-campeonato",
+  "fecha_nota": "2011-08-08",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-logro-un-claro-triunfo-ante-comercial",
+  "fecha_nota": "2011-08-10",
+  "partidos": [
+   {
+    "fecha_partido": "2011-08-07",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Bloque de juveniles (M-15, M-16, M-17)",
+    "instancia": null,
+    "rival": "Comercial",
+    "condicion": "Local",
+    "tantos_los50": 5,
+    "tantos_rival": 26,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "M-15, derrota."
+   },
+   {
+    "fecha_partido": "2011-08-07",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Bloque de juveniles (M-15, M-16, M-17)",
+    "instancia": null,
+    "rival": "Comercial",
+    "condicion": "Local",
+    "tantos_los50": 50,
+    "tantos_rival": 36,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "M-16, victoria."
+   },
+   {
+    "fecha_partido": "2011-08-07",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Bloque de juveniles (M-15, M-16, M-17)",
+    "instancia": null,
+    "rival": "Comercial",
+    "condicion": "Local",
+    "tantos_los50": null,
+    "tantos_rival": null,
+    "formacion": [
+     "Julián Bicondoa",
+     "Joaquín Montero",
+     "Byron Fuse",
+     "José Jiménez",
+     "Leonel Esperón",
+     "Joaquín Araujo",
+     "Mariano Casanova",
+     "Nahuel Botto",
+     "Luciano Mauro",
+     "Jacinto Arrondo",
+     "Andrés Mathiasen",
+     "Franco Pelaia",
+     "Francisco Daud",
+     "Ignacio Lasarte",
+     "Lucas Islas"
+    ],
+    "ingresaron": [
+     "Ignacio Subilibia",
+     "Ignacio Castelnuovo",
+     "Lucas Ruiz Durán",
+     "Ezequiel Oxoby",
+     "Ignacio Romero",
+     "Braian Sánchez"
+    ],
+    "puntos": [
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "try",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Lucas Islas",
+      "tipo": "try",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Leonel Esperón",
+      "tipo": "try",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Mariano Casanova",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Nahuel Botto",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "conversion",
+      "cantidad": 6
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "M-17, 'triunfo claro'; la nota no da el marcador (por los puntos detallados serían 52)."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-los-cardos-tiempo-de-revancha-en-la-rural",
+  "fecha_nota": "2011-08-13",
+  "partidos": [
+   {
+    "fecha_partido": null,
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Clasificatorio de la Unión de Rugby de Mar del Plata (Copa Santa Bárbara)",
+    "instancia": "2da fecha",
+    "rival": "Los Cardos",
+    "condicion": null,
+    "tantos_los50": 10,
+    "tantos_rival": 8,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Resultado mencionado como antecedente en una previa; sin detalles ni sede."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-tuvo-revancha-y-se-llevo-el-clasico-ante-los-50",
+  "fecha_nota": "2011-08-14",
+  "partidos": [
+   {
+    "fecha_partido": "2011-08-13",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Regional Pampeano A",
+    "instancia": "5ta fecha, Zona A (clásico)",
+    "rival": "Los Cardos",
+    "condicion": "Local",
+    "tantos_los50": 10,
+    "tantos_rival": 26,
+    "formacion": [
+     "Juan Rossi",
+     "Cristian Pasarelli",
+     "Juan Manuel Vismara",
+     "Juan Manuel Quaranta",
+     "Tomás Quaranta",
+     "Joaquín Fagonde",
+     "Alejandro Paskvan",
+     "Bernardo Quaranta",
+     "Gonzalo Lauge",
+     "Camilo Vila",
+     "Martín Molina",
+     "Marcelo Lorenzo",
+     "Felipe Vitullo",
+     "Mauro Collivignarelli",
+     "Guillermo Perazzone"
+    ],
+    "ingresaron": [
+     "Leonardo Canale",
+     "Cristian Hollander",
+     "Nicolás Difonso",
+     "Nicolás Sanferreiter"
+    ],
+    "puntos": [
+     {
+      "jugador": "Marcelo Lorenzo",
+      "tipo": "penal",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Marcelo Lorenzo",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "conversion",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [
+     {
+      "jugador": "Alejandro Paskvan",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "Tomás Quaranta",
+      "tipo": "roja"
+     }
+    ],
+    "puntos_completos": true,
+    "nota": "La síntesis marca la amarilla de Perazzone como (LC) pero el relato la atribuye a Los 50 (es capitán de Los 50). Cambios: Canale por B. Quaranta, Hollander por Paskvan, Difonso por Lauge, Sanferreiter por Collivignarelli."
+   },
+   {
+    "fecha_partido": "2011-08-13",
+    "categoria": "Intermedia",
+    "categoria_inferida": false,
+    "torneo": "Regional Pampeano A (clásico de intermedia)",
+    "instancia": null,
+    "rival": "Los Cardos",
+    "condicion": "Local",
+    "tantos_los50": 11,
+    "tantos_rival": 25,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-fue-vapuleado-por-universitario",
+  "fecha_nota": "2011-08-21",
+  "partidos": [
+   {
+    "fecha_partido": "2011-08-20",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Regional Pampeano A - Zona Permanencia",
+    "instancia": null,
+    "rival": "Universitario (Mar del Plata)",
+    "condicion": "Visitante",
+    "tantos_los50": 8,
+    "tantos_rival": 62,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/a-puro-try-los-cardos-se-metio-en-las-semifinales",
+  "fecha_nota": "2011-08-22",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-busca-un-lugar-en-la-final-ante-mar-del-plata-2c5",
+  "fecha_nota": "2011-08-27",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-no-pudo-cerrarlo-y-mar-del-plata-lo-gano-al-final",
+  "fecha_nota": "2011-08-28",
+  "partidos": [
+   {
+    "fecha_partido": "2011-08-27",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Regional Pampeano A - Zona Permanencia",
+    "instancia": "Final Zona Permanencia",
+    "rival": "Comercial",
+    "condicion": "Local",
+    "tantos_los50": 31,
+    "tantos_rival": 21,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ }
+]

@@ -1,0 +1,861 @@
+[
+ {
+  "url": "https://www.eleco.com.ar/interes-general/sporting-derroto-a-sportiva-y-favorecio-a-los-cardos",
+  "fecha_nota": "2014-10-05",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-busca-un-lugar-en-el-torneo-del-interior-a",
+  "fecha_nota": "2014-10-11",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-se-encontro-con-un-sportiva-superior",
+  "fecha_nota": "2014-10-12",
+  "partidos": [
+   {
+    "fecha_partido": "2014-10-11",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Regional Pampeano",
+    "instancia": "última fecha",
+    "rival": "Universitario (Mar del Plata)",
+    "condicion": "Visitante",
+    "tantos_los50": 15,
+    "tantos_rival": 43,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-se-consagro-en-la-final-ante-mar-del-plata",
+  "fecha_nota": "2014-11-16",
+  "partidos": [
+   {
+    "fecha_partido": null,
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": "Zona C",
+    "rival": "Los Cardos",
+    "condicion": null,
+    "tantos_los50": 17,
+    "tantos_rival": 27,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Seven en Mar del Plata; fecha exacta no indicada"
+   },
+   {
+    "fecha_partido": null,
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": "Zona C",
+    "rival": "Villa Gesell",
+    "condicion": null,
+    "tantos_los50": 36,
+    "tantos_rival": 10,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha exacta no indicada"
+   },
+   {
+    "fecha_partido": null,
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": "Final de Copa de Plata",
+    "rival": "Biguá",
+    "condicion": null,
+    "tantos_los50": 14,
+    "tantos_rival": 45,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha exacta no indicada; Los 50 avanzó por no presentación de Pueyrredón"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/jugadores-de-los-50-y-los-cardos-en-la-lista",
+  "fecha_nota": "2014-12-02",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/uncas-gano-el-clasico-es-el-campeon",
+  "fecha_nota": "2014-12-07",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-presento-su-fiesta-anual-de-rugby-reducido",
+  "fecha_nota": "2015-01-23",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/equipos-de-los-50-y-los-cardos-en-el-seven-playero-de-pinamar",
+  "fecha_nota": "2015-01-24",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/yo-quiero-a-mi-mama-de-los-50-cayo-en-la-definicion",
+  "fecha_nota": "2015-01-25",
+  "partidos": [
+   {
+    "fecha_partido": "2015-01-24",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "6° Seven Tackle de Primera (Pinamar)",
+    "instancia": null,
+    "rival": "Pucará",
+    "condicion": null,
+    "tantos_los50": 22,
+    "tantos_rival": 0,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Equipo 'Yo quiero a mi mamá', de Los 50"
+   },
+   {
+    "fecha_partido": "2015-01-24",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "6° Seven Tackle de Primera (Pinamar)",
+    "instancia": null,
+    "rival": "Pueyrredón",
+    "condicion": null,
+    "tantos_los50": 34,
+    "tantos_rival": 0,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Equipo 'Yo quiero a mi mamá', de Los 50"
+   },
+   {
+    "fecha_partido": "2015-01-24",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "6° Seven Tackle de Primera (Pinamar)",
+    "instancia": "Semifinal de Oro",
+    "rival": "Hand Off/Cays",
+    "condicion": null,
+    "tantos_los50": 17,
+    "tantos_rival": 12,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Equipo 'Yo quiero a mi mamá', de Los 50"
+   },
+   {
+    "fecha_partido": "2015-01-24",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "6° Seven Tackle de Primera (Pinamar)",
+    "instancia": "Final de Oro",
+    "rival": "Seguinos en Twitter (Universitario)",
+    "condicion": null,
+    "tantos_los50": 10,
+    "tantos_rival": 12,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Equipo 'Yo quiero a mi mamá', de Los 50; tuvo a Bernardo Quaranta y Luciano Sachetto"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-cerro-su-preparacion-con-un-triunfo-frente-a-uncas",
+  "fecha_nota": "2015-03-29",
+  "partidos": [
+   {
+    "fecha_partido": "2015-03-28",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Amistoso",
+    "instancia": null,
+    "rival": "Campo de Pato",
+    "condicion": "Visitante",
+    "tantos_los50": 30,
+    "tantos_rival": 12,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-debuta-en-casa-y-uncas-visita-a-comercial",
+  "fecha_nota": "2015-04-11",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/una-dura-caida-para-los-50",
+  "fecha_nota": "2015-04-12",
+  "partidos": [
+   {
+    "fecha_partido": "2015-04-11",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Torneo Reubicación (Urmdp)",
+    "instancia": "1ra fecha",
+    "rival": "Villa Gesell RC",
+    "condicion": "Local",
+    "tantos_los50": 0,
+    "tantos_rival": 25,
+    "formacion": [
+     "Mauro Bilbao",
+     "Juan Pedro Zugbi",
+     "Andrés Mercanti",
+     "Leonardo Canale",
+     "Ignacio Arbulu",
+     "Joaquín Fagonde",
+     "Federico Cantet",
+     "Carmelo Zalayeta",
+     "Nicolás Difonzo",
+     "Marcelo Lorenzo",
+     "Matías Radetich",
+     "Guillermo Perazzone",
+     "Luciano Sacchetto",
+     "Marcos Phillips",
+     "Jacinto Arrondo"
+    ],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [
+     {
+      "jugador": "Juan Pedro Zugbi",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "Leonardo Canale",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "Juan Manuel Quaranta",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "Máximo Lasarte",
+      "tipo": "amarilla"
+     }
+    ],
+    "puntos_completos": true,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-vista-a-comercial-y-uncas-en-casa-ante-bigua",
+  "fecha_nota": "2015-04-17",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/derrotas-de-uncas-y-los-50",
+  "fecha_nota": "2015-04-19",
+  "partidos": [
+   {
+    "fecha_partido": "2015-04-18",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Torneo Reubicación (Urmdp)",
+    "instancia": "2da fecha",
+    "rival": "Comercial",
+    "condicion": "Visitante",
+    "tantos_los50": 5,
+    "tantos_rival": 48,
+    "formacion": [
+     "Mauro Bilbao",
+     "Juan Pedro Zugbi",
+     "Andrés Mercanti",
+     "Leonardo Canale",
+     "Juan M. Quaranta",
+     "Joaquín Fagonde",
+     "Federico Cantet",
+     "Luciano Sachetto",
+     "Camilo Vila",
+     "Nicolás Di Fonzo",
+     "Matías Radetich",
+     "Marcelo Lorenzo",
+     "Marcos Phillips",
+     "Nahuel Botto",
+     "Jacinto Arrondo"
+    ],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Nahuel Botto",
+      "tipo": "try",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/el-choque-de-tandilenses-quedo-en-manos-de-uncas",
+  "fecha_nota": "2015-04-26",
+  "partidos": [
+   {
+    "fecha_partido": "2015-04-25",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Torneo Reubicación (Urmdp)",
+    "instancia": "3ra fecha",
+    "rival": "Uncas",
+    "condicion": "Local",
+    "tantos_los50": 10,
+    "tantos_rival": 19,
+    "formacion": [
+     "Mauro Bilbao",
+     "Angel Sanz",
+     "Andrés Mercanti",
+     "Leonardo Canale",
+     "Juan Manuel Quaranta",
+     "Joaquín Fagonde",
+     "Esteban Varela",
+     "Luciano Sachetto",
+     "Camilo Vila",
+     "Nicolás Di Fonzo",
+     "Nahuel Botto",
+     "Marcelo Lorenzo",
+     "Marcos Philip",
+     "Matías Radetich",
+     "Germán Pérez Diez"
+    ],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Luciano Sachetto",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Nicolás Di Fonzo",
+      "tipo": "try",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [
+     {
+      "jugador": "Angel Sanz",
+      "tipo": "roja"
+     },
+     {
+      "jugador": "Andrés Mercanti",
+      "tipo": "amarilla"
+     }
+    ],
+    "puntos_completos": true,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/uncas-festejo-en-la-rural",
+  "fecha_nota": "2015-04-27",
+  "partidos": [
+   {
+    "fecha_partido": "2015-04-25",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Torneo Reubicación (Urmdp)",
+    "instancia": "3ra fecha",
+    "rival": "Uncas",
+    "condicion": "Local",
+    "tantos_los50": 10,
+    "tantos_rival": 19,
+    "formacion": [
+     "Mauro Bilbao",
+     "Angel Sanz",
+     "Andrés Mercanti",
+     "Leonardo Canale",
+     "Juan Manuel Quaranta",
+     "Joaquín Fagonde",
+     "Esteban Varela",
+     "Luciano Sachetto",
+     "Camilo Vila",
+     "Nicolás Di Fonzo",
+     "Nahuel Botto",
+     "Marcelo Lorenzo",
+     "Marcos Philip",
+     "Matías Radetich",
+     "Germán Pérez Diez"
+    ],
+    "ingresaron": [
+     "Federico Cantet",
+     "Pablo Magnasco",
+     "Tomás Lasarte",
+     "Jacinto Arrondo",
+     "Fermín Telechea",
+     "Ignacio Arbulo"
+    ],
+    "puntos": [
+     {
+      "jugador": "Luciano Sachetto",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Nicolás Di Fonzo",
+      "tipo": "try",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [
+     {
+      "jugador": "Angel Sanz",
+      "tipo": "roja"
+     },
+     {
+      "jugador": "Andrés Mercanti",
+      "tipo": "amarilla"
+     }
+    ],
+    "puntos_completos": true,
+    "nota": "Angel Sanz expulsado (roja)"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/uncas-logro-un-valioso-triunfo-ante-pueyrredon",
+  "fecha_nota": "2015-05-03",
+  "partidos": [
+   {
+    "fecha_partido": "2015-05-02",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Torneo Reubicación (Urmdp)",
+    "instancia": "4ta fecha",
+    "rival": "Universitario",
+    "condicion": "Local",
+    "tantos_los50": 17,
+    "tantos_rival": 36,
+    "formacion": [
+     "Mauro Bilbao",
+     "Fermín Telechea",
+     "Andrés Mercanti",
+     "Juan M. Quaranta",
+     "Leonardo Canale",
+     "Luciano Sachetto",
+     "Esteban Varela",
+     "Joaquín Fagonde",
+     "Camilo Vila",
+     "Nicolás Di Fonzo",
+     "Marcos Philip",
+     "Marcelo Lorenzo",
+     "Máximo Lasarte",
+     "Matías Radetich",
+     "Germán Pérez Diez"
+    ],
+    "ingresaron": [
+     "Nahuel Botto",
+     "Ignacio Arbulu",
+     "Juan Pedro Zugbi",
+     "Matías Toletti"
+    ],
+    "puntos": [
+     {
+      "jugador": "Matías Radetich",
+      "tipo": "try",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Marcos Philip",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Camilo Vila",
+      "tipo": "conversion",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": "La redacción de la formación es confusa en la tercera línea"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-consiguio-la-primera-victoria-ante-union-del-sur",
+  "fecha_nota": "2015-05-10",
+  "partidos": [
+   {
+    "fecha_partido": "2015-05-09",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Torneo Reubicación (Urmdp)",
+    "instancia": "5ta fecha",
+    "rival": "Unión del Sur",
+    "condicion": "Visitante",
+    "tantos_los50": 10,
+    "tantos_rival": 9,
+    "formacion": [
+     "Mauro Bilbao",
+     "Fermín Telechea",
+     "Mateo Sarti",
+     "Leonardo Canale",
+     "Juan M. Quaranta",
+     "Joaquín Fagonde",
+     "Esteban Varela",
+     "Luciano Sachetto",
+     "Camilo Vila",
+     "Nicolás Di Fonzo",
+     "Nahuel Botto",
+     "Marcelo Lorenzo",
+     "Máximo Lasarte",
+     "Matías Radetich",
+     "Tomás Lasarte"
+    ],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Mateo Sarti",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Máximo Lasarte",
+      "tipo": "try",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/triunfos-de-uncas-y-los-50",
+  "fecha_nota": "2015-05-16",
+  "partidos": [
+   {
+    "fecha_partido": "2015-05-15",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Torneo Reubicación (Urmdp)",
+    "instancia": "6ta fecha",
+    "rival": "Biguá",
+    "condicion": "Local",
+    "tantos_los50": 37,
+    "tantos_rival": 17,
+    "formacion": [
+     "Mateo Sarti",
+     "Fermín Telechea",
+     "Mauro Bilbao",
+     "Juan Quaranta",
+     "Leonardo Canale",
+     "Luciano Sachetto",
+     "Esteban Varela",
+     "Joaquín Fagonde",
+     "Francisco Bustamante",
+     "Jacinto Arrondo",
+     "Nahuel Botto",
+     "Máximo Lasarte",
+     "Marcos Philip",
+     "Tomás Lasarte",
+     "Germán Pérez Díez"
+    ],
+    "ingresaron": [
+     "Nicolás Di Fonzo",
+     "José Giménez",
+     "Andrés Mercanti",
+     "Nicolás González",
+     "Santiago Arnautou"
+    ],
+    "puntos": [
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "penal",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Tomás Lasarte",
+      "tipo": "try",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Nahuel Botto",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Juan M. Quaranta",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Joaquín Fagonde",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Tomás Lasarte",
+      "tipo": "conversion",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "conversion",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/uncas-y-los-50-cierran-su-participacion-en-mar-del-plata",
+  "fecha_nota": "2015-05-23",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/derrotas-de-los-50-y-uncas-en-el-cierre-de-la-competencia-2",
+  "fecha_nota": "2015-05-24",
+  "partidos": [
+   {
+    "fecha_partido": "2015-05-23",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Torneo Reubicación (Urmdp)",
+    "instancia": "7ma fecha (última)",
+    "rival": "Pueyrredón",
+    "condicion": "Visitante",
+    "tantos_los50": 10,
+    "tantos_rival": 28,
+    "formacion": [
+     "Mateo Sarti",
+     "Fermín Telechea",
+     "Mauro Bilbao",
+     "Juan M. Quaranta",
+     "Leonardo Canale",
+     "Luciano Sachetto",
+     "José Jiménez",
+     "Joaquín Fagonde",
+     "Santiago Arnautou",
+     "Jacinto Arrondo",
+     "Matías Radetich",
+     "Nicolás Di Fonzo",
+     "Máximo Lasarte",
+     "Nahuel Botto",
+     "Tomás Lasarte"
+    ],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Nicolás Di Fonzo",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "conversion",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Tomás Lasarte",
+      "tipo": "drop",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/uncas-el-unico-ganador-en-la-apertura-del-certamen",
+  "fecha_nota": "2015-05-31",
+  "partidos": [
+   {
+    "fecha_partido": "2015-05-30",
+    "categoria": "Preintermedia",
+    "categoria_inferida": false,
+    "torneo": "Copa Imágenes Colón (Urmdp)",
+    "instancia": "1ra fecha",
+    "rival": "Universitario",
+    "condicion": "Visitante",
+    "tantos_los50": 24,
+    "tantos_rival": 28,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2015-05-30",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Clasificatorio M17",
+    "instancia": null,
+    "rival": "Los Cardos",
+    "condicion": null,
+    "tantos_los50": 12,
+    "tantos_rival": 28,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Categoría M17"
+   },
+   {
+    "fecha_partido": "2015-05-30",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Clasificatorio M19",
+    "instancia": null,
+    "rival": "Los Cardos",
+    "condicion": null,
+    "tantos_los50": 5,
+    "tantos_rival": 17,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Categoría M19"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-inicia-su-camino-de-visitante-ante-san-ignacio",
+  "fecha_nota": "2015-06-05",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-debuto-cayendo-de-visitante",
+  "fecha_nota": "2015-06-06",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-juega-de-local-frente-a-sporting",
+  "fecha_nota": "2015-06-12",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/a-los-cardos-solo-le-alcanzo-para-darle-un-susto-a-sporting",
+  "fecha_nota": "2015-06-14",
+  "partidos": [
+   {
+    "fecha_partido": "2015-06-13",
+    "categoria": "Preintermedia",
+    "categoria_inferida": true,
+    "torneo": "Copa Imágenes Colón (Urmdp)",
+    "instancia": "3ra fecha",
+    "rival": "Unión del Sur A",
+    "condicion": "Local",
+    "tantos_los50": 5,
+    "tantos_rival": 69,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "El texto dice Unión del Sur B pero el listado de resultados dice Unión del Sur A; categoría supuesta por notas previas (Los 50 usa Preintermedia en esta copa); local según nota previa"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-no-pudo-en-casa-con-el-nacional",
+  "fecha_nota": "2015-06-15",
+  "partidos": [
+   {
+    "fecha_partido": "2015-06-14",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Regional Pampeano B",
+    "instancia": "1ra fecha",
+    "rival": "El Nacional (Bahía Blanca)",
+    "condicion": "Local",
+    "tantos_los50": 8,
+    "tantos_rival": 10,
+    "formacion": [
+     "Mauro Bilbao",
+     "Fermín Telechea",
+     "Mateo Sarti",
+     "Juan M. Quaranta",
+     "Leonardo Canale",
+     "Joaquín Fagonde",
+     "Esteban Varela",
+     "José Jiménez",
+     "Francisco Bustamante",
+     "Jacinto Arrondo",
+     "Nahuel Botto",
+     "Nicolás Di Fonzo",
+     "Máximo Lasarte",
+     "Matías Radetich",
+     "Tomás Lasarte"
+    ],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Mauro Bilbao",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Tomás Lasarte",
+      "tipo": "penal",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": "Tomás Lasarte erró la conversión final"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/el-plantel-de-tandil-xv-se-reune-por-primera-vez-en-uncas",
+  "fecha_nota": "2015-06-17",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-ante-universitario-en-busca-de-la-primera-victoria",
+  "fecha_nota": "2015-06-19",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-define-el-titulo-frente-a-argentino-de-rojas",
+  "fecha_nota": "2015-06-21",
+  "partidos": []
+ }
+]

@@ -1,0 +1,516 @@
+[
+ {
+  "url": "https://www.eleco.com.ar/interes-general/la-m-17-de-los-cardos-tuvo-su-festejo-en-casa",
+  "fecha_nota": "2013-11-13",
+  "partidos": [
+   {
+    "fecha_partido": null,
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Copa de Plata Menores de 15 (Bloque)",
+    "instancia": "ultima fecha",
+    "rival": "Biguá",
+    "condicion": "Local",
+    "tantos_los50": 41,
+    "tantos_rival": 15,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "M-15; fecha exacta del partido no indicada (fin de semana previo)"
+   },
+   {
+    "fecha_partido": null,
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Copa de Plata Menores de 16 (Bloque)",
+    "instancia": "ultima fecha",
+    "rival": "Biguá",
+    "condicion": "Local",
+    "tantos_los50": 12,
+    "tantos_rival": 16,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "M-16; fecha exacta no indicada"
+   },
+   {
+    "fecha_partido": null,
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Copa de Plata Menores de 17 (Bloque)",
+    "instancia": "ultima fecha",
+    "rival": "Biguá",
+    "condicion": "Local",
+    "tantos_los50": 0,
+    "tantos_rival": 30,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "M-17; fecha exacta no indicada"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/se-juega-la-segunda-etapa-del-seven-de-la-union",
+  "fecha_nota": "2013-11-16",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-cayo-en-semifinales-ante-sporting-que-fue-campeon",
+  "fecha_nota": "2013-11-17",
+  "partidos": [
+   {
+    "fecha_partido": "2013-11-16",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven de la Unión de Rugby de Mar del Plata, 2da etapa - Copa de Bronce",
+    "instancia": "Cuartos de final",
+    "rival": "Necochea",
+    "condicion": null,
+    "tantos_los50": 40,
+    "tantos_rival": 7,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Seven de Primera"
+   },
+   {
+    "fecha_partido": "2013-11-16",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven de la Unión de Rugby de Mar del Plata, 2da etapa - Copa de Bronce",
+    "instancia": "Semifinal",
+    "rival": "Biguá",
+    "condicion": null,
+    "tantos_los50": 19,
+    "tantos_rival": 21,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Seven de Primera"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/seven-de-la-union-se-define-el-circuito",
+  "fecha_nota": "2013-11-20",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/el-seven-de-m-17-y-m-19-se-juega-hoy-en-los-cardos",
+  "fecha_nota": "2013-11-23",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/rugby-una-victoria-fundamental-en-el-infierno-correntino",
+  "fecha_nota": "2013-11-27",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-recibio-los-torneos-de-m-17-y-m-19",
+  "fecha_nota": "2013-11-27",
+  "partidos": [
+   {
+    "fecha_partido": "2013-11-23",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven de Juveniles Unión de Rugby de Mar del Plata M-17",
+    "instancia": "Grupo A",
+    "rival": "Los Cardos A",
+    "condicion": "Visitante",
+    "tantos_los50": 7,
+    "tantos_rival": 14,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "M-17; en Los Cardos"
+   },
+   {
+    "fecha_partido": "2013-11-23",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven de Juveniles Unión de Rugby de Mar del Plata M-19",
+    "instancia": "Grupo B",
+    "rival": "Mar del Plata Club",
+    "condicion": null,
+    "tantos_los50": 7,
+    "tantos_rival": 47,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "M-19"
+   },
+   {
+    "fecha_partido": "2013-11-23",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven de Juveniles Unión de Rugby de Mar del Plata M-19",
+    "instancia": "Grupo B",
+    "rival": "Sporting",
+    "condicion": null,
+    "tantos_los50": 5,
+    "tantos_rival": 40,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "M-19"
+   },
+   {
+    "fecha_partido": "2013-11-24",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven de Juveniles Unión de Rugby de Mar del Plata M-15",
+    "instancia": null,
+    "rival": "Campo de Pato",
+    "condicion": null,
+    "tantos_los50": 32,
+    "tantos_rival": 0,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "M-15; el domingo (24/11) segun la nota"
+   },
+   {
+    "fecha_partido": "2013-11-24",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven de Juveniles Unión de Rugby de Mar del Plata M-16",
+    "instancia": null,
+    "rival": "Uncas",
+    "condicion": null,
+    "tantos_los50": 19,
+    "tantos_rival": 10,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "M-16; el domingo (24/11) segun la nota"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/rugby-se-define-el-seven-de-primera",
+  "fecha_nota": "2013-11-30",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/se-postergo-la-final-del-seven",
+  "fecha_nota": "2013-12-01",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-se-consagro-en-la-copa-de-oro-de-m-16-del-seven-de-la-union",
+  "fecha_nota": "2013-12-02",
+  "partidos": [
+   {
+    "fecha_partido": "2013-12-01",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven de Juveniles Unión de Rugby de Mar del Plata M-15 - Copa de Oro",
+    "instancia": "Final",
+    "rival": "Universitario",
+    "condicion": null,
+    "tantos_los50": 14,
+    "tantos_rival": 26,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "M-15; seven en Campo de Pato (Balcarce)"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-sorprendio-con-el-titulo-en-menores-de-16",
+  "fecha_nota": "2013-12-04",
+  "partidos": [
+   {
+    "fecha_partido": "2013-12-01",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven de Juveniles Unión de Rugby de Mar del Plata M-15 - Copa de Oro",
+    "instancia": "Final",
+    "rival": "Universitario",
+    "condicion": null,
+    "tantos_los50": 14,
+    "tantos_rival": 26,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "M-15; seven en Campo de Pato (Balcarce)"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/rugby-anunciaron-la-preseleccion-de-seven-con-11-tandilenses",
+  "fecha_nota": "2013-12-05",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/rugby-mar-del-plata-se-presenta-ante-el-seleccionado-local-en-parana",
+  "fecha_nota": "2013-12-13",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/ocho-tandilenses-en-el-preseleccionado-de-seven",
+  "fecha_nota": "2014-01-04",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/el-seven-fernando-varela-sumara-hockey-en-esta-edicion",
+  "fecha_nota": "2014-01-09",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-se-prepara-para-otra-fiesta-del-rugby-en-tandil",
+  "fecha_nota": "2014-01-24",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/en-los-50-presentan-el-seven-fernando-varela",
+  "fecha_nota": "2014-01-29",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/se-presento-oficialmente-el-25to-seven-fernando-varela",
+  "fecha_nota": "2014-01-30",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/mucho-publico-y-algunas-sorpresas-en-el-arranque-del-seven-fernando-varela",
+  "fecha_nota": "2014-02-02",
+  "partidos": [
+   {
+    "fecha_partido": "2014-02-01",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Fernando Varela (Primera)",
+    "instancia": "Zona C",
+    "rival": "Papasco",
+    "condicion": "Local",
+    "tantos_los50": 0,
+    "tantos_rival": 29,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Equipo Los 50 B"
+   },
+   {
+    "fecha_partido": "2014-02-01",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Fernando Varela (Primera)",
+    "instancia": "Zona C",
+    "rival": "El Rejunte",
+    "condicion": "Local",
+    "tantos_los50": 36,
+    "tantos_rival": 0,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Equipo Los 50 B"
+   },
+   {
+    "fecha_partido": "2014-02-01",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Fernando Varela (Primera)",
+    "instancia": "Zona H",
+    "rival": "Bataraz VII",
+    "condicion": "Local",
+    "tantos_los50": 31,
+    "tantos_rival": 7,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Equipo Los 50 A"
+   },
+   {
+    "fecha_partido": "2014-02-01",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Fernando Varela (Primera)",
+    "instancia": "Zona H",
+    "rival": "Papasco B",
+    "condicion": "Local",
+    "tantos_los50": 19,
+    "tantos_rival": 10,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Equipo Los 50 A"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/papasco-del-san-isidro-club-se-quedo-con-la-copa-de-oro-del-seven-fernando-varela",
+  "fecha_nota": "2014-02-03",
+  "partidos": [
+   {
+    "fecha_partido": "2014-02-02",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Fernando Varela (Primera) - Copa de Oro",
+    "instancia": "Octavos de final",
+    "rival": "GEBA",
+    "condicion": "Local",
+    "tantos_los50": 0,
+    "tantos_rival": 38,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Equipo Los 50 B"
+   },
+   {
+    "fecha_partido": "2014-02-02",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Fernando Varela (Primera) - Copa de Oro",
+    "instancia": "Octavos de final",
+    "rival": "Uncas Negro",
+    "condicion": "Local",
+    "tantos_los50": 35,
+    "tantos_rival": 0,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Equipo Los 50 A"
+   },
+   {
+    "fecha_partido": "2014-02-02",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Fernando Varela (Primera) - Copa de Oro",
+    "instancia": "Cuartos de final",
+    "rival": "Papasco A",
+    "condicion": "Local",
+    "tantos_los50": 0,
+    "tantos_rival": 31,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Equipo Los 50 A"
+   },
+   {
+    "fecha_partido": "2014-02-02",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Fernando Varela (Primera) - Copa de Plata",
+    "instancia": "Cuartos de final",
+    "rival": "Talento 7",
+    "condicion": "Local",
+    "tantos_los50": 14,
+    "tantos_rival": 19,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Equipo Los 50 B"
+   },
+   {
+    "fecha_partido": "2014-02-02",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Fernando Varela Menores de 18 - Final",
+    "instancia": "Final",
+    "rival": "Barbie",
+    "condicion": "Local",
+    "tantos_los50": 5,
+    "tantos_rival": 33,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Equipo Malaria 7 (Los 50) segun la nota"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/rugby-los-equipos-tandilenses-se-preparan-para-un-ano-exigente",
+  "fecha_nota": "2014-02-04",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/rugby-se-conocio-el-fixture-del-torneo-preparacion",
+  "fecha_nota": "2014-02-21",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/el-preseleccionado-m-18-se-reune-hoy-en-los-cardos",
+  "fecha_nota": "2014-02-22",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/el-preseleccionado-m18-tuvo-su-concentracion-en-los-cardos",
+  "fecha_nota": "2014-02-25",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/un-colegio-canadiense-visitara-los-50",
+  "fecha_nota": "2014-02-28",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/rugby-entrenamiento-y-reduccion-del-plantel-para-el-argentino",
+  "fecha_nota": "2014-03-05",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/rugby-se-conocio-el-fixture-del-torneo-oficial-de-la-urmdp",
+  "fecha_nota": "2014-03-13",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/rugby-infantil-los-clubes-tandilenses-en-el-encuentro-de-ayacucho",
+  "fecha_nota": "2014-03-22",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/rugby-anunciaron-el-fixture-del-preparacion-de-juveniles",
+  "fecha_nota": "2014-03-27",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-recibe-a-uncas",
+  "fecha_nota": "2014-03-29",
+  "partidos": []
+ }
+]

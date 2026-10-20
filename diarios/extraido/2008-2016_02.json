@@ -1,0 +1,752 @@
+[
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-se-esperanza",
+  "fecha_nota": "2008-08-25",
+  "partidos": [
+   {
+    "fecha_partido": "2008-08-24",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Biguá",
+    "condicion": "Local",
+    "tantos_los50": 26,
+    "tantos_rival": 5,
+    "formacion": [
+     "Martín De Poli",
+     "Juan Vismara",
+     "Sebastián Echeveste",
+     "Tomás Quaranta",
+     "Cristian Hollenger",
+     "Juan Rossi",
+     "Leonardo Canale",
+     "Diego Lapenna",
+     "Ignacio Pérez Diez",
+     "Nicolás González",
+     "Manuel Molina",
+     "Marcelo Lorenzo",
+     "Bernardo Diez",
+     "Franco Martignoni",
+     "Ignacio Falco"
+    ],
+    "ingresaron": [
+     "Germán Pérez Diez",
+     "Pablo Luiz",
+     "Guillermo Perazzone",
+     "Nicolás Vismara",
+     "Gonzalo Lauge"
+    ],
+    "puntos": [
+     {
+      "jugador": "Marcelo Lorenzo",
+      "tipo": "penal",
+      "cantidad": 3
+     },
+     {
+      "jugador": "Franco Martignoni",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Marcelo Lorenzo",
+      "tipo": "conversion",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Nicolás Vismara",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "try",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [
+     {
+      "jugador": "Sebastián Echeveste",
+      "tipo": "amarilla"
+     }
+    ],
+    "puntos_completos": true,
+    "nota": "Fecha deducida (nota del lunes, partido del domingo). Cancha: Los 50. 'Amonestado' registrado como amarilla."
+   },
+   {
+    "fecha_partido": "2008-08-24",
+    "categoria": "Intermedia",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Biguá",
+    "condicion": "Local",
+    "tantos_los50": 12,
+    "tantos_rival": 17,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2008-08-24",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Mar del Plata",
+    "condicion": null,
+    "tantos_los50": 5,
+    "tantos_rival": 63,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "M15"
+   },
+   {
+    "fecha_partido": "2008-08-24",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Mar del Plata",
+    "condicion": null,
+    "tantos_los50": 30,
+    "tantos_rival": 13,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "M16"
+   },
+   {
+    "fecha_partido": "2008-08-24",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Mar del Plata",
+    "condicion": null,
+    "tantos_los50": 17,
+    "tantos_rival": 14,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "M17"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/actividad-de-rugby",
+  "fecha_nota": "2008-09-06",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/uncas-alcanzo-una-contundente-victoria",
+  "fecha_nota": "2008-09-07",
+  "partidos": [
+   {
+    "fecha_partido": "2008-09-07",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Zona Reclasificatorio",
+    "instancia": null,
+    "rival": "Unión del Sur",
+    "condicion": null,
+    "tantos_los50": 13,
+    "tantos_rival": 8,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2008-09-07",
+    "categoria": "Intermedia",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Unión del Sur",
+    "condicion": null,
+    "tantos_los50": 12,
+    "tantos_rival": 27,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/uncas-gano-su-zona-con-una-abultada-victoria",
+  "fecha_nota": "2008-09-08",
+  "partidos": [
+   {
+    "fecha_partido": "2008-09-07",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Unión del Sur",
+    "condicion": null,
+    "tantos_los50": null,
+    "tantos_rival": null,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Solo menciona el triunfo de Los 50 sobre Unión del Sur, sin resultado en esta nota (ver nota anterior: 13-8)."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/triunfo-de-los-cardos-2",
+  "fecha_nota": "2008-09-14",
+  "partidos": [
+   {
+    "fecha_partido": "2008-09-13",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Zona Reclasificatoria",
+    "instancia": null,
+    "rival": "Mar del Plata",
+    "condicion": null,
+    "tantos_los50": 20,
+    "tantos_rival": 17,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2008-09-13",
+    "categoria": "Intermedia",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Mar del Plata",
+    "condicion": null,
+    "tantos_los50": 29,
+    "tantos_rival": 12,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Esta nota dice 29-12; otra nota del 15/09 dice Los 50 12-Mar del Plata Club 29: resultado contradictorio."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-por-conducta",
+  "fecha_nota": "2008-09-15",
+  "partidos": [
+   {
+    "fecha_partido": "2008-09-13",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Mar del Plata Club",
+    "condicion": "Local",
+    "tantos_los50": 20,
+    "tantos_rival": 17,
+    "formacion": [
+     "Sebastián Echeveste",
+     "Pablo Luiz",
+     "C. Passarelli",
+     "Tomás Quaranta",
+     "Diego Lapenna",
+     "Juan Rossi",
+     "J. P. Zugbi",
+     "A. Pasckvan",
+     "Ignacio Pérez Díez",
+     "Germán Pérez Díez",
+     "Manuel Molina",
+     "Marcelo Lorenzo",
+     "Bernardo Díez",
+     "N. Sanfereiter",
+     "Ignacio Falco"
+    ],
+    "ingresaron": [
+     "Nicolás Vismara"
+    ],
+    "puntos": [
+     {
+      "jugador": "Pablo Luiz",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Sebastián Echeveste",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Marcelo Lorenzo",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Germán Pérez Diez",
+      "tipo": "conversion",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Germán Pérez Diez",
+      "tipo": "penal",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": "Nombres de formación con inicial. Cancha: Los 50. Fecha deducida: la nota 14/09 dice 'ayer'."
+   },
+   {
+    "fecha_partido": "2008-09-13",
+    "categoria": "Intermedia",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Mar del Plata Club",
+    "condicion": null,
+    "tantos_los50": 12,
+    "tantos_rival": 29,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Esta nota dice 12-29; otra nota del 14/09 dice Los 50 29-Mar del Plata 12: contradictorio."
+   },
+   {
+    "fecha_partido": "2008-09-14",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Biguá",
+    "condicion": null,
+    "tantos_los50": 12,
+    "tantos_rival": 21,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "M15"
+   },
+   {
+    "fecha_partido": "2008-09-14",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Biguá",
+    "condicion": null,
+    "tantos_los50": 25,
+    "tantos_rival": 19,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "M16"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/resultados-de-rugby",
+  "fecha_nota": "2008-09-21",
+  "partidos": [
+   {
+    "fecha_partido": "2008-09-20",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Zona Reclasificatorio",
+    "instancia": null,
+    "rival": "Remo",
+    "condicion": "Visitante",
+    "tantos_los50": 33,
+    "tantos_rival": 21,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Remo listado primero en el resumen; condición inferida por orden."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-muy-light",
+  "fecha_nota": "2008-09-22",
+  "partidos": [
+   {
+    "fecha_partido": "2008-09-20",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Remo",
+    "condicion": null,
+    "tantos_los50": null,
+    "tantos_rival": null,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Solo dice que ganó con bonus tras ir perdiendo al inicio; sin resultado (otra nota: 33-21)."
+   },
+   {
+    "fecha_partido": "2008-09-21",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Los Cardos A",
+    "condicion": null,
+    "tantos_los50": 5,
+    "tantos_rival": 42,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "M15"
+   },
+   {
+    "fecha_partido": "2008-09-21",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Los Cardos",
+    "condicion": null,
+    "tantos_los50": 22,
+    "tantos_rival": 30,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "M16"
+   },
+   {
+    "fecha_partido": "2008-09-21",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Los Cardos",
+    "condicion": null,
+    "tantos_los50": 7,
+    "tantos_rival": 45,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "M17"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/sobre-uncas-y-su-rival",
+  "fecha_nota": "2008-09-24",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/actividad-de-rugby-para-el-fin-de-semana",
+  "fecha_nota": "2008-09-27",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-setenta-de-los-50",
+  "fecha_nota": "2008-10-22",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/programaron-un-seven",
+  "fecha_nota": "2008-10-25",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/seven-oficial-de-primera",
+  "fecha_nota": "2008-10-28",
+  "partidos": [
+   {
+    "fecha_partido": "2008-10-25",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Oficial de Primera (URMDP)",
+    "instancia": null,
+    "rival": "Remo",
+    "condicion": null,
+    "tantos_los50": 10,
+    "tantos_rival": 29,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2008-10-25",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Oficial de Primera (URMDP)",
+    "instancia": null,
+    "rival": "Miramar RC",
+    "condicion": null,
+    "tantos_los50": 36,
+    "tantos_rival": 0,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2008-10-25",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Oficial de Primera (URMDP)",
+    "instancia": null,
+    "rival": "Unión del Sur",
+    "condicion": null,
+    "tantos_los50": 7,
+    "tantos_rival": 43,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-vuelve-a-jugar-como-local",
+  "fecha_nota": "2008-11-01",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/la-caida-de-los-cardos-una-sorpresa-en-tandil",
+  "fecha_nota": "2008-11-04",
+  "partidos": [
+   {
+    "fecha_partido": "2008-11-02",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Seven M16 (URMDP)",
+    "instancia": null,
+    "rival": "Biguá",
+    "condicion": null,
+    "tantos_los50": 26,
+    "tantos_rival": 0,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha 1/2-nov deducida; sevens del fin de semana."
+   },
+   {
+    "fecha_partido": "2008-11-02",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Seven M16 (URMDP)",
+    "instancia": null,
+    "rival": "Comercial",
+    "condicion": null,
+    "tantos_los50": 22,
+    "tantos_rival": 12,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2008-11-02",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Seven M16 (URMDP)",
+    "instancia": "Semifinal",
+    "rival": "Mar del Plata",
+    "condicion": null,
+    "tantos_los50": 12,
+    "tantos_rival": 14,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2008-11-02",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Seven M17 (URMDP)",
+    "instancia": null,
+    "rival": "Universitario B",
+    "condicion": null,
+    "tantos_los50": 10,
+    "tantos_rival": 22,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2008-11-02",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Seven M17 (URMDP)",
+    "instancia": null,
+    "rival": "Jockey Club",
+    "condicion": null,
+    "tantos_los50": 17,
+    "tantos_rival": 24,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/se-juega-otra-fecha-del-regional-de-rugby",
+  "fecha_nota": "2008-11-08",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/el-rugby-de-los-50-de-gira-por-buenos-aires",
+  "fecha_nota": "2008-11-13",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/setenta-anos-del-club-los-50",
+  "fecha_nota": "2008-11-13",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/presentacion-oficial-de-rugby-por-los-chicos",
+  "fecha_nota": "2008-11-15",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/el-rugby-se-juega-por-los-chicos-de-tandil",
+  "fecha_nota": "2008-11-21",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/el-rugby-jugo-por-los-chicos",
+  "fecha_nota": "2008-11-23",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/el-rugby-sobre-el-final-de-noviembre",
+  "fecha_nota": "2008-11-29",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/lo-que-falta-y-lo-que-queda-para-el-rugby",
+  "fecha_nota": "2008-12-02",
+  "partidos": [
+   {
+    "fecha_partido": null,
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "II Seven de Azul",
+    "instancia": "Cuartos de final Copa de Oro",
+    "rival": "Coronel Suárez",
+    "condicion": null,
+    "tantos_los50": 24,
+    "tantos_rival": 0,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Seven del 29-30 nov 2008; día exacto no indicado."
+   },
+   {
+    "fecha_partido": null,
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "II Seven de Azul",
+    "instancia": "Semifinal Copa de Oro",
+    "rival": "Mariano Moreno A",
+    "condicion": null,
+    "tantos_los50": 5,
+    "tantos_rival": 34,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Seven del 29-30 nov 2008; día exacto no indicado."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/presentaran-el-seven",
+  "fecha_nota": "2009-01-10",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/manana-presentaran-el-seven-fernando-varela",
+  "fecha_nota": "2009-01-14",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/presentaron-el-seven-de-rugby-fernando-varela",
+  "fecha_nota": "2009-01-16",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/comienza-el-seven-fernando-varela",
+  "fecha_nota": "2009-01-24",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/comienzan-las-practicas-de-hockey-en-los-50",
+  "fecha_nota": "2009-02-19",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-y-un-triunfo-en-brasil",
+  "fecha_nota": "2009-02-25",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/se-juega-el-seven-apertura-de-hockey",
+  "fecha_nota": "2009-03-14",
+  "partidos": []
+ }
+]

@@ -1,0 +1,645 @@
+[
+ {
+  "url": "https://www.eleco.com.ar/deportes/un-nuevo-encuentro-de-rugby-en-el-penal-de-barker",
+  "fecha_nota": "2017-07-10",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/resultados-de-juveniles-en-la-union-de-rugby-de-mar-del-plaa",
+  "fecha_nota": "2017-07-11",
+  "partidos": [
+   {
+    "fecha_partido": null,
+    "categoria": "Juveniles",
+    "torneo": "Clasificatorio del Bloque de Juveniles M15 (URMdP)",
+    "instancia": "ultima fecha",
+    "rival": "Sporting A",
+    "condicion": null,
+    "tantos_los50": 14,
+    "tantos_rival": 55,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 15; fecha del fin de semana previo, sin dia exacto"
+   },
+   {
+    "fecha_partido": null,
+    "categoria": "Juveniles",
+    "torneo": "Clasificatorio del Bloque de Juveniles M16 (URMdP)",
+    "instancia": "ultima fecha",
+    "rival": "Sporting A",
+    "condicion": null,
+    "tantos_los50": 7,
+    "tantos_rival": 45,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 16; fecha del fin de semana previo, sin dia exacto"
+   },
+   {
+    "fecha_partido": null,
+    "categoria": "Juveniles",
+    "torneo": "Clasificatorio del Bloque de Juveniles M17 (URMdP)",
+    "instancia": "ultima fecha",
+    "rival": "Los Cardos",
+    "condicion": null,
+    "tantos_los50": 5,
+    "tantos_rival": 50,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 17, clasico; fecha del fin de semana previo, sin dia exacto"
+   },
+   {
+    "fecha_partido": null,
+    "categoria": "Juveniles",
+    "torneo": "Copa Imagenes M19 (URMdP)",
+    "instancia": null,
+    "rival": "San Ignacio",
+    "condicion": null,
+    "tantos_los50": 0,
+    "tantos_rival": 90,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 19; fecha del fin de semana previo, sin dia exacto"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-en-bahia-2",
+  "fecha_nota": "2017-07-15",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-superado-en-su-viaje-a-bahia-blanca",
+  "fecha_nota": "2017-07-16",
+  "partidos": [
+   {
+    "fecha_partido": "2017-07-15",
+    "categoria": "Primera",
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": null,
+    "rival": "Los Miuras (Junin)",
+    "condicion": "Visitante",
+    "tantos_los50": 41,
+    "tantos_rival": 24,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/rugby-juegan-los-tandilenses",
+  "fecha_nota": "2017-07-23",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/triunfo-de-los-50-y-caidas-de-los-cardos-y-uncas",
+  "fecha_nota": "2017-07-30",
+  "partidos": [
+   {
+    "fecha_partido": "2017-07-29",
+    "categoria": "Primera",
+    "torneo": "Copa Imagenes MDQ - Copa de Plata",
+    "instancia": null,
+    "rival": "San Ignacio",
+    "condicion": "Local",
+    "tantos_los50": 32,
+    "tantos_rival": 10,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "En La Rural; la lista de resultados no marca categoria, se asume Primera"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-juega-de-local-frente-uno-de-los-punteros",
+  "fecha_nota": "2017-08-05",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-batallo-pero-no-pudo-con-mar-del-plata",
+  "fecha_nota": "2017-08-06",
+  "partidos": [
+   {
+    "fecha_partido": "2017-08-05",
+    "categoria": "Primera",
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": null,
+    "rival": "Argentino (Bahia Blanca)",
+    "condicion": null,
+    "tantos_los50": 15,
+    "tantos_rival": 22,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Resultado de la lista; por otra nota Los 50 visitaba a Argentino en Bahia Blanca"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/el-fixture-de-la-segunda-fase-del-rugby-juvenil",
+  "fecha_nota": "2017-08-11",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-enfrenta-una-final-en-casa-ante-comercial",
+  "fecha_nota": "2017-08-12",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/otra-final-para-los-cardos-que-no-puede-dejar-puntos",
+  "fecha_nota": "2017-08-19",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-dejo-pasar-una-chance-como-local",
+  "fecha_nota": "2017-08-20",
+  "partidos": [
+   {
+    "fecha_partido": "2017-08-19",
+    "categoria": "Primera",
+    "torneo": "Copa Imagenes MDQ - Copa de Plata",
+    "instancia": null,
+    "rival": "Campo de Pato",
+    "condicion": null,
+    "tantos_los50": 26,
+    "tantos_rival": 22,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Lista de resultados sin categoria (se asume Primera) ni dia; fecha deducida como el sabado anterior"
+   },
+   {
+    "fecha_partido": null,
+    "categoria": "Juveniles",
+    "torneo": "Torneo Intermedio M19",
+    "instancia": null,
+    "rival": "Pueyrredon",
+    "condicion": null,
+    "tantos_los50": 12,
+    "tantos_rival": 24,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "M19; sin dia exacto"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/sin-margen-los-cardos-va-por-un-triunfo-ante-uni",
+  "fecha_nota": "2017-08-26",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-al-menos-rescato-un-punto-ante-universitario",
+  "fecha_nota": "2017-08-27",
+  "partidos": [
+   {
+    "fecha_partido": "2017-08-26",
+    "categoria": "Primera",
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": null,
+    "rival": "Santa Rosa",
+    "condicion": "Local",
+    "tantos_los50": 55,
+    "tantos_rival": 12,
+    "formacion": [
+     "Angel Sanz",
+     "Juan Pedro Zugbi",
+     "Mauro Bilbao",
+     "Leonardo Canale",
+     "Andrés Mercanti",
+     "Luciano Mauro",
+     "Esteban Varela",
+     "José Jiménez",
+     "Nicolás Di Fonzo",
+     "Jacinto Arrondo",
+     "Nahuel Botto",
+     "Luciano Sachetto",
+     "Máximo Lasarte",
+     "Juan Bertucci",
+     "Nicolás Homps"
+    ],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "En La Rural"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-enfrenta-un-desafio-muy-complicado-ante-sporting",
+  "fecha_nota": "2017-09-02",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-cayo-ante-sporting-y-quedo-cerca-perder-la-categoria",
+  "fecha_nota": "2017-09-03",
+  "partidos": [
+   {
+    "fecha_partido": "2017-09-02",
+    "categoria": "Primera",
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": null,
+    "rival": "Uncas",
+    "condicion": "Visitante",
+    "tantos_los50": 26,
+    "tantos_rival": 17,
+    "formacion": [
+     "Juan Manuel Vismara",
+     "Angel Sanz",
+     "Mauro Bilbao",
+     "Ignacio Arbulu",
+     "Andrés Mercanti",
+     "Luciano Mauro",
+     "Esteban Varela",
+     "José Jiménez",
+     "Nicolás Di Fonzo",
+     "Jacinto Arrondo",
+     "Nahuel Botto",
+     "Luciano Sacchetto",
+     "Máximo Lasarte",
+     "Juan Bertucci",
+     "Nicolás Homps"
+    ],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Juan Bertucci",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Nahuel Botto",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Angel Sanz",
+      "tipo": "try",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Los demas puntos fueron de Jacinto Arrondo con el pie, sin detallar cantidad. La nota escribe Bartucci en el texto y Bertucci en la formacion."
+   },
+   {
+    "fecha_partido": "2017-09-02",
+    "categoria": "Primera",
+    "torneo": "Copa Imagenes MDQ - Copa de Plata",
+    "instancia": null,
+    "rival": "Uncas",
+    "condicion": null,
+    "tantos_los50": 20,
+    "tantos_rival": 3,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Lista de resultados sin categoria ni dia; se asume Primera y sabado anterior; podria ser otra categoria o fecha"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-se-juega-la-ultima-ficha-ante-comercial",
+  "fecha_nota": "2017-09-09",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-lucho-pero-no-pudo-evitar-una-caida-anunciada",
+  "fecha_nota": "2017-09-10",
+  "partidos": [
+   {
+    "fecha_partido": "2017-09-09",
+    "categoria": "Primera",
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": null,
+    "rival": "Biguá",
+    "condicion": "Local",
+    "tantos_los50": 10,
+    "tantos_rival": 0,
+    "formacion": [
+     "Angel Sanz",
+     "Juan Pedro Zugbi",
+     "Mauro Bilbao",
+     "Ignacio Arbulu",
+     "Andrés Mercanti",
+     "Leonardo Canale",
+     "Esteban Varela",
+     "José Jiménez",
+     "Nicolás Di Fonzo",
+     "Jacinto Arrondo",
+     "Nahuel Botto",
+     "Luciano Sacchetto",
+     "Máximo Lasarte",
+     "Juan Bertucci",
+     "Nicolás Homps"
+    ],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "conversion",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "penal",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": "Partido suspendido a los 27 min del primer tiempo por tormenta electrica; resultado parcial. Formacion tomada de la nota previa de la misma fecha (la sintesis no la trae). Se completo despues (27-5)."
+   },
+   {
+    "fecha_partido": "2017-09-09",
+    "categoria": "Primera",
+    "torneo": "Copa Imagenes MDQ - Copa de Plata",
+    "instancia": null,
+    "rival": "Biguá",
+    "condicion": null,
+    "tantos_los50": 6,
+    "tantos_rival": 6,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Lista de resultados sin categoria; se asume Primera"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-se-despide-del-torneo-visitando-a-san-ignacio",
+  "fecha_nota": "2017-09-16",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-se-despidio-con-una-derrota-ante-san-ignacio",
+  "fecha_nota": "2017-09-17",
+  "partidos": [
+   {
+    "fecha_partido": "2017-09-16",
+    "categoria": "Primera",
+    "torneo": "Copa Imagenes MDQ - Copa de Plata",
+    "instancia": null,
+    "rival": "Uncas",
+    "condicion": null,
+    "tantos_los50": 19,
+    "tantos_rival": 20,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Lista de resultados sin categoria; se asume Primera"
+   },
+   {
+    "fecha_partido": "2017-09-16",
+    "categoria": "Juveniles",
+    "torneo": "Copa Imagenes MDQ - Copa de Plata M15",
+    "instancia": null,
+    "rival": "Uncas",
+    "condicion": null,
+    "tantos_los50": 17,
+    "tantos_rival": 38,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 15"
+   },
+   {
+    "fecha_partido": "2017-09-16",
+    "categoria": "Juveniles",
+    "torneo": "Copa Imagenes MDQ - Copa de Plata M16",
+    "instancia": null,
+    "rival": "Uncas",
+    "condicion": null,
+    "tantos_los50": 26,
+    "tantos_rival": 21,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 16"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-derroto-a-sporting",
+  "fecha_nota": "2017-09-24",
+  "partidos": [
+   {
+    "fecha_partido": "2017-09-23",
+    "categoria": "Primera",
+    "torneo": "Copa Imagenes MDQ - Copa de Plata",
+    "instancia": null,
+    "rival": "Campo de Pato",
+    "condicion": "Visitante",
+    "tantos_los50": 27,
+    "tantos_rival": 32,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Se asume Primera (la nota habla de los equipos tandilenses en Copa de Plata)"
+   },
+   {
+    "fecha_partido": null,
+    "categoria": "Juveniles",
+    "torneo": "Torneo Intermedio M19",
+    "instancia": null,
+    "rival": "Los Cardos",
+    "condicion": null,
+    "tantos_los50": 5,
+    "tantos_rival": 42,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "M19; sin dia exacto"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-50-completo-con-una-victoria-su-partido-ante-bigua",
+  "fecha_nota": "2017-10-01",
+  "partidos": [
+   {
+    "fecha_partido": null,
+    "categoria": "Primera",
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": null,
+    "rival": "Biguá",
+    "condicion": null,
+    "tantos_los50": 27,
+    "tantos_rival": 5,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Partido suspendido el 2017-09-09 (10-0 a los 27 min) y completado; fecha de la reanudacion no indicada. Es el mismo partido del 10-0 parcial, el resultado final fue 27-5."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/el-rugby-una-herramienta-para-una-segunda-oportunidad",
+  "fecha_nota": "2017-10-01",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-definira-frente-a-universitario-el-regional-m17",
+  "fecha_nota": "2017-10-03",
+  "partidos": [
+   {
+    "fecha_partido": null,
+    "categoria": "Juveniles",
+    "torneo": "Copa Imagenes MDQ - Copa de Plata M15",
+    "instancia": null,
+    "rival": "Universitario B",
+    "condicion": null,
+    "tantos_los50": 24,
+    "tantos_rival": 13,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "M15; fin de semana previo, sin dia exacto"
+   },
+   {
+    "fecha_partido": null,
+    "categoria": "Juveniles",
+    "torneo": "Copa Imagenes MDQ - Copa de Plata M16",
+    "instancia": null,
+    "rival": "Universitario B",
+    "condicion": null,
+    "tantos_los50": 22,
+    "tantos_rival": 0,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "M16; fin de semana previo, sin dia exacto"
+   },
+   {
+    "fecha_partido": null,
+    "categoria": "Juveniles",
+    "torneo": "Torneo Intermedio M17",
+    "instancia": null,
+    "rival": "Tiro Federal",
+    "condicion": null,
+    "tantos_los50": 10,
+    "tantos_rival": 33,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "M17; fin de semana previo, sin dia exacto"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/actividad-de-infantiles-en-los-50",
+  "fecha_nota": "2017-10-07",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-se-quedo-sin-final",
+  "fecha_nota": "2017-10-15",
+  "partidos": [
+   {
+    "fecha_partido": "2017-10-14",
+    "categoria": "Primera",
+    "torneo": "Copa Imagenes MDQ - Copa de Plata",
+    "instancia": "Semifinal",
+    "rival": "Biguá",
+    "condicion": null,
+    "tantos_los50": 19,
+    "tantos_rival": 39,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Dia deducido: semifinales del sabado anterior a la nota"
+   },
+   {
+    "fecha_partido": null,
+    "categoria": "Juveniles",
+    "torneo": "Copa Imagenes MDQ - Copa de Plata M15",
+    "instancia": null,
+    "rival": "Camarones",
+    "condicion": null,
+    "tantos_los50": 15,
+    "tantos_rival": 52,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "M15; sin dia exacto; la nota no indica instancia"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-50-fue-anfitrion-de-un-encuentro-de-infantiles",
+  "fecha_nota": "2017-11-02",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/uncas-y-los-50-van-por-un-lugar-en-la-final-en-junin",
+  "fecha_nota": "2017-11-04",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/uncas-festejo-ante-los-50-en-una-definicion-tandilense",
+  "fecha_nota": "2017-11-06",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/se-juega-el-seven-de-m16",
+  "fecha_nota": "2017-12-02",
+  "partidos": []
+ }
+]

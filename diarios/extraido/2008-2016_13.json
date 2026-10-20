@@ -1,0 +1,593 @@
+[
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-viaja-para-jugar-con-union-del-sur-2",
+  "fecha_nota": "2012-10-13",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-viaja-para-jugar-con-union-del-sur",
+  "fecha_nota": "2012-10-13",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/el-bloque-de-los-cardos-cierra-ante-universitario",
+  "fecha_nota": "2012-10-17",
+  "partidos": [
+   {
+    "fecha_partido": "2012-10-14",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Copa de Plata del Bloque de Juveniles (URMDP)",
+    "instancia": "Última fecha, M-15",
+    "rival": "Comercial",
+    "condicion": "Visitante",
+    "tantos_los50": 5,
+    "tantos_rival": 31,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 15"
+   },
+   {
+    "fecha_partido": "2012-10-14",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Copa de Plata del Bloque de Juveniles (URMDP)",
+    "instancia": "Última fecha, M-16",
+    "rival": "Comercial",
+    "condicion": "Visitante",
+    "tantos_los50": 15,
+    "tantos_rival": 31,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 16"
+   },
+   {
+    "fecha_partido": "2012-10-14",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Copa de Plata del Bloque de Juveniles (URMDP)",
+    "instancia": "Última fecha, M-17",
+    "rival": "Comercial",
+    "condicion": "Visitante",
+    "tantos_los50": 10,
+    "tantos_rival": 60,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 17"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-pelicanes-preparan-otro-encuentro-de-rugby",
+  "fecha_nota": "2012-10-18",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-dejo-escapar-una-victoria-que-parecia-segura",
+  "fecha_nota": "2012-10-21",
+  "partidos": [
+   {
+    "fecha_partido": "2012-10-20",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Torneo Clausura (URMDP)",
+    "instancia": null,
+    "rival": "Unión del Sur",
+    "condicion": "Local",
+    "tantos_los50": 25,
+    "tantos_rival": 28,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [
+     {
+      "jugador": "Martín De Poli",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "Juan Manuel Quaranta",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "Joaquín Fagonde",
+      "tipo": "amarilla"
+     }
+    ],
+    "puntos_completos": false,
+    "nota": "Fecha deducida (la nota es del domingo 21; otra nota dice que fue la semana previa al 27/10). Ganaba 22-5 al descanso. Categoría Primera inferida del torneo."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-cerro-otra-buena-temporada-con-el-bloque",
+  "fecha_nota": "2012-10-24",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/la-m-14-de-los-50-viajo-rumbo-a-uruguay",
+  "fecha_nota": "2012-10-26",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-y-los-cardos-con-compromisos-complicados",
+  "fecha_nota": "2012-10-27",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/caidas-de-los-cardos-y-los-50",
+  "fecha_nota": "2012-10-28",
+  "partidos": [
+   {
+    "fecha_partido": "2012-10-27",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Torneo Clausura (URMDP)",
+    "instancia": "4ta fecha",
+    "rival": "San Ignacio",
+    "condicion": "Visitante",
+    "tantos_los50": 3,
+    "tantos_rival": 11,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "penal",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-quiere-cerrar-el-ano-de-la-mejor-forma",
+  "fecha_nota": "2012-11-03",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-no-pudo-con-comercial",
+  "fecha_nota": "2012-11-04",
+  "partidos": [
+   {
+    "fecha_partido": "2012-11-03",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Torneo Clausura (URMDP)",
+    "instancia": "Última fecha",
+    "rival": "Comercial",
+    "condicion": "Local",
+    "tantos_los50": 20,
+    "tantos_rival": 34,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Tomás Lasarte",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "conversion",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "penal",
+      "cantidad": 2
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": "La nota dice 'dos tries de Tomás Lasarte y Guillermo Perazzone'; se asume un try cada uno (suma 20)."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-se-quedo-con-la-copa-de-oro",
+  "fecha_nota": "2012-11-06",
+  "partidos": [
+   {
+    "fecha_partido": null,
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven oficial Menores de 19 (URMDP)",
+    "instancia": "Zona B",
+    "rival": "Universitario",
+    "condicion": null,
+    "tantos_los50": 0,
+    "tantos_rival": 43,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Seven M-19; fecha del último fin de semana antes del 6/11/2012."
+   },
+   {
+    "fecha_partido": null,
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven oficial Menores de 19 (URMDP)",
+    "instancia": "Zona B",
+    "rival": "Biguá",
+    "condicion": null,
+    "tantos_los50": 10,
+    "tantos_rival": 52,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Seven M-19; fecha del último fin de semana antes del 6/11/2012."
+   },
+   {
+    "fecha_partido": null,
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven oficial Menores de 19 (URMDP)",
+    "instancia": "Final Copa de Bronce",
+    "rival": "Villa Gesell",
+    "condicion": null,
+    "tantos_los50": 21,
+    "tantos_rival": 17,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Seven M-19; ganó la Copa de Bronce."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/seis-tandilenses-convocados-al-preseleccionado-de-seven",
+  "fecha_nota": "2012-11-10",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/el-seleccionado-de-seven-tuvo-su-primera-practica",
+  "fecha_nota": "2012-11-16",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/se-definieron-las-zonas-para-el-seven-de-la-union",
+  "fecha_nota": "2012-11-23",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/solo-los-cardos-pudo-alcanzar-los-cuartos",
+  "fecha_nota": "2012-11-27",
+  "partidos": [
+   {
+    "fecha_partido": "2012-11-26",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven oficial de Primera (URMDP)",
+    "instancia": "Zona F",
+    "rival": "San Ignacio B",
+    "condicion": null,
+    "tantos_los50": null,
+    "tantos_rival": null,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Victoria, sin tantos informados."
+   },
+   {
+    "fecha_partido": "2012-11-26",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven oficial de Primera (URMDP)",
+    "instancia": "Zona F",
+    "rival": "Unión del Sur",
+    "condicion": null,
+    "tantos_los50": null,
+    "tantos_rival": null,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Derrota, sin tantos informados; eliminado."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/el-casi-visito-a-los-50-con-el-puma-martin-landajo",
+  "fecha_nota": "2012-12-16",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/el-seven-playero-de-miramar-tendra-presencia-tandilense",
+  "fecha_nota": "2013-01-04",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/presentaron-oficialmente-el-24to-seven-fernando-varela",
+  "fecha_nota": "2013-01-25",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/la-fiesta-del-rugby-se-pone-en-marcha-en-los-50",
+  "fecha_nota": "2013-02-02",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/uncas-encara-la-temporada-para-afianzar-su-proyecto",
+  "fecha_nota": "2013-02-20",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-renueva-su-objetivo-de-pelear-mas-arriba",
+  "fecha_nota": "2013-02-27",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-salio-mejor-parado-en-la-primera-fecha",
+  "fecha_nota": "2013-03-10",
+  "partidos": [
+   {
+    "fecha_partido": "2013-03-09",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Torneo Preparación (URMDP)",
+    "instancia": "1ra fecha, Zona D",
+    "rival": "Uncas",
+    "condicion": null,
+    "tantos_los50": 13,
+    "tantos_rival": 7,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Los 50 con mayoría de jugadores de Intermedia más algunos de Primera. Partido de 30 minutos."
+   },
+   {
+    "fecha_partido": "2013-03-09",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Torneo Preparación (URMDP)",
+    "instancia": "1ra fecha, Zona D",
+    "rival": "Los Cardos",
+    "condicion": null,
+    "tantos_los50": 10,
+    "tantos_rival": 19,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Partido de 30 minutos."
+   },
+   {
+    "fecha_partido": "2013-03-09",
+    "categoria": "Intermedia",
+    "categoria_inferida": false,
+    "torneo": "Torneo Preparación (URMDP)",
+    "instancia": "1ra fecha, Zona D",
+    "rival": "Los Cardos",
+    "condicion": null,
+    "tantos_los50": 0,
+    "tantos_rival": 26,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Resultado deducido del texto ('15-0 a Uncas y 26-0'); partido de 30 minutos."
+   },
+   {
+    "fecha_partido": "2013-03-09",
+    "categoria": "Intermedia",
+    "categoria_inferida": false,
+    "torneo": "Torneo Preparación (URMDP)",
+    "instancia": "1ra fecha, Zona D",
+    "rival": "Uncas",
+    "condicion": null,
+    "tantos_los50": 5,
+    "tantos_rival": 26,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Partido de 30 minutos."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-sera-la-sede-de-la-zona-2-el-sabado",
+  "fecha_nota": "2013-03-13",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-recibe-la-zona-2-en-busca-de-las-semifinales",
+  "fecha_nota": "2013-03-16",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-consiguio-un-lugar-en-las-semifinales",
+  "fecha_nota": "2013-03-17",
+  "partidos": [
+   {
+    "fecha_partido": "2013-03-16",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Torneo Preparación (URMDP)",
+    "instancia": "2da fecha, Zona 1",
+    "rival": "Mar del Plata Club",
+    "condicion": "Visitante",
+    "tantos_los50": 0,
+    "tantos_rival": 29,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Sede Biguá; la nota no aclara si es Primera o Intermedia, se asume Primera."
+   },
+   {
+    "fecha_partido": "2013-03-16",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Torneo Preparación (URMDP)",
+    "instancia": "2da fecha, Zona 1",
+    "rival": "Biguá",
+    "condicion": "Visitante",
+    "tantos_los50": 0,
+    "tantos_rival": 12,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Sede Biguá; la nota no aclara si es Primera o Intermedia, se asume Primera."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-busca-la-final",
+  "fecha_nota": "2013-03-20",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-busca-la-final-frente-a-mar-del-plata-club",
+  "fecha_nota": "2013-03-23",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-cayo-dos-veces-y-termino-en-el-cuarto-puesto",
+  "fecha_nota": "2013-03-24",
+  "partidos": [
+   {
+    "fecha_partido": "2013-03-23",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Torneo Preparación (URMDP)",
+    "instancia": "Semifinal Copa de Plata",
+    "rival": "Universitario",
+    "condicion": null,
+    "tantos_los50": 5,
+    "tantos_rival": 6,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Categoría inferida."
+   },
+   {
+    "fecha_partido": "2013-03-23",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Torneo Preparación (URMDP)",
+    "instancia": "Tercer puesto Copa de Plata",
+    "rival": "Unión del Sur",
+    "condicion": null,
+    "tantos_los50": 14,
+    "tantos_rival": 0,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Categoría inferida; sede Unión del Sur."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-y-los-cardos-jugaron-con-el-preparacion-de-juveniles",
+  "fecha_nota": "2013-03-27",
+  "partidos": [
+   {
+    "fecha_partido": "2013-03-24",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Torneo Preparación del Bloque de Juveniles (URMDP)",
+    "instancia": "2da fecha, M-15",
+    "rival": "San Ignacio",
+    "condicion": null,
+    "tantos_los50": 10,
+    "tantos_rival": 0,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 15, cancha de Universitario."
+   },
+   {
+    "fecha_partido": "2013-03-24",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Torneo Preparación del Bloque de Juveniles (URMDP)",
+    "instancia": "2da fecha, M-15",
+    "rival": "Universitario",
+    "condicion": "Visitante",
+    "tantos_los50": 0,
+    "tantos_rival": 12,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 15."
+   },
+   {
+    "fecha_partido": "2013-03-24",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Torneo Preparación del Bloque de Juveniles (URMDP)",
+    "instancia": "2da fecha, M-16",
+    "rival": "San Ignacio",
+    "condicion": null,
+    "tantos_los50": 0,
+    "tantos_rival": 7,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 16, cancha de Universitario."
+   },
+   {
+    "fecha_partido": "2013-03-24",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Torneo Preparación del Bloque de Juveniles (URMDP)",
+    "instancia": "2da fecha, M-16",
+    "rival": "Universitario",
+    "condicion": "Visitante",
+    "tantos_los50": 0,
+    "tantos_rival": 19,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 16."
+   }
+  ]
+ }
+]

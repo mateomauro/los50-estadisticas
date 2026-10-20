@@ -1,0 +1,428 @@
+[
+ {
+  "url": "https://www.eleco.com.ar/interes-general/uncas-recibe-a-los-50-por-un-lugar-en-primera",
+  "fecha_nota": "2009-11-07",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-fue-superior-a-uncas-y-conservo-su-lugar-en-primera",
+  "fecha_nota": "2009-11-08",
+  "partidos": [
+   {
+    "fecha_partido": "2009-11-07",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Torneo Reclasificatorio de la Unión Marplatense de Rugby",
+    "instancia": "última fecha",
+    "rival": "Uncas",
+    "condicion": "Visitante",
+    "tantos_los50": null,
+    "tantos_rival": null,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "La nota solo dice en el título que Los 50 fue superior a Uncas y conservó su lugar en Primera; no trae el marcador. Condición deducida de la previa (Uncas recibía en su cancha)."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-por-el-titulo",
+  "fecha_nota": "2009-11-15",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/el-sub-16-de-los-cardos-se-consagro-en-mar-del-plata",
+  "fecha_nota": "2009-11-16",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-se-alista-para-una-nueva-edicion-de-su-seven",
+  "fecha_nota": "2010-01-29",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/uncas-disputo-el-seven-playero-organizado-por-pueyrredon-rc",
+  "fecha_nota": "2010-02-02",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/en-los-50-comienza-hoy-el-seven-fernando-varela",
+  "fecha_nota": "2010-02-06",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/el-seven-fernando-varela-ya-tiene-a-sus-clasificados",
+  "fecha_nota": "2010-02-07",
+  "partidos": [
+   {
+    "fecha_partido": "2010-02-06",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Fernando Varela",
+    "instancia": "Zona G",
+    "rival": "Regatas B",
+    "condicion": null,
+    "tantos_los50": 17,
+    "tantos_rival": 12,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Equipo Los 50 A."
+   },
+   {
+    "fecha_partido": "2010-02-06",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Fernando Varela",
+    "instancia": "Zona G",
+    "rival": "Los Lobos B",
+    "condicion": null,
+    "tantos_los50": 36,
+    "tantos_rival": 0,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Equipo Los 50 A."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/sojasco-se-consagro-campeon-del-seven-fernando-varela",
+  "fecha_nota": "2010-02-08",
+  "partidos": [
+   {
+    "fecha_partido": "2010-02-07",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Fernando Varela - Copa de Oro",
+    "instancia": "Octavos de final",
+    "rival": "Vaca Negra",
+    "condicion": null,
+    "tantos_los50": 20,
+    "tantos_rival": 12,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2010-02-07",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Fernando Varela - Copa de Oro",
+    "instancia": "Cuartos de final",
+    "rival": "Los Lobos A",
+    "condicion": null,
+    "tantos_los50": 5,
+    "tantos_rival": 19,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/que-no-se-detenga-el-seven-fernando-varela",
+  "fecha_nota": "2010-02-10",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/tandilenses-en-las-practicas-del-seleccionado-de-la-urmdp",
+  "fecha_nota": "2010-02-22",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/mar-del-plata-juega-por-la-clasificacion-en-rugby",
+  "fecha_nota": "2010-04-10",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/dos-victorias-de-uncas-en-la-segunda-division",
+  "fecha_nota": "2010-04-30",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/caida-de-los-cardos-frente-a-pueyrredon",
+  "fecha_nota": "2010-05-02",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-sera-visitante-frente-a-union-del-sur",
+  "fecha_nota": "2010-05-08",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-se-recupero-en-su-visita-a-union-del-sur",
+  "fecha_nota": "2010-05-09",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/tras-cumplir-la-sancion-los-50-visita-a-san-ignacio",
+  "fecha_nota": "2010-05-15",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/jornada-de-rugby",
+  "fecha_nota": "2010-05-22",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/victoria-de-los-50-como-local-frente-a-pueyrredon",
+  "fecha_nota": "2010-05-23",
+  "partidos": [
+   {
+    "fecha_partido": "2010-05-22",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Torneo Clasificatorio de Primera de la URMDP (Copa Santa Bárbara)",
+    "instancia": "4ta fecha",
+    "rival": "Pueyrredón",
+    "condicion": "Local",
+    "tantos_los50": 14,
+    "tantos_rival": 6,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Ignacio Falco",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Nicolás González",
+      "tipo": "penal",
+      "cantidad": 3
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/victoria-de-los-cardos-y-derrota-de-los-50",
+  "fecha_nota": "2010-05-26",
+  "partidos": [
+   {
+    "fecha_partido": "2010-05-25",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Torneo Clasificatorio de Primera de la URMDP (Copa Santa Bárbara)",
+    "instancia": "5ta fecha",
+    "rival": "Comercial",
+    "condicion": "Visitante",
+    "tantos_los50": 15,
+    "tantos_rival": 32,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-visita-a-comercial-y-los-50-recibe-a-union-del-sur",
+  "fecha_nota": "2010-05-29",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-gano-de-local-y-perdio-los-cardos",
+  "fecha_nota": "2010-05-30",
+  "partidos": [
+   {
+    "fecha_partido": "2010-05-29",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Torneo Clasificatorio de Primera de la URMDP",
+    "instancia": "6ta fecha",
+    "rival": "Unión del Sur",
+    "condicion": "Local",
+    "tantos_los50": 5,
+    "tantos_rival": 3,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-y-los-50-se-enfrentan-en-el-clasico",
+  "fecha_nota": "2010-06-05",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-se-quedo-con-los-festejos-en-el-clasico",
+  "fecha_nota": "2010-06-06",
+  "partidos": [
+   {
+    "fecha_partido": "2010-06-05",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Torneo Clasificatorio de Primera de la URMDP",
+    "instancia": "7ma fecha",
+    "rival": "Los Cardos",
+    "condicion": "Visitante",
+    "tantos_los50": 17,
+    "tantos_rival": 32,
+    "formacion": [
+     "Cristian Pasarelli",
+     "Pablo Luis",
+     "Emiliano Salas",
+     "Juan Marcos Schang",
+     "Tomás Quaranta",
+     "Joaquín Fagonde",
+     "Alejandro Paskvan",
+     "Juan Rossi",
+     "Ignacio Pérez",
+     "Esteban Romero",
+     "Martín Molina",
+     "Germán Pérez",
+     "Ignacio Falco",
+     "Camilo Vila",
+     "Guillermo Perazzone"
+    ],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Joaquín Fagonde",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Camilo Vila",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Tomás Quaranta",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "conversion",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": "Clásico en Los Laureles."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-y-los-50-juegan-como-locales",
+  "fecha_nota": "2010-06-12",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-mantiene-la-ilusion-de-ser-semifinalista",
+  "fecha_nota": "2010-06-13",
+  "partidos": [
+   {
+    "fecha_partido": "2010-06-12",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Torneo Clasificatorio de Primera de la URMDP",
+    "instancia": "8va fecha",
+    "rival": "Mar del Plata Club",
+    "condicion": "Local",
+    "tantos_los50": 14,
+    "tantos_rival": 16,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Juan Manuel Quaranta",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "conversion",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Camilo Vila",
+      "tipo": "try",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Hubo dos conversiones (14 = 2 tries + 2 conversiones); la nota atribuye a Perazzone solo la del try de Quaranta, la otra no tiene pateador explícito."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/de-visitante-los-cardos-juega-por-la-clasificacion",
+  "fecha_nota": "2010-06-21",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-se-metio-con-el-ultimo-aliento-en-semifinales",
+  "fecha_nota": "2010-06-22",
+  "partidos": [
+   {
+    "fecha_partido": "2010-06-21",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Torneo Clasificatorio de Primera de la URMDP",
+    "instancia": "9na fecha",
+    "rival": "Universitario",
+    "condicion": "Visitante",
+    "tantos_los50": 23,
+    "tantos_rival": 34,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Camilo Vila",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Juan Vismara",
+      "tipo": "try",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "La nota detalla solo 3 tries (15 de 23 puntos)."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/sporting-y-san-ignacio-definen-el-campeonato-en-los-cardos",
+  "fecha_nota": "2010-07-04",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-debuta-frente-a-universitario-de-bahia-blanca",
+  "fecha_nota": "2010-07-10",
+  "partidos": []
+ }
+]

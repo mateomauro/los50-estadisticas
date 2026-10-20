@@ -1,0 +1,28 @@
+# claves: NUNCA se suben (en GitHub van como "secrets")
+.env
+
+# se regeneran en cada actualización
+__pycache__/
+datos_uar/los50.db
+datos_uar/*.log
+*.log
+informe.md
+aviso.md
+
+# copia vieja de los partidos (ahora están comprimidos en datos_uar/raw/partido)
+cache/
+
+# Excel que se generan solos (en GitHub quedan como archivos de cada actualización)
+Los50_*.xlsx
+!Los50_Diarios_2008-2016.xlsx
+auditoria*.xlsx
+
+# archivos sueltos de trabajo
+*.zip
+*.pdf
+Ver_animaciones.html
+
+# diarios: los textos de las notas no se suben (son del diario); el resultado está en Los50_Diarios_2008-2016.xlsx
+diarios/eleco_textos.jsonl
+diarios/lotes/
+diarios/__pycache__/

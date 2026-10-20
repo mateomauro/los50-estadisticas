@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Los 50 · Entrenadores</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#0B0D12">
+  <link rel="icon" type="image/png" href="img/favicon.png">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="entrenadores.css">
+</head>
+<body class="ent">
+  <!-- ingreso con clave -->
+  <main class="candado" id="candado">
+    <form class="candado__caja" id="form-clave" autocomplete="off">
+      <img class="candado__escudo" src="img/escudo-160.webp" width="160" height="173" alt="Escudo del Club Los 50">
+      <h1 class="candado__titulo">Entrenadores</h1>
+      <p class="candado__sub">Sección privada: tiene datos de juveniles. Pedile la clave al club.</p>
+      <label class="candado__campo">
+        <span class="sr">Clave</span>
+        <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+        <input id="clave" type="password" placeholder="Clave" autocomplete="current-password" enterkeyhint="go" required>
+        <button type="button" class="candado__ver" id="ver-clave" aria-label="Mostrar la clave" aria-pressed="false">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </label>
+      <label class="candado__recordar"><input type="checkbox" id="recordar"> Recordar en este dispositivo</label>
+      <p class="candado__error" id="error-clave" role="alert" hidden></p>
+      <button class="candado__entrar" type="submit" id="entrar">Entrar</button>
+      <a class="candado__volver" href="index.html">← Volver al inicio</a>
+    </form>
+  </main>
+
+  <!-- la sección (se muestra al abrir con la clave) -->
+  <div class="app" id="app" hidden>
+    <header class="top">
+      <div class="top__in">
+        <a class="top__home" href="index.html" aria-label="Volver al inicio">
+          <img class="top__escudo" src="img/escudo-160.webp" width="160" height="173" alt="">
+        </a>
+        <div class="top__textos">
+          <h1 class="top__titulo">Los 50 <span>Entrenadores</span></h1>
+          <p class="top__sub" id="sub"></p>
+        </div>
+        <a class="top__inicio" href="index.html">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>Inicio</a>
+      </div>
+    </header>
+
+    <main class="vista" id="vista" tabindex="-1"></main>
+
+    <footer class="pie">
+      <p>Partidos oficiales de la base UAR · actualizado el <span id="actualizado"></span></p>
+      <p><button type="button" class="link" id="salir">Cerrar sesión</button></p>
+    </footer>
+  </div>
+
+  <script src="entrenadores.data.js"></script>
+  <script src="entrenadores.js"></script>
+</body>
+</html>

@@ -1,0 +1,587 @@
+[
+ {
+  "url": "https://www.eleco.com.ar/interes-general/sigue-tomando-color-la-fiesta-del-club-los-50",
+  "fecha_nota": "2017-01-22",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/el-seven-fernando-varela-tendra-su-28va-edicion",
+  "fecha_nota": "2017-02-02",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/se-pone-en-marcha-el-seven-fernando-varela",
+  "fecha_nota": "2017-02-04",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/seven-tackle-de-primera-tandilenses-en-pinamar",
+  "fecha_nota": "2017-02-05",
+  "partidos": [
+   {
+    "fecha_partido": null,
+    "categoria": "Seven",
+    "torneo": "Seven Tackle de Primera, Copa UCES",
+    "instancia": "Zona 1",
+    "rival": "Camarones",
+    "condicion": null,
+    "tantos_los50": 0,
+    "tantos_rival": 7,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": "Combinado de Los 50; fecha exacta no indicada (\"el último fin de semana\")"
+   },
+   {
+    "fecha_partido": null,
+    "categoria": "Seven",
+    "torneo": "Seven Tackle de Primera, Copa UCES",
+    "instancia": "Zona 1",
+    "rival": "CASI",
+    "condicion": null,
+    "tantos_los50": 0,
+    "tantos_rival": 21,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": "Combinado de Los 50; fecha exacta no indicada (\"el último fin de semana\")"
+   },
+   {
+    "fecha_partido": null,
+    "categoria": "Seven",
+    "torneo": "Seven Tackle de Primera, Copa UCES",
+    "instancia": "Final de Bronce",
+    "rival": "Los Caranchos",
+    "condicion": null,
+    "tantos_los50": 0,
+    "tantos_rival": 25,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": "Combinado de Los 50; fecha exacta no indicada (\"el último fin de semana\")"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/el-temporal-trunco-el-final-del-seven-fernando-varela",
+  "fecha_nota": "2017-02-06",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/en-los-50-el-temporal-no-impidio-hacer-donaciones",
+  "fecha_nota": "2017-02-11",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/rugby-comenzo-el-primer-curso-de-acreditacion-de-primeras-lineas",
+  "fecha_nota": "2017-02-15",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/se-conocio-el-fixture-de-la-copa-imagenes-mdq",
+  "fecha_nota": "2017-03-31",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-fue-superior-y-se-llevo-el-triunfo-frente-a-los-cardos",
+  "fecha_nota": "2017-04-02",
+  "partidos": [
+   {
+    "fecha_partido": "2017-04-01",
+    "categoria": "Primera",
+    "torneo": "Torneo Preparación, zona Mar y Sierras",
+    "instancia": "3ra fecha",
+    "rival": "Los Cardos",
+    "condicion": "Local",
+    "tantos_los50": 18,
+    "tantos_rival": 10,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "penal",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Nahuel Botto",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Cristian Passarelli",
+      "tipo": "try",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha deducida (nota del domingo 2017-04-02, sin dia explicito). Los puntos detallados suman 16 de 18 (conversiones no mencionadas). Passarelli tuvo una 'inconducta' que emparejo la amarilla a rival; no se dice explicitamente tarjeta."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/arranca-la-copa-imagenes-mdq",
+  "fecha_nota": "2017-04-22",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-supero-a-comercial",
+  "fecha_nota": "2017-04-23",
+  "partidos": [
+   {
+    "fecha_partido": "2017-04-22",
+    "categoria": "Primera",
+    "torneo": "Copa Imágenes MDQ (zona Desarrollo)",
+    "instancia": null,
+    "rival": "Camarones",
+    "condicion": "Visitante",
+    "tantos_los50": 46,
+    "tantos_rival": 6,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Categoría no explicita (Plantel Superior, Desarrollo); se asume Primera por regla. El texto dice 46-6 y el cuadro de resultados 46-5."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/se-juega-la-segunda-fecha-de-la-copa-imagenes-mdq",
+  "fecha_nota": "2017-04-29",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/victorias-de-los-tandilenses-en-la-copa-imagenes-mdq",
+  "fecha_nota": "2017-04-30",
+  "partidos": [
+   {
+    "fecha_partido": "2017-04-29",
+    "categoria": "Primera",
+    "torneo": "Copa Imágenes MDQ (zona Desarrollo)",
+    "instancia": "2da fecha",
+    "rival": "Necochea Rugby",
+    "condicion": "Local",
+    "tantos_los50": 57,
+    "tantos_rival": 5,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Categoría no explicita (Plantel Superior, Desarrollo); la nota dice que el certamen esta reservado para Intermedias y Preintermedias, se asume Primera por regla."
+   },
+   {
+    "fecha_partido": null,
+    "categoria": "Juveniles",
+    "torneo": "Menores de 17",
+    "instancia": null,
+    "rival": "Pueyrredón",
+    "condicion": null,
+    "tantos_los50": 21,
+    "tantos_rival": 24,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 17; fecha no indicada"
+   },
+   {
+    "fecha_partido": "2017-04-29",
+    "categoria": "Juveniles",
+    "torneo": "Copa Imágenes MDQ (zona Desarrollo) - Menores de 19",
+    "instancia": "2da fecha",
+    "rival": "Pueyrredón",
+    "condicion": null,
+    "tantos_los50": 0,
+    "tantos_rival": 55,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha tomada de la previa de la misma fecha del torneo"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-enfrenta-un-debut-muy-exigente-ante-mar-del-plata",
+  "fecha_nota": "2017-05-06",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-tuvo-un-duro-choque-con-la-realidad",
+  "fecha_nota": "2017-05-07",
+  "partidos": [
+   {
+    "fecha_partido": "2017-05-06",
+    "categoria": "Juveniles",
+    "torneo": "Copa Imágenes MDQ (zona Desarrollo) - Menores de 19",
+    "instancia": null,
+    "rival": "Sporting",
+    "condicion": null,
+    "tantos_los50": 5,
+    "tantos_rival": 75,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha segun programa del dia en nota previa"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/el-rugby-y-una-actividad-como-ayuda-para-la-resocializacion-en-la-unidad-37-de-barker",
+  "fecha_nota": "2017-05-12",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/copa-imagenes-de-rugby-suspension-en-tandil",
+  "fecha_nota": "2017-05-20",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-reacciono-pero-no-le-alcanzo-ante-comercial",
+  "fecha_nota": "2017-05-28",
+  "partidos": [
+   {
+    "fecha_partido": "2017-05-27",
+    "categoria": "Juveniles",
+    "torneo": "Copa Imágenes MDQ (zona Desarrollo) - Menores de 19",
+    "instancia": null,
+    "rival": "Comercial",
+    "condicion": null,
+    "tantos_los50": 5,
+    "tantos_rival": 73,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha deducida (nota del domingo 2017-05-28)"
+   },
+   {
+    "fecha_partido": "2017-05-27",
+    "categoria": "Primera",
+    "torneo": "Copa Imágenes MDQ (zona Desarrollo) (Desarrollo)",
+    "instancia": null,
+    "rival": "Villa Gesell",
+    "condicion": null,
+    "tantos_los50": 57,
+    "tantos_rival": 5,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha deducida (nota del domingo 2017-05-28); listado bajo Primera"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/en-bahia-blanca-los-cardos-va-por-su-primera-victoria",
+  "fecha_nota": "2017-06-03",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-no-aguanto-el-ritmo-frente-a-universitario",
+  "fecha_nota": "2017-06-04",
+  "partidos": [
+   {
+    "fecha_partido": "2017-06-03",
+    "categoria": "Primera",
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": "1ra fecha (debut)",
+    "rival": "Argentino de Bahía Blanca",
+    "condicion": "Local",
+    "tantos_los50": 25,
+    "tantos_rival": 26,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-juega-en-casa-para-cortar-la-racha-negativa",
+  "fecha_nota": "2017-06-10",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-volvio-a-sufrir-con-una-derrota-ajustada",
+  "fecha_nota": "2017-06-11",
+  "partidos": [
+   {
+    "fecha_partido": "2017-06-10",
+    "categoria": "Primera",
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": "2da fecha",
+    "rival": "Santa Rosa RC",
+    "condicion": "Visitante",
+    "tantos_los50": 42,
+    "tantos_rival": 27,
+    "formacion": [
+     "Mauro Bilbao",
+     "Juan Pedro Zugbi",
+     "Angel Sanz",
+     "Federico Schord",
+     "Ignacio Arbulu",
+     "Luciano Mauro",
+     "Nicolás Varela",
+     "Jose Jiménez",
+     "Nicolás Di Fonzo",
+     "Jacinto Arrondo",
+     "Nahuel Botto",
+     "Luciano Sachetto",
+     "Máximo Lasarte",
+     "Juan Bertucci",
+     "Nicolás Homps"
+    ],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-50-y-un-proyecto-que-busca-un-salto-de-calidad",
+  "fecha_nota": "2017-06-16",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/sporting-un-desafio-muy-complicado-para-los-cardos",
+  "fecha_nota": "2017-06-17",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-dio-pelea-pero-sporting-impuso-su-jerarquia",
+  "fecha_nota": "2017-06-18",
+  "partidos": [
+   {
+    "fecha_partido": "2017-06-17",
+    "categoria": "Primera",
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": "3ra fecha",
+    "rival": "El Nacional",
+    "condicion": "Visitante",
+    "tantos_los50": 13,
+    "tantos_rival": 24,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Jose Jiménez",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Camilo Vila",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "penal",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": "En Bahía Blanca"
+   },
+   {
+    "fecha_partido": "2017-06-17",
+    "categoria": "Juveniles",
+    "torneo": "Copa Imágenes MDQ (zona Desarrollo) - Menores de 19",
+    "instancia": null,
+    "rival": "Los Cardos",
+    "condicion": "Visitante",
+    "tantos_los50": 14,
+    "tantos_rival": 41,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha y condicion segun previa (Los Cardos local, 12.30)"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/hay-duelo-tandilense-en-el-regional-pampeano-b",
+  "fecha_nota": "2017-06-24",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-50-fue-mas-practico-y-se-llevo-el-triunfo-frente-a-uncas",
+  "fecha_nota": "2017-06-25",
+  "partidos": [
+   {
+    "fecha_partido": "2017-06-24",
+    "categoria": "Primera",
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": "4ta fecha",
+    "rival": "Uncas",
+    "condicion": "Local",
+    "tantos_los50": 30,
+    "tantos_rival": 19,
+    "formacion": [
+     "Juan Manuel Vismara",
+     "Juan Pedro Zugbi",
+     "Mauro Bilbao",
+     "Leonardo Canale",
+     "Leonardo Pérez",
+     "Luciano Mauro",
+     "Nicolás Varela",
+     "Jose Ignacio Jiménez",
+     "Camilo Vila",
+     "Jacinto Arrondo",
+     "Nahuel Botto",
+     "Luciano Sachetto",
+     "Máximo Lasarte",
+     "Matías Radetich",
+     "Nicolás Homps"
+    ],
+    "ingresaron": [
+     "Cristian Passarelli",
+     "Angel Sanz",
+     "Juan Bertucci"
+    ],
+    "puntos": [
+     {
+      "jugador": "Máximo Lasarte",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "penal",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Mauro Bilbao",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Nicolás Homps",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "conversion",
+      "cantidad": 2
+     }
+    ],
+    "tarjetas": [
+     {
+      "jugador": "Leonardo Canale",
+      "tipo": "amarilla"
+     }
+    ],
+    "puntos_completos": true,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2017-06-24",
+    "categoria": "Intermedia",
+    "torneo": "Copa Imágenes MDQ (zona Desarrollo) (Desarrollo)",
+    "instancia": null,
+    "rival": "Uncas",
+    "condicion": null,
+    "tantos_los50": 30,
+    "tantos_rival": 7,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Categoría Intermedia segun la previa del dia; listado como Desarrollo"
+   },
+   {
+    "fecha_partido": "2017-06-24",
+    "categoria": "Juveniles",
+    "torneo": "Copa Imágenes MDQ (zona Desarrollo) - Menores de 19",
+    "instancia": null,
+    "rival": "Biguá",
+    "condicion": null,
+    "tantos_los50": 7,
+    "tantos_rival": 36,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha segun programa de la previa"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-domina-el-bloque",
+  "fecha_nota": "2017-06-30",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-es-local-y-va-por-su-primer-triunfo",
+  "fecha_nota": "2017-07-08",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/deportes/los-cardos-fue-solido-y-logro-su-primera-victoria",
+  "fecha_nota": "2017-07-09",
+  "partidos": [
+   {
+    "fecha_partido": "2017-07-08",
+    "categoria": "Primera",
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": "5ta fecha",
+    "rival": "Biguá",
+    "condicion": "Visitante",
+    "tantos_los50": 31,
+    "tantos_rival": 11,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "En Camet"
+   },
+   {
+    "fecha_partido": "2017-07-08",
+    "categoria": "Juveniles",
+    "torneo": "Copa Imágenes MDQ (zona Desarrollo) - Menores de 19",
+    "instancia": null,
+    "rival": "San Ignacio",
+    "condicion": null,
+    "tantos_los50": 0,
+    "tantos_rival": 90,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha deducida (nota del domingo 2017-07-09)"
+   }
+  ]
+ }
+]

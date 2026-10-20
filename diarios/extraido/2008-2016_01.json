@@ -1,0 +1,923 @@
+[
+ {
+  "url": "https://www.eleco.com.ar/interes-general/uncas-cayo-por-poco",
+  "fecha_nota": "2008-04-28",
+  "partidos": [
+   {
+    "fecha_partido": "2008-04-27",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Campo de Pato",
+    "condicion": null,
+    "tantos_los50": 25,
+    "tantos_rival": 19,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 15. Fecha deducida: la nota no indica el dia exacto de juego."
+   },
+   {
+    "fecha_partido": "2008-04-27",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Universitario",
+    "condicion": null,
+    "tantos_los50": 27,
+    "tantos_rival": 0,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 16. Fecha deducida: la nota no indica el dia exacto de juego."
+   },
+   {
+    "fecha_partido": "2008-04-27",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Union del Sur",
+    "condicion": null,
+    "tantos_los50": 10,
+    "tantos_rival": 26,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 17. Fecha deducida: la nota no indica el dia exacto de juego."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/mala-tarde-de-uncas",
+  "fecha_nota": "2008-05-19",
+  "partidos": [
+   {
+    "fecha_partido": "2008-05-18",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "San Ignacio",
+    "condicion": null,
+    "tantos_los50": 7,
+    "tantos_rival": 10,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 15"
+   },
+   {
+    "fecha_partido": "2008-05-18",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "San Ignacio",
+    "condicion": null,
+    "tantos_los50": 34,
+    "tantos_rival": 8,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 16"
+   },
+   {
+    "fecha_partido": "2008-05-18",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "San Ignacio",
+    "condicion": null,
+    "tantos_los50": 16,
+    "tantos_rival": 22,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 17"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/rugby-para-el-fin-de-semana",
+  "fecha_nota": "2008-05-24",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/rugby-en-las-sierras",
+  "fecha_nota": "2008-05-31",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/resultados-de-rugby-2",
+  "fecha_nota": "2008-06-01",
+  "partidos": [
+   {
+    "fecha_partido": "2008-05-31",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": null,
+    "instancia": null,
+    "rival": "San Ignacio",
+    "condicion": "Visitante",
+    "tantos_los50": 7,
+    "tantos_rival": 35,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha deducida (sabado previo a la nota)."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/la-fecha-del-rugby",
+  "fecha_nota": "2008-06-06",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/importante-actividad-desarrollara-el-rugby",
+  "fecha_nota": "2008-06-07",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/resultados-de-rugby-3",
+  "fecha_nota": "2008-06-08",
+  "partidos": [
+   {
+    "fecha_partido": "2008-06-07",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Bigue",
+    "condicion": "Local",
+    "tantos_los50": 20,
+    "tantos_rival": 5,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha deducida (sabado previo a la nota)."
+   },
+   {
+    "fecha_partido": "2008-06-07",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Bigue",
+    "condicion": null,
+    "tantos_los50": 22,
+    "tantos_rival": 27,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 15; jugado en Bigue segun nota previa."
+   },
+   {
+    "fecha_partido": "2008-06-07",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Bigue",
+    "condicion": null,
+    "tantos_los50": 12,
+    "tantos_rival": 7,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 16; jugado en Bigue segun nota previa."
+   },
+   {
+    "fecha_partido": "2008-06-07",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Bigue",
+    "condicion": null,
+    "tantos_los50": 12,
+    "tantos_rival": 21,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 17; jugado en Bigue segun nota previa."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/novena-fecha-de-rugby",
+  "fecha_nota": "2008-06-14",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/uncas-cumplio-su-parte",
+  "fecha_nota": "2008-06-16",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/independiente-y-uncas-no-se-sacaron-ventaja",
+  "fecha_nota": "2008-06-17",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/sabado-a-todo-rugby",
+  "fecha_nota": "2008-06-21",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-fue-superior",
+  "fecha_nota": "2008-06-22",
+  "partidos": [
+   {
+    "fecha_partido": "2008-06-21",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Los Cardos",
+    "condicion": "Visitante",
+    "tantos_los50": 10,
+    "tantos_rival": 36,
+    "formacion": [
+     "D. Neyra",
+     "N. Vismara",
+     "J. Vismara",
+     "T. Quaranta",
+     "I. Dacovich",
+     "J. Rossi",
+     "A. Paskvan",
+     "JM Quaranta",
+     "I. Pérez Diez",
+     "N. Gonzalez",
+     "M. Molina",
+     "M. Lorenzo",
+     "JM Schang",
+     "T. Hernández",
+     "G. Perazzone"
+    ],
+    "ingresaron": [
+     "F. Vitullo",
+     "G. Pérez Diez",
+     "Pablo Luiz",
+     "A. Destefano"
+    ],
+    "puntos": [
+     {
+      "jugador": "G. Perazzone",
+      "tipo": "try",
+      "cantidad": 2
+     }
+    ],
+    "tarjetas": [
+     {
+      "jugador": "T. Quaranta",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "A. Paskvan",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "I. Pérez Diez",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "F. Vitullo",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "JM Quaranta",
+      "tipo": "roja"
+     }
+    ],
+    "puntos_completos": true,
+    "nota": "Cancha de Los Cardos. Fecha deducida (sabado previo)."
+   },
+   {
+    "fecha_partido": "2008-06-21",
+    "categoria": "Intermedia",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Los Cardos",
+    "condicion": null,
+    "tantos_los50": 17,
+    "tantos_rival": 18,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Solo resultado. Fecha deducida."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-logro-una-granvictoria-frente-a-comercial",
+  "fecha_nota": "2008-06-28",
+  "partidos": [
+   {
+    "fecha_partido": "2008-06-28",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Torneo URMDP - Zona Reubicacion",
+    "instancia": "1ra fecha segunda fase",
+    "rival": "Bigue",
+    "condicion": null,
+    "tantos_los50": 20,
+    "tantos_rival": 39,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha deducida; la nota dice 'ayer' pero el torneo arrancaba el sabado 28."
+   },
+   {
+    "fecha_partido": "2008-06-28",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Sporting",
+    "condicion": null,
+    "tantos_los50": 0,
+    "tantos_rival": 36,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 15. Fecha deducida."
+   },
+   {
+    "fecha_partido": "2008-06-28",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Sporting",
+    "condicion": null,
+    "tantos_los50": 7,
+    "tantos_rival": 20,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 16. Fecha deducida."
+   },
+   {
+    "fecha_partido": "2008-06-28",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Sporting",
+    "condicion": null,
+    "tantos_los50": 12,
+    "tantos_rival": 45,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 17. Fecha deducida."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/uncas-e-independiente-dos-lideres-a-todo-gol",
+  "fecha_nota": "2008-07-10",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/triunfos-de-los-50-y-uncas",
+  "fecha_nota": "2008-07-13",
+  "partidos": [
+   {
+    "fecha_partido": "2008-07-12",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Torneo URMDP - Zona Reubicacion",
+    "instancia": null,
+    "rival": "Pueyrredon",
+    "condicion": null,
+    "tantos_los50": 12,
+    "tantos_rival": 6,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha deducida (ayer)."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/uncas-fue-demasiado-ante-un-rival-muy-pobre",
+  "fecha_nota": "2008-07-14",
+  "partidos": [
+   {
+    "fecha_partido": "2008-07-13",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Los Cardos",
+    "condicion": null,
+    "tantos_los50": 0,
+    "tantos_rival": 67,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 15 (Los Cardos A). Fecha deducida."
+   },
+   {
+    "fecha_partido": "2008-07-13",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Los Cardos",
+    "condicion": null,
+    "tantos_los50": 5,
+    "tantos_rival": 5,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 16. Fecha deducida."
+   },
+   {
+    "fecha_partido": "2008-07-13",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Los Cardos",
+    "condicion": null,
+    "tantos_los50": 17,
+    "tantos_rival": 28,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 17. Fecha deducida."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-cuenta-con-un-refuerzo-de-lujo-lapenna",
+  "fecha_nota": "2008-07-18",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/encuentro-de-rugby",
+  "fecha_nota": "2008-07-18",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/otro-fin-de-semana-colmado-de-rugby",
+  "fecha_nota": "2008-07-19",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-vencio-a-universitario",
+  "fecha_nota": "2008-07-20",
+  "partidos": [
+   {
+    "fecha_partido": "2008-07-19",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Torneo URMDP - Zona Reubicacion",
+    "instancia": null,
+    "rival": "Union del Sur",
+    "condicion": "Visitante",
+    "tantos_los50": 22,
+    "tantos_rival": 24,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha deducida (ayer)."
+   },
+   {
+    "fecha_partido": "2008-07-19",
+    "categoria": "Intermedia",
+    "categoria_inferida": false,
+    "torneo": "Torneo URMDP - Zona Reubicacion",
+    "instancia": null,
+    "rival": "Union del Sur",
+    "condicion": "Visitante",
+    "tantos_los50": 22,
+    "tantos_rival": 20,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Solo resultado."
+   },
+   {
+    "fecha_partido": "2008-07-19",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Universitario",
+    "condicion": null,
+    "tantos_los50": 0,
+    "tantos_rival": 46,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 15. Fecha deducida segun nota previa."
+   },
+   {
+    "fecha_partido": "2008-07-19",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Universitario",
+    "condicion": null,
+    "tantos_los50": 8,
+    "tantos_rival": 29,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 16. Fecha deducida."
+   },
+   {
+    "fecha_partido": "2008-07-19",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Universitario",
+    "condicion": null,
+    "tantos_los50": 30,
+    "tantos_rival": 17,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 17. Fecha deducida."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-trepo-a-lo-mas-alto-de-la-tabla",
+  "fecha_nota": "2008-08-03",
+  "partidos": [
+   {
+    "fecha_partido": "2008-08-02",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Torneo URMDP - Zona Reubicacion",
+    "instancia": null,
+    "rival": "Mar del Plata Club",
+    "condicion": null,
+    "tantos_los50": 8,
+    "tantos_rival": 21,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha deducida (vispera)."
+   },
+   {
+    "fecha_partido": "2008-08-02",
+    "categoria": "Intermedia",
+    "categoria_inferida": false,
+    "torneo": "Torneo URMDP - Zona Reubicacion",
+    "instancia": null,
+    "rival": "Mar del Plata Club",
+    "condicion": null,
+    "tantos_los50": 18,
+    "tantos_rival": 30,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Solo resultado. Fecha deducida."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-encontro-la-punta",
+  "fecha_nota": "2008-08-04",
+  "partidos": [
+   {
+    "fecha_partido": "2008-08-02",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Reclasificatorio",
+    "instancia": null,
+    "rival": "Mar del Plata",
+    "condicion": null,
+    "tantos_los50": 8,
+    "tantos_rival": 21,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha deducida (sabado previo)."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/se-vivira-otro-sabado-de-rugby",
+  "fecha_nota": "2008-08-09",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-no-hizo-pie-en-mar-del-plata",
+  "fecha_nota": "2008-08-10",
+  "partidos": [
+   {
+    "fecha_partido": "2008-08-09",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Torneo URMDP - Zona Reclasificatorio",
+    "instancia": "5ta fecha",
+    "rival": "Remo",
+    "condicion": "Local",
+    "tantos_los50": 33,
+    "tantos_rival": 21,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha deducida (sabado previo)."
+   },
+   {
+    "fecha_partido": "2008-08-09",
+    "categoria": "Intermedia",
+    "categoria_inferida": false,
+    "torneo": "Torneo URMDP - Zona Reclasificatorio",
+    "instancia": "5ta fecha",
+    "rival": "Remo",
+    "condicion": "Local",
+    "tantos_los50": 59,
+    "tantos_rival": 0,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Solo resultado. Fecha deducida."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-aprovecho-todo",
+  "fecha_nota": "2008-08-11",
+  "partidos": [
+   {
+    "fecha_partido": "2008-08-09",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Remo",
+    "condicion": "Local",
+    "tantos_los50": 33,
+    "tantos_rival": 21,
+    "formacion": [
+     "Sebastián Echeveste",
+     "G. Ayala",
+     "Nicolás Vismara",
+     "Tomás Quaranta",
+     "Diego Lapenna",
+     "Juan Rossi",
+     "Juan Vismara",
+     "Alejandro Paskvan",
+     "Ignacio Pérez Díaz",
+     "Nicolás González",
+     "Manuel Molina",
+     "Marcelo Lorenzo",
+     "Ignacio Falco",
+     "Franco Martignoni",
+     "Guillermo Perazzone"
+    ],
+    "ingresaron": [
+     "Martín De Poli",
+     "Paulo Luiz",
+     "Germán Pérez Díaz",
+     "Gonzalo Lauge",
+     "Juan P. Surbi"
+    ],
+    "puntos": [
+     {
+      "jugador": "I. González",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "N. Vismara",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "F. Martignoni",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "M. Lorenzo",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "J. Rossi",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "M. Lorenzo",
+      "tipo": "conversion",
+      "cantidad": 4
+     }
+    ],
+    "tarjetas": [
+     {
+      "jugador": "S. Echeveste",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "A. Paskvan",
+      "tipo": "amarilla"
+     }
+    ],
+    "puntos_completos": true,
+    "nota": "Try del 14' atribuido a 'I. Gonzalez' (en la formacion figura Nicolás González). Cancha de Los 50. Fecha deducida."
+   },
+   {
+    "fecha_partido": "2008-08-09",
+    "categoria": "Intermedia",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Remo",
+    "condicion": "Local",
+    "tantos_los50": 59,
+    "tantos_rival": 0,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Solo resultado. Fecha deducida."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/triunfos-de-los-cardos-independiente-y-uncas",
+  "fecha_nota": "2008-08-19",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/resultados-de-rugby-4",
+  "fecha_nota": "2008-08-19",
+  "partidos": [
+   {
+    "fecha_partido": "2008-08-18",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Bigue",
+    "condicion": null,
+    "tantos_los50": 14,
+    "tantos_rival": 15,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 15. Fecha deducida (juveniles pasados al lunes 18)."
+   },
+   {
+    "fecha_partido": "2008-08-18",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Bigue",
+    "condicion": null,
+    "tantos_los50": 10,
+    "tantos_rival": 18,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 16. Fecha deducida."
+   },
+   {
+    "fecha_partido": "2008-08-18",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Bigue",
+    "condicion": null,
+    "tantos_los50": 5,
+    "tantos_rival": 36,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 17. Fecha deducida."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/actividad-de-rugby-para-el-fin-de-semana-2",
+  "fecha_nota": "2008-08-23",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/resultados-de-rugby-5",
+  "fecha_nota": "2008-08-24",
+  "partidos": [
+   {
+    "fecha_partido": "2008-08-23",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Torneo URMDP - Zona Reclasificacion",
+    "instancia": null,
+    "rival": "Bigue",
+    "condicion": "Local",
+    "tantos_los50": 26,
+    "tantos_rival": 5,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha deducida (sabado previo)."
+   },
+   {
+    "fecha_partido": "2008-08-23",
+    "categoria": "Intermedia",
+    "categoria_inferida": false,
+    "torneo": "Torneo URMDP - Zona Reclasificacion",
+    "instancia": null,
+    "rival": "Bigue",
+    "condicion": "Local",
+    "tantos_los50": 12,
+    "tantos_rival": 17,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Solo resultado. Fecha deducida."
+   }
+  ]
+ }
+]

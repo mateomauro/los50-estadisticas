@@ -1,0 +1,638 @@
+[
+ {
+  "url": "https://www.eleco.com.ar/interes-general/el-fixture-del-seven-oficial-de-la-union",
+  "fecha_nota": "2015-11-23",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/se-juega-el-seven-oficial",
+  "fecha_nota": "2015-12-08",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-lanzo-la-xxvii-edicion-del-seven-fernando-varela",
+  "fecha_nota": "2016-01-07",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/presentan-hoy-el-xxvii-seven-fernando-varela",
+  "fecha_nota": "2016-01-27",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/presentaron-la-27ma-edicion-del-seven-fernando-varela",
+  "fecha_nota": "2016-01-28",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/en-la-rural-comienza-a-rodar-el-27mo-seven-fernando-varela",
+  "fecha_nota": "2016-02-05",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/concluyo-otra-edicion-del-seven-fernando-varela",
+  "fecha_nota": "2016-02-08",
+  "partidos": [
+   {
+    "fecha_partido": "2016-02-07",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Fernando Varela",
+    "instancia": "Octavos de final",
+    "rival": "Sel. Mar del Plata",
+    "condicion": null,
+    "tantos_los50": 0,
+    "tantos_rival": 31,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Equipo 'Los 50 A'. Fecha deducida (copas se definieron el domingo)."
+   },
+   {
+    "fecha_partido": "2016-02-07",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Fernando Varela",
+    "instancia": "Copa de Plata, cuartos de final",
+    "rival": "La Banda del Toro",
+    "condicion": null,
+    "tantos_los50": 0,
+    "tantos_rival": 24,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Equipo 'Los 50 A'. Fecha deducida."
+   },
+   {
+    "fecha_partido": "2016-02-07",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Fernando Varela",
+    "instancia": "Final Copa de Bronce",
+    "rival": "Selectivo de Uncas",
+    "condicion": null,
+    "tantos_los50": null,
+    "tantos_rival": null,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Nota dice que Los 50 ganó la copa de bronce derrotando a un selectivo de Uncas, sin marcador; el cuadro de bronce no lo lista. Fecha deducida."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-los-50-y-uncas-inician-el-ano-con-un-triangular",
+  "fecha_nota": "2016-02-26",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/hubo-duelos-muy-disputados-en-el-triangular-de-los-cardos",
+  "fecha_nota": "2016-02-28",
+  "partidos": [
+   {
+    "fecha_partido": "2016-02-27",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Triangular amistoso 50 años de Los Cardos",
+    "instancia": null,
+    "rival": "Los Cardos",
+    "condicion": "Visitante",
+    "tantos_los50": 5,
+    "tantos_rival": 26,
+    "formacion": [
+     "Cabrera",
+     "Angel Sanz",
+     "Andrés Mercanti",
+     "Leonardo Canale",
+     "Mateo Sarti",
+     "Juan Picart",
+     "Esteban Varela",
+     "José Jiménez",
+     "Camilo Vila",
+     "Jacinto Arrondo",
+     "Nahuel Botto",
+     "Nicolás Di Fonzo",
+     "Marcos Philip",
+     "Matías Radetich",
+     "Nicolás González"
+    ],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Andrés Mercanti",
+      "tipo": "try",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": "Amistoso de dos tiempos de 20 min. Fecha deducida (sábado)."
+   },
+   {
+    "fecha_partido": "2016-02-27",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Triangular amistoso 50 años de Los Cardos",
+    "instancia": null,
+    "rival": "Uncas",
+    "condicion": null,
+    "tantos_los50": 12,
+    "tantos_rival": 14,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Amistoso de dos tiempos de 20 min; sin detalle. Fecha deducida."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/hubo-encuentro-en-uncas-y-cardos",
+  "fecha_nota": "2016-03-22",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/rugby-se-conocio-el-fixture-del-torneo-que-arranca-el-sabado",
+  "fecha_nota": "2016-03-29",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/victoria-de-los-cardos-y-caidas-de-uncas-y-los-50",
+  "fecha_nota": "2016-04-02",
+  "partidos": [
+   {
+    "fecha_partido": "2016-04-02",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Torneo Reubicación (Reclasificatorio URMDP)",
+    "instancia": "1ra fecha",
+    "rival": "Biguá",
+    "condicion": "Local",
+    "tantos_los50": 19,
+    "tantos_rival": 24,
+    "formacion": [
+     "Ezequiel Cabrera",
+     "Angel Sanz",
+     "Andrés Mercanti",
+     "Tomás Quaranta",
+     "Leonardo Canale",
+     "José Ignacio Jiménez",
+     "Luciano Mauro",
+     "Juan Rossi",
+     "Camilo Vila",
+     "Jacinto Arrondo",
+     "Laureano Salagoyti",
+     "Máximo Lasarte",
+     "Diego Fernández",
+     "Nicolás González",
+     "Nahuel Botto"
+    ],
+    "ingresaron": [
+     "Germán Sak Weth",
+     "Leonardo Pérez",
+     "Nicolás Homps",
+     "Juan Pedro Zugbi"
+    ],
+    "puntos": [
+     {
+      "jugador": "Diego Fernández",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Camilo Vila",
+      "tipo": "try",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "conversion",
+      "cantidad": 2
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2016-04-02",
+    "categoria": "Intermedia",
+    "categoria_inferida": false,
+    "torneo": "Torneo Reubicación (Reclasificatorio URMDP)",
+    "instancia": "1ra fecha",
+    "rival": "Biguá",
+    "condicion": null,
+    "tantos_los50": 41,
+    "tantos_rival": 10,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2016-04-02",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": "1ra fecha",
+    "rival": "Uncas",
+    "condicion": null,
+    "tantos_los50": 14,
+    "tantos_rival": 15,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 19; torneo no claro (listado junto a Reubicación y Preparación)."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-aplasto-a-villa-gesell-y-los-50-se-impuso-a-comercial",
+  "fecha_nota": "2016-04-16",
+  "partidos": [
+   {
+    "fecha_partido": "2016-04-16",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Torneo Reubicación (Reclasificatorio URMDP)",
+    "instancia": "3ra fecha",
+    "rival": "Comercial",
+    "condicion": "Local",
+    "tantos_los50": 17,
+    "tantos_rival": 12,
+    "formacion": [
+     "Ezequiel Cabrera",
+     "Juan Pedro Zugbi",
+     "Andrés Mercanti",
+     "Francisco Ubeda",
+     "Tomás Quaranta",
+     "Joaquín Fagonde",
+     "Leonardo Canale",
+     "Jiménez",
+     "Nicolás González",
+     "Jacinto Arrondo",
+     "Matías Radetich",
+     "Nicolás Di Fonzo",
+     "Máximo Lasarte",
+     "Nahuel Botto",
+     "Camilo Vila"
+    ],
+    "ingresaron": [
+     "Juan Sanz",
+     "Diego Heter"
+    ],
+    "puntos": [
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "conversion",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "penal",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Camilo Vila",
+      "tipo": "try",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-ante-los-50-en-el-regreso-del-clasico",
+  "fecha_nota": "2016-04-22",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-arranco-con-esfuerzo-y-termino-holgado-en-el-clasico",
+  "fecha_nota": "2016-04-24",
+  "partidos": [
+   {
+    "fecha_partido": "2016-04-23",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Torneo Reubicación (Reclasificatorio URMDP)",
+    "instancia": "4ta fecha",
+    "rival": "Los Cardos",
+    "condicion": "Visitante",
+    "tantos_los50": 17,
+    "tantos_rival": 42,
+    "formacion": [
+     "Juan Pedro Zugbi",
+     "Angel Sanz",
+     "Andrés Mercanti",
+     "Francisco Ubeda",
+     "Tomás Quaranta",
+     "Joaquín Fagonde",
+     "Leonardo Canale",
+     "José Jiménez",
+     "Nicolás González",
+     "Jacinto Arrondo",
+     "Nahuel Botto",
+     "Nicolás Di Fonzo",
+     "Máximo Lasarte",
+     "Matías Radetich",
+     "Camilo Vila"
+    ],
+    "ingresaron": [
+     "Juan Magnasco",
+     "Federico Cantet",
+     "Diego Heter",
+     "Emiliano Salas"
+    ],
+    "puntos": [
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "conversion",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "penal",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Federico Cantet",
+      "tipo": "try",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [
+     {
+      "jugador": "Juan Pedro Zugbi",
+      "tipo": "amarilla"
+     }
+    ],
+    "puntos_completos": true,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-busca-consolidar-su-liderazgo-ante-pueyrredon",
+  "fecha_nota": "2016-04-30",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-se-trajo-el-triunfo-y-la-clasificacion",
+  "fecha_nota": "2016-05-02",
+  "partidos": [
+   {
+    "fecha_partido": "2016-04-30",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Torneo Reubicación (Reclasificatorio URMDP)",
+    "instancia": "5ta fecha",
+    "rival": "Villa Gesell",
+    "condicion": "Local",
+    "tantos_los50": 90,
+    "tantos_rival": 6,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Matías Radetich",
+      "tipo": "try",
+      "cantidad": 3
+     },
+     {
+      "jugador": "Nicolás Di Fonzo",
+      "tipo": "try",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "try",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Leonardo Canale",
+      "tipo": "try",
+      "cantidad": 2
+     },
+     {
+      "jugador": "José Jiménez",
+      "tipo": "try",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Nahuel Botto",
+      "tipo": "try",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Juan Pedro Zugbi",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Angel Sanz",
+      "tipo": "try",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Nota dice 15 tries; no detalla conversiones, no suman 90."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/la-copa-imagenes-mdq-tendra-su-segunda-edicion",
+  "fecha_nota": "2016-05-06",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-puede-asegurar-el-titulo-hoy-frente-a-uncas",
+  "fecha_nota": "2016-05-07",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-se-consagro-con-triunfo-ante-uncas",
+  "fecha_nota": "2016-05-08",
+  "partidos": [
+   {
+    "fecha_partido": "2016-05-07",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Torneo Reubicación (Reclasificatorio URMDP)",
+    "instancia": "6ta fecha",
+    "rival": "Pueyrredón",
+    "condicion": "Local",
+    "tantos_los50": 22,
+    "tantos_rival": 25,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/entregaron-desfibriladores-para-los-cardos-y-los-50",
+  "fecha_nota": "2016-05-13",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-visita-a-bigua-para-cerrar-el-torneo-invicto",
+  "fecha_nota": "2016-05-14",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/rugby-se-conocio-el-fixture-de-la-copa-imagenes-mdq",
+  "fecha_nota": "2016-05-17",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/triunfo-de-uncas-y-caida-de-los-cardos-y-los-50",
+  "fecha_nota": "2016-05-26",
+  "partidos": [
+   {
+    "fecha_partido": "2016-05-25",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Copa Imágenes MDQ",
+    "instancia": "1ra fecha",
+    "rival": "San Ignacio",
+    "condicion": "Visitante",
+    "tantos_los50": 29,
+    "tantos_rival": 31,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Nota dice 'plantel superior' (primera, intermedia y pre intermedia) sin precisar división; se supuso Primera."
+   },
+   {
+    "fecha_partido": "2016-05-25",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Copa Imágenes MDQ",
+    "instancia": "1ra fecha",
+    "rival": "San Ignacio",
+    "condicion": "Visitante",
+    "tantos_los50": 19,
+    "tantos_rival": 35,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "M19."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-debutara-de-local-ante-sportiva",
+  "fecha_nota": "2016-05-27",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-hace-su-debut-en-casa-frente-a-sportiva",
+  "fecha_nota": "2016-06-04",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-merecio-algo-mas-que-el-empate-ante-sportiva",
+  "fecha_nota": "2016-06-05",
+  "partidos": [
+   {
+    "fecha_partido": "2016-06-04",
+    "categoria": "Pre-Intermedia",
+    "categoria_inferida": true,
+    "torneo": "Copa Imágenes MDQ",
+    "instancia": "3ra fecha",
+    "rival": "Los Cardos",
+    "condicion": "Visitante",
+    "tantos_los50": 41,
+    "tantos_rival": 21,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Nota lista 'plantel superior'; la previa dice que en Los Laureles había clásicos de preintermedia y M19, por eso se infirió Pre-Intermedia."
+   },
+   {
+    "fecha_partido": "2016-06-04",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Copa Imágenes MDQ",
+    "instancia": "3ra fecha",
+    "rival": "Los Cardos",
+    "condicion": "Visitante",
+    "tantos_los50": 19,
+    "tantos_rival": 21,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "M19."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-visita-por-la-tercera-fecha-a-universitario",
+  "fecha_nota": "2016-06-18",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-derrotado-en-su-visita-a-universitario",
+  "fecha_nota": "2016-06-19",
+  "partidos": [
+   {
+    "fecha_partido": "2016-06-18",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Regional Pampeano C",
+    "instancia": "2da fecha",
+    "rival": "Uncas",
+    "condicion": "Local",
+    "tantos_los50": 19,
+    "tantos_rival": 23,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/en-bahia-blanca-los-cardos-buscara-su-primera-victoria",
+  "fecha_nota": "2016-06-25",
+  "partidos": []
+ }
+]

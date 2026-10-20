@@ -1,0 +1,681 @@
+[
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-prevalecio-en-el-choque-de-tandilenses",
+  "fecha_nota": "2010-10-31",
+  "partidos": [
+   {
+    "fecha_partido": "2010-10-30",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Uncas",
+    "condicion": "Local",
+    "tantos_los50": null,
+    "tantos_rival": null,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Martín Molina",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Juan Ignacio Falco",
+      "tipo": "try",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Ganó Los 50; la nota no da el resultado final (iba 13-0 y 13-7 con try penal de Uncas, luego Los 50 estiró). Torneo (Reclasificatorio URMdP) no nombrado en la nota."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-quiere-asegurar-la-permanencia-ante-el-lider",
+  "fecha_nota": "2010-11-13",
+  "partidos": [
+   {
+    "fecha_partido": null,
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Reclasificatorio de la Unión de Rugby de Mar del Plata",
+    "instancia": null,
+    "rival": "Unión del Sur",
+    "condicion": "Visitante",
+    "tantos_los50": 21,
+    "tantos_rival": 15,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Mencionado en la previa como 'el fin de semana último' (probablemente 6-7/11/2010); fecha exacta no precisa."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-perdio-y-no-pudo-asegurar-la-permanencia",
+  "fecha_nota": "2010-11-14",
+  "partidos": [
+   {
+    "fecha_partido": "2010-11-13",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Reclasificatorio de la Unión de Rugby de Mar del Plata",
+    "instancia": null,
+    "rival": "Universitario de Mar del Plata",
+    "condicion": "Local",
+    "tantos_los50": 11,
+    "tantos_rival": 21,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Nicolás González",
+      "tipo": "drop",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Nicolás González",
+      "tipo": "penal",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Juan Zugby",
+      "tipo": "try",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/convocados-de-la-urmdp-para-los-partidos-amistosos-en-la-plata",
+  "fecha_nota": "2010-11-17",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/programa-del-seven-de-la-union-de-mar-del-plata",
+  "fecha_nota": "2010-11-19",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-por-la-permanencia-en-necochea",
+  "fecha_nota": "2010-11-20",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-confirmo-su-lugar-en-1ra-con-un-triunfo-aplastante",
+  "fecha_nota": "2010-11-21",
+  "partidos": [
+   {
+    "fecha_partido": "2010-11-20",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Reclasificatorio de la Unión de Rugby de Mar del Plata",
+    "instancia": "10ma fecha (última)",
+    "rival": "Necochea RC",
+    "condicion": "Visitante",
+    "tantos_los50": 106,
+    "tantos_rival": 0,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/seleccionados-de-la-urmdp-se-presentaron-en-la-plata",
+  "fecha_nota": "2010-11-22",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/el-sabado-se-definen-los-sevens-en-mar-del-plata",
+  "fecha_nota": "2010-11-25",
+  "partidos": [
+   {
+    "fecha_partido": "2010-11-21",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Seven oficial de Juveniles URMdP (sede Campo de Pato, Balcarce)",
+    "instancia": "Semifinal M-16",
+    "rival": "Los Cardos",
+    "condicion": null,
+    "tantos_los50": 5,
+    "tantos_rival": 19,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Categoría M-16; clásico de Tandil. Fecha deducida (domingo de la etapa clasificatoria)."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/el-programa-de-los-sevens-juveniles",
+  "fecha_nota": "2010-11-26",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/se-juega-el-seven-oficial-de-primera-en-san-ignacio",
+  "fecha_nota": "2010-12-04",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-cayo-en-la-semifinal-ante-sporting",
+  "fecha_nota": "2010-12-07",
+  "partidos": [
+   {
+    "fecha_partido": "2010-12-04",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Oficial de Primera URMdP (San Ignacio)",
+    "instancia": "Fase clasificatoria",
+    "rival": "Uncas",
+    "condicion": null,
+    "tantos_los50": 19,
+    "tantos_rival": 10,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2010-12-04",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Oficial de Primera URMdP (San Ignacio)",
+    "instancia": "Fase clasificatoria",
+    "rival": "Miramar RC",
+    "condicion": null,
+    "tantos_los50": 40,
+    "tantos_rival": 0,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2010-12-04",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Oficial de Primera URMdP (San Ignacio)",
+    "instancia": "Fase clasificatoria",
+    "rival": "Sporting",
+    "condicion": null,
+    "tantos_los50": 5,
+    "tantos_rival": 31,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2010-12-04",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Oficial de Primera URMdP (San Ignacio)",
+    "instancia": "Cuartos de final (Copa de Oro)",
+    "rival": "Los Cardos",
+    "condicion": null,
+    "tantos_los50": 10,
+    "tantos_rival": 27,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-juega-el-seven-de-old-christians",
+  "fecha_nota": "2010-12-11",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/dos-equipos-tandilenses-en-el-seven-playero-de-miramar",
+  "fecha_nota": "2011-01-07",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/presentaron-el-tradicional-seven-fernando-varela",
+  "fecha_nota": "2011-01-08",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-gano-la-copa-de-plata",
+  "fecha_nota": "2011-01-10",
+  "partidos": [
+   {
+    "fecha_partido": "2011-01-08",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven de Miramar",
+    "instancia": "Etapa clasificatoria",
+    "rival": "Chascomús RC",
+    "condicion": null,
+    "tantos_los50": 26,
+    "tantos_rival": 12,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2011-01-08",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven de Miramar",
+    "instancia": "Etapa clasificatoria",
+    "rival": "Olivos",
+    "condicion": null,
+    "tantos_los50": 5,
+    "tantos_rival": 12,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2011-01-09",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven de Miramar",
+    "instancia": "Semifinal Copa de Plata",
+    "rival": "Campo de Pato",
+    "condicion": null,
+    "tantos_los50": 19,
+    "tantos_rival": 14,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2011-01-09",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven de Miramar",
+    "instancia": "Final Copa de Plata",
+    "rival": "Pueyrredón (MdP)",
+    "condicion": null,
+    "tantos_los50": 19,
+    "tantos_rival": 0,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Los 50 campeón de la Copa de Plata."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/se-pone-en-marcha-el-seven-de-verano-en-mar-del-plata",
+  "fecha_nota": "2011-01-15",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-juega-el-repechaje",
+  "fecha_nota": "2011-01-16",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-y-los-50-en-el-seven-juvenil-de-miramar",
+  "fecha_nota": "2011-01-19",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/ademas-del-rugby-habra-varios-eventos-especiales",
+  "fecha_nota": "2011-01-22",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-festejo-el-titulo-en-el-seven-de-claromeco",
+  "fecha_nota": "2011-01-26",
+  "partidos": [
+   {
+    "fecha_partido": null,
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven de Claromecó",
+    "instancia": "Cuartos de final (Copa de Oro)",
+    "rival": "Unión del Sur A",
+    "condicion": null,
+    "tantos_los50": 12,
+    "tantos_rival": 0,
+    "formacion": [
+     "Franco Martignoni",
+     "Guillermo Perazzone",
+     "Mateo Schettino",
+     "Nicolás Fernández",
+     "Nicolás Homps",
+     "Luciano Sachetto",
+     "Nicolás Difonso",
+     "Marcelo Lorenzo",
+     "Tomás Lasarte",
+     "Martín Morel"
+    ],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha no indicada. 'formacion' es el plantel del seven (10 jugadores), no titulares."
+   },
+   {
+    "fecha_partido": null,
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven de Claromecó",
+    "instancia": "Semifinal (Copa de Oro)",
+    "rival": "La Banda del Toro (Balcarce)",
+    "condicion": null,
+    "tantos_los50": 22,
+    "tantos_rival": 0,
+    "formacion": [
+     "Franco Martignoni",
+     "Guillermo Perazzone",
+     "Mateo Schettino",
+     "Nicolás Fernández",
+     "Nicolás Homps",
+     "Luciano Sachetto",
+     "Nicolás Difonso",
+     "Marcelo Lorenzo",
+     "Tomás Lasarte",
+     "Martín Morel"
+    ],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha no indicada. 'formacion' es el plantel del seven (10 jugadores), no titulares."
+   },
+   {
+    "fecha_partido": null,
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven de Claromecó",
+    "instancia": "Final (Copa de Oro)",
+    "rival": "Náutico de Necochea",
+    "condicion": null,
+    "tantos_los50": 19,
+    "tantos_rival": 12,
+    "formacion": [
+     "Franco Martignoni",
+     "Guillermo Perazzone",
+     "Mateo Schettino",
+     "Nicolás Fernández",
+     "Nicolás Homps",
+     "Luciano Sachetto",
+     "Nicolás Difonso",
+     "Marcelo Lorenzo",
+     "Tomás Lasarte",
+     "Martín Morel"
+    ],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha no indicada. 'formacion' es el plantel del seven (10 jugadores), no titulares. Los 50 campeón."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/en-los-50-ya-palpitan-una-edicion-especial-del-seven",
+  "fecha_nota": "2011-02-02",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/en-los-50-el-rugby-da-inicio-a-su-mayor-fiesta",
+  "fecha_nota": "2011-02-05",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/comenzo-una-nueva-edicion-del-seven-fernando-varela",
+  "fecha_nota": "2011-02-06",
+  "partidos": [
+   {
+    "fecha_partido": "2011-02-05",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Fernando Varela",
+    "instancia": "Zona E",
+    "rival": "AMT",
+    "condicion": null,
+    "tantos_los50": 5,
+    "tantos_rival": 22,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Equipo Los 50 B."
+   },
+   {
+    "fecha_partido": "2011-02-05",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Fernando Varela",
+    "instancia": "Zona E",
+    "rival": "Merewether Carlton A",
+    "condicion": null,
+    "tantos_los50": 0,
+    "tantos_rival": 36,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Equipo Los 50 B."
+   },
+   {
+    "fecha_partido": "2011-02-05",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Fernando Varela",
+    "instancia": "Zona G",
+    "rival": "Merewether Carlton B",
+    "condicion": null,
+    "tantos_los50": 33,
+    "tantos_rival": 3,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Equipo Los 50 A."
+   },
+   {
+    "fecha_partido": "2011-02-05",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Fernando Varela",
+    "instancia": "Zona G",
+    "rival": "Pero más bien loquita",
+    "condicion": null,
+    "tantos_los50": 40,
+    "tantos_rival": 0,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Equipo Los 50 A."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/alumni-se-consagro-con-una-victoria-frente-a-los-cardos",
+  "fecha_nota": "2011-02-07",
+  "partidos": [
+   {
+    "fecha_partido": "2011-02-06",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Fernando Varela",
+    "instancia": "Octavos de final Copa de Bronce",
+    "rival": "Puey50",
+    "condicion": null,
+    "tantos_los50": 19,
+    "tantos_rival": 0,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Equipo Los 50 B."
+   },
+   {
+    "fecha_partido": "2011-02-06",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Fernando Varela",
+    "instancia": "Semifinal Copa de Bronce",
+    "rival": "Champagnat",
+    "condicion": null,
+    "tantos_los50": 7,
+    "tantos_rival": 12,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Equipo Los 50 B."
+   },
+   {
+    "fecha_partido": "2011-02-06",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Fernando Varela",
+    "instancia": "Cuartos de final Copa de Oro",
+    "rival": "Alumni",
+    "condicion": null,
+    "tantos_los50": 14,
+    "tantos_rival": 26,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Equipo Los 50 A."
+   },
+   {
+    "fecha_partido": "2011-02-06",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Seven Fernando Varela",
+    "instancia": "Semifinal categoría 1992",
+    "rival": "A Falta de Ale",
+    "condicion": null,
+    "tantos_los50": 41,
+    "tantos_rival": 0,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Juveniles de Los 50 bajo el nombre 'Yo quiero a mi mamá'."
+   },
+   {
+    "fecha_partido": "2011-02-06",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Seven Fernando Varela",
+    "instancia": "Final categoría 1992",
+    "rival": "GNC Junior",
+    "condicion": null,
+    "tantos_los50": 14,
+    "tantos_rival": 0,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Juveniles de Los 50 bajo el nombre 'Yo quiero a mi mamá'; campeones."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/marcos-migliore-es-el-nuevo-coach-del-rugby-de-los-50",
+  "fecha_nota": "2011-02-19",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/encuentro-de-tenis-en-los-50",
+  "fecha_nota": "2011-03-02",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/un-acto-solidario-en-los-50",
+  "fecha_nota": "2011-03-05",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-disputo-un-amistoso",
+  "fecha_nota": "2011-03-13",
+  "partidos": [
+   {
+    "fecha_partido": "2011-03-12",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Amistoso (pretemporada)",
+    "instancia": null,
+    "rival": "Atlético Chascomús",
+    "condicion": "Local",
+    "tantos_los50": null,
+    "tantos_rival": null,
+    "formacion": [
+     "Christian Passarelli",
+     "Emiliano Salas",
+     "Juan Manuel Vismara",
+     "Tomas Quaranta",
+     "Leonardo Canale",
+     "Joaquín Fagonde",
+     "Alejandro Paskvan",
+     "Cristian Urban",
+     "Gonzalo Lauge",
+     "Germán Pérez Diez",
+     "Marcelo Lorenzo",
+     "Felipe Vitullo",
+     "Nicolás Safenreiter",
+     "Franco Martignoni",
+     "Camilo Vila"
+    ],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Amistoso con varios tiempos de 30 min y mucha rotación; la nota no da resultado."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/intensa-actividad-de-rugby-hoy-en-los-50",
+  "fecha_nota": "2011-03-19",
+  "partidos": []
+ }
+]

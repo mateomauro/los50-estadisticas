@@ -1,0 +1,683 @@
+[
+ {
+  "url": "https://www.eleco.com.ar/interes-general/uncas-busca-alternativas-para-salir-del-mal-momento",
+  "fecha_nota": "2011-08-31",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-no-pudo-ganar-en-la-visita-de-universitario",
+  "fecha_nota": "2011-09-07",
+  "partidos": [
+   {
+    "fecha_partido": "2011-09-04",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Zona Estímulo del Bloque, Unión de Rugby de Mar del Plata",
+    "instancia": "M-15",
+    "rival": "Universitario (Mar del Plata)",
+    "condicion": "Local",
+    "tantos_los50": 7,
+    "tantos_rival": 10,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Categoría M-15"
+   },
+   {
+    "fecha_partido": "2011-09-04",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Zona Estímulo del Bloque, Unión de Rugby de Mar del Plata",
+    "instancia": "M-16",
+    "rival": "Universitario (Mar del Plata)",
+    "condicion": "Local",
+    "tantos_los50": 45,
+    "tantos_rival": 0,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Categoría M-16"
+   },
+   {
+    "fecha_partido": "2011-09-04",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Zona Estímulo del Bloque, Unión de Rugby de Mar del Plata",
+    "instancia": "M-17",
+    "rival": "Universitario (Mar del Plata)",
+    "condicion": "Local",
+    "tantos_los50": 21,
+    "tantos_rival": 26,
+    "formacion": [
+     "Julián Bicondoa",
+     "Ignacio Zuvilivia",
+     "Byron Fusce",
+     "José Jiménez",
+     "Leonel Esperón",
+     "Joaquín Araujo",
+     "Santiago Poli",
+     "Mariano Casanova",
+     "Andrés Mathiasen",
+     "Jacinto Arrondo",
+     "Luciano Mauro",
+     "Nahuel Botto",
+     "Ignacio Lasarte",
+     "Lucas Islas",
+     "Pablo Genaro"
+    ],
+    "ingresaron": [
+     "Ignacio Moreno",
+     "Lucas Ruiz Durán",
+     "Viterman Ríos",
+     "Tomás Romero"
+    ],
+    "puntos": [
+     {
+      "jugador": "Joaquín Araujo",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Mariano Casanova",
+      "tipo": "try",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Categoría M-17; la formación se asigna a M-17 (partido de categoría mayor). Los tries de Los 50 no suman el total; el último try figura como 'Casanovas'."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/con-el-trabajo-de-los-valores-a-traves-del-juego-tuvo-lugar-la-tercera-edicion-del-seven-solidario",
+  "fecha_nota": "2011-09-12",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-enfrenta-un-duro-debut-en-neuquen",
+  "fecha_nota": "2011-09-17",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-cedio-puntos-inesperados-ante-san-ignacio",
+  "fecha_nota": "2011-09-21",
+  "partidos": [
+   {
+    "fecha_partido": "2011-09-18",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Zona Estímulo del Bloque, Unión de Rugby de Mar del Plata",
+    "instancia": "5ta fecha",
+    "rival": "Unión del Sur",
+    "condicion": "Visitante",
+    "tantos_los50": 22,
+    "tantos_rival": 21,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Categoría M-15"
+   },
+   {
+    "fecha_partido": "2011-09-18",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Zona Estímulo del Bloque, Unión de Rugby de Mar del Plata",
+    "instancia": "5ta fecha",
+    "rival": "Unión del Sur",
+    "condicion": "Visitante",
+    "tantos_los50": 12,
+    "tantos_rival": 22,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Categoría M-16"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-obligado-a-ganar-en-bahia-blanca-ante-sportiva",
+  "fecha_nota": "2011-09-24",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-volvio-a-ganar",
+  "fecha_nota": "2011-09-25",
+  "partidos": [
+   {
+    "fecha_partido": "2011-09-24",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Torneo Clausura de la Unión de Rugby de Mar del Plata",
+    "instancia": "2da fecha (adelantada la 3ra)",
+    "rival": "Comercial",
+    "condicion": "Local",
+    "tantos_los50": 28,
+    "tantos_rival": 8,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2011-09-17",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Torneo Clausura de la Unión de Rugby de Mar del Plata",
+    "instancia": "1ra fecha",
+    "rival": "Universitario",
+    "condicion": "Visitante",
+    "tantos_los50": 20,
+    "tantos_rival": 19,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Resultado mencionado como antecedente"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-volvio-a-ganar-y-esta-segundo",
+  "fecha_nota": "2011-09-28",
+  "partidos": [
+   {
+    "fecha_partido": "2011-09-24",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Torneo Clausura de la Unión de Rugby de Mar del Plata",
+    "instancia": null,
+    "rival": "Comercial",
+    "condicion": "Local",
+    "tantos_los50": 28,
+    "tantos_rival": 8,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Debut en la primera fecha: victoria como visitante ante Universitario, sin resultado en esta nota"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-saco-mas-ventaja",
+  "fecha_nota": "2011-09-28",
+  "partidos": [
+   {
+    "fecha_partido": "2011-09-25",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Zona Estímulo del Bloque, Unión de Rugby de Mar del Plata",
+    "instancia": "M-15",
+    "rival": "Campo de Pato",
+    "condicion": "Visitante",
+    "tantos_los50": 10,
+    "tantos_rival": 13,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Categoría M-15, en Balcarce"
+   },
+   {
+    "fecha_partido": "2011-09-25",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Zona Estímulo del Bloque, Unión de Rugby de Mar del Plata",
+    "instancia": "M-17",
+    "rival": "Campo de Pato",
+    "condicion": "Visitante",
+    "tantos_los50": 36,
+    "tantos_rival": 33,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Categoría M-17, en Balcarce"
+   },
+   {
+    "fecha_partido": "2011-09-25",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Zona Estímulo del Bloque, Unión de Rugby de Mar del Plata",
+    "instancia": "M-16",
+    "rival": "Jockey",
+    "condicion": null,
+    "tantos_los50": 39,
+    "tantos_rival": 5,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Categoría M-16; no aclara condición"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-juega-solo-para-cumplir-frente-a-bigornia",
+  "fecha_nota": "2011-10-01",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-se-despidio-con-una-victoria-sobre-bigornia",
+  "fecha_nota": "2011-10-02",
+  "partidos": [
+   {
+    "fecha_partido": "2011-10-01",
+    "categoria": "Intermedia",
+    "categoria_inferida": false,
+    "torneo": "Torneo Clausura de la Unión de Rugby de Mar del Plata",
+    "instancia": null,
+    "rival": "Mar del Plata Club",
+    "condicion": null,
+    "tantos_los50": 31,
+    "tantos_rival": 26,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Condición no aclarada (previa la lista como Mar del Plata vs. Los 50)"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-se-mide-con-sporting-por-el-clausura",
+  "fecha_nota": "2011-10-08",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-y-los-50-tienen-compromisos-como-locales",
+  "fecha_nota": "2011-10-15",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/victorias-de-los-50-y-los-cardos-en-la-previa-de-un-nuevo-clasico",
+  "fecha_nota": "2011-10-16",
+  "partidos": [
+   {
+    "fecha_partido": "2011-10-15",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Torneo Clausura de la Unión de Rugby de Mar del Plata",
+    "instancia": "5ta fecha",
+    "rival": "Sporting",
+    "condicion": "Local",
+    "tantos_los50": 36,
+    "tantos_rival": 22,
+    "formacion": [
+     "Emiliano Salas",
+     "Cristian Pasarelli",
+     "Juan Manuel Vismara",
+     "Leonardo Canale",
+     "Cristian Urban",
+     "Juan Rossi",
+     "Bernardo Quaranta",
+     "Pablo Magnasco",
+     "Camilo Vila",
+     "Germán Pérez Diez",
+     "Mauro Collivignarelli",
+     "Marcelo Lorenzo",
+     "Martín Molina",
+     "Matías Radetich",
+     "Guillermo Perazzone"
+    ],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Bernardo Quaranta",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Camilo Vila",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "try",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Juan Rossi",
+      "tipo": "try",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-recibe-a-los-50-en-el-ultimo-clasico-del-ano",
+  "fecha_nota": "2011-10-22",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-encontro-el-triunfo-en-la-ultima-jugada",
+  "fecha_nota": "2011-10-23",
+  "partidos": [
+   {
+    "fecha_partido": "2011-10-22",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Torneo Clausura de la Unión de Rugby de Mar del Plata",
+    "instancia": "6ta fecha (clásico)",
+    "rival": "Los Cardos",
+    "condicion": "Visitante",
+    "tantos_los50": 24,
+    "tantos_rival": 31,
+    "formacion": [
+     "Emiliano Salas",
+     "Juan Rossi",
+     "Juan Manuel Vismara",
+     "Leonardo Canale",
+     "Cristian Urban",
+     "Joaquín Fagonde",
+     "Bernardo Quaranta",
+     "Pablo Magnasco",
+     "Camilo Vila",
+     "Germán Pérez Diez",
+     "Matías Radetich",
+     "Marcelo Lorenzo",
+     "Martín Molina",
+     "Mauro Collivignarelli",
+     "Guillermo Perazzone"
+    ],
+    "ingresaron": [
+     "Tomás Lasarte",
+     "Alejandro Paskvan",
+     "Juan Manuel Quaranta",
+     "Cristian Pasarelli",
+     "Gonzalo Lauge",
+     "Maximiliano Oxoby"
+    ],
+    "puntos": [
+     {
+      "jugador": "Tomás Lasarte",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Pablo Magnasco",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Mauro Collivignarelli",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Camilo Vila",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Marcelo Lorenzo",
+      "tipo": "conversion",
+      "cantidad": 2
+     }
+    ],
+    "tarjetas": [
+     {
+      "jugador": "Juan Manuel Vismara",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "Mauro Collivignarelli",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "Camilo Vila",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "Bernardo Quaranta",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "Alejandro Paskvan",
+      "tipo": "roja"
+     }
+    ],
+    "puntos_completos": true,
+    "nota": "Fecha del partido deducida (sábado anterior); el relato menciona que Magnasco y Rossi apoyaron casi juntos, pero el detalle de tantos solo acredita a Magnasco"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-busca-el-titulo-en-su-cancha-frente-a-san-ignacio",
+  "fecha_nota": "2011-10-29",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/san-ignacio-fue-superior-y-se-quedo-con-el-titulo-ante-los-50",
+  "fecha_nota": "2011-10-30",
+  "partidos": [
+   {
+    "fecha_partido": "2011-10-29",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Torneo Clausura de la Unión de Rugby de Mar del Plata",
+    "instancia": "Última fecha",
+    "rival": "San Ignacio",
+    "condicion": "Local",
+    "tantos_los50": 8,
+    "tantos_rival": 48,
+    "formacion": [
+     "Emiliano Salas",
+     "Juan Rossi",
+     "Juan Manuel Vismara",
+     "Leonardo Canale",
+     "Juan Manuel Quaranta",
+     "Pablo Magnasco",
+     "Bernardo Quaranta",
+     "Joaquín Fagonde",
+     "Camilo Vila",
+     "Germán Pérez Diez",
+     "Matías Radetich",
+     "Marcelo Lorenzo",
+     "Mauro Collivignarelli",
+     "Martín Molina",
+     "Tomás Lasarte"
+    ],
+    "ingresaron": [
+     "Maximiliano Oxoby",
+     "Cristian Pasarelli",
+     "Cristian Urban",
+     "Gonzalo Lauge",
+     "Bernardo Homps",
+     "Germán Wibaux"
+    ],
+    "puntos": [
+     {
+      "jugador": "Marcelo Lorenzo",
+      "tipo": "penal",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Tomás Lasarte",
+      "tipo": "try",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": "El relato nombra 'Bernardo Lasarte' como autor del try; el detalle de tantos y la formación dicen Lasarte (Tomás Lasarte en la formación)"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-clubes-tandilenses-se-ponen-a-punto-para-el-seven-de-la-union",
+  "fecha_nota": "2011-11-16",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-y-uncas-comparten-la-zona-c-en-el-seven-de-la-union",
+  "fecha_nota": "2011-11-18",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-tres-tandilenses-en-el-seven-oficial-de-rugby",
+  "fecha_nota": "2011-11-19",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-se-consagro-en-el-seven-oficial-de-primera",
+  "fecha_nota": "2011-11-20",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-campeon-de-m-16",
+  "fecha_nota": "2011-11-21",
+  "partidos": [
+   {
+    "fecha_partido": "2011-11-20",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Oficial de la Unión de Rugby de Mar del Plata",
+    "instancia": "Final Copa de Bronce",
+    "rival": "Campo de Pato",
+    "condicion": null,
+    "tantos_los50": 22,
+    "tantos_rival": 43,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Seven de M-17 (sede Pueyrredón); perdió la final de la Copa de Bronce"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/un-fin-de-semana-a-puro-festejo-para-los-cardos",
+  "fecha_nota": "2011-11-23",
+  "partidos": [
+   {
+    "fecha_partido": "2011-11-20",
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Oficial de la Unión de Rugby de Mar del Plata",
+    "instancia": "Final Copa de Bronce M-17",
+    "rival": "Campo de Pato",
+    "condicion": null,
+    "tantos_los50": 22,
+    "tantos_rival": 43,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Seven M-17; perdió la final de bronce (resultado según nota del 21/11)"
+   },
+   {
+    "fecha_partido": null,
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven Oficial de la Unión de Rugby de Mar del Plata",
+    "instancia": "Final Copa de Bronce M-19",
+    "rival": "Pueyrredón",
+    "condicion": null,
+    "tantos_los50": 21,
+    "tantos_rival": 7,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Seven M-19; ganó la Copa de Bronce; fecha del partido no precisada"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-cayo-en-semifinales",
+  "fecha_nota": "2011-11-30",
+  "partidos": [
+   {
+    "fecha_partido": null,
+    "categoria": "Seven",
+    "categoria_inferida": true,
+    "torneo": "Seven Ciudad de Azul",
+    "instancia": "Semifinal Copa de Oro",
+    "rival": "Alumni",
+    "condicion": null,
+    "tantos_los50": 17,
+    "tantos_rival": 19,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Seven de Primera; fecha exacta no precisada (fin de semana anterior a la nota)"
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/guazzelli-y-christensen-citados-para-los-pumas-seven-en-parana",
+  "fecha_nota": "2011-12-02",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/la-union-de-rugby-tiene-como-presidente-a-gastaldi",
+  "fecha_nota": "2011-12-24",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/seis-jugadores-de-tandil-citados-a-la-seleccion-marplatense-de-rugby",
+  "fecha_nota": "2011-12-27",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-seleccionados-de-rugby-tuvieron-su-primera-reunion",
+  "fecha_nota": "2011-12-29",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/juveniles-tandilenses-en-el-seven-de-miramar",
+  "fecha_nota": "2012-01-14",
+  "partidos": [
+   {
+    "fecha_partido": null,
+    "categoria": "Seven",
+    "categoria_inferida": false,
+    "torneo": "Seven de Miramar",
+    "instancia": "Final Copa de Bronce",
+    "rival": "Invitación VII",
+    "condicion": null,
+    "tantos_los50": 22,
+    "tantos_rival": 0,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Seven de primera división; fecha exacta no precisada (fin de semana anterior)"
+   }
+  ]
+ }
+]

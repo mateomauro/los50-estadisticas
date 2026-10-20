@@ -1,0 +1,1012 @@
+[
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-saco-adelante-un-partido-duro-ante-uncas",
+  "fecha_nota": "2014-03-30",
+  "partidos": [
+   {
+    "fecha_partido": null,
+    "categoria": "Intermedia",
+    "categoria_inferida": false,
+    "torneo": "Torneo de Intermedia",
+    "instancia": null,
+    "rival": "Miramar",
+    "condicion": "Local",
+    "tantos_los50": 90,
+    "tantos_rival": 0,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Fecha no explicita (nota del domingo, en La Rural); sin detalle de jugadores."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/uncas-los-cardos-y-los-50-juegan-fuera-de-la-ciudad",
+  "fecha_nota": "2014-04-05",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-y-los-50-son-locales-en-la-tercera-fecha",
+  "fecha_nota": "2014-04-12",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/victorias-sin-dificultades-para-los-50-y-los-cardos",
+  "fecha_nota": "2014-04-13",
+  "partidos": [
+   {
+    "fecha_partido": "2014-04-12",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Torneo Preparación de Plantel Superior",
+    "instancia": null,
+    "rival": "Campo de Pato",
+    "condicion": "Local",
+    "tantos_los50": 36,
+    "tantos_rival": 0,
+    "formacion": [
+     "Juan I. Potes",
+     "Cristian Passarelli",
+     "Juan Pedro Zugbi",
+     "Leonardo Canale",
+     "Ignacio Arbulu",
+     "Joaquín Fagonde",
+     "Bernardo Quaranta",
+     "Federico Cantet",
+     "Marcos Philip",
+     "Camilo Vila",
+     "Martín Molina",
+     "Máximo Lasarte",
+     "Santiago Puchuri",
+     "Matías Radetich",
+     "Tomás Lasarte"
+    ],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Federico Cantet",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Matías Radetich",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Tomás Lasarte",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Cristian Passarelli",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Andrés Mercanti",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Tomás Lasarte",
+      "tipo": "conversion",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "conversion",
+      "cantidad": 2
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": "Formacion tomada de la nota (Arrondo y Mercanti, que anotaron, no figuran entre los titulares)."
+   },
+   {
+    "fecha_partido": "2014-04-12",
+    "categoria": "Intermedia",
+    "categoria_inferida": false,
+    "torneo": "Torneo Preparación de Plantel Superior",
+    "instancia": null,
+    "rival": "Uncas",
+    "condicion": "Visitante",
+    "tantos_los50": 27,
+    "tantos_rival": 12,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Amistoso con Uncas (Campo de Pato no tiene Intermedia)."
+   },
+   {
+    "fecha_partido": "2014-04-12",
+    "categoria": "Pre-Intermedia",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Uncas",
+    "condicion": "Visitante",
+    "tantos_los50": 10,
+    "tantos_rival": 6,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Amistoso con Uncas."
+   },
+   {
+    "fecha_partido": "2014-04-12",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Torneo Preparación de Plantel Superior",
+    "instancia": null,
+    "rival": "Campo de Pato",
+    "condicion": "Local",
+    "tantos_los50": 0,
+    "tantos_rival": 12,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 17."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-y-los-cardos-frente-a-frente-en-el-primer-clasico",
+  "fecha_nota": "2014-04-26",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-se-quedo-con-el-primer-clasico-del-ano",
+  "fecha_nota": "2014-04-26",
+  "partidos": [
+   {
+    "fecha_partido": "2014-04-26",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Torneo Preparación (Unión de Rugby de Mar del Plata)",
+    "instancia": "4ta fecha",
+    "rival": "Los Cardos",
+    "condicion": "Local",
+    "tantos_los50": 6,
+    "tantos_rival": 45,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Clasico; la nota no da detalle de jugadores de Los 50."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/este-domingo-se-realizara-el-seven-solidario-de-hockey-en-la-cancha-de-las-pumas",
+  "fecha_nota": "2014-04-26",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-marco-la-diferencia-en-la-rural",
+  "fecha_nota": "2014-04-27",
+  "partidos": [
+   {
+    "fecha_partido": "2014-04-26",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": "Zona A",
+    "rival": "Los Cardos",
+    "condicion": "Local",
+    "tantos_los50": 6,
+    "tantos_rival": 45,
+    "formacion": [
+     "Andrés Mercanti",
+     "Cristian Passarelli",
+     "Juan P. Zugbi",
+     "Leonardo Canale",
+     "Tomás Quaranta",
+     "Joaquín Fagonde",
+     "Bernardo Quaranta",
+     "Federico Cantet",
+     "José de Urquiza",
+     "Nicolás González",
+     "Martín Molina",
+     "Máximo Lasarte",
+     "Tomás Lasarte",
+     "Nicolás Homps",
+     "Jacinto Arrondo"
+    ],
+    "ingresaron": [
+     "Juan Manuel Vismara",
+     "Juan I. Potes",
+     "Ignacio Arbulu",
+     "Juan Rossi",
+     "Luciano Sachetto",
+     "Germán Pérez Diez",
+     "Juan Picart"
+    ],
+    "puntos": [
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "penal",
+      "cantidad": 2
+     }
+    ],
+    "tarjetas": [
+     {
+      "jugador": "Nicolás González",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "Leonardo Canale",
+      "tipo": "amarilla"
+     }
+    ],
+    "puntos_completos": true,
+    "nota": "Clasico de preparacion."
+   },
+   {
+    "fecha_partido": "2014-04-26",
+    "categoria": "Pre-Intermedia",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": "Zona A",
+    "rival": "Los Cardos",
+    "condicion": "Local",
+    "tantos_los50": 5,
+    "tantos_rival": 28,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2014-04-26",
+    "categoria": "Intermedia",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": "Zona A",
+    "rival": "Los Cardos",
+    "condicion": "Local",
+    "tantos_los50": 8,
+    "tantos_rival": 17,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/uncas-recibe-a-los-50-por-la-ultima-fecha-de-la-zona-a",
+  "fecha_nota": "2014-05-03",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-se-quedo-con-un-duelo-parejo-ante-uncas",
+  "fecha_nota": "2014-05-04",
+  "partidos": [
+   {
+    "fecha_partido": "2014-05-03",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": "Última fecha Zona A",
+    "rival": "Uncas",
+    "condicion": "Visitante",
+    "tantos_los50": 16,
+    "tantos_rival": null,
+    "formacion": [
+     "Juan Pedro Zugbi",
+     "Cristian Passarelli",
+     "Juan Manuel Vismara",
+     "Andrés Mercanti",
+     "Tomás Quaranta",
+     "Juan Rossi",
+     "Bernardo Quaranta",
+     "Leonardo Canale",
+     "Nicolás González",
+     "Camilo Vila",
+     "Martín Molina",
+     "Máximo Lasarte",
+     "Luciano Sachetto",
+     "Matías Radetich",
+     "Jacinto Arrondo"
+    ],
+    "ingresaron": [
+     "Juan Potes"
+    ],
+    "puntos": [
+     {
+      "jugador": "Camilo Vila",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "conversion",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "penal",
+      "cantidad": 3
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "La nota dice que Vila y Arrondo completaron los 16 tantos (ambiguo si total o primer tiempo); Uncas anotó un try y un penal, marcador final no explicito. Los 50 ganó."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/comenzo-el-torneo-inicial-de-juveniles-de-la-urmdp",
+  "fecha_nota": "2014-05-06",
+  "partidos": [
+   {
+    "fecha_partido": null,
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Torneo Inicial de juveniles Urmdp",
+    "instancia": "1ra fecha",
+    "rival": "Pueyrredón",
+    "condicion": "Local",
+    "tantos_los50": 18,
+    "tantos_rival": 17,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 15. Fecha no explicita (fin de semana anterior)."
+   },
+   {
+    "fecha_partido": null,
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Torneo Inicial de juveniles Urmdp",
+    "instancia": "1ra fecha",
+    "rival": "Pueyrredón",
+    "condicion": "Local",
+    "tantos_los50": 26,
+    "tantos_rival": 5,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 16. Fecha no explicita (fin de semana anterior)."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-y-los-50-inician-de-visitantes-su-participacion",
+  "fecha_nota": "2014-05-17",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/derrotas-de-los-cardos-y-los-50-en-la-presentacion",
+  "fecha_nota": "2014-05-18",
+  "partidos": [
+   {
+    "fecha_partido": "2014-05-17",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Torneo Oficial Urmdp - Grupo I",
+    "instancia": "1ra fecha",
+    "rival": "Mar del Plata Club",
+    "condicion": "Visitante",
+    "tantos_los50": 11,
+    "tantos_rival": 54,
+    "formacion": [
+     "Andrés Mercanti",
+     "Juan Pedro Zugbi",
+     "Cristian Passarelli",
+     "Tomás Quaranta",
+     "Leonardo Canale",
+     "Federico Cantet",
+     "Bernardo Quaranta",
+     "Juan Rossi",
+     "Nicolás González",
+     "Camilo Vila",
+     "Martín Molina",
+     "Máximo Lasarte",
+     "Luciano Sachetto",
+     "Matías Radetich",
+     "Jacinto Arrondo"
+    ],
+    "ingresaron": [
+     "Ignacio Arbulu",
+     "Francisco Ubeda",
+     "Santiago Bernazza",
+     "Joaquín Fagonde",
+     "Juan Ignacio Potes"
+    ],
+    "puntos": [
+     {
+      "jugador": "Cristian Passarelli",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "penal",
+      "cantidad": 2
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/rugby-resultados-de-juveniles-2",
+  "fecha_nota": "2014-05-21",
+  "partidos": [
+   {
+    "fecha_partido": "2014-05-18",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Torneo Inicial de juveniles Urmdp",
+    "instancia": null,
+    "rival": "Campo de Pato",
+    "condicion": null,
+    "tantos_los50": 17,
+    "tantos_rival": 5,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 15."
+   },
+   {
+    "fecha_partido": "2014-05-18",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Torneo Inicial de juveniles Urmdp",
+    "instancia": null,
+    "rival": "Campo de Pato",
+    "condicion": null,
+    "tantos_los50": 5,
+    "tantos_rival": 57,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 16."
+   },
+   {
+    "fecha_partido": "2014-05-17",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Torneo Inicial de juveniles Urmdp",
+    "instancia": null,
+    "rival": "Mar del Plata",
+    "condicion": null,
+    "tantos_los50": 0,
+    "tantos_rival": 32,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 17."
+   },
+   {
+    "fecha_partido": "2014-05-17",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": "Torneo Inicial de juveniles Urmdp",
+    "instancia": null,
+    "rival": "Mar del Plata",
+    "condicion": null,
+    "tantos_los50": 0,
+    "tantos_rival": 50,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 19."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-recibe-a-san-ignacio-y-los-cardos-visita-a-comercial",
+  "fecha_nota": "2014-05-24",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-vendio-cara-su-derrota-ante-san-ignacio",
+  "fecha_nota": "2014-05-25",
+  "partidos": [
+   {
+    "fecha_partido": "2014-05-24",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Torneo Oficial Urmdp - Grupo I",
+    "instancia": "2da fecha",
+    "rival": "San Ignacio",
+    "condicion": "Local",
+    "tantos_los50": 16,
+    "tantos_rival": 24,
+    "formacion": [
+     "Juan Manuel Vismara",
+     "Cristian Passarelli",
+     "Juan Pedro Zugbi",
+     "Andrés Mercanti",
+     "Leonardo Canale",
+     "Juan Rossi",
+     "Bernardo Quaranta",
+     "Federico Cantet",
+     "Nicolás González",
+     "Camilo Vila",
+     "Tomás Lasarte",
+     "Máximo Lasarte",
+     "Luciano Sachetto",
+     "Matías Radetich",
+     "Jacinto Arrondo"
+    ],
+    "ingresaron": [
+     "Joaquín Fagonde",
+     "Nicolás Homps"
+    ],
+    "puntos": [
+     {
+      "jugador": "Luciano Sachetto",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "conversion",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "penal",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "drop",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [
+     {
+      "jugador": "Juan Manuel Vismara",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "Bernardo Quaranta",
+      "tipo": "amarilla"
+     }
+    ],
+    "puntos_completos": true,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-reacciono-y-se-quedo-con-todo",
+  "fecha_nota": "2014-06-01",
+  "partidos": [
+   {
+    "fecha_partido": "2014-05-31",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Torneo Oficial Urmdp - Grupo I",
+    "instancia": "3ra fecha",
+    "rival": "Los Cardos",
+    "condicion": "Visitante",
+    "tantos_los50": 10,
+    "tantos_rival": 19,
+    "formacion": [
+     "Juan Pedro Zugbi",
+     "Cristian Passarelli",
+     "Juan Manuel Vismara",
+     "Leonardo Canale",
+     "Andrés Mercanti",
+     "Federico Cantet",
+     "Bernardo Quaranta",
+     "Juan Rossi",
+     "Nicolás González",
+     "Camilo Vila",
+     "Tomás Lasarte",
+     "Máximo Lasarte",
+     "Luciano Sachetto",
+     "Matías Radetich",
+     "Jacinto Arrondo"
+    ],
+    "ingresaron": [
+     "Joaquín Fagonde",
+     "Guillermo Perazzone"
+    ],
+    "puntos": [
+     {
+      "jugador": "Máximo Lasarte",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "conversion",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "penal",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [
+     {
+      "jugador": "Andrés Mercanti",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "Nicolás González",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "Cristian Passarelli",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "amarilla"
+     }
+    ],
+    "puntos_completos": true,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2014-05-31",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Los Cardos",
+    "condicion": "Visitante",
+    "tantos_los50": 17,
+    "tantos_rival": 22,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 17, clasico."
+   },
+   {
+    "fecha_partido": "2014-05-31",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Los Cardos",
+    "condicion": "Visitante",
+    "tantos_los50": 0,
+    "tantos_rival": 32,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 19, clasico."
+   },
+   {
+    "fecha_partido": "2014-05-31",
+    "categoria": "Pre-Intermedia",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Los Cardos",
+    "condicion": "Visitante",
+    "tantos_los50": 8,
+    "tantos_rival": 13,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   },
+   {
+    "fecha_partido": "2014-05-31",
+    "categoria": "Intermedia",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Los Cardos",
+    "condicion": "Visitante",
+    "tantos_los50": 18,
+    "tantos_rival": 26,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-ante-una-visita-de-alta-exigencia-a-sporting",
+  "fecha_nota": "2014-06-07",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-termino-igualando-en-su-visita-a-sierra-de-los-padres",
+  "fecha_nota": "2014-06-08",
+  "partidos": [
+   {
+    "fecha_partido": "2014-06-07",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Torneo Oficial Urmdp - Grupo I",
+    "instancia": "4ta fecha",
+    "rival": "Comercial",
+    "condicion": "Visitante",
+    "tantos_los50": 18,
+    "tantos_rival": 18,
+    "formacion": [
+     "Juan Pedro Zugbi",
+     "Cristian Passarelli",
+     "Juan Manuel Vismara",
+     "Andrés Mercanti",
+     "Leonardo Canale",
+     "Joaquín Fagonde",
+     "Bernardo Quaranta",
+     "Federico Cantet",
+     "Nicolás González",
+     "Camilo Vila",
+     "Matías Radetich",
+     "Máximo Lasarte",
+     "Luciano Sachetto",
+     "Tomás Lasarte",
+     "Jacinto Arrondo"
+    ],
+    "ingresaron": [
+     "Juan Ignacio Potes",
+     "Matías Toletti",
+     "Guillermo Perazzone"
+    ],
+    "puntos": [
+     {
+      "jugador": "Andrés Mercanti",
+      "tipo": "try",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Luciano Sachetto",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Jacinto Arrondo",
+      "tipo": "penal",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": "La nota habla de sendos tries de Mercanti y un tercero de Sachetto; se asignaron 2 a Mercanti para sumar 18 (inferido)."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-y-los-50-ante-duelos-de-maxima-exigencia",
+  "fecha_nota": "2014-06-14",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-estuvo-muy-cerca-de-frenar-al-puntero",
+  "fecha_nota": "2014-06-15",
+  "partidos": [
+   {
+    "fecha_partido": "2014-06-14",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Torneo Oficial Urmdp - Grupo I",
+    "instancia": null,
+    "rival": "Sporting",
+    "condicion": "Local",
+    "tantos_los50": 8,
+    "tantos_rival": 43,
+    "formacion": [
+     "Juan Pedro Zugbi",
+     "Cristian Passarelli",
+     "Juan Manuel Vismara",
+     "Leonardo Canale",
+     "Andrés Mercanti",
+     "Juan Rossi",
+     "Bernardo Quaranta",
+     "Federico Cantet",
+     "Nicolás González",
+     "Camilo Vila",
+     "Matías Radetich",
+     "Máximo Lasarte",
+     "Luciano Sachetto",
+     "Guillermo Perazzone",
+     "Tomás Lasarte"
+    ],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "penal",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Máximo Lasarte",
+      "tipo": "try",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-y-los-50-juegan-otra-vez-en-casa",
+  "fecha_nota": "2014-06-20",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/encuentro-infantil-en-los-50",
+  "fecha_nota": "2014-06-27",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-recibe-a-comercial-y-los-50-visita-a-san-ignacio",
+  "fecha_nota": "2014-06-28",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-empieza-a-ponerse-al-dia-ante-sporting",
+  "fecha_nota": "2014-07-09",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-recupero-con-derrota-el-duelo-ante-sporting",
+  "fecha_nota": "2014-07-10",
+  "partidos": [
+   {
+    "fecha_partido": "2014-07-09",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Los Cardos",
+    "condicion": "Local",
+    "tantos_los50": 17,
+    "tantos_rival": 15,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 17, clasico (feriado)."
+   },
+   {
+    "fecha_partido": "2014-07-09",
+    "categoria": "Juveniles",
+    "categoria_inferida": false,
+    "torneo": null,
+    "instancia": null,
+    "rival": "Los Cardos",
+    "condicion": "Local",
+    "tantos_los50": 5,
+    "tantos_rival": 34,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Menores de 19, clasico (feriado)."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-y-los-50-se-presentan-como-locales",
+  "fecha_nota": "2014-07-12",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-juega-semis",
+  "fecha_nota": "2014-07-12",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-vencio-a-sporting-y-los-50-pudo-con-comercial",
+  "fecha_nota": "2014-07-13",
+  "partidos": [
+   {
+    "fecha_partido": "2014-07-12",
+    "categoria": "Primera",
+    "categoria_inferida": false,
+    "torneo": "Torneo Oficial Urmdp - Grupo I",
+    "instancia": null,
+    "rival": "Comercial",
+    "condicion": "Local",
+    "tantos_los50": 15,
+    "tantos_rival": 13,
+    "formacion": [
+     "Juan Manuel Vismara",
+     "Juan Pedro Zugbi",
+     "Andrés Mercanti",
+     "Leonardo Canale",
+     "Bernardo Quaranta",
+     "Juan Rossi",
+     "Esteban Varela",
+     "Federico Cantet",
+     "Camilo Vila",
+     "Nicolás Di Fonzo",
+     "Máximo Lasarte",
+     "Guillermo Perazzone",
+     "Luciano Sachetto",
+     "Matías Radetich",
+     "Tomás Lasarte"
+    ],
+    "ingresaron": [
+     "Cristian Pasarelli"
+    ],
+    "puntos": [
+     {
+      "jugador": "Máximo Lasarte",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Guillermo Perazzone",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Juan Rossi",
+      "tipo": "try",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [
+     {
+      "jugador": "Juan Manuel Vismara",
+      "tipo": "amarilla"
+     },
+     {
+      "jugador": "Juan Manuel Vismara",
+      "tipo": "amarilla"
+     }
+    ],
+    "puntos_completos": true,
+    "nota": "Vismara con doble amarilla (se registraron dos amarillas)."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-termino-tercero",
+  "fecha_nota": "2014-07-15",
+  "partidos": []
+ }
+]

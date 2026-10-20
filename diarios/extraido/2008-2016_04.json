@@ -1,0 +1,433 @@
+[
+ {
+  "url": "https://www.eleco.com.ar/interes-general/despedida-de-los-50",
+  "fecha_nota": "2009-07-21",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-y-uncas-arrancan-el-regional",
+  "fecha_nota": "2009-07-25",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-arranco-con-una-victoria-en-el-regional-b",
+  "fecha_nota": "2009-07-27",
+  "partidos": [
+   {
+    "fecha_partido": "2009-07-26",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": "1ra fecha, Zona 3",
+    "rival": "Social Rugby Club (Chacabuco)",
+    "condicion": "Local",
+    "tantos_los50": 37,
+    "tantos_rival": 10,
+    "formacion": [
+     "Juan Vismara",
+     "Paulo Luiz",
+     "Sebastián Echeveste",
+     "Luis Schiaratura",
+     "Juan Manuel Quaranta",
+     "Juan Marcos Schang",
+     "Juan Ignacio Rossi",
+     "Pablo Magnasco",
+     "Ignacio Pérez Diez",
+     "Nicolás González",
+     "Ignacio Falco",
+     "Germán Pérez Diez",
+     "Nicolás Safenreiter",
+     "Matías Radetich",
+     "Guillermo Perazzone"
+    ],
+    "ingresaron": [],
+    "puntos": [
+     {
+      "jugador": "Ignacio Falco",
+      "tipo": "try",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Matías Radetich",
+      "tipo": "try",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Juan Ignacio Rossi",
+      "tipo": "try",
+      "cantidad": 1
+     },
+     {
+      "jugador": "Nicolás González",
+      "tipo": "conversion",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Nicolás González",
+      "tipo": "penal",
+      "cantidad": 2
+     },
+     {
+      "jugador": "Matías Radetich",
+      "tipo": "conversion",
+      "cantidad": 1
+     }
+    ],
+    "tarjetas": [],
+    "puntos_completos": true,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-consiguio-una-aplastante-victoria",
+  "fecha_nota": "2009-08-02",
+  "partidos": [
+   {
+    "fecha_partido": "2009-08-01",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": "2da fecha, Zona 3",
+    "rival": "Saladillo Rugby Club",
+    "condicion": "Visitante",
+    "tantos_los50": 36,
+    "tantos_rival": 16,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-viaja-a-bahia-blanca-y-defiende-la-punta-ante-sportiva",
+  "fecha_nota": "2009-08-08",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-perdio-la-punta-en-bahia-blanca",
+  "fecha_nota": "2009-08-09",
+  "partidos": [
+   {
+    "fecha_partido": "2009-08-08",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": "3ra fecha, Zona 3",
+    "rival": "Chivilcoy",
+    "condicion": "Visitante",
+    "tantos_los50": 48,
+    "tantos_rival": 12,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/se-realizo-la-charla-en-los-50",
+  "fecha_nota": "2009-08-15",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-recibe-hoy-a-comercial-el-puntero",
+  "fecha_nota": "2009-08-15",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-no-pudo-con-el-puntero-en-su-cancha",
+  "fecha_nota": "2009-08-16",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/victoria-de-los-50-en-su-visita-a-chacabuco",
+  "fecha_nota": "2009-08-17",
+  "partidos": [
+   {
+    "fecha_partido": "2009-08-16",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": "Zona 3",
+    "rival": "Social Rugby Club (Chacabuco)",
+    "condicion": "Visitante",
+    "tantos_los50": null,
+    "tantos_rival": null,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "La nota solo dice que Los 50 ganó; partido postergado del sábado al domingo. Sin resultado en el texto."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-volvio-a-caer-en-el-regional-pampeano",
+  "fecha_nota": "2009-08-23",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-se-impuso-con-comodidad-a-saladillo",
+  "fecha_nota": "2009-08-24",
+  "partidos": [
+   {
+    "fecha_partido": "2009-08-23",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": "Zona 3",
+    "rival": "Saladillo Rugby Club",
+    "condicion": "Local",
+    "tantos_los50": null,
+    "tantos_rival": null,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "La nota solo dice que Los 50 se impuso con comodidad; sin resultado en el texto."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/uncas-fue-sede-del-encuentro-de-infantiles",
+  "fecha_nota": "2009-08-28",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-tiene-una-visita-muy-complicada-a-sporting",
+  "fecha_nota": "2009-08-29",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-cayo-28-8-en-su-visita-a-sporting",
+  "fecha_nota": "2009-08-30",
+  "partidos": [
+   {
+    "fecha_partido": "2009-08-29",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": "6ta fecha, Zona 3",
+    "rival": "Racing Club de Chivilcoy",
+    "condicion": "Local",
+    "tantos_los50": 64,
+    "tantos_rival": 17,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-cardos-quiere-volver-al-triunfo-ante-argentino",
+  "fecha_nota": "2009-09-05",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/derrota-de-los-cardos-y-triunfo-para-los-50",
+  "fecha_nota": "2009-09-06",
+  "partidos": [
+   {
+    "fecha_partido": "2009-09-05",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": "Cuartos de final",
+    "rival": "Unión del Sur",
+    "condicion": "Local",
+    "tantos_los50": 31,
+    "tantos_rival": 28,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-jugara-la-semifinal-de-visitante-en-santa-rosa",
+  "fecha_nota": "2009-09-08",
+  "partidos": [
+   {
+    "fecha_partido": "2009-09-05",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": "Cuartos de final",
+    "rival": "Unión del Sur",
+    "condicion": "Local",
+    "tantos_los50": null,
+    "tantos_rival": null,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "La nota solo menciona la victoria, sin resultado."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-gano-y-jugara-la-final-del-regional-b",
+  "fecha_nota": "2009-09-13",
+  "partidos": [
+   {
+    "fecha_partido": "2009-09-12",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": "Semifinal",
+    "rival": "Santa Rosa Rugby",
+    "condicion": "Local",
+    "tantos_los50": 46,
+    "tantos_rival": 23,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-estuvo-de-gira",
+  "fecha_nota": "2009-09-17",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-busca-el-titulo-frente-a-mar-del-plata",
+  "fecha_nota": "2009-09-19",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-no-pudo-en-la-final-ante-mar-del-plata",
+  "fecha_nota": "2009-09-20",
+  "partidos": [
+   {
+    "fecha_partido": "2009-09-19",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Torneo Regional Pampeano B",
+    "instancia": "Final",
+    "rival": "Mar del Plata Rugby",
+    "condicion": "Visitante",
+    "tantos_los50": 8,
+    "tantos_rival": 36,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "Perdió la final. Primer tiempo 8-12."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/juegan-uncas-y-los-50",
+  "fecha_nota": "2009-10-03",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/triunfo-de-los-50-y-caida-de-uncas",
+  "fecha_nota": "2009-10-04",
+  "partidos": [
+   {
+    "fecha_partido": "2009-10-03",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Torneo Reclasificatorio de la Unión de Rugby de Mar del Plata",
+    "instancia": "1ra fecha",
+    "rival": "Club de Pato (Balcarce)",
+    "condicion": "Local",
+    "tantos_los50": 38,
+    "tantos_rival": 26,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-busca-otro-triunfo-en-su-visita-a-mar-del-plata",
+  "fecha_nota": "2009-10-10",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-logro-un-triunfo-clave-ante-mar-del-plata",
+  "fecha_nota": "2009-10-11",
+  "partidos": [
+   {
+    "fecha_partido": "2009-10-10",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Torneo Reclasificatorio de la Unión de Rugby de Mar del Plata",
+    "instancia": "2da fecha",
+    "rival": "Mar del Plata Rugby",
+    "condicion": "Visitante",
+    "tantos_los50": null,
+    "tantos_rival": null,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": "La nota solo dice triunfo clave de Los 50; sin resultado en el texto."
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/uncas-recibe-a-club-de-pato",
+  "fecha_nota": "2009-10-17",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/uncas-derroto-como-local-a-club-de-pato",
+  "fecha_nota": "2009-10-19",
+  "partidos": []
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/hubo-derrotas-de-uncas-y-los-50",
+  "fecha_nota": "2009-11-01",
+  "partidos": [
+   {
+    "fecha_partido": "2009-10-31",
+    "categoria": "Primera",
+    "categoria_inferida": true,
+    "torneo": "Torneo Reclasificatorio de la Unión de Rugby de Mar del Plata",
+    "instancia": "4ta fecha",
+    "rival": "Unión del Sur",
+    "condicion": "Local",
+    "tantos_los50": 20,
+    "tantos_rival": 30,
+    "formacion": [],
+    "ingresaron": [],
+    "puntos": [],
+    "tarjetas": [],
+    "puntos_completos": false,
+    "nota": null
+   }
+  ]
+ },
+ {
+  "url": "https://www.eleco.com.ar/interes-general/los-50-viaja-a-uruguay-con-los-menores-de-14",
+  "fecha_nota": "2009-11-04",
+  "partidos": []
+ }
+]
