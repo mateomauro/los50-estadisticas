@@ -17465,63 +17465,6 @@
   "cats": [
    "M7"
   ],
-  "fecha": "",
-  "semana": 23,
-  "foco": "Perseguido salta, Mancha pelota, 2 perros por un hueso (con tag)",
-  "objetivos": [],
-  "bloques": [
-   {
-    "agua": true,
-    "min": null
-   },
-   {
-    "b": "",
-    "items": [
-     {
-      "obj": "Perseguido salta",
-      "act": "Todos sentados con piernas extendidas, dos corren, al que saltan lo tiene que perseguir hasta que salata a otro"
-     },
-     {
-      "obj": "Mancha pelota",
-      "act": "Sector limitado 2 pelotas/2 manchas"
-     },
-     {
-      "obj": "2 perros por un hueso (con tag)",
-      "act": "2 equipos sentados en los laterales de la cancha cada uno con un numero, se enfrentan por numeros 1vs1 2vs2 3vs3"
-     },
-     {
-      "obj": "Robar el tesoro (con tag)",
-      "act": "2 equipos en cada ingoal diferentes materiales, conos pelotas pecheras, en un tiempo determ, robar el tesoro del equipo contrariogana el que mas tiene."
-     }
-    ]
-   },
-   {
-    "agua": true,
-    "min": null
-   },
-   {
-    "b": "",
-    "items": [
-     {
-      "min": 15,
-      "obj": "Partido con tag",
-      "act": "Participación activa de todos"
-     }
-    ]
-   }
-  ],
-  "cierre": true,
-  "min": 15,
-  "origen": "M 7 - MEGAN.xlsx · hoja 12",
-  "id": "m7-semana-23-2",
-  "orden": "2026-06-08"
- },
- {
-  "quien": "Mele",
-  "grupo": "M7",
-  "cats": [
-   "M7"
-  ],
   "fecha": "2026-06-10",
   "semana": null,
   "foco": "Juegos de lucha, Iniciación al Tackle, Pasar y atrapar",

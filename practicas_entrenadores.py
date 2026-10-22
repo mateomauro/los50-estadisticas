@@ -60,7 +60,8 @@ ARREGLOS = {"situcaiones": "situaciones", "rapindo": "rápido", "genrar": "gener
             "cuadrad0": "cuadrado", "cambieo": "cambio", "jquutarle": "quitarle",
             # abreviaturas del plan de scrum
             "hom,esp y cad": "hombros, espalda y cadera", "rod 90°": "rodillas a 90°", "avnzan": "avanzan", "mov.art": "movilidad articular",
-            "aumentar el rom": "aumentar el rango de movimiento (ROM)", "grabedad": "gravedad"}
+            "aumentar el rom": "aumentar el rango de movimiento (ROM)", "grabedad": "gravedad",
+            " <cant tap": ""}  # un resto de la planilla de scrum que no se entiende
 
 
 def norm(s):
@@ -85,7 +86,7 @@ def texto(v):
         t = " ".join(palabras)
         t = t[:1].upper() + t[1:]
     for a, b in ARREGLOS.items():
-        t = re.sub(rf"\b{re.escape(a)}" + (r"\b" if a[-1].isalnum() else ""), b, t, flags=re.I)
+        t = re.sub((r"\b" if a[0].isalnum() else "") + re.escape(a) + (r"\b" if a[-1].isalnum() else ""), b, t, flags=re.I)
     return t[:1].upper() + t[1:] if t else t
 
 
@@ -230,7 +231,8 @@ def leer(carpeta):
     # la misma práctica copiada en dos hojas (las semanas y los meses de Mati): queda la más completa
     unicas = {}
     for p in todas:
-        k = (p["grupo"], p["fecha"], norm(p["foco"])) if p["fecha"] else (p["grupo"], p["origen"], norm(p["foco"]), len(unicas))
+        # sin fecha: es la misma si tiene la misma semana y las mismas actividades (Mele copió alguna dos veces en la planilla)
+        k = (p["grupo"], p["fecha"], norm(p["foco"])) if p["fecha"] else (p["grupo"], p["semana"], norm(p["foco"]), json.dumps(p["bloques"], sort_keys=True))
         n = sum(len(b.get("items", [])) for b in p["bloques"])
         if k not in unicas or n > sum(len(b.get("items", [])) for b in unicas[k]["bloques"]):
             unicas[k] = p

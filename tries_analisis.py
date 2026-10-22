@@ -32,7 +32,8 @@ CONFIABLE = 0.9  # parte de los titulares que tiene que usar camisetas del 1 al 
 
 
 def _resumen(t, con_puesto):
-    puesto = t.puesto
+    # el try penal va aparte: a veces la UAR se lo pone a un jugador (casi siempre al 8) y se contaba dos veces
+    puesto = t.puesto.where(t.incidencia != "Try penal")
     minuto = t.minuto.where(~((t.tiempo == "2T") & (t.minuto <= 40)), t.minuto + 40)
     return {
         "tries": int(len(t)),

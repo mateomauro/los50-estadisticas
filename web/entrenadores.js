@@ -63,17 +63,17 @@
     err.hidden = true; btn.disabled = true; btn.textContent = "Abriendo…";
     try {
       if (!SOBRE) throw new Error("sin datos");
-      const llave = await derivar($("#clave").value);
+      const llave = await derivar($("#clave").value.trim());
       const datos = await descifrar(llave);
       LLAVE_ACTUAL = llave;
-      guardar(aB64(await crypto.subtle.exportKey("raw", llave)), $("#recordar").checked, await fichaDe($("#clave").value));
+      guardar(aB64(await crypto.subtle.exportKey("raw", llave)), $("#recordar").checked, await fichaDe($("#clave").value.trim()));
       iniciar(datos);
     } catch (e2) {
       err.textContent = SOBRE ? "La clave no es correcta. Probá de nuevo." : "No se encontraron los datos de esta sección.";
       err.hidden = false; $("#clave").select();
     } finally { btn.disabled = false; btn.textContent = "Entrar"; }
   });
-  $("#salir").addEventListener("click", () => { olvidar(); location.href = "index.html"; });
+  $("#salir").addEventListener("click", () => { olvidar(); location.replace(location.pathname); }); // vuelve a la clave de esta misma web
 
 
   // ---------- la sección ----------
@@ -135,6 +135,10 @@
     $("#app").hidden = false;
     S = { ver: "inicio", cat: null, temp: null, gcat: null, tab: null, q: "", ordenJ: "pj", verJ: false, verP: false, verN: false, verR: false, rol: null, para: null, ej: null, puesto: null, practica: null, pgrupo: null, qp: "", qe: "", abiertos: new Set(),
       acat: null, afecha: null, aform: null, marcas: null, base: null, aviso: null, estadoLista: null, recien: new Set(), cambiarNombre: false };
+    // al abrir la sección (un link, la dirección escrita o que el navegador completó) arranca en el inicio;
+    // al recargar o al volver con "atrás" sigue donde estaba (por ejemplo, en medio de una lista)
+    const nav = performance.getEntriesByType ? performance.getEntriesByType("navigation")[0] : null;
+    if (nav && nav.type === "navigate" && location.search) history.replaceState(null, "", location.pathname);
     leerURL();
     render();
     addEventListener("popstate", () => {
@@ -150,7 +154,7 @@
     const c = D.cats.find((x) => slug(x) === p.get("cat"));
     const g = D.guia ? gCats().find((x) => slug(x) === p.get("guia")) : null;
     const hayPuestos = !!(D.guia && D.guia.puestos), hayPr = !!(D.guia && D.guia.practicas && D.guia.practicas.length);
-    const vistas = ["club", "consejos", "proximos"].concat(D.guia ? ["guia", "cantos", "scrum"] : [], D.guia && D.guia.ejercicios ? ["ejercicios"] : [], hayPuestos ? ["puestos"] : [], hayPr ? ["practicas"] : []);
+    const vistas = ["club", "consejos", "proximos", "categorias", "elegir"].concat(D.guia ? ["guia", "cantos", "scrum"] : [], D.guia && D.guia.ejercicios ? ["ejercicios"] : [], hayPuestos ? ["puestos"] : [], hayPr ? ["practicas"] : []);
     const ej = D.guia && D.guia.ejercicios ? D.guia.ejercicios.find((x) => x.id === p.get("ejercicio")) : null;
     const pu = hayPuestos && puestoDe(+p.get("puesto")) ? +p.get("puesto") : null;
     const pr = hayPr ? D.guia.practicas.find((x) => x.id === p.get("practica")) : null;
@@ -163,7 +167,7 @@
     S.fcat = [...new Set(D.prox.map((x) => x.cat))].find((x) => slug(x) === p.get("categoria")) || null;
     const ac = D.fichados ? ASIS_CATS.find((x) => slug(x) === p.get("asistencia")) : null;
     S.acat = ac || null;
-    S.afecha = ac && /^\d{4}-\d{2}-\d{2}$/.test(p.get("fecha") || "") ? p.get("fecha") : null;
+    S.afecha = ac && fechaOk(p.get("fecha") || "") ? p.get("fecha") : null;
     S.aform = null; S.marcas = null;
     if (D.fichados) vistas.push("asistencia");
     S.ver = c ? "cat" : g ? "guia" : ej ? "ejercicio" : pu ? "puesto" : pr ? "practica" : ac ? (S.afecha ? "lista" : p.get("chicos") ? "chicos" : "asis")
@@ -189,10 +193,24 @@
     return location.pathname + (qs ? "?" + qs : "");
   }
   function irA(cambios, empujar = true) {
+    // cada paso guarda cuántos pasos hay adentro de la sección y de qué pantalla se vino: así "Volver" sabe adónde va y lo dice
+    const desde = empujar ? tituloDe() : null;
     Object.assign(S, cambios);
-    history[empujar ? "pushState" : "replaceState"]({}, "", url());
+    history[empujar ? "pushState" : "replaceState"](empujar ? { n: ((history.state && history.state.n) || 0) + 1, desde } : history.state, "", url());
     render();
     if (empujar) { scrollTo({ top: 0 }); $("#vista").focus({ preventScroll: true }); }
+  }
+  /** cambia de pantalla sin sumar un paso: para Anterior / Siguiente (así "Volver" no las recorre una por una) */
+  function irSinPaso(cambios) {
+    irA(cambios, false);
+    scrollTo({ top: 0 }); $("#vista").focus({ preventScroll: true });
+  }
+  /** el nombre corto de la pantalla en la que se está: es lo que dice el botón "Volver" de la pantalla siguiente */
+  function tituloDe() {
+    const ej = S.ver === "ejercicio" && D.guia.ejercicios.find((x) => x.id === S.ej), pu = S.ver === "puesto" && puestoDe(S.puesto);
+    return ({ inicio: "Inicio", cat: S.cat, club: "Todo el club", consejos: "Consejos", proximos: "Próximos partidos", guia: S.gcat || "Qué aprende cada categoría",
+      cantos: "Cantos y zonas", scrum: "Scrum seguro", ejercicios: "Ejercicios", ejercicio: ej && ej.nombre, puestos: "Los puestos", puesto: pu && pu.nombre,
+      practicas: "Prácticas", practica: "Práctica", categorias: "Todas las categorías", elegir: "Tu categoría", asistencia: "Asistencia", asis: S.acat, lista: `Lista de ${S.acat}`, chicos: `Los chicos de ${S.acat}` })[S.ver] || "Volver";
   }
 
   // ---------- datos de una categoría ----------
@@ -327,12 +345,12 @@
 
   // ---------- pantallas ----------
   function render() {
-    $("#app").classList.toggle("app--ancha", S.ver === "inicio"); // el inicio usa dos columnas en la compu (y el pie se alinea con eso)
+    $("#app").classList.toggle("app--ancha", ["inicio", "categorias", "elegir"].includes(S.ver)); // todo el ancho y dos columnas en la compu (y el pie se alinea con eso)
     GRAF.pend = [];
     soltarVideos();
     $("#vista").dataset.pantalla = S.ver; // ojo: no "data-ver", que es el de los botones "Ver todos"
     ({ inicio: vInicio, cat: vCategoria, club: vClub, consejos: vConsejos, guia: vGuia, cantos: vCantos, scrum: vScrum, ejercicios: vEjercicios, ejercicio: vEjercicio, puestos: vPuestos, puesto: vPuesto, practicas: vPracticas, practica: vPractica, proximos: vProximos,
-      asistencia: vAsistencia, asis: vAsis, lista: vLista, chicos: vChicos })[S.ver]();
+      asistencia: vAsistencia, asis: vAsis, lista: vLista, chicos: vChicos, categorias: () => vCategorias(false), elegir: () => vElegir(false) })[S.ver]();
     dibujarGraficos();
     ponerFotos();
   }
@@ -343,21 +361,40 @@
   /** al lado de la respuesta: si fue mejor o peor que lo normal (el promedio de todos los años), con lo normal entre paréntesis */
   const tendencia = (dif, umbral, normal) => dif > umbral ? `<p class="tend tend--mejor">${IC.sube}Mejor que lo normal (${normal})</p>`
     : dif < -umbral ? `<p class="tend tend--peor">${IC.baja}Peor que lo normal (${normal})</p>` : `<p class="tend">Como lo normal (${normal})</p>`;
-  const volver = (txt = "Inicio", a = "inicio") => `<button type="button" class="volver" data-ir="${a}">${IC.atras}${txt}</button>`;
+  /** ir a una de las pantallas principales: sin categoría, filtros ni formularios abiertos */
+  const LIMPIO = { cat: null, temp: null, gcat: null, tab: null, rol: null, para: null, qe: "", pgrupo: null, qp: "", fcat: null, aform: null, aviso: null };
+  /** "Volver": lleva a la pantalla de la que se vino y dice cuál es ("‹ M13"), igual que el botón atrás del celular.
+      Si no hay de dónde (se recargó sin historial), va a la de arriba ("txt"; "a" es la pantalla o los cambios) sin sumar un paso */
+  const hayAtras = () => !!(history.state && history.state.n > 0);
+  let SUBIR = null;
+  const volver = (txt = "Inicio", a = "inicio") => {
+    if (hayAtras()) return `<button type="button" class="volver" data-atras>${IC.atras}<span class="volver__txt">${esc(history.state.desde || "Volver")}</span></button>`;
+    SUBIR = typeof a === "string" ? { ver: a, ...LIMPIO } : a;
+    return `<button type="button" class="volver" data-subir>${IC.atras}<span class="volver__txt">${txt}</span></button>`;
+  };
+  /** después de guardar o borrar, vuelve a la pantalla de antes (si no hay, a "alt") */
+  const volverAtras = (alt) => (hayAtras() ? history.back() : irSinPaso(alt));
 
   // ---------- ayuda: el "?" al lado de un título abre la explicación (en el celular sale desde abajo) ----------
   // así la pantalla queda limpia: el número y la frase que lo dice en palabras quedan a la vista, el "cómo se lee" va acá
   const AYUDA = {
-    categorias: () => ["Elegí tu categoría", ["Tocá una categoría para ver sus partidos, sus jugadores y qué tiene que aprender.",
+    categorias: () => ["Elegí una categoría", ["Tocá una categoría para ver sus partidos, sus jugadores y qué tiene que aprender.",
       `Los números son de ${D.hasta}: los partidos oficiales que están cargados en la página de la UAR.`,
       "Los infantiles no juegan partidos oficiales: ahí se ve qué tiene que aprender cada categoría."]],
     asistencia: () => ["Asistencia", ["Para tomar lista en cada entrenamiento y ver cuánto viene cada chico.",
-      "El porcentaje es sobre los entrenamientos en los que se tomó lista. Los cancelados no cuentan.",
+      "El porcentaje es sobre los entrenamientos en los que se tomó lista. Los suspendidos no cuentan.",
       "La lista de chicos arranca con los fichados en la UAR para este año. Cada entrenador puede sumar o sacar chicos."]],
     asisCat: () => ["Cómo se lee", ["Al lado de cada chico: a cuántos entrenamientos vino, de los que se tomó lista.",
       "Verde: viene el 80% o más. Amarillo: entre 60% y 80%. Rojo: menos del 60%. Los que menos vienen están arriba.",
-      "Los entrenamientos cancelados no cuentan, y un día que no se tomó lista tampoco. Un chico sumado a mano cuenta desde el día que se sumó.",
-      "Lo que se carga acá (listas, días, cancelados) lo ven todos los entrenadores."]],
+      "Los entrenamientos suspendidos no cuentan, y un día que no se tomó lista tampoco. Un chico sumado a mano cuenta desde el día que se sumó.",
+      "Lo que se carga acá (listas, días, suspendidos) lo ven todos los entrenadores."]],
+    elegir: () => ["Tu categoría", ["Primero vas a ver lo de tu categoría: tomar lista, el próximo partido y lo de preparar el entrenamiento.",
+      "Queda guardada en este celular. La cambiás cuando quieras con “Cambiar”, arriba del inicio.",
+      "Si coordinás o ayudás en varias categorías, elegí “Todo el club”: vas a ver todas."]],
+    sinFecha: () => ["Próximo partido", ["Acá aparece el próximo partido de tu categoría apenas la UAR lo carga en su página.",
+      "Si dice “Todavía sin fecha”, la UAR todavía no cargó los próximos partidos."]],
+    comoViene: () => ["Cómo viene", ["Ganó, empató y perdió: los partidos oficiales de la temporada. Tocá la fila para ver todo: los tries, los jugadores y más.",
+      `Asistencia: de todas las veces que un chico pudo venir a entrenar, cuántas vino. El color aparece desde la ${LISTAS_MIN}ª lista.`]],
     proximos: () => ["Próximos partidos", ["Los partidos que la UAR ya cargó para las próximas fechas, con el día y la hora.",
       "Se actualiza solo los lunes, martes y miércoles. Si un partido no aparece, es porque la UAR todavía no lo cargó.",
       "La UAR no dice en qué cancha se juega."]],
@@ -391,7 +428,8 @@
     guiaCats: () => ["Qué aprende cada categoría", ["Lo que el club busca enseñar en cada categoría, de M6 a M19: la frase guía, qué priorizar en ataque y en defensa, y qué evitar.",
       "Lo definió la Coordinación de Rugby del club (Magali Fazzi) en 2026."]],
     guiaCat: () => ["De dónde sale esto", ["Es lo que la Coordinación de Rugby del club (Magali Fazzi) definió para esta categoría en 2026.",
-      "Las frases de arriba son las frases guía: lo que el chico tiene que poder decir y hacer en esta categoría."]],
+      S.gcat && !esInf(S.gcat) ? "Arriba, en pocas palabras, lo que tiene que lograr la categoría y sus palabras clave; abajo, el detalle de cada parte del juego."
+        : "Las frases de arriba son las frases guía: lo que el chico tiene que poder decir y hacer en esta categoría."]],
     cantos: () => ["Cantos y zonas", ["Los cantos del club con lo que quiere decir cada uno, las zonas y los canales de la cancha, y el modelo de juego.",
       "Sale del material de la Coordinación de Rugby del club (Magali Fazzi), 2026."]],
     scrum: () => ["Scrum seguro", ["Qué se puede hacer en cada edad, cómo se enseña, el set up del club, la entrada y el empuje.",
@@ -437,35 +475,116 @@
     if (ayudaDesde && ayudaDesde.isConnected) ayudaDesde.focus();
     if (desdeBoton && history.state && history.state.ayuda) { saltarPop = true; history.back(); }
   }
-  /** una opción de menú: ícono, nombre, una línea que dice qué hay y la flecha (mismo estilo que las filas de categoría) */
-  const opcion = (ir, ic, nom, que) => `<li><button type="button" class="menu__it" data-ir="${ir}"><span class="menu__ic">${ic}</span>
+  /** una opción de menú: ícono, nombre, una línea que dice qué hay y la flecha (mismo estilo que las filas de categoría).
+      opcionDe lleva el atributo entero (para ir a una práctica, a la guía de una categoría…); opcion va a una pantalla */
+  const opcionDe = (attr, ic, nom, que) => `<li><button type="button" class="menu__it" ${attr}><span class="menu__ic">${ic}</span>
     <span class="menu__txt"><b>${nom}</b><small>${que}</small></span>${IC.adelante}</button></li>`;
+  const opcion = (ir, ic, nom, que) => opcionDe(`data-ir="${ir}"`, ic, nom, que);
 
-  // inicio: a la izquierda lo principal (elegir la categoría); a la derecha, la guía, los últimos partidos y todo el club.
-  // En el celular va todo en una columna, en ese orden.
+  // las categorías como una tabla de posiciones: una fila por categoría, con ganados, empatados y perdidos
+  // en los mismos colores que adentro de la categoría. Toda la fila se toca.
+  function filaCatHTML(cat, conUltimo) {
+    const r = filasCat(cat).at(-1), u = conUltimo && D.partidos.find((x) => x.cat === cat);
+    const n = (k, v) => `<span class="fila-cat__n fila-cat__n--${k}${v ? "" : " fila-cat__n--cero"} num">${v}</span>`;
+    return `<li><button type="button" class="fila-cat" data-ir-cat="${esc(cat)}"
+      aria-label="${esc(cat)}, ${r["Año"]}: ${pl(r.PJ, "partido", "partidos")}. Ganó ${r.G}, empató ${r.E}, perdió ${r.P}">
+      <span class="fila-cat__nom">${esc(cat)}<small>${u ? `Último: ${({ G: "ganó", E: "empató", P: "perdió" })[u.res]} ${u.pf}–${u.pc}`
+        : `${r["Año"] !== D.hasta ? `${r["Año"]} · ` : ""}${pl(r.PJ, "partido", "partidos")}`}</small></span>
+      ${n("g", r.G)}${n("e", r.E)}${n("p", r.P)}${IC.adelante}</button></li>`;
+  }
+  const tablaCats = (titulo, cats, conUltimo) => `<div class="grupo-cat">
+      <div class="grupo-cat__cab"><h3 class="grupo-cat__tit">${titulo}</h3><span aria-hidden="true">Ganó</span><span aria-hidden="true">Empató</span><span aria-hidden="true">Perdió</span></div>
+      <ul class="filas-cat">${cats.map((c) => filaCatHTML(c, conUltimo)).join("")}</ul></div>`;
+
+  // ---------- mi categoría: el inicio de cada entrenador ----------
+  // La primera vez se elige la categoría que entrena (queda en el celular) y el inicio muestra primero lo suyo, en el orden
+  // en que lo usa: tomar lista (en la cancha, con apuro), el próximo partido (lo que más se pregunta en la semana),
+  // lo de preparar el entrenamiento (en casa), cómo viene y, al final, lo del club.
+  // Quien coordina elige "Todo el club": su inicio son todas las categorías.
+  const MI = "los50-ent-mia", TODO_CLUB = "Todo el club";
+  const miCat = () => { const m = enCel.get(MI); return m === TODO_CLUB || ASIS_CATS.includes(m) ? m : null; };
+  /** las categorías de la UAR (partidos y números) de una categoría de entrenamiento: el plantel superior son cuatro; los infantiles, ninguna */
+  const catsUAR = (mc) => (mc === "Plantel superior" ? PS : [mc]).filter((c) => D.cats.includes(c));
+  /** arriba del inicio: de quién es y "Cambiar" */
+  const miCatCab = (mc) => `<div class="mi-cat"><span class="mi-cat__lbl">Tu categoría</span><h2 class="mi-cat__nom">${esc(mc)}</h2>
+    <button type="button" class="link mi-cat__cambiar" data-ir="elegir">Cambiar</button></div>`;
+
   function vInicio() {
-    // las categorías como una tabla de posiciones: una fila por categoría, con ganados, empatados y perdidos
-    // en los mismos colores que adentro de la categoría. Toda la fila se toca.
-    const fila = (cat) => {
-      const r = filasCat(cat).at(-1);
-      const n = (k, v) => `<span class="fila-cat__n fila-cat__n--${k}${v ? "" : " fila-cat__n--cero"} num">${v}</span>`;
-      return `<li><button type="button" class="fila-cat" data-ir-cat="${esc(cat)}"
-        aria-label="${esc(cat)}, ${r["Año"]}: ${pl(r.PJ, "partido", "partidos")}. Ganó ${r.G}, empató ${r.E}, perdió ${r.P}">
-        <span class="fila-cat__nom">${esc(cat)}<small>${r["Año"] !== D.hasta ? `${r["Año"]} · ` : ""}${pl(r.PJ, "partido", "partidos")}</small></span>
-        ${n("g", r.G)}${n("e", r.E)}${n("p", r.P)}${IC.adelante}</button></li>`;
-    };
-    const tabla = (titulo, cats) => `<div class="grupo-cat">
-        <div class="grupo-cat__cab"><h3 class="grupo-cat__tit">${titulo}</h3><span aria-hidden="true">Ganó</span><span aria-hidden="true">Empató</span><span aria-hidden="true">Perdió</span></div>
-        <ul class="filas-cat">${cats.map(fila).join("")}</ul></div>`;
+    const mc = miCat();
+    if (!mc) vElegir(true);
+    else if (mc === TODO_CLUB) vCategorias(true);
+    else vMiCat(mc);
+  }
+
+  // el inicio de un entrenador
+  function vMiCat(mc) {
+    const cs = catsUAR(mc), g = D.guia;
+    // 1. hoy: tomar lista
+    const hoy = D.fichados ? tarjetaMia(mc) : "";
+    // 2. el próximo partido, en una tarjeta igual a la de hoy (el primer día que juega; el plantel superior juega varios ese día)
+    const prox = proxTodos().filter((x) => cs.includes(x.cat)), dia1 = prox.filter((x) => x.fecha === prox[0].fecha);
+    const partido = !cs.length ? "" : `<section class="sec"><div class="hoy">
+        <p class="hoy__lbl">${dia1.length > 1 ? "Próximos partidos" : "Próximo partido"}${dia1.length ? "" : ayudaBtn("sinFecha")}</p>
+        <h3 class="hoy__dia">${dia1.length ? esc(mayus(cuandoP(dia1[0]))) : "Todavía sin fecha"}</h3>
+        ${dia1.map((x) => `<p class="prox-mio"><span class="prox-mio__hora num">${esc(x.hora || "–")}</span>
+          <span class="prox-mio__vs">${cs.length > 1 ? `<span class="chip chip--cat">${esc(x.cat)}</span>` : ""}<b>${vsHTML(x)}</b><small>${subProx(x)}</small></span></p>`).join("")}
+        ${prox.length > dia1.length ? `<button type="button" class="btn-sec btn-sec--ancho" data-ir-prox="${cs.length > 1 ? "" : esc(cs[0])}">Ver todos los próximos (${prox.length})</button>`
+          : !prox.length && proxTodos().length ? `<button type="button" class="btn-sec btn-sec--ancho" data-ir-prox="">Próximos partidos del club</button>` : ""}
+      </div></section>`;
+    // 3. para el entrenamiento: las prácticas del grupo, los ejercicios o juegos, qué tiene que aprender y el scrum de su edad
+    const grupo = grupoDeCat(mc === "Plantel superior" ? "Primera" : mc), gc = g && gDe(mc), sc = g && scrumDe(mc === "Plantel superior" ? "M19" : mc);
+    const jg = g && g.ejercicios ? g.ejercicios.filter((e) => e.cats.includes(mc)).length : 0;
+    const lema = !gc ? "" : esInf(mc) ? (gc.semillas.ataque[0] ? `“${esc(gc.semillas.ataque[0])}”` : "") : esc(g.lemas_juv[mc] || "");
+    const entrenar = !g ? "" : `<section class="sec">
+        ${tit("Para el entrenamiento")}
+        <ul class="menu">
+          ${grupo ? opcionDe(`data-ir-practicas="${esc(grupo)}"`, IC.calendario, `Prácticas de ${esc(grupo)}`, `${pl(nPr(grupo), "práctica", "prácticas")}, día por día`) : ""}
+          ${!g.ejercicios ? "" : jg ? opcionDe(`data-ir-ej-para="${esc(mc)}"`, IC.cono, `Juegos para ${esc(mc)}`, `${pl(jg, "juego", "juegos")} que usan en ${esc(mc)}`)
+            : opcion("ejercicios", IC.cono, "Ejercicios", "Line, maul y juegos para entrenar")}
+          ${gc ? opcionDe(`data-ir-guia="${esc(mc)}"`, IC.libro, `Qué tiene que aprender ${esc(mc)}`, lema || "Frase guía, prioridades y qué evitar") : ""}
+          ${opcion("scrum", IC.escudo, "Scrum seguro", sc ? `En ${esc(mc)}: ${esc(sc[1])}` : "Qué se hace en cada edad y el set up")}
+        </ul>
+      </section>`;
+    // 4. cómo viene: la temporada (en el plantel superior, cada división con su último resultado), la asistencia y los últimos partidos.
+    //    En infantiles, que no juegan partidos de la UAR, es una tarjeta con la asistencia, igual a la de hoy
+    const ult = cs.length === 1 ? D.partidos.filter((x) => x.cat === cs[0]).slice(0, 3) : [];
+    const como = cs.length ? `<section class="sec">
+        ${tit(`Cómo viene ${esc(mc)}`, "comoViene")}
+        ${tablaCats(`Temporada ${D.hasta}`, cs, cs.length > 1)}
+        ${D.fichados ? filaAsisMia(mc) : ""}
+        ${ult.length ? `<h3 class="grupo">Últimos partidos</h3><ol class="resultados">${ult.map((x) => partidoHTML(x)).join("")}</ol>` : ""}
+      </section>` : D.fichados ? tarjetaAsisMia(mc) : "";
+    // 5. el club: lo que se consulta de vez en cuando
+    const club = `<section class="sec">
+        ${tit("El club")}
+        <ul class="menu">
+          ${opcion("categorias", IC.barras, "Todas las categorías", "Partidos, guía y asistencia de cada una")}
+          ${g && g.puestos ? opcion("puestos", IC.camiseta, "Los puestos", "Qué se espera del 1 al 15") : ""}
+          ${g ? opcion("cantos", IC.canto, "Cantos y zonas", `Los ${g.cantos.length} cantos y las zonas de la cancha`) : ""}
+          ${opcion("club", IC.gente, "¿Los chicos siguen?", "Cuántos siguen y llegan a Primera")}
+          ${opcion("consejos", IC.idea, "Consejos", "Qué trabajar y qué empezar a medir")}
+        </ul>
+      </section>`;
+    // en el celular, todo en una columna en este orden; en la compu, de a dos por fila y del mismo alto (entrenadores.css: .mia)
+    const caja = (k, html) => (html ? `<div class="mia__b mia__${k}">${html}</div>` : "");
+    $("#vista").innerHTML = `${miCatCab(mc)}${avisoHTML()}
+      <div class="mia${cs.length ? "" : " mia--sin-partidos"}">${caja("hoy", hoy)}${caja("partido", partido)}${caja("entrenar", entrenar)}${caja("como", como)}${caja("club", club)}</div>`;
+  }
+
+  // todas las categorías (el inicio de quien coordina): a la izquierda, elegir la categoría; a la derecha, la guía,
+  // los últimos partidos y todo el club. En el celular va todo en una columna, en ese orden.
+  function vCategorias(esInicio) {
     // los infantiles no tienen partidos en la UAR: su fila lleva directo a lo que tienen que aprender
     const filaInf = (c) => `<li><button type="button" class="fila-cat fila-cat--inf" data-ir-guia="${esc(c.cat)}">
         <span class="fila-cat__nom">${esc(c.cat)}${c.apodo ? `<small>${esc(c.apodo)}</small>` : ""}</span>
         <span class="fila-cat__etapa">${esc(c.etapa)}</span>${IC.adelante}</button></li>`;
-    $("#vista").innerHTML = `${D.fichados ? hoyInicio() : ""}<div class="inicio">
+    // el aviso ("Lista guardada…") también se ve al volver al inicio después de tomar lista
+    $("#vista").innerHTML = `${esInicio ? miCatCab(TODO_CLUB) + hoyInicio(enCel.get(ULTIMA)) : `<div class="cab">${volver()}${cabTit("Todas las categorías")}</div>`}${avisoHTML()}
+      <div class="inicio">
       <section class="sec">
-        ${tit("Elegí tu categoría", "categorias")}
-        ${tabla("Plantel superior", D.cats.filter((c) => PS.includes(c)))}
-        ${tabla("Juveniles", D.cats.filter((c) => !PS.includes(c)))}
+        ${tit("Elegí una categoría", "categorias")}
+        ${tablaCats("Plantel superior", D.cats.filter((c) => PS.includes(c)))}
+        ${tablaCats("Juveniles", D.cats.filter((c) => !PS.includes(c)))}
         ${D.guia ? `<div class="grupo-cat">
           <div class="grupo-cat__cab"><h3 class="grupo-cat__tit">Infantiles</h3></div>
           <ul class="filas-cat">${D.guia.infantiles.slice().reverse().map(filaInf).join("")}</ul></div>` : ""}
@@ -487,7 +606,7 @@
           <ol class="resultados">${D.partidos.slice(0, 5).map((p) => partidoHTML(p, true)).join("")}</ol>
         </section>
         <section class="sec">
-          ${tit("Todo el club")}
+          ${tit("El club")}
           <ul class="menu">
             ${D.fichados ? opcion("asistencia", IC.lista, "Asistencia", "Tomar lista y ver cuánto viene cada chico") : ""}
             ${proxTodos().length ? opcion("proximos", IC.calendario, "Próximos partidos", `El próximo es el ${esc(cuandoP(proxTodos()[0]).replace(/ de \S+$/, ""))}`) : ""}
@@ -497,6 +616,21 @@
         </section>
       </div>
     </div>`;
+  }
+
+  // "¿Qué categoría entrenás?": la primera vez, en el inicio; después, desde "Cambiar"
+  function vElegir(enInicio) {
+    const mc = miCat();
+    const boton = (c) => `<button type="button" class="elegir__cat" data-mi="${esc(c)}" aria-pressed="${mc === c}">${esc(c)}</button>`;
+    const grupo = (t, cats, cls = "") => `<h3 class="grupo">${t}</h3><div class="elegir${cls}">${cats.map(boton).join("")}</div>`;
+    $("#vista").innerHTML = `
+      <div class="cab">${enInicio ? "" : volver()}${cabTit("¿Qué categoría entrenás?", "elegir")}</div>
+      <section class="sec sec--pegada">
+        ${grupo("Plantel superior", ["Plantel superior"])}
+        ${grupo("Juveniles", ASIS_CATS.slice(1, 7))}
+        ${grupo("Infantiles", ASIS_CATS.slice(7), " elegir--4")}
+        ${grupo("Si coordinás o ayudás en varias", [TODO_CLUB])}
+      </section>`;
   }
 
   // categoría: las 5 preguntas
@@ -555,7 +689,9 @@
     const tr = D.tries && D.tries[cat] && D.tries[cat][a];
     let triesHTML = "";
     if (tr) {
-      const af = tr.a_favor, ec = tr.en_contra;
+      // la tabla siempre suma el total: lo que no tiene puesto en la planilla (sin camiseta) va en su propio renglón
+      const sinPuesto = (x) => ({ ...x, sinpuesto: x.lineas ? x.tries - x.forwards - x.backs - x.try_penal : 0 });
+      const af = sinPuesto(tr.a_favor), ec = sinPuesto(tr.en_contra);
       // un renglón por dato con lo que hizo (azul) y lo que le hicieron (rojo); arriba, una sola vez, qué es cada número
       const fila = (lbl, x, y) => `<div class="duelo duelo--c"><span class="duelo__lbl">${lbl}</span>
         <strong class="duelo__n duelo__n--a num">${x}</strong>
@@ -570,7 +706,8 @@
         ${tabla([["Forwards", "forwards"], ["Backs", "backs"],
           ["Primera línea<small>1 al 3</small>", "primera", 1], ["Segunda línea<small>4 y 5</small>", "segunda", 1], ["Tercera línea<small>6 al 8</small>", "tercera", 1],
           ["Medios<small>9 y 10</small>", "medios", 1], ["Centros<small>12 y 13</small>", "centros", 1], ["Wings y fullback<small>11, 14 y 15</small>", "wings_fullback", 1],
-          af.try_penal || ec.try_penal ? ["Try penal", "try_penal"] : null])}` : "";
+          af.try_penal || ec.try_penal ? ["Try penal", "try_penal"] : null,
+          af.sinpuesto || ec.sinpuesto ? ["Sin dato del puesto", "sinpuesto"] : null])}` : "";
       triesHTML = desple("tries", "Los tries: quién y cuándo", `
         ${quien}
         <h3 class="grupo">¿Cuándo?</h3>
@@ -610,7 +747,7 @@
           ${duelo("Puntos", r["Puntos a favor"], r["Puntos en contra"])}
           ${duelo("Tries", r["Tries a favor"], r["Tries en contra"])}
         </div>
-        ${tor.length ? `<h3 class="grupo">Torneos</h3><ul class="lista">${tor.map((t) => `<li><span class="lista__txt">${esc(t.Torneo.replace(/^\d+\/\d{4}\s*/, ""))}<small class="num">${pl(t.G, "ganado", "ganados")} · ${pl(t.P, "perdido", "perdidos")}${t.E ? ` · ${pl(t.E, "empatado", "empatados")}` : ""}</small></span>${pos(t) ? `<span class="chip">${pos(t)}</span>` : ""}</li>`).join("")}</ul>` : ""}
+        ${tor.length ? `<h3 class="grupo">Torneos</h3><ul class="lista">${tor.map((t) => `<li><span class="lista__txt">${esc(t.Torneo.replace(/^\d+\/\d{4}\s*/, ""))}<small class="num">${pl(t.G, "ganado", "ganados")}${t.E ? ` · ${pl(t.E, "empatado", "empatados")}` : ""} · ${pl(t.P, "perdido", "perdidos")}</small></span>${pos(t) ? `<span class="chip">${pos(t)}</span>` : ""}</li>`).join("")}</ul>` : ""}
       </section>
 
       <section class="sec">
@@ -625,7 +762,7 @@
         ${videosDe("cats", cat).length ? desple("videos", "Videos de partidos", `<div class="videos-ej">${videosDe("cats", cat).map(tarjetaVideo).join("")}</div>`,
           pl(videosDe("cats", cat).length, "video", "videos")) : ""}
         ${desple("partidos", "Contra quién jugó", `
-          <ol class="resultados">${verP.map(partidoHTML).join("")}</ol>
+          <ol class="resultados">${verP.map((p) => partidoHTML(p)).join("")}</ol>
           ${parts.length > 6 ? `<button type="button" class="btn btn--ancho" data-ver="P">${S.verP ? "Ver menos" : `Ver los ${parts.length} partidos`}</button>` : ""}
           ${riv.length ? `<div class="grupo-fila"><h3 class="grupo">Contra cada rival, todos los años</h3>
             <p class="ley"><span><i class="ley--g"></i>ganamos</span><span><i class="ley--e"></i>empatamos</span><span><i class="ley--p"></i>perdimos</span></p></div>
@@ -691,12 +828,12 @@
   /** abajo del partido: de local o de visitante y la instancia */
   const subProx = (x) => `De ${condTxt(x.cond).toLowerCase()}${x.inst ? ` · ${esc(x.inst)}` : ""}`;
   /** agrupados por día: la hora, la categoría, el rival y si es de local o de visitante */
-  function proxHTML(lista) {
+  function proxHTML(lista, conCat = !S.fcat) {
     const dias = [...new Set(lista.map((x) => x.fecha))];
     return dias.map((f) => `<h3 class="grupo">${esc(mayus(cuandoP({ fecha: f })))}</h3>
       <ol class="resultados">${lista.filter((x) => x.fecha === f).map((x) => `<li class="res">
         <span class="res__fecha num">${esc(x.hora || "–")}</span>
-        <span class="res__cuerpo">${S.fcat ? "" : `<span class="chip chip--cat">${esc(x.cat)}</span>`}<span class="res__rival">${vsHTML(x)}</span><span class="res__sub">${subProx(x)}</span></span></li>`).join("")}</ol>`).join("");
+        <span class="res__cuerpo">${conCat ? `<span class="chip chip--cat">${esc(x.cat)}</span>` : ""}<span class="res__rival">${vsHTML(x)}</span><span class="res__sub">${subProx(x)}</span></span></li>`).join("")}</ol>`).join("");
   }
 
   // las categorías que tienen partidos por delante, en el orden de siempre (las que no están en la lista, al final)
@@ -863,6 +1000,8 @@
   const ROLES_LINE = ["Lanzador", "Saltador", "Levantador", "Tríos"];
   const tabEj = () => (["line", "maul", "juegos"].includes(S.tab) ? S.tab : "todos");
   /** los ejercicios que se ven con los filtros de arriba (sin contar lo que se escribe en el buscador), en el orden de la lista */
+  /** el texto en el que busca el buscador de ejercicios */
+  const textoEj = (e) => norm([e.nombre, e.grupo, e.tipo, e.material, ...e.foco, ...e.como, videosDe("ejercicios", e.id).length ? "video" : ""].join(" "));
   const ejLista = () => D.guia.ejercicios.filter((e) => {
     const tab = tabEj();
     if (tab !== "todos" && norm(e.tipo) !== tab) return false;
@@ -878,7 +1017,7 @@
       if (!gr) grupos.push((gr = { k, items: [] }));
       gr.items.push(e);
     });
-    const fila = (e) => `<li data-q="${esc(norm([e.nombre, e.grupo, e.tipo, e.material, ...e.foco, ...e.como, videosDe("ejercicios", e.id).length ? "video" : ""].join(" ")))}">
+    const fila = (e) => `<li data-q="${esc(textoEj(e))}">
       <button type="button" class="ej${e.paso ? "" : " ej--sin-paso"}" data-ir-ej="${esc(e.id)}">
         ${e.paso ? `<span class="ej__paso num">${e.paso}</span>` : ""}
         <span class="ej__txt"><b>${esc(e.nombre)}</b>${e.foco[0] ? `<small>${conCantos(e.foco[0])}</small>` : ""}${e.material ? `<span class="ej__mat">${IC.cono}${esc(e.material)}</span>` : ""}${videosDe("ejercicios", e.id).length ? `<span class="ej__video">${IC.play}Con video</span>` : ""}</span>
@@ -891,7 +1030,7 @@
       ${S.para ? `<p class="filtro-g"><span>Solo los juegos que usan en <b>${esc(S.para)}</b></span><button type="button" class="link" data-quitar-para>Ver todos</button></p>` : ""}
       <section class="sec sec--pegada">
         <label class="buscar-g"><span class="sr">Buscar un ejercicio</span>${IC.buscar}<input type="search" id="buscar-ej" value="${esc(S.qe)}" placeholder="Buscar: salto, tackle, conos…" autocomplete="off" enterkeyhint="search"></label>
-        ${grupos.map((gr) => `<div class="grupo-ej"><div class="grupo-ej__cab"><h3 class="grupo-cat__tit">${esc(gr.k)}</h3><span class="num">${gr.items[0].tipo === "Juegos" ? pl(gr.items.length, "juego", "juegos") : pl(gr.items.length, "ejercicio", "ejercicios")}</span></div>
+        ${grupos.map((gr) => `<div class="grupo-ej"><div class="grupo-ej__cab"><h3 class="grupo-cat__tit">${esc(gr.k)}</h3>${cuenta(gr.items.length, gr.items[0].tipo === "Juegos" ? ["juego", "juegos"] : ["ejercicio", "ejercicios"])}</div>
           <ul class="filas-cat">${gr.items.map(fila).join("")}</ul></div>`).join("")}
         <p class="vacio-g" id="sin-ej" hidden>No hay ningún ejercicio con esa palabra.</p>
       </section>`;
@@ -904,6 +1043,7 @@
       let vis = 0;
       gr.querySelectorAll("li[data-q]").forEach((li) => { const ok = !q || li.dataset.q.includes(q); li.hidden = !ok; vis += ok; });
       gr.hidden = !vis; n += vis;
+      contar(gr, q, vis);
     });
     const v = $("#sin-ej");
     if (v) v.hidden = n > 0;
@@ -913,16 +1053,17 @@
   function vEjercicio() {
     const todos = D.guia.ejercicios, e = todos.find((x) => x.id === S.ej);
     // se recorre la misma lista que se estaba mirando (si se entró con un link directo, todos)
-    const vistos = ejLista(), orden = vistos.some((x) => x.id === e.id) ? vistos : todos, j = orden.findIndex((x) => x.id === e.id);
+    const q = norm((S.qe || "").trim()), vistos = ejLista().filter((x) => !q || textoEj(x).includes(q));
+    const orden = vistos.some((x) => x.id === e.id) ? vistos : todos, j = orden.findIndex((x) => x.id === e.id);
     const total = todos.filter((x) => x.tipo === e.tipo && x.grupo === e.grupo).length;
     const salto = (k, der) => {
       const ok = k >= 0 && k < orden.length;
-      return `<button type="button"${ok ? ` data-ir-ej="${esc(orden[k].id)}" aria-label="${der ? "Siguiente" : "Anterior"}: ${esc(orden[k].nombre)}"` : " disabled"}>${der ? "" : IC.atras}<span>${der ? "Siguiente" : "Anterior"}</span>${der ? IC.adelante : ""}</button>`;
+      return `<button type="button"${ok ? ` data-lado data-ir-ej="${esc(orden[k].id)}" aria-label="${der ? "Siguiente" : "Anterior"}: ${esc(orden[k].nombre)}"` : " disabled"}>${der ? "" : IC.atras}<span>${der ? "Siguiente" : "Anterior"}</span>${der ? IC.adelante : ""}</button>`;
     };
     const bloque = (t, h) => `<h3 class="grupo">${t}</h3>${h}`, vids = videosDe("ejercicios", e.id);
     $("#vista").innerHTML = `
       <div class="cab">
-        <div class="cab__fila"><button type="button" class="volver" data-volver-ej>${IC.atras}Ejercicios</button>
+        <div class="cab__fila">${volver("Ejercicios", { ver: "ejercicios", ej: null })}
           <div class="saltos saltos--ej" role="group" aria-label="Otros ejercicios">${salto(j - 1)}${salto(j + 1, true)}</div></div>
         <p class="ej-tag">${esc(e.tipo)} · ${esc(e.grupo)}${e.paso ? ` · paso ${e.paso} de ${total}` : ""}</p>
         <h2 class="ej-tit">${esc(e.nombre)}</h2>
@@ -1017,13 +1158,13 @@
     if (!D.guia.ejercicios) return "";
     const jg = D.guia.ejercicios.filter((e) => e.cats.includes(cat)).length;
     return jg ? `<button type="button" class="atajo" data-ir-ej-para="${esc(cat)}">${IC.cono}<span>Juegos que usan en ${esc(cat)} (${jg})</span>${IC.adelante}</button>`
-      : esInf(cat) ? "" : `<button type="button" class="atajo" data-ir-ej-tab="line">${IC.cono}<span>Ejercicios de line y maul</span>${IC.adelante}</button>`;
+      : esInf(cat) ? "" : `<button type="button" class="atajo" data-ir-ej-tab="todos">${IC.cono}<span>Ejercicios de line y maul</span>${IC.adelante}</button>`;
   }
   function vGuiaCat() {
     const g = D.guia, cat = S.gcat, c = gDe(cat), cats = gCats(), i = cats.indexOf(cat), inf = esInf(cat), sc = scrumDe(cat);
     const salto = (j, lbl) => {
       const ok = j >= 0 && j < cats.length;
-      return `<button type="button" data-ir-guia="${ok ? esc(cats[j]) : ""}"${ok ? ` aria-label="${lbl}: ${esc(cats[j])}"` : " disabled"}>${j < i ? IC.atras : ""}<span>${ok ? esc(cats[j]) : ""}</span>${j > i ? IC.adelante : ""}</button>`;
+      return `<button type="button" data-lado data-ir-guia="${ok ? esc(cats[j]) : ""}"${ok ? ` aria-label="${lbl}: ${esc(cats[j])}"` : " disabled"}>${j < i ? IC.atras : ""}<span>${ok ? esc(cats[j]) : ""}</span>${j > i ? IC.adelante : ""}</button>`;
     };
     // las frases guía de infantiles van entre comillas (son textuales); el resumen de juveniles no
     const semilla = (lbl, frases, comillas = true) => frases.length ? `<div class="semilla"><span class="semilla__lbl">${lbl}</span>${frases.map((f) =>
@@ -1158,6 +1299,7 @@
       let vis = 0;
       gr.querySelectorAll("li[data-q]").forEach((li) => { const ok = !q || li.dataset.q.includes(q); li.hidden = !ok; vis += ok; });
       gr.hidden = !vis; n += vis;
+      contar(gr, q, vis);
     });
     const v = $("#sin-cantos");
     if (v) v.hidden = n > 0;
@@ -1195,7 +1337,7 @@
       cuerpo = `<section class="sec sec--pegada desplegables">
         ${grupos.map((g) => `<h3 class="grupo">${esc(g)}</h3>
           ${s.sesiones.filter((x) => x.grupo === g).map((x, n) => desple(`ss-${slug(g)}-${n}`, `Sesión ${n + 1}<small>${esc(mayus(cuandoP(x)))}</small>`,
-            `<ul class="prac-g">${x.bloques.filter((b) => !b.agua).flatMap((b) => b.items).map(itemPr).join("")}</ul>`, x.min ? `${x.min} min` : "")).join("")}`).join("")}
+            `<ul class="prac-g">${x.bloques.filter((b) => !b.agua).flatMap((b) => b.items).map(itemPr).join("")}</ul>`, minDe(x) ? `${minDe(x)} min` : "")).join("")}`).join("")}
       </section>`;
     } else {
       cuerpo = `<section class="sec sec--pegada">
@@ -1249,7 +1391,7 @@
     const todos = D.guia.puestos, p = puestoDe(S.puesto), j = todos.indexOf(p), n = p.n[0];
     const salto = (k, der) => {
       const q = todos[k];
-      return `<button type="button"${q ? ` data-ir-puesto="${q.n[0]}" aria-label="${der ? "Siguiente" : "Anterior"}: ${esc(q.nombre)}"` : " disabled"}>${der ? "" : IC.atras}<span>${der ? "Siguiente" : "Anterior"}</span>${der ? IC.adelante : ""}</button>`;
+      return `<button type="button"${q ? ` data-lado data-ir-puesto="${q.n[0]}" aria-label="${der ? "Siguiente" : "Anterior"}: ${esc(q.nombre)}"` : " disabled"}>${der ? "" : IC.atras}<span>${der ? "Siguiente" : "Anterior"}</span>${der ? IC.adelante : ""}</button>`;
     };
     const atajos = (n <= 8 ? `<button type="button" class="atajo" data-ir="scrum">${IC.escudo}<span><b>Scrum seguro:</b> qué se hace en cada edad y el set up</span>${IC.adelante}</button>` : "")
       + (LINE_DE[n] ? `<button type="button" class="atajo" data-ir-line="${LINE_DE[n]}">${IC.cono}<span><b>Ejercicios de line</b> del ${LINE_DE[n].toLowerCase()}</span>${IC.adelante}</button>` : "");
@@ -1285,14 +1427,22 @@
   const nPr = (g) => D.guia.practicas.filter((p) => p.grupo === g).length;
   const atajoPr = (cat) => { const g = grupoDeCat(cat); return g ? `<button type="button" class="atajo" data-ir-practicas="${esc(g)}">${IC.calendario}<span>Prácticas de ${esc(g)} (${nPr(g)})</span>${IC.adelante}</button>` : ""; };
   // las sin fecha van al final
-  const prLista = () => D.guia.practicas.filter((p) => !S.pgrupo || p.grupo === S.pgrupo)
-    .sort((a, b) => (b.orden === "9" ? "0" : b.orden).localeCompare(a.orden === "9" ? "0" : a.orden));
+  const ordenPr = (a, b) => (b.orden === "9" ? "0" : b.orden).localeCompare(a.orden === "9" ? "0" : a.orden);
+  const prLista = () => D.guia.practicas.filter((p) => !S.pgrupo || p.grupo === S.pgrupo).sort(ordenPr);
   /** una actividad de una práctica (o de una sesión de scrum): los minutos a la izquierda; el objetivo, qué se hace y cómo */
   const itemPr = (it) => `<li class="prac-it"><span class="prac-it__min num">${it.min ? `${it.min}'` : ""}</span><div class="prac-it__txt">
       ${it.obj ? `<span class="prac-it__obj">${conCantos(it.obj)}</span>` : ""}
       ${it.act ? `<p class="prac-it__act">${conCantos(it.act)}</p>` : ""}
       ${it.det ? `<p class="prac-it__det">${conCantos(it.det)}</p>` : ""}
       ${it.grupo ? `<span class="chip chip--gris">${esc(it.grupo)}</span>` : ""}</div></li>`;
+  /** el número de cada grupo; mientras se busca dice cuántos se ven ("6 de 15") */
+  const cuenta = (n, [uno, varios]) => `<span class="num" data-n="${n}" data-txt="${pl(n, uno, varios)}">${pl(n, uno, varios)}</span>`;
+  function contar(gr, q, vis) {
+    const c = gr.querySelector(".grupo-ej__cab .num");
+    if (c && c.dataset.n) c.textContent = q ? `${vis} de ${c.dataset.n}` : c.dataset.txt;
+  }
+  /** los minutos de una práctica o sesión: solo si todas las actividades tienen sus minutos */
+  const minDe = (p) => (p.min && !p.bloques.some((b) => !b.agua && b.items.some((it) => !it.min)) ? p.min : null);
   let Q_PR = null; // lo que se busca de cada práctica (se arma la primera vez que se usa el buscador)
   const textoBusca = (p) => norm([p.foco, p.grupo, p.quien, ...p.objetivos, ...p.bloques.flatMap((b) => (b.items || []).map((it) => `${it.obj || ""} ${it.act || ""} ${it.det || ""}`))].join(" "));
 
@@ -1308,7 +1458,7 @@
       const d = p.fecha ? dia(p.fecha) : null;
       return `<li data-pr="${esc(p.id)}"><button type="button" class="ej prac" data-ir-practica="${esc(p.id)}">
         <span class="prac__dia">${d ? `<b class="num">${d.getDate()}</b><small>${DIA_S[d.getDay()].slice(0, 3)}</small>` : `<small>${p.semana ? `Sem. ${p.semana}` : "Sin fecha"}</small>`}</span>
-        <span class="ej__txt"><b>${esc(p.foco || "Práctica")}</b><small>${S.pgrupo ? "" : `${esc(p.grupo)} · `}${esc(p.quien)}${p.min ? ` · ${p.min} min` : ""}</small></span>
+        <span class="ej__txt"><b>${esc(p.foco || "Práctica")}</b><small>${S.pgrupo ? "" : `${esc(p.grupo)} · `}${esc(p.quien)}${minDe(p) ? ` · ${minDe(p)} min` : ""}</small></span>
         ${IC.adelante}</button></li>`;
     };
     const grupos = P_GRUPOS.filter((g) => nPr(g));
@@ -1318,7 +1468,7 @@
         `<button type="button" data-pgrupo="${esc(v)}" aria-pressed="${(S.pgrupo || "") === v}">${esc(l)}</button>`).join("")}</div>
       <section class="sec sec--pegada">
         <label class="buscar-g"><span class="sr">Buscar una práctica</span>${IC.buscar}<input type="search" id="buscar-pr" value="${esc(S.qp)}" placeholder="Buscar: tackle, ruck, pase…" autocomplete="off" enterkeyhint="search"></label>
-        ${meses.map((m) => `<div class="grupo-ej"><div class="grupo-ej__cab"><h3 class="grupo-cat__tit">${m.k === "sin" ? "Sin fecha" : mayus(MES_S[+m.k.slice(5, 7) - 1])}</h3><span class="num">${pl(m.items.length, "práctica", "prácticas")}</span></div>
+        ${meses.map((m) => `<div class="grupo-ej"><div class="grupo-ej__cab"><h3 class="grupo-cat__tit">${m.k === "sin" ? "Sin fecha" : mayus(MES_S[+m.k.slice(5, 7) - 1])}</h3>${cuenta(m.items.length, ["práctica", "prácticas"])}</div>
           <ul class="filas-cat">${m.items.map(fila).join("")}</ul></div>`).join("")}
         <p class="vacio-g" id="sin-pr" hidden>No hay ninguna práctica con esa palabra.</p>
       </section>`;
@@ -1332,6 +1482,7 @@
       let vis = 0;
       gr.querySelectorAll("li[data-pr]").forEach((li) => { const ok = !q || Q_PR.get(li.dataset.pr).includes(q); li.hidden = !ok; vis += ok; });
       gr.hidden = !vis; n += vis;
+      contar(gr, q, vis);
     });
     const v = $("#sin-pr");
     if (v) v.hidden = n > 0;
@@ -1341,11 +1492,11 @@
   function vPractica() {
     const todos = D.guia.practicas, p = todos.find((x) => x.id === S.practica);
     // "Anterior / Siguiente" por fecha, dentro de la misma lista que se estaba mirando
-    const vistos = prLista(), base = vistos.some((x) => x.id === p.id) ? vistos : todos;
-    const cron = base.filter((x) => x.orden !== "9" || x.id === p.id).sort((a, b) => a.orden.localeCompare(b.orden)), j = cron.indexOf(p);
+    const q = norm((S.qp || "").trim()), vistos = prLista().filter((x) => !q || textoBusca(x).includes(q));
+    const cron = vistos.some((x) => x.id === p.id) ? vistos : D.guia.practicas.slice().sort(ordenPr), j = cron.indexOf(p);
     const salto = (k, der) => {
       const q = cron[k];
-      return `<button type="button"${q ? ` data-ir-practica="${esc(q.id)}" aria-label="${der ? "Siguiente" : "Anterior"}: ${esc(q.foco)}"` : " disabled"}>${der ? "" : IC.atras}<span>${der ? "Siguiente" : "Anterior"}</span>${der ? IC.adelante : ""}</button>`;
+      return `<button type="button"${q ? ` data-lado data-ir-practica="${esc(q.id)}" aria-label="${der ? "Siguiente" : "Anterior"}: ${esc(q.foco)}"` : " disabled"}>${der ? "" : IC.atras}<span>${der ? "Siguiente" : "Anterior"}</span>${der ? IC.adelante : ""}</button>`;
     };
     const minB = (b) => b.items.reduce((s, it) => s + (it.min || 0), 0);
     const cuerpo = p.bloques.map((b) => b.agua ? `<p class="prac-agua">${IC.gota}<span>Agua${b.min ? ` · ${b.min} min` : ""}</span></p>`
@@ -1353,11 +1504,11 @@
         <ul class="prac-g">${b.items.map(itemPr).join("")}</ul>`).join("");
     $("#vista").innerHTML = `
       <div class="cab">
-        <div class="cab__fila"><button type="button" class="volver" data-volver-pr>${IC.atras}Prácticas</button>
+        <div class="cab__fila">${volver("Prácticas", { ver: "practicas", practica: null })}
           <div class="saltos saltos--ej" role="group" aria-label="Otras prácticas">${salto(j - 1)}${salto(j + 1, true)}</div></div>
         <p class="ej-tag">${esc(p.grupo)} · ${esc(p.quien)}</p>
         <h2 class="ej-tit">${esc(p.foco || "Práctica")}</h2>
-        <p class="prac-cuando">${IC.calendario}<span>${mayus(cuandoP(p))}${p.min ? ` · ${p.min} minutos` : ""}</span></p>
+        <p class="prac-cuando">${IC.calendario}<span>${mayus(cuandoP(p))}${minDe(p) ? ` · ${minDe(p)} minutos` : ""}</span></p>
       </div>
       <section class="sec sec--pegada ej-det">
         ${p.objetivos.length ? `<h3 class="grupo">Objetivos</h3>${lista(p.objetivos, "check-g")}` : ""}
@@ -1382,6 +1533,12 @@
   const ASIS = { resumen: null, cats: {}, error: {}, cargando: new Set() };
   const isoDe = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
   const masDias = (iso, n) => { const d = dia(iso); d.setDate(d.getDate() + n); return isoDe(d); };
+  /** los días que se pueden usar en la asistencia: que existan (no un 30 de febrero), del último año y hasta 4 meses para adelante */
+  const DIAS_ATRAS = 366, DIAS_ADELANTE = 120;
+  const fechaOk = (f) => /^\d{4}-\d{2}-\d{2}$/.test(f) && isoDe(dia(f)) === f && f >= masDias(hoyISO(), -DIAS_ATRAS) && f <= masDias(hoyISO(), DIAS_ADELANTE);
+  const ahoraHora = () => new Date().toTimeString().slice(0, 5);
+  /** para ver si un chico ya está: sin tildes, mayúsculas ni comas, y en cualquier orden ("Pérez, Tomás" = "tomas perez") */
+  const claveNombre = (n) => norm(n).replace(/[^a-z0-9]+/g, " ").trim().split(" ").sort().join(" ");
   const corta = (iso) => `${DIA_S[dia(iso).getDay()].slice(0, 3)} ${dia(iso).getDate()}/${dia(iso).getMonth() + 1}`;
   const diaMes = (iso) => cuandoP({ fecha: iso }).replace(/ de \S+$/, ""); // "jueves 22"
   const horaDe = (ts) => { const d = new Date(ts); return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`; };
@@ -1422,7 +1579,7 @@
       .catch((e) => { ASIS.error[k] = e.message === "clave" ? avisoError(e) : "No se pudo cargar: no hay señal."; })
       .finally(() => {
         ASIS.cargando.delete(k);
-        const aca = cat ? (S.acat === cat && ["asis", "lista", "chicos"].includes(S.ver)) || (S.ver === "inicio" && enCel.get(ULTIMA) === cat) : S.ver === "asistencia";
+        const aca = cat ? (S.acat === cat && ["asis", "lista", "chicos"].includes(S.ver)) || (S.ver === "inicio" && (enCel.get(ULTIMA) === cat || miCat() === cat)) || S.ver === "asistencia" : S.ver === "asistencia";
         if (aca) render();
       });
   }
@@ -1445,6 +1602,13 @@
       if (despues) { despues(); return; }
     } catch (e) { avisar("error", avisoError(e)); }
     render();
+  }
+  /** un aviso de "falta algo": se muestra sin volver a dibujar, así no se pierde lo que ya se eligió */
+  function avisoSuelto(txt) {
+    avisar("error", txt);
+    const viejo = $(".aviso");
+    if (viejo) viejo.remove();
+    $("#vista").insertAdjacentHTML("beforeend", avisoHTML());
   }
   const avisoHTML = () => (S.aviso ? `<p class="aviso aviso--${S.aviso.tipo}" role="status">${S.aviso.tipo === "ok" ? IC.tilde : ""}<span>${S.aviso.txt}</span></p>` : "");
   const cargandoHTML = (k) => (ASIS.error[k] ? `<div class="hoy hoy--error"><p class="hoy__canc">${ASIS.error[k]}</p>
@@ -1492,15 +1656,20 @@
     return [...porHora].map(([hora, ds]) => `${ds.length > 1 ? `${ds.slice(0, -1).join(", ")} y ${ds.at(-1)}` : ds[0]} a las ${hora}`).join(" · ");
   }
   /** cuántos vinieron, contando solo a los chicos que hoy están en la lista (los que ya no vienen no suman) */
+  /** los chicos que estaban en la lista ese día: un chico sumado a mano no aparece en las listas de antes */
+  const chicosEn = (activos, f) => activos.filter((c) => !c.desde || c.desde <= f);
   const vinieron = (l, activos) => { const ids = new Set(activos.map((c) => c.id)); return l.presentes.filter((id) => ids.has(id)).length; };
   /** quién tomó la lista y a qué hora */
   const tomoTxt = (l) => (l.por ? `tomó lista ${esc(l.por)} a las ${horaDe(l.ts)}` : `se guardó a las ${horaDe(l.ts)}`);
   /** cómo está un entrenamiento, en pocas palabras */
   function estadoTxt(s, activos, cat) {
-    if (s.estado === "cancelado") return `Suspendido${s.motivo ? `: ${esc(s.motivo)}` : ""}`;
-    if (s.lista) return `Vinieron ${vinieron(s.lista, activos)} de ${activos.length}`;
+    // el motivo largo se corta: si no, en el celular tapa la fecha del renglón
+    const mot = s.motivo && s.motivo.length > 22 ? `${s.motivo.slice(0, 21).trim()}…` : s.motivo;
+    if (s.estado === "cancelado") return `Suspendido${mot ? `: ${esc(mot)}` : ""}`;
+    if (s.lista) { const ch = chicosEn(activos, s.fecha); return `Vinieron ${vinieron(s.lista, ch)} de ${ch.length}`; }
     if (borrador(cat, s.fecha)) return "Lista sin guardar";
-    return s.fecha > hoyISO() ? "Próximo" : s.fecha === hoyISO() ? "Falta la lista" : "Sin lista";
+    // hoy, antes de la hora del entrenamiento, todavía no "falta" la lista
+    return s.fecha > hoyISO() ? "Próximo" : s.fecha === hoyISO() ? (s.hora > ahoraHora() ? "Más tarde" : "Falta la lista") : "Sin lista";
   }
 
   // los formularios chicos (suspender, cambiar la hora, agregar, días, borrar): aparecen en el lugar, sin ventanas
@@ -1508,41 +1677,45 @@
   const HORAS = Array.from({ length: 65 }, (_, i) => { const m = 7 * 60 + i * 15; return `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`; });
   const elegirHora = (id, valor) => `<select id="${id}" class="asis-input asis-input--hora">${[...new Set([...HORAS, valor].filter(Boolean))].sort()
     .map((h) => `<option${h === valor ? " selected" : ""}>${esc(h)}</option>`).join("")}</select>`;
-  const volverBtn = `<button type="button" class="btn-sec" data-form="">Volver</button>`;
-  const formSuspender = (s, activos) => `<div class="asis-form"><span class="asis-form__l">¿Por qué se suspende?</span>
+  const cerrarBtn = `<button type="button" class="btn-sec" data-form="">Cerrar</button>`;
+  // si no se pudo guardar (sin señal), el motivo elegido sigue elegido (S.amotivo)
+  const formSuspender = (s, activos) => { const am = S.amotivo || {}; return `<div class="asis-form"><span class="asis-form__l">¿Por qué se suspende?</span>
       <div class="chips-g chips-g--asis" role="group" aria-label="Motivo">${["Lluvia", "Cancha en mal estado", "Otro"].map((m) =>
-        `<button type="button" data-motivo="${m}" aria-pressed="false">${m === "Otro" ? "Otro motivo" : m}</button>`).join("")}</div>
-      <label class="asis-form__campo" id="motivo-otro" hidden>Contá por qué<input id="motivo" class="asis-input" maxlength="120" autocomplete="off"></label>
-      ${s.lista ? `<p class="asis-form__aviso">Este día ya tiene lista (vinieron ${vinieron(s.lista, activos)} de ${activos.length}). Si lo suspendés, esa lista no cuenta.</p>` : ""}
-      <div class="asis-form__btns"><button type="button" class="btn btn--peligro btn--alto" data-cancelar-ok="${s.fecha}">Suspender el entrenamiento</button>${volverBtn}</div></div>`;
+        `<button type="button" data-motivo="${m}" aria-pressed="${am.m === m}">${m === "Otro" ? "Otro motivo" : m}</button>`).join("")}</div>
+      <label class="asis-form__campo" id="motivo-otro"${am.m === "Otro" ? "" : " hidden"}>Contá por qué<input id="motivo" class="asis-input" maxlength="120" autocomplete="off" value="${esc(am.txt || "")}"></label>
+      ${s.lista ? `<p class="asis-form__aviso">Este día ya tiene lista (vinieron ${vinieron(s.lista, chicosEn(activos, s.fecha))} de ${chicosEn(activos, s.fecha).length}). Si lo suspendés, esa lista no cuenta.</p>`
+        : borrador(S.acat, s.fecha) ? `<p class="asis-form__aviso">Tenés una lista sin guardar de este día. Si lo suspendés, esa lista no cuenta.</p>` : ""}
+      <div class="asis-form__btns"><button type="button" class="btn btn--peligro btn--alto" data-cancelar-ok="${s.fecha}">Suspender el entrenamiento</button>${cerrarBtn}</div></div>`; };
   const formHora = (s) => `<div class="asis-form"><label class="asis-form__campo">Nueva hora para el ${esc(cuandoP(s))}
       ${elegirHora("hora-nueva", s.hora || "18:00")}</label>
-      <div class="asis-form__btns"><button type="button" class="btn btn--ok btn--alto" data-hora-ok="${s.fecha}">Cambiar la hora</button>${volverBtn}</div></div>`;
+      <div class="asis-form__btns"><button type="button" class="btn btn--ok btn--alto" data-hora-ok="${s.fecha}">Cambiar la hora</button>${cerrarBtn}</div></div>`;
   const formBorrarExtra = (s) => `<div class="asis-form"><span class="asis-form__l">¿Borrar el entrenamiento agregado del ${esc(cuandoP(s))}?</span>
-      <div class="asis-form__btns"><button type="button" class="btn btn--peligro btn--alto" data-deshacer="${s.fecha}">Borrarlo</button>${volverBtn}</div></div>`;
+      <div class="asis-form__btns"><button type="button" class="btn btn--peligro btn--alto" data-deshacer="${s.fecha}">Borrarlo</button>${cerrarBtn}</div></div>`;
   /** el primer día desde mañana que no tiene entrenamiento: así "agregar" no propone uno que ya existe */
   const diaLibre = (d) => { let f = masDias(hoyISO(), 1); while (sesiones(d, f, f).length) f = masDias(f, 1); return f; };
   const formAgregar = (d) => `<div class="asis-form"><span class="asis-form__l">Un entrenamiento que no está en los días de siempre</span>
-      <div class="asis-form__fila"><label class="asis-form__campo">Día<input id="fecha-nueva" class="asis-input" type="date" value="${diaLibre(d)}" required></label>
+      <div class="asis-form__fila"><label class="asis-form__campo">Día<input id="fecha-nueva" class="asis-input" type="date" value="${diaLibre(d)}" min="${masDias(hoyISO(), -60)}" max="${masDias(hoyISO(), DIAS_ADELANTE)}" required></label>
         <label class="asis-form__campo">Hora${elegirHora("hora-agregar", (d.horarios[0] || {}).hora || "18:00")}</label></div>
-      <div class="asis-form__btns"><button type="button" class="btn btn--ok btn--alto" data-agregar-ok>${IC.mas}Agregar</button>${volverBtn}</div></div>`;
+      <div class="asis-form__btns"><button type="button" class="btn btn--ok btn--alto" data-agregar-ok>${IC.mas}Agregar</button>${cerrarBtn}</div></div>`;
   const formDias = (d) => `<div class="asis-form"><span class="asis-form__l">Tocá los días que entrena</span>
       <div class="chips-g chips-g--asis chips-g--dias" role="group" aria-label="Días">${[1, 2, 3, 4, 5, 6, 0].map((n) =>
         `<button type="button" data-dia="${n}" aria-pressed="${d.horarios.some((h) => h.dia === n)}">${mayus(DIA_S[n].slice(0, 3))}</button>`).join("")}</div>
       <label class="asis-form__campo">A qué hora${elegirHora("hora-dias", (d.horarios[0] || {}).hora || "18:00")}</label>
-      <div class="asis-form__btns"><button type="button" class="btn btn--ok btn--alto" data-horarios-ok>Guardar los días</button>${d.horarios.length ? volverBtn : ""}</div></div>`;
+      <div class="asis-form__btns"><button type="button" class="btn btn--ok btn--alto" data-horarios-ok>Guardar los días</button>${d.horarios.length ? cerrarBtn : ""}</div></div>`;
 
+  /** suspender uno de siempre, o borrar uno agregado (si ya tiene lista, primero hay que borrar la lista: si no, no desaparece) */
+  const botonQuitar = (s, borrar) => (s.estado !== "extra" ? `<button type="button" class="btn-sec" data-form="suspender:${s.fecha}">Suspender</button>`
+    : s.lista ? "" : `<button type="button" class="btn-sec" data-form="suspender:${s.fecha}">${borrar}</button>`);
   /** el entrenamiento de hoy (o el próximo): lo primero, con un solo botón grande */
   function tarjetaHoy(cat, s, activos) {
     const hoy = hoyISO(), b = borrador(cat, s.fecha);
     const estado = s.estado === "cancelado" ? `<p class="hoy__canc">Suspendido${s.motivo ? `: ${esc(s.motivo)}` : ""}</p>`
       : b ? `<p class="hoy__estado hoy__estado--ojo">${IC.alerta}<span>Tenés la lista sin guardar (${b.marcas.length} marcados)</span></p>`
-      : s.lista ? `<p class="hoy__estado">${IC.tilde}<span>Vinieron <b>${vinieron(s.lista, activos)} de ${activos.length}</b> · ${tomoTxt(s.lista)}</span></p>`
+      : s.lista ? `<p class="hoy__estado">${IC.tilde}<span>Vinieron <b>${vinieron(s.lista, chicosEn(activos, s.fecha))} de ${chicosEn(activos, s.fecha).length}</b> · ${tomoTxt(s.lista)}</span></p>`
       : s.estado === "movido" ? `<p class="hoy__nota">Cambió la hora (antes ${esc(s.antes)})</p>` : "";
     const principal = s.estado === "cancelado" ? `<button type="button" class="btn-sec btn-sec--ancho" data-deshacer="${s.fecha}">Deshacer: vuelve a haber entrenamiento</button>`
       : s.fecha <= hoy ? `<button type="button" class="btn btn--ok btn--grande" data-ir-lista="${s.fecha}">${IC.lista}${b ? "Seguir la lista" : s.lista ? "Sumar a alguien que llegó tarde" : "Tomar lista"}</button>` : "";
-    const otras = s.estado === "cancelado" ? "" : `<div class="acc-2">
-        <button type="button" class="btn-sec" data-form="suspender:${s.fecha}">${s.estado === "extra" ? "Borrarlo" : "Suspender"}</button>
+    const otras = s.estado === "cancelado" || s.estado === "nuevo" ? "" : `<div class="acc-2">${botonQuitar(s, "Borrarlo")}
         <button type="button" class="btn-sec" data-form="hora:${s.fecha}">Cambiar la hora</button></div>`;
     const form = S.aform === `suspender:${s.fecha}` ? (s.estado === "extra" ? formBorrarExtra(s) : formSuspender(s, activos)) : S.aform === `hora:${s.fecha}` ? formHora(s) : "";
     return `<div class="hoy${s.estado === "cancelado" ? " hoy--canc" : ""}">
@@ -1551,16 +1724,25 @@
       ${estado}${principal}${otras}${form}</div>`;
   }
 
+  /** cuánto viene la categoría: de todas las veces que un chico pudo venir (con lista), cuántas vino. Igual en todas las pantallas */
+  function promedioCat(cat, d) {
+    const { activos } = chicosDe(cat, d), tot = porcentajes(d, activos).reduce((t, c) => [t[0] + c.vino, t[1] + c.de], [0, 0]), ls = listasValidas(d);
+    return { p: tot[1] ? Math.round((tot[0] / tot[1]) * 100) : null, nListas: ls.length, ultima: ls.length ? ls.at(-1).fecha : null };
+  }
+
   // la lista de categorías, con cuánto viene cada una
   function vAsistencia() {
     const r = ASIS.resumen;
     if (!r && !ASIS.error["*"]) cargarAsis(null);
     const fila = (cat) => {
-      const res = r && r.resumen[cat], ch = (r && r.chicos[cat]) || { alta: 0, baja: 0 };
-      const n = (D.fichados[cat] || []).length + ch.alta - ch.baja, p = res && n ? Math.round((res.presentes / (res.listas * n)) * 100) : null;
+      // el porcentaje se calcula con los datos de cada categoría, igual que adentro (se traen las que tienen listas)
+      const res = r && r.resumen[cat], d = res && ASIS.cats[cat];
+      if (res && !d && !ASIS.error[cat]) cargarAsis(cat);
+      // las listas de días suspendidos no cuentan (igual que adentro de la categoría)
+      const pr = d && promedioCat(cat, d), nL = pr ? pr.nListas : res ? res.listas : 0, ult = pr ? pr.ultima : res && res.ultima;
       return `<li><button type="button" class="fila-cat fila-cat--asis" data-ir-asis="${esc(cat)}">
-        <span class="fila-cat__nom">${esc(cat)}<small>${!r ? "…" : res ? `${pl(res.listas, "lista", "listas")} · la última, ${corta(res.ultima)}` : "Todavía sin listas"}</small></span>
-        ${r && res ? porcHTML(p, res.listas >= LISTAS_MIN) : ""}${IC.adelante}</button></li>`;
+        <span class="fila-cat__nom">${esc(cat)}<small>${!r ? "…" : nL ? `${pl(nL, "lista", "listas")} · la última, ${corta(ult)}` : "Todavía sin listas"}</small></span>
+        ${pr ? (pr.nListas ? porcHTML(pr.p, pr.nListas >= LISTAS_MIN) : "") : res ? `<span class="porc porc--gris">…</span>` : ""}${IC.adelante}</button></li>`;
     };
     $("#vista").innerHTML = `
       <div class="cab">${volver()}${cabTit("Asistencia", "asistencia")}</div>
@@ -1584,14 +1766,14 @@
     // los de antes se muestran desde que se empezó a usar (la primera lista o el primer cambio), hasta 6 semanas para atrás
     const primero = [...d.listas, ...d.entrenamientos].map((x) => x.fecha).filter((f) => f < hoy).sort()[0] || hoy;
     const ses = sesiones(d, primero > masDias(hoy, -42) ? primero : masDias(hoy, -42), masDias(hoy, 14));
-    const actual = ses.find((s) => s.fecha === hoy) || ses.find((s) => s.fecha > hoy && s.estado !== "cancelado");
+    const actual = ses.find((s) => s.fecha === hoy) || ses.find((s) => s.fecha > hoy && s.estado !== "cancelado")
+      || (borrador(cat, hoy) ? { fecha: hoy, hora: "", estado: "nuevo", lista: null } : null);
     const validas = listasValidas(d), nListas = validas.length, conColor = nListas >= LISTAS_MIN;
-    const pc = porcentajes(d, activos), tot = pc.reduce((t, c) => [t[0] + c.vino, t[1] + c.de], [0, 0]);
-    const ult = validas.at(-1);
+    const pc = porcentajes(d, activos), ult = validas.at(-1), alUltimo = ult ? chicosEn(activos, ult.fecha) : [];
     const resumen = !nListas ? `<p class="asis-nada">Todavía no se tomó ninguna lista.</p>`
-      : !conColor ? `<p class="titular">${nListas === 1 ? "Primera lista" : "Última lista"}: vinieron <b>${vinieron(ult, activos)} de ${total}</b></p>
+      : !conColor ? `<p class="titular">${nListas === 1 ? "Primera lista" : "Última lista"}: vinieron <b>${vinieron(ult, alUltimo)} de ${alUltimo.length}</b></p>
           <p class="asis-nota">Desde la tercera lista se ve cuánto viene cada chico.</p>`
-      : `<p class="titular">Viene el <b>${Math.round((tot[0] / tot[1]) * 100)}%</b> de las veces</p>
+      : `<p class="titular">Viene el <b>${promedioCat(cat, d).p}%</b> de las veces</p>
           <p class="asis-nota">En ${pl(nListas, "entrenamiento", "entrenamientos")} con lista</p>
           <h3 class="grupo">Los que menos vienen</h3>
           <ul class="asis-chicos">${pc.filter((c) => c.de).sort((a, b) => a.pct - b.pct || porNombre(a, b)).slice(0, 5).map((c) =>
@@ -1602,9 +1784,9 @@
         <span class="ses-estado">${estadoTxt(s, activos, cat)}</span>${IC.adelante}</button></li>`;
     $("#vista").innerHTML = `${cab}
       <section class="sec sec--pegada asis-v">
-        ${!d.horarios.length && !actual ? `<div class="hoy"><p class="hoy__lbl">Para empezar</p><h3 class="hoy__dia">¿Qué días entrena ${esc(cat)}?</h3>${formDias(d)}
-            <button type="button" class="btn-sec btn-sec--ancho" data-ir-lista="${hoy}">O tomar lista hoy igual</button></div>`
-          : actual ? tarjetaHoy(cat, actual, activos) : ""}
+        ${actual ? tarjetaHoy(cat, actual, activos) : ""}
+        ${!d.horarios.length ? `<div class="hoy"><p class="hoy__lbl">Para empezar</p><h3 class="hoy__dia">¿Qué días entrena ${esc(cat)}?</h3>${formDias(d)}
+            ${actual ? "" : `<button type="button" class="btn-sec btn-sec--ancho" data-ir-lista="${hoy}">O tomar lista hoy igual</button>`}</div>` : ""}
       </section>
       <section class="sec asis-v">
         ${resumen}
@@ -1624,10 +1806,15 @@
       ${avisoHTML()}`;
   }
 
+  /** de la lista o de los chicos, a la categoría */
+  const VOLVER_ASIS = { ver: "asis", afecha: null, aform: null, marcas: null, aviso: null, estadoLista: null, cambiarNombre: false };
+  /** lo que se ve si el buscador no encuentra a nadie */
+  const sinChicos = `<p class="asis-nada" id="sin-chicos" hidden>No hay ningún chico con ese nombre.</p>`;
+
   // los chicos de la categoría: en orden alfabético, para sumar a uno nuevo o sacar a uno que ya no viene (con deshacer ahí mismo)
   function vChicos() {
     const cat = S.acat, d = ASIS.cats[cat];
-    const cab = `<div class="cab"><button type="button" class="volver" data-volver-asis>${IC.atras}${esc(cat)}</button><h2 class="ej-tit">Los chicos de ${esc(cat)}</h2></div>`;
+    const cab = `<div class="cab">${volver(esc(cat), VOLVER_ASIS)}<h2 class="ej-tit">Los chicos de ${esc(cat)}</h2></div>`;
     if (!d) {
       if (!ASIS.error[cat]) cargarAsis(cat);
       $("#vista").innerHTML = `${cab}<section class="sec sec--pegada asis-v">${cargandoHTML(cat)}</section>`;
@@ -1647,14 +1834,15 @@
     $("#vista").innerHTML = `${cab}
       <section class="sec sec--pegada asis-v">
         <div class="asis-form asis-form--suelto"><label class="asis-form__campo" for="nuevo-chico">Sumar a un chico nuevo</label>
-          <div class="asis-form__fila"><input id="nuevo-chico" class="asis-input" maxlength="80" placeholder="Apellido, nombre" autocomplete="off">
+          <div class="asis-form__fila"><input id="nuevo-chico" class="asis-input" maxlength="80" placeholder="Apellido, nombre" autocomplete="off" enterkeyhint="done">
           <button type="button" class="btn btn--ok btn--alto" data-sumar-chico>${IC.mas}Sumar</button></div></div>
         ${activos.length > 20 ? `<label class="buscar-g asis-buscar"><span class="sr">Buscar un chico</span>${IC.buscar}<input type="search" id="buscar-chico" placeholder="Buscar por apellido" autocomplete="off" enterkeyhint="search"></label>` : ""}
         <h3 class="grupo">En la lista (${activos.length})</h3>
-        <ul class="asis-chicos asis-chicos--editar" id="lista-chicos">${filas.map(fila).join("")}</ul>
+        <ul class="asis-chicos asis-chicos--editar" data-filtro>${filas.map(fila).join("")}</ul>
         ${otrosFuera.length ? `<h3 class="grupo">Ya no vienen (${otrosFuera.length})</h3>
-          <ul class="asis-chicos asis-chicos--editar">${otrosFuera.map((c) => `<li><span class="asis-chicos__nom">${nombreHTML(c.nombre)}</span>
+          <ul class="asis-chicos asis-chicos--editar" data-filtro>${otrosFuera.map((c) => `<li data-q="${esc(norm(c.nombre))}"><span class="asis-chicos__nom">${nombreHTML(c.nombre)}</span>
             <button type="button" class="btn-sec btn-sec--chico" data-volver-chico="${esc(c.id)}">Volver a sumar</button></li>`).join("")}</ul>` : ""}
+        ${sinChicos}
       </section>
       ${avisoHTML()}`;
   }
@@ -1662,7 +1850,7 @@
   // tomar lista: un toque por chico (verde con tilde = vino). Abajo, fijo, cuántos vinieron y guardar, con cómo va el guardado.
   function vLista() {
     const cat = S.acat, f = S.afecha, d = ASIS.cats[cat];
-    const cab = (hora) => `<div class="cab"><button type="button" class="volver" data-volver-asis>${IC.atras}${esc(cat)}</button>
+    const cab = (hora) => `<div class="cab">${volver(esc(cat), VOLVER_ASIS)}
       <h2 class="ej-tit">Lista de ${esc(cat)}</h2><p class="prac-cuando">${IC.calendario}<span>${esc(mayus(cuandoP({ fecha: f })))}${hora ? ` · ${esc(hora)}` : ""}</span></p></div>`;
     if (!d) {
       if (!ASIS.error[cat]) cargarAsis(cat);
@@ -1671,7 +1859,7 @@
     }
     enCel.set(ULTIMA, cat);
     const s = sesiones(d, f, f)[0] || { fecha: f, hora: "", estado: "nuevo", lista: null };
-    const { activos } = chicosDe(cat, d), total = activos.length, futuro = f > hoyISO(), canc = s.estado === "cancelado";
+    const activos = chicosEn(chicosDe(cat, d).activos, f), total = activos.length, futuro = f > hoyISO(), canc = s.estado === "cancelado";
     if (!S.marcas) {
       // lo que quedó marcado en el celular sin guardar tiene prioridad; si no, lo que ya está guardado
       const b = borrador(cat, f), guardados = s.lista ? s.lista.presentes : [];
@@ -1681,7 +1869,7 @@
     const n = activos.filter((c) => S.marcas.has(c.id)).length, nombre = nombreGuardado();
     const acciones = s.estado === "nuevo" ? "" : S.aform === `suspender:${f}` ? (s.estado === "extra" ? formBorrarExtra(s) : formSuspender(s, activos))
       : S.aform === `hora:${f}` ? formHora(s)
-      : `<div class="acc-2"><button type="button" class="btn-sec" data-form="suspender:${f}">${s.estado === "extra" ? "Borrar este entrenamiento" : "Suspender"}</button>
+      : `<div class="acc-2">${botonQuitar(s, "Borrar este entrenamiento")}
           <button type="button" class="btn-sec" data-form="hora:${f}">Cambiar la hora</button></div>`;
     let cuerpo;
     if (canc) {
@@ -1691,14 +1879,15 @@
       cuerpo = `<div class="hoy"><p class="hoy__nota">La lista se toma el día del entrenamiento.</p>${acciones}</div>`;
     } else {
       const borrarForm = S.aform === "borrar-lista" ? `<div class="asis-form"><span class="asis-form__l">¿Borrar la lista de este día? Se pierden los ${s.lista ? vinieron(s.lista, activos) : 0} que vinieron.</span>
-          <div class="asis-form__btns"><button type="button" class="btn btn--peligro btn--alto" data-borrar-lista-ok>Borrar la lista</button>${volverBtn}</div></div>` : "";
+          <div class="asis-form__btns"><button type="button" class="btn btn--peligro btn--alto" data-borrar-lista-ok>Borrar la lista</button>${cerrarBtn}</div></div>` : "";
       cuerpo = `
         ${!nombre || S.cambiarNombre ? `<label class="asis-form__campo lista-quien">¿Quién toma lista?<input id="por" class="asis-input" maxlength="60" value="${esc(nombre)}" placeholder="Tu nombre" autocomplete="name"></label>` : ""}
         ${s.lista ? `<p class="lista-info">Ya hay una lista guardada: vinieron ${vinieron(s.lista, activos)} de ${total}, ${tomoTxt(s.lista)}. Lo que cambies se suma a esa lista.</p>` : ""}
-        <div class="lista-cab"><span>${s.lista ? "Tocá a los que llegaron tarde" : "Tocá a los que vinieron"}</span>${n ? "" : `<button type="button" class="btn-sec btn-sec--chico" data-todos>Marcar a todos</button>`}</div>
+        <div class="lista-cab"><span>${s.lista ? "Tocá a los que llegaron tarde" : "Tocá a los que vinieron"}</span><button type="button" class="btn-sec btn-sec--chico" data-todos${n ? " hidden" : ""}>Marcar a todos</button></div>
         ${total > 30 ? `<label class="buscar-g asis-buscar"><span class="sr">Buscar un chico</span>${IC.buscar}<input type="search" id="buscar-chico" placeholder="Buscar por apellido" autocomplete="off" enterkeyhint="search"></label>` : ""}
-        <ul class="lista-g" id="lista-chicos">${activos.map((c) => `<li data-q="${esc(norm(c.nombre))}"><button type="button" class="lista-it" data-marca="${esc(c.id)}" aria-pressed="${S.marcas.has(c.id)}">
+        <ul class="lista-g" data-filtro>${activos.map((c) => `<li data-q="${esc(norm(c.nombre))}"><button type="button" class="lista-it" data-marca="${esc(c.id)}" aria-pressed="${S.marcas.has(c.id)}">
           <span class="lista-it__ic">${IC.tilde}</span><span class="lista-it__nom">${nombreHTML(c.nombre)}</span></button></li>`).join("")}</ul>
+        ${sinChicos}
         ${nombre && !S.cambiarNombre ? `<p class="lista-por">Toma lista <b>${esc(nombre)}</b> <button type="button" class="link" data-cambiar-nombre>Cambiar</button></p>` : ""}
         <div class="lista-mas"><span class="asis-form__l">¿No hubo entrenamiento o cambió la hora?</span>${acciones}
           ${s.lista && S.aform !== "borrar-lista" ? `<button type="button" class="btn-sec btn-sec--ancho" data-form="borrar-lista">Borrar la lista de este día</button>` : ""}${borrarForm}</div>
@@ -1737,7 +1926,7 @@
       S.estadoLista = null;
       const { activos } = chicosDe(cat, ASIS.cats[cat]), l = ASIS.cats[cat].listas.find((x) => x.fecha === f);
       avisar("ok", `Lista guardada: vinieron ${l ? vinieron(l, activos) : 0} de ${activos.length}`);
-      irA({ ver: "asis", afecha: null, aform: null, marcas: null, cambiarNombre: false });
+      volverAtras({ ver: "asis", afecha: null, aform: null, marcas: null, cambiarNombre: false });
     } catch (e) {
       S.estadoLista = e.message === "clave" ? "clave" : "error";
       pintarPie();
@@ -1746,10 +1935,10 @@
   // si se cortó la señal mientras guardaba, apenas vuelve lo intenta solo
   addEventListener("online", () => { if (S && S.ver === "lista" && S.estadoLista === "error") guardarLista(); });
 
-  /** en el inicio, los días que entrena la última categoría en la que tomaste lista: el atajo para tomarla en 2 toques */
-  function hoyInicio() {
-    const cat = D.fichados && enCel.get(ULTIMA);
-    if (!cat || !ASIS_CATS.includes(cat)) return "";
+  /** en el inicio, si hoy entrena la categoría (la tuya, o la última en la que tomaste lista): el atajo para tomarla en 2 toques.
+      "otra" agrega el link a las otras categorías (en el inicio de quien coordina) */
+  function hoyInicio(cat, otra = true) {
+    if (!D.fichados || !cat || !ASIS_CATS.includes(cat)) return "";
     const d = ASIS.cats[cat];
     if (!d) { if (!ASIS.error[cat]) cargarAsis(cat); return ""; }
     const hoy = hoyISO(), s = sesiones(d, hoy, hoy)[0], b = borrador(cat, hoy);
@@ -1758,24 +1947,54 @@
     if (s && s.estado === "cancelado") {
       return `<section class="sec hoy-inicio"><div class="hoy hoy--canc"><p class="hoy__lbl">Hoy · ${esc(cat)}</p>
         <h3 class="hoy__dia">No hay entrenamiento</h3><p class="hoy__canc">Suspendido${s.motivo ? `: ${esc(s.motivo)}` : ""}</p>
-        <button type="button" class="btn-sec btn-sec--ancho" data-ir-asis="${esc(cat)}">Ver ${esc(cat)}</button></div></section>`;
+        <button type="button" class="btn-sec btn-sec--ancho" data-ir-asis="${esc(cat)}">Ver ${esc(cat)}</button>
+        ${otra ? `<button type="button" class="link hoy__otra" data-ir="asistencia">Otra categoría</button>` : ""}</div></section>`;
     }
     return `<section class="sec hoy-inicio"><div class="hoy"><p class="hoy__lbl">Hoy entrena ${esc(cat)}</p>
       <h3 class="hoy__dia">${s && s.hora ? `A las ${esc(s.hora)}` : esc(mayus(cuandoP({ fecha: hoy })))}</h3>
       ${b ? `<p class="hoy__estado hoy__estado--ojo">${IC.alerta}<span>Tenés la lista sin guardar (${b.marcas.length} marcados)</span></p>`
         : s && s.lista ? `<p class="hoy__estado">${IC.tilde}<span>Vinieron <b>${vinieron(s.lista, activos)} de ${activos.length}</b> · ${tomoTxt(s.lista)}</span></p>` : ""}
       <button type="button" class="btn btn--ok btn--grande" data-ir-hoy="${esc(cat)}|${hoy}">${IC.lista}${b ? "Seguir la lista" : s && s.lista ? "Sumar a alguien que llegó tarde" : "Tomar lista"}</button>
-      <button type="button" class="link hoy__otra" data-ir="asistencia">Otra categoría</button></div></section>`;
+      ${otra ? `<button type="button" class="link hoy__otra" data-ir="asistencia">Otra categoría</button>` : ""}</div></section>`;
+  }
+  /** lo primero en el inicio de un entrenador: hoy, "Tomar lista"; si hoy no entrena, cuándo es el próximo; si no cargó los días, cargarlos */
+  function tarjetaMia(mc) {
+    const d = ASIS.cats[mc];
+    if (!d) { if (!ASIS.error[mc]) cargarAsis(mc); return `<section class="sec hoy-inicio">${cargandoHTML(mc)}</section>`; }
+    const hoy = hoyISO();
+    if (sesiones(d, hoy, hoy)[0] || borrador(mc, hoy)) return hoyInicio(mc, false);
+    const prox = sesiones(d, masDias(hoy, 1), masDias(hoy, 14)).find((x) => x.estado !== "cancelado");
+    const titulo = prox ? `${esc(mayus(cuandoP(prox)))}${prox.hora ? ` · ${esc(prox.hora)}` : ""}`
+      : d.horarios.length ? "No hay entrenamientos en los próximos días" : `¿Qué días entrena ${esc(mc)}?`;
+    return `<section class="sec hoy-inicio"><div class="hoy">
+      <p class="hoy__lbl">${prox ? "Próximo entrenamiento" : "Asistencia"}</p><h3 class="hoy__dia">${titulo}</h3>
+      <button type="button" class="btn-sec btn-sec--ancho" data-ir-asis="${esc(mc)}">${d.horarios.length ? `Asistencia de ${esc(mc)}` : "Cargar los días"}</button></div></section>`;
+  }
+  /** cómo viene en infantiles (no juegan partidos de la UAR): una tarjeta con la asistencia, igual a la de hoy */
+  function tarjetaAsisMia(mc) {
+    const d = ASIS.cats[mc], pr = d && promedioCat(mc, d);
+    const dato = !d ? "…" : pr.nListas >= LISTAS_MIN ? `Viene el ${pr.p}%` : pr.nListas ? pl(pr.nListas, "lista tomada", "listas tomadas") : "Todavía sin listas";
+    return `<section class="sec"><div class="hoy">
+      <p class="hoy__lbl">Cómo viene ${esc(mc)}${ayudaBtn("comoViene")}</p><h3 class="hoy__dia">${dato}</h3>
+      ${pr && pr.nListas ? `<p class="hoy__nota">${pl(pr.nListas, "lista", "listas")} · la última, ${corta(pr.ultima)}</p>` : ""}
+      <button type="button" class="btn-sec btn-sec--ancho" data-ir-asis="${esc(mc)}">Ver la asistencia</button></div></section>`;
+  }
+  /** en "Cómo viene": cuánto viene la categoría a entrenar, con su porcentaje (en gris hasta la tercera lista) */
+  function filaAsisMia(mc) {
+    const d = ASIS.cats[mc], pr = d && promedioCat(mc, d);
+    const txt = !d ? "…" : pr.nListas ? `${pl(pr.nListas, "lista", "listas")} · la última, ${corta(pr.ultima)}` : "Todavía sin listas";
+    return `<div class="grupo-cat"><ul class="filas-cat"><li><button type="button" class="fila-cat fila-cat--asis" data-ir-asis="${esc(mc)}">
+      <span class="fila-cat__nom">Asistencia<small>${txt}</small></span>${pr && pr.nListas ? porcHTML(pr.p, pr.nListas >= LISTAS_MIN) : "<span></span>"}${IC.adelante}</button></li></ul></div>`;
   }
 
   /** la práctica en texto, para WhatsApp */
   function textoPractica(p) {
-    const l = [`*${p.foco || "Práctica"}*`, `${p.grupo} · ${cuandoP(p)}${p.min ? ` · ${p.min} min` : ""}`];
+    const l = [`*${p.foco || "Práctica"}*`, `${p.grupo} · ${cuandoP(p)}${minDe(p) ? ` · ${minDe(p)} min` : ""}`];
     if (p.objetivos.length) l.push("", "Objetivos:", ...p.objetivos.map((o) => `• ${o}`));
     p.bloques.forEach((b) => {
       if (b.agua) { l.push(`(Agua${b.min ? ` ${b.min}'` : ""})`); return; }
       if (b.b) l.push("", `*${b.b}*`);
-      b.items.forEach((it) => l.push(`${it.min ? `${it.min}' ` : "• "}${[it.obj, it.act, it.det].filter(Boolean).join(". ") || b.b || "—"}${it.grupo ? ` (${it.grupo})` : ""}`));
+      b.items.forEach((it) => l.push(`${it.min ? `${it.min}' ` : "• "}${[it.obj, it.act, it.det].filter(Boolean).map((x) => x.replace(/\.+$/, "")).join(". ") || b.b || "—"}${it.grupo ? ` (${it.grupo})` : ""}`));
     });
     if (p.cierre) l.push("", "Charla final y elongación");
     l.push("", `Práctica de ${p.quien} · Club Los 50`);
@@ -1793,27 +2012,35 @@
   // ---------- eventos ----------
   document.addEventListener("click", (e) => {
     if (!S) return;
-    const t = e.target.closest("[data-play],[data-reclave],[data-ayuda],[data-cerrar-ayuda],[data-ir],[data-ir-cat],[data-ir-guia],[data-ir-ej],[data-ir-ej-para],[data-ir-ej-tab],[data-ir-line],[data-ir-puesto],[data-ir-practica],[data-ir-practicas],[data-pgrupo],[data-fcat],[data-ir-asis],[data-ir-hoy],[data-ir-lista],[data-ir-chicos],[data-volver-asis],[data-form],[data-reintentar],[data-motivo],[data-dia],[data-marca],[data-todos],[data-cancelar-ok],[data-deshacer],[data-hora-ok],[data-agregar-ok],[data-horarios-ok],[data-guardar-lista],[data-borrar-lista-ok],[data-cambiar-nombre],[data-sacar],[data-volver-chico],[data-sumar-chico],[data-volver-pr],[data-compartir-pr],[data-volver-ej],[data-rol],[data-quitar-para],[data-tab],[data-anio],[data-ver],[data-ordj]");
+    const t = e.target.closest("[data-atras],[data-subir],[data-mi],[data-ir-prox],[data-play],[data-reclave],[data-ayuda],[data-cerrar-ayuda],[data-ir],[data-ir-cat],[data-ir-guia],[data-ir-ej],[data-ir-ej-para],[data-ir-ej-tab],[data-ir-line],[data-ir-puesto],[data-ir-practica],[data-ir-practicas],[data-pgrupo],[data-fcat],[data-ir-asis],[data-ir-hoy],[data-ir-lista],[data-ir-chicos],[data-form],[data-reintentar],[data-motivo],[data-dia],[data-marca],[data-todos],[data-cancelar-ok],[data-deshacer],[data-hora-ok],[data-agregar-ok],[data-horarios-ok],[data-guardar-lista],[data-borrar-lista-ok],[data-cambiar-nombre],[data-sacar],[data-volver-chico],[data-sumar-chico],[data-compartir-pr],[data-rol],[data-quitar-para],[data-tab],[data-anio],[data-ver],[data-ordj]");
     if (!t || t.disabled) return;
-    const ds = t.dataset;
-    if (ds.play) reproducir(ds.play);
+    if (t.tagName === "A") e.preventDefault(); // el escudo de arriba: va al inicio sin recargar
+    const ds = t.dataset, ir = "lado" in ds ? irSinPaso : irA; // Anterior / Siguiente no suman pasos
+    if ("atras" in ds) history.back();
+    else if ("subir" in ds) irSinPaso(SUBIR);
+    else if (ds.mi) {
+      // la categoría queda en el celular; desde "Cambiar" vuelve al inicio, la primera vez se queda ahí
+      enCel.set(MI, ds.mi);
+      if (S.ver === "elegir") volverAtras({ ver: "inicio", ...LIMPIO });
+      else { render(); scrollTo({ top: 0 }); }
+    } else if ("irProx" in ds) irA({ ver: "proximos", ...LIMPIO, fcat: ds.irProx || null });
+    else if (ds.play) reproducir(ds.play);
     else if ("reclave" in ds) { olvidar(); location.reload(); } // vuelve a la misma pantalla después de la clave
     else if (ds.ayuda) abrirAyuda(ds.ayuda, t);
     else if ("cerrarAyuda" in ds) cerrarAyuda();
-    else if (ds.ir) irA({ ver: ds.ir, cat: null, temp: null, gcat: null, tab: null, rol: null, para: null, qe: "", pgrupo: null, qp: "", fcat: null, aform: null, aviso: null });
-    else if (ds.irEj) irA({ ver: "ejercicio", ej: ds.irEj });
+    else if (ds.ir) { if (ds.ir === S.ver && S.ver === "inicio") scrollTo({ top: 0 }); else irA({ ver: ds.ir, ...LIMPIO }); }
+    else if (ds.irEj) ir({ ver: "ejercicio", ej: ds.irEj });
     else if (ds.irEjPara) irA({ ver: "ejercicios", tab: "juegos", rol: null, para: ds.irEjPara, gcat: null, qe: "" });
     else if (ds.irEjTab) irA({ ver: "ejercicios", tab: ds.irEjTab, rol: null, para: null, gcat: null, qe: "" });
     else if (ds.irLine) irA({ ver: "ejercicios", tab: "line", rol: ds.irLine, para: null, gcat: null, qe: "" });
-    else if (ds.irPuesto) irA({ ver: "puesto", puesto: +ds.irPuesto });
-    else if (ds.irPractica) irA({ ver: "practica", practica: ds.irPractica });
+    else if (ds.irPuesto) ir({ ver: "puesto", puesto: +ds.irPuesto });
+    else if (ds.irPractica) ir({ ver: "practica", practica: ds.irPractica });
     else if (ds.irPracticas) irA({ ver: "practicas", pgrupo: ds.irPracticas, qp: "", cat: null, gcat: null, temp: null });
     else if (ds.irAsis) irA({ ver: "asis", acat: ds.irAsis, afecha: null, aform: null, marcas: null, aviso: null, estadoLista: null, cat: null, gcat: null, temp: null });
     else if (ds.irHoy) { const [acat, afecha] = ds.irHoy.split("|"); irA({ ver: "lista", acat, afecha, aform: null, marcas: null, aviso: null, estadoLista: null, cambiarNombre: false }); }
     else if (ds.irLista) irA({ ver: "lista", afecha: ds.irLista, aform: null, marcas: null, aviso: null, estadoLista: null, cambiarNombre: false });
     else if ("irChicos" in ds) irA({ ver: "chicos", aform: null, aviso: null, recien: new Set() });
-    else if ("volverAsis" in ds) irA({ ver: "asis", afecha: null, aform: null, marcas: null, aviso: null, estadoLista: null, cambiarNombre: false });
-    else if ("form" in ds) { S.aform = S.aform === ds.form || !ds.form ? null : ds.form; S.aviso = null; render(); }
+    else if ("form" in ds) { S.aform = S.aform === ds.form || !ds.form ? null : ds.form; S.aviso = null; S.amotivo = null; render(); }
     else if (ds.reintentar) { delete ASIS.error[ds.reintentar]; render(); }
     else if (ds.motivo) {
       // un solo motivo elegido; "Otro motivo" abre el campo para escribirlo
@@ -1831,7 +2058,7 @@
       const c = $("#cont");
       if (c) c.textContent = document.querySelectorAll(".lista-it[aria-pressed='true']").length;
       const todos = $("[data-todos]");
-      if (todos) todos.hidden = true;
+      if (todos) todos.hidden = !!document.querySelector(".lista-it[aria-pressed='true']");
     } else if ("todos" in ds) {
       S.marcas = new Set([...document.querySelectorAll(".lista-it")].map((x) => x.dataset.marca));
       guardarBorrador(S.acat, S.afecha, { marcas: [...S.marcas], base: S.base || [] });
@@ -1839,28 +2066,38 @@
     } else if (ds.cancelarOk) {
       const elegido = $("[data-motivo][aria-pressed='true']");
       const motivo = !elegido ? "" : elegido.dataset.motivo === "Otro" ? $("#motivo").value.trim() : elegido.dataset.motivo;
+      S.amotivo = elegido ? { m: elegido.dataset.motivo, txt: $("#motivo").value } : null;
       guardarAsis({ accion: "entrenamiento", fecha: ds.cancelarOk, estado: "cancelado", motivo }, "Entrenamiento suspendido");
     } else if (ds.deshacer) {
       const fecha = ds.deshacer, s = sesiones(ASIS.cats[S.acat], fecha, fecha)[0], extra = s && s.estado === "extra";
       guardarAsis({ accion: "entrenamiento", fecha, estado: "normal" }, extra ? "Entrenamiento borrado" : "Listo: vuelve a haber entrenamiento",
-        extra && S.ver === "lista" ? () => irA({ ver: "asis", afecha: null, aform: null, marcas: null }) : null);
+        extra && S.ver === "lista" ? () => volverAtras(VOLVER_ASIS) : null);
     } else if (ds.horaOk) {
-      const hora = $("#hora-nueva").value, s = sesiones(ASIS.cats[S.acat], ds.horaOk, ds.horaOk)[0];
+      const d = ASIS.cats[S.acat], hora = $("#hora-nueva").value, s = sesiones(d, ds.horaOk, ds.horaOk)[0];
       if (!hora) { $("#hora-nueva").focus(); return; }
-      guardarAsis({ accion: "entrenamiento", fecha: ds.horaOk, estado: s && s.estado === "extra" ? "extra" : "movido", hora }, `Ahora es a las ${hora}`);
+      // si vuelve a la hora de siempre, deja de decir "cambió la hora"
+      const deSiempre = d.horarios.find((h) => h.dia === dia(ds.horaOk).getDay());
+      const estado = s && s.estado === "extra" ? "extra" : deSiempre && deSiempre.hora === hora ? "normal" : "movido";
+      guardarAsis({ accion: "entrenamiento", fecha: ds.horaOk, estado, hora }, `Ahora es a las ${hora}`);
     } else if ("agregarOk" in ds) {
       const fecha = $("#fecha-nueva").value, hora = $("#hora-agregar").value;
       if (!fecha || !hora) { $(fecha ? "#hora-agregar" : "#fecha-nueva").focus(); return; }
+      const fIn = $("#fecha-nueva");
+      if (!fechaOk(fecha) || fecha < fIn.min || fecha > fIn.max) { avisoSuelto(`Elegí un día entre el ${cuandoP({ fecha: fIn.min })} y el ${cuandoP({ fecha: fIn.max })}.`); return; }
+      // un día tiene un solo entrenamiento: si ya entrena, se le cambia la hora (si no, se pisaría el de siempre)
+      const ya = sesiones(ASIS.cats[S.acat], fecha, fecha)[0];
+      if (ya && ya.estado !== "cancelado") { avisoSuelto(`Ese día ya entrena${ya.hora ? ` a las ${ya.hora}` : ""}. Para cambiarle la hora, tocá ese día en la lista de entrenamientos.`); return; }
       guardarAsis({ accion: "entrenamiento", fecha, estado: "extra", hora }, `Entrenamiento agregado: ${diaMes(fecha)} a las ${hora}`);
     } else if ("horariosOk" in ds) {
       const dias = [...document.querySelectorAll("[data-dia][aria-pressed='true']")].map((x) => +x.dataset.dia), hora = $("#hora-dias").value;
       if (!hora) { $("#hora-dias").focus(); return; }
+      if (!dias.length && !ASIS.cats[S.acat].horarios.length) { avisoSuelto("Tocá al menos un día de entrenamiento."); return; }
       guardarAsis({ accion: "horarios", horarios: dias.map((dia) => ({ dia, hora })) }, dias.length ? "Días guardados" : "Se sacaron los días");
     } else if ("guardarLista" in ds) guardarLista();
     else if ("borrarListaOk" in ds) {
       guardarAsis({ accion: "borrar_lista", fecha: S.afecha }, "Lista borrada", () => {
         guardarBorrador(S.acat, S.afecha, null);
-        irA({ ver: "asis", afecha: null, aform: null, marcas: null });
+        volverAtras({ ver: "asis", afecha: null, aform: null, marcas: null });
       });
     } else if ("cambiarNombre" in ds) { S.cambiarNombre = true; render(); $("#por").focus(); }
     else if (ds.sacar) {
@@ -1871,18 +2108,21 @@
       guardarAsis({ accion: "chico", id, estado: "activo" }, "Volvió a la lista", () => { S.recien.delete(id); render(); });
     } else if ("sumarChico" in ds) {
       const nombre = $("#nuevo-chico").value.trim();
-      if (nombre.length < 2) { $("#nuevo-chico").focus(); return; }
+      if (nombre.length < 3) { avisoSuelto("Escribí el apellido y el nombre del chico."); $("#nuevo-chico").focus(); return; }
+      // que no quede dos veces (así su asistencia no se parte en dos renglones)
+      const { activos, fuera } = chicosDe(S.acat, ASIS.cats[S.acat]), k = claveNombre(nombre);
+      const esta = activos.find((c) => claveNombre(c.nombre) === k), estaba = fuera.find((c) => claveNombre(c.nombre) === k);
+      if (esta) { avisoSuelto(`${esc(esta.nombre)} ya está en la lista.`); return; }
+      if (estaba) { avisoSuelto(`${esc(estaba.nombre)} ya estaba: tocá “Volver a sumar”, abajo de todo.`); return; }
       guardarAsis({ accion: "chico", estado: "alta", nombre }, `${esc(nombre)} se sumó a la lista`);
     }
     else if ("pgrupo" in ds) irA({ pgrupo: ds.pgrupo || null }, false);
     else if ("fcat" in ds) irA({ fcat: ds.fcat || null }, false);
-    else if ("volverPr" in ds) irA({ ver: "practicas", practica: null }); // vuelve a la lista con el mismo filtro
     else if ("compartirPr" in ds) compartirPractica();
-    else if ("volverEj" in ds) irA({ ver: "ejercicios", ej: null }); // vuelve a la lista con los mismos filtros
     else if ("rol" in ds) irA({ rol: ds.rol || null }, false);
     else if ("quitarPara" in ds) irA({ para: null }, false);
     else if (ds.irCat) irA({ ver: "cat", cat: ds.irCat, temp: null, verJ: false, verP: false, verN: false, verR: false });
-    else if (ds.irGuia) irA({ ver: "guia", gcat: ds.irGuia, cat: null, temp: null });
+    else if (ds.irGuia) ir({ ver: "guia", gcat: ds.irGuia, cat: null, temp: null });
     else if (ds.tab) { irA({ tab: ds.tab, rol: null, para: null }, false); $(`[data-tab="${ds.tab}"]`).focus(); }
     else if (ds.anio) irA({ temp: +ds.anio, verJ: false, verP: false, verN: false, verR: false }, false);
     else if (ds.ver) { S["ver" + ds.ver] = !S["ver" + ds.ver]; render(); }
@@ -1893,6 +2133,7 @@
     const d = e.target;
     if (!S || !d.dataset || !d.dataset.sec) return;
     if (d.open) S.abiertos.add(d.dataset.sec); else S.abiertos.delete(d.dataset.sec);
+    if (!d.open) d.querySelectorAll("video").forEach((v) => v.pause()); // al cerrar "Videos de partidos" no sigue sonando
   }, true);
 
   // la ayuda se cierra con Escape; mientras está abierta, el foco no se va a la pantalla de atrás (solo tiene el botón "Entendido")
@@ -1909,11 +2150,23 @@
     if (e.target.id === "buscar-canto") { S.q = e.target.value; filtrarCantos(); }
     if (e.target.id === "buscar-ej") { S.qe = e.target.value; filtrarEj(); }
     if (e.target.id === "buscar-pr") { S.qp = e.target.value; filtrarPr(); }
+    if (e.target.id === "por") enCel.set(NOMBRE, e.target.value.trim() || null);
     if (e.target.id === "buscar-chico") {
       const q = norm(e.target.value.trim());
-      document.querySelectorAll("#lista-chicos li[data-q]").forEach((li) => { li.hidden = !!q && !li.dataset.q.includes(q); });
+      let vis = 0;
+      document.querySelectorAll("[data-filtro] li[data-q]").forEach((li) => { li.hidden = !!q && !li.dataset.q.includes(q); vis += !li.hidden; });
+      const sin = $("#sin-chicos");
+      if (sin) sin.hidden = !q || vis > 0;
     }
   });
+
+  // en "Sumar a un chico nuevo", la tecla Enter (o "Listo") del teclado también suma
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && e.target.id === "nuevo-chico") { e.preventDefault(); $("[data-sumar-chico]").click(); }
+  });
+
+  // después de "Cerrar sesión", el botón "atrás" del navegador no tiene que volver a mostrar la sección abierta
+  addEventListener("pageshow", (e) => { if (e.persisted && S && !guardada()) location.reload(); });
 
   // ---------- inicio ----------
   intentarGuardada().then((ok) => { if (!ok) $("#clave").focus(); });
