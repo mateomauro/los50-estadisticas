@@ -14,6 +14,8 @@ from pathlib import Path
 
 HERE = Path(__file__).parent
 PROGRESIONES = HERE / "guia" / "progresiones.json"
+PRACTICAS = HERE / "guia" / "practicas.json"
+SCRUM_SESIONES = HERE / "guia" / "scrum_sesiones.json"
 
 # ---------- cantos (CODIGOS.xlsx: se sacó la copia repetida del final y se completó CACIQUE) ----------
 # Grupo | Situación | Código | Significado
@@ -560,9 +562,13 @@ def guia():
         "ejercicios": ejercicios(),
         # los videos (título, duración y dónde va cada uno), que arma videos_entrenadores.py; los pedacitos están en Cloudflare R2
         "videos": json.loads((HERE / "guia" / "videos.json").read_text(encoding="utf-8")) if (HERE / "guia" / "videos.json").exists() else {},
+        # las prácticas de los entrenadores, día por día, que arma practicas_entrenadores.py (sin el archivo de donde salió cada una)
+        "practicas": [{k: v for k, v in p.items() if k != "origen"} for p in json.loads(PRACTICAS.read_text(encoding="utf-8"))] if PRACTICAS.exists() else [],
         "scrum": {"edades": SCRUM_EDADES, "metodo": SCRUM_METODO, "principios": SCRUM_PRINCIPIOS, "setup": SCRUM_SETUP,
                   "entrada": SCRUM_ENTRADA, "empuje": SCRUM_EMPUJE, "empuje_notas": SCRUM_EMPUJE_NOTAS,
-                  "regla": SCRUM_REGLA, "regla_txt": SCRUM_REGLA_TXT},
+                  "regla": SCRUM_REGLA, "regla_txt": SCRUM_REGLA_TXT,
+                  # las sesiones de scrum de Coordinación, día por día (practicas_entrenadores.py)
+                  "sesiones": json.loads(SCRUM_SESIONES.read_text(encoding="utf-8")) if SCRUM_SESIONES.exists() else []},
     }
 
 

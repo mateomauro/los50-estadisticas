@@ -103,6 +103,9 @@
     escudo: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>',
     cono: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.3 6.2a4.55 4.55 0 0 0 5.4 0M7.9 10.7c.9.8 2.4 1.3 4.1 1.3s3.2-.5 4.1-1.3M13.9 3.5a1.93 1.93 0 0 0-3.8-.1l-3 10c-.1.2-.1.4-.1.6 0 1.7 2.2 3 5 3s5-1.3 5-3c0-.2 0-.4-.1-.5ZM7.5 12.2l-4.7 2.7c-.5.3-.8.7-.8 1.1s.3.8.8 1.1l7.6 4.5c.9.5 2.1.5 3 0l7.6-4.5c.7-.3 1-.7 1-1.1s-.3-.8-.8-1.1l-4.7-2.8"/></svg>',
     play: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3l14 9-14 9z"/></svg>',
+    calendario: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 2v4M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"/></svg>',
+    gota: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg>',
+    compartir: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.59 13.51 6.83 3.98M15.41 6.51l-6.82 3.98"/></svg>',
     camiseta: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>',
     buscar: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>',
     barras: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16M18 17V9M13 17V5M8 17v-3"/></svg>',
@@ -117,7 +120,7 @@
       res: t("resumen"), torneos: t("torneos"), rivales: t("rivales"), ret: t("retencion"),
       camino: t("camino"), era: t("edad_relativa"), fis: t("fisico"), partidos: t("partidos"), jug: t("jugadores"), noSig: t("no_siguieron"),
       diag: datos.diag_web, expertos: datos.expertos, medir: datos.a_medir, fuentes: datos.fuentes, glosario: datos.glosario,
-      guia: datos.guia || null, tries: datos.tries || null,
+      guia: datos.guia || null, tries: datos.tries || null, prox: datos.proximos || [],
     };
     const anios = D.res.map((r) => r["Año"]);
     D.desde = Math.min(...anios); D.hasta = Math.max(...anios);
@@ -125,7 +128,7 @@
     $("#actualizado").textContent = D.act;
     $("#candado").hidden = true;
     $("#app").hidden = false;
-    S = { ver: "inicio", cat: null, temp: null, gcat: null, tab: null, q: "", ordenJ: "pj", verJ: false, verP: false, verN: false, verR: false, rol: null, para: null, ej: null, puesto: null, qe: "", abiertos: new Set() };
+    S = { ver: "inicio", cat: null, temp: null, gcat: null, tab: null, q: "", ordenJ: "pj", verJ: false, verP: false, verN: false, verR: false, rol: null, para: null, ej: null, puesto: null, practica: null, pgrupo: null, qp: "", qe: "", abiertos: new Set() };
     leerURL();
     render();
     addEventListener("popstate", () => {
@@ -140,15 +143,18 @@
     const p = new URLSearchParams(location.search);
     const c = D.cats.find((x) => slug(x) === p.get("cat"));
     const g = D.guia ? gCats().find((x) => slug(x) === p.get("guia")) : null;
-    const hayPuestos = !!(D.guia && D.guia.puestos);
-    const vistas = ["club", "consejos"].concat(D.guia ? ["guia", "cantos", "scrum"] : [], D.guia && D.guia.ejercicios ? ["ejercicios"] : [], hayPuestos ? ["puestos"] : []);
+    const hayPuestos = !!(D.guia && D.guia.puestos), hayPr = !!(D.guia && D.guia.practicas && D.guia.practicas.length);
+    const vistas = ["club", "consejos"].concat(D.guia ? ["guia", "cantos", "scrum"] : [], D.guia && D.guia.ejercicios ? ["ejercicios"] : [], hayPuestos ? ["puestos"] : [], hayPr ? ["practicas"] : []);
     const ej = D.guia && D.guia.ejercicios ? D.guia.ejercicios.find((x) => x.id === p.get("ejercicio")) : null;
     const pu = hayPuestos && puestoDe(+p.get("puesto")) ? +p.get("puesto") : null;
+    const pr = hayPr ? D.guia.practicas.find((x) => x.id === p.get("practica")) : null;
     S.cat = c || null;
     S.gcat = g || null;
     S.ej = ej ? ej.id : null;
     S.puesto = pu;
-    S.ver = c ? "cat" : g ? "guia" : ej ? "ejercicio" : pu ? "puesto" : vistas.includes(p.get("ver")) ? p.get("ver") : "inicio";
+    S.practica = pr ? pr.id : null;
+    S.pgrupo = hayPr ? P_GRUPOS.find((x) => slug(x) === p.get("grupo")) || null : null;
+    S.ver = c ? "cat" : g ? "guia" : ej ? "ejercicio" : pu ? "puesto" : pr ? "practica" : vistas.includes(p.get("ver")) ? p.get("ver") : "inicio";
     S.temp = /^\d{4}$/.test(p.get("temp") || "") ? +p.get("temp") : null;
     S.tab = p.get("tab");
     S.rol = p.get("rol");
@@ -160,6 +166,8 @@
     else if (S.ver === "guia" && S.gcat) p.set("guia", slug(S.gcat));
     else if (S.ver === "ejercicio") p.set("ejercicio", S.ej);
     else if (S.ver === "puesto") p.set("puesto", S.puesto);
+    else if (S.ver === "practica") p.set("practica", S.practica);
+    else if (S.ver === "practicas") { p.set("ver", S.ver); if (S.pgrupo) p.set("grupo", slug(S.pgrupo)); }
     else if (S.ver === "ejercicios") { p.set("ver", S.ver); if (S.tab) p.set("tab", S.tab); if (S.rol) p.set("rol", S.rol); if (S.para) p.set("para", S.para); }
     else if (S.ver !== "inicio") { p.set("ver", S.ver); if (S.tab) p.set("tab", S.tab); }
     const qs = p.toString();
@@ -307,7 +315,7 @@
     $("#app").classList.toggle("app--ancha", S.ver === "inicio"); // el inicio usa dos columnas en la compu (y el pie se alinea con eso)
     GRAF.pend = [];
     soltarVideos();
-    ({ inicio: vInicio, cat: vCategoria, club: vClub, consejos: vConsejos, guia: vGuia, cantos: vCantos, scrum: vScrum, ejercicios: vEjercicios, ejercicio: vEjercicio, puestos: vPuestos, puesto: vPuesto })[S.ver]();
+    ({ inicio: vInicio, cat: vCategoria, club: vClub, consejos: vConsejos, guia: vGuia, cantos: vCantos, scrum: vScrum, ejercicios: vEjercicios, ejercicio: vEjercicio, puestos: vPuestos, puesto: vPuesto, practicas: vPracticas, practica: vPractica })[S.ver]();
     dibujarGraficos();
     ponerFotos();
   }
@@ -326,6 +334,9 @@
     categorias: () => ["Elegí tu categoría", ["Tocá una categoría para ver sus partidos, sus jugadores y qué tiene que aprender.",
       `Los números son de ${D.hasta}: los partidos oficiales que están cargados en la página de la UAR.`,
       "Los infantiles no juegan partidos oficiales: ahí se ve qué tiene que aprender cada categoría."]],
+    proximos: () => ["Próximos partidos", ["Los partidos que la UAR ya cargó para las próximas fechas, con el día y la hora.",
+      "Se actualiza solo los lunes, martes y miércoles. Si un partido no aparece, es porque la UAR todavía no lo cargó.",
+      "La UAR no dice en qué cancha se juega."]],
     ultimos: () => ["Últimos partidos cargados", [`Datos al ${D.act}.`,
       "Si un partido del fin de semana no aparece, es porque todavía no cargaron su planilla en la página de la UAR."]],
     comparar: () => ["Cómo se leen estos gráficos", ["Cada barra es un año. La que está resaltada es el año que estás mirando: se cambia con las flechas de arriba.",
@@ -360,9 +371,13 @@
     cantos: () => ["Cantos y zonas", ["Los cantos del club con lo que quiere decir cada uno, las zonas y los canales de la cancha, y el modelo de juego.",
       "Sale del material de la Coordinación de Rugby del club (Magali Fazzi), 2026."]],
     scrum: () => ["Scrum seguro", ["Qué se puede hacer en cada edad, cómo se enseña, el set up del club, la entrada y el empuje.",
-      "Sale del protocolo de scrum de la Coordinación de Rugby del club (Magali Fazzi), 2026."]],
+      "En Sesiones: las sesiones de scrum que planificó la Coordinación para M13 a M19, en el orden en que se hicieron. Muestran cómo se va sumando de a poco, hasta llegar al set up.",
+      "Sale del protocolo y del plan de scrum de la Coordinación de Rugby del club (Magali Fazzi), 2026."]],
     ejercicios: () => ["Ejercicios", ["Los ejercicios de line y maul de la Coordinación de Rugby (Magali Fazzi) y los juegos que más usan los entrenadores de infantiles en sus planificaciones.",
       "Los de line están en orden, de lo más fácil a lo más difícil para cada rol.", "Tocá uno para ver cómo se hace, en qué fijarse y qué material hace falta."]],
+    practicas: () => ["Prácticas", ["Las prácticas que armaron los entrenadores del club en 2026, día por día, de las planillas de Coordinación.",
+      "Sirven para repetir una que salió bien o para ver cómo se arma una práctica en el club: entrada en calor, destrezas, juego integrado y cierre.",
+      "Están como las escribieron los entrenadores. Adentro de cada una, con el botón de abajo se manda por WhatsApp."]],
     puestos: () => ["Los puestos", ["Lo que el club espera de cada puesto, del 1 al 15: qué tiene que saber hacer, lo mental y lo ideal en un partido.",
       "Sale del perfil del jugador de la Coordinación de Rugby del club (Magali Fazzi)."]],
     partidoPuesto: () => ["En un partido", ["Lo ideal para este puesto en un partido entero: por ejemplo, cuántos tackles tiene que hacer.",
@@ -432,6 +447,10 @@
           <ul class="filas-cat">${D.guia.infantiles.slice().reverse().map(filaInf).join("")}</ul></div>` : ""}
       </section>
       <div class="inicio__lado">
+        ${proxTodos().length ? `<section class="sec">
+          ${tit("Próximos partidos", "proximos")}
+          ${proxHTML(proxTodos())}
+        </section>` : ""}
         ${D.guia ? `<section class="sec">
           ${tit("Guía del club")}
           <ul class="menu">
@@ -440,6 +459,7 @@
             ${opcion("cantos", IC.canto, "Cantos y zonas", `Los ${D.guia.cantos.length} cantos y las zonas de la cancha`)}
             ${opcion("scrum", IC.escudo, "Scrum seguro", "Qué se hace en cada edad y el set up")}
             ${D.guia.ejercicios ? opcion("ejercicios", IC.cono, "Ejercicios", "Line, maul y juegos para entrenar") : ""}
+            ${D.guia.practicas && D.guia.practicas.length ? opcion("practicas", IC.calendario, "Prácticas", "Las que armaron los entrenadores, día por día") : ""}
           </ul>
         </section>` : ""}
         <section class="sec">
@@ -461,7 +481,7 @@
   function vCategoria() {
     const cat = S.cat, filas = filasCat(cat), anios = filas.map((r) => r["Año"]);
     if (!S.temp || !anios.includes(S.temp)) S.temp = ultimaTemp(cat);
-    const a = S.temp, r = filas.find((x) => x["Año"] === a), i = anios.indexOf(a);
+    const a = S.temp, r = filas.find((x) => x["Año"] === a), i = anios.indexOf(a), px = proxDe(cat)[0];
 
     // 1. cómo le fue
     const duelo = (lbl, hizo, recibio) => {
@@ -547,7 +567,11 @@
             <button type="button" data-anio="${i < anios.length - 1 ? anios[i + 1] : ""}" aria-label="Año siguiente"${i < anios.length - 1 ? "" : " disabled"}>${IC.adelante}</button>
           </div>
         </div>
+        ${px ? `<div class="prox">${IC.calendario}<span class="prox__txt"><span class="prox__lbl">Próximo partido</span>
+          <b>${esc(mayus(cuandoP(px)))}${px.hora ? ` · ${esc(px.hora)}` : ""}</b>
+          <span>${condTxt(px.cond)} contra ${esc(px.rival)}${px.inst ? ` · ${esc(px.inst)}` : ""}</span></span></div>` : ""}
         ${D.guia && gDe(cat) ? `<button type="button" class="atajo" data-ir-guia="${esc(cat)}">${IC.libro}<span>Qué tiene que aprender ${esc(cat)}</span>${IC.adelante}</button>` : ""}
+        ${D.guia ? atajoPr(cat) : ""}
       </div>
 
       <section class="sec">
@@ -632,6 +656,22 @@
     const i = n.indexOf(",");
     return i < 0 ? `<b>${esc(n)}</b>` : `<b>${esc(n.slice(0, i))}</b>, ${esc(n.slice(i + 1).trim())}`;
   }
+  // ---------- próximos partidos (el fixture que ya cargó la UAR; proximos_partidos.py) ----------
+  // Solo de hoy en adelante: si la actualización se atrasa, no quedan partidos viejos a la vista.
+  const hoyISO = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; };
+  const proxTodos = () => D.prox.filter((x) => x.fecha >= hoyISO());
+  const proxDe = (cat) => proxTodos().filter((x) => x.cat === cat);
+  const condTxt = (c) => (c === "L" ? "Local" : "Visitante");
+  /** agrupados por día: la hora, la categoría, el rival y si es de local o de visitante */
+  function proxHTML(lista) {
+    const dias = [...new Set(lista.map((x) => x.fecha))];
+    return dias.map((f) => `<h3 class="grupo">${esc(mayus(cuandoP({ fecha: f })))}</h3>
+      <ol class="resultados">${lista.filter((x) => x.fecha === f).map((x) => `<li class="res">
+        <span class="res__fecha num">${esc(x.hora || "–")}</span>
+        <span class="res__cuerpo"><span class="chip chip--cat">${esc(x.cat)}</span><span class="res__rival">${esc(x.rival)}</span>${x.inst ? `<span class="res__torneo">${esc(x.inst)}</span>` : ""}</span>
+        <span class="cond cond--${x.cond === "L" ? "l" : "v"}">${condTxt(x.cond)}</span></li>`).join("")}</ol>`).join("");
+  }
+
   const partidoHTML = (p, conCat) => `<li class="res">
       <span class="res__fecha">${fecha(p.fecha)}<small>${p.cond === "L" ? "Local" : "Visitante"}</small></span>
       <span class="res__cuerpo">${conCat ? `<span class="chip chip--cat">${esc(p.cat)}</span>` : ""}<span class="res__rival">${esc(p.rival)}</span></span>
@@ -970,6 +1010,7 @@
              <p class="claves-g"><span class="claves-g__lbl">Defensa</span>${g.claves.defensa.map((x) => `<span class="chip">${esc(x)}</span>`).join("")}</p>`}
         ${sc ? `<button type="button" class="atajo" data-ir="scrum">${IC.escudo}<span><b>Scrum en ${esc(cat)}:</b> ${esc(sc[1])}${sc[2] ? ` ${esc(sc[2])}` : ""}</span>${IC.adelante}</button>` : ""}
         ${atajoEj(cat)}
+        ${atajoPr(cat)}
         ${D.cats.includes(cat) ? `<button type="button" class="atajo" data-ir-cat="${esc(cat)}">${IC.barras}<span>Cómo le fue a ${esc(cat)} en los partidos</span>${IC.adelante}</button>` : ""}
       </section>
 
@@ -1081,7 +1122,8 @@
 
   // scrum: regla de oro, qué se hace en cada edad, el set up y la entrada
   function vScrum() {
-    const s = D.guia.scrum, tab = ["edad", "setup", "entrada"].includes(S.tab) ? S.tab : "edad";
+    const s = D.guia.scrum, haySes = !!(s.sesiones && s.sesiones.length);
+    const tab = ["edad", "setup", "entrada"].concat(haySes ? ["sesiones"] : []).includes(S.tab) ? S.tab : "edad";
     const pasos = (items) => `<ol class="pasos">${items.map(([t, d], i) => `<li><span class="pasos__n">${i + 1}</span><span class="pasos__t">${esc(t)}</span>${d ? `<div class="pasos__d">${d}</div>` : ""}</li>`).join("")}</ol>`;
     let cuerpo;
     if (tab === "edad") {
@@ -1104,6 +1146,14 @@
           <span class="pasos__n">${i + 1}</span><span class="setup-g__p">${esc(p)}</span>${canto ? `<span class="chip">Canto: ${esc(canto)}</span>` : ""}</summary>
           <div class="setup-g__in">${lista(items)}</div></details></li>`).join("")}</ol>
       </section>`;
+    } else if (tab === "sesiones") {
+      // las sesiones de scrum que planificó Coordinación, por grupo y en el orden en que se hicieron: cada una se abre y se ve entera
+      const grupos = [...new Set(s.sesiones.map((x) => x.grupo))];
+      cuerpo = `<section class="sec sec--pegada desplegables">
+        ${grupos.map((g) => `<h3 class="grupo">${esc(g)}</h3>
+          ${s.sesiones.filter((x) => x.grupo === g).map((x, n) => desple(`ss-${slug(g)}-${n}`, `Sesión ${n + 1}<small>${esc(mayus(cuandoP(x)))}</small>`,
+            `<ul class="prac-g">${x.bloques.filter((b) => !b.agua).flatMap((b) => b.items).map(itemPr).join("")}</ul>`, x.min ? `${x.min} min` : "")).join("")}`).join("")}
+      </section>`;
     } else {
       cuerpo = `<section class="sec sec--pegada">
         <h2 class="h2">La entrada</h2>
@@ -1122,7 +1172,7 @@
         <h2 class="h2">Regla de oro</h2>
         ${pasos(s.regla.map((x, i) => [x, s.regla_txt[i] ? esc(s.regla_txt[i]) : ""]))}
       </section>
-      ${pestanas([["edad", "Por edad"], ["setup", "Set up"], ["entrada", "Entrada"]], tab)}
+      ${pestanas([["edad", "Por edad"], ["setup", "Set up"], ["entrada", "Entrada"]].concat(haySes ? [["sesiones", "Sesiones"]] : []), tab)}
       ${cuerpo}`;
   }
 
@@ -1178,22 +1228,144 @@
       </section>`;
   }
 
+  // ---------- prácticas de los entrenadores (planillas de PLANIFICACIONES, practicas_entrenadores.py) ----------
+  // Una lista por mes, de la más nueva a la más vieja, con filtro por categoría y buscador; al tocar una se ve entera,
+  // con "Anterior / Siguiente" por fecha y el botón para mandarla por WhatsApp.
+  const P_GRUPOS = ["Plantel superior", "M17 a M19", "M15 y M16", "M13 y M14", "M11 y M12", "M9 y M10", "M8", "M7", "M6"];
+  const DIA_S = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
+  const MES_S = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+  const dia = (iso) => new Date(`${iso}T12:00:00`);
+  const cuandoP = (p) => p.fecha ? `${DIA_S[dia(p.fecha).getDay()]} ${dia(p.fecha).getDate()} de ${MES_S[dia(p.fecha).getMonth()]}`
+    : p.semana ? `semana ${p.semana} de la temporada` : "sin fecha";
+  const mayus = (t) => t.charAt(0).toUpperCase() + t.slice(1);
+  const grupoDeCat = (cat) => { const p = (D.guia && D.guia.practicas || []).find((x) => x.cats.includes(cat)); return p ? p.grupo : null; };
+  const nPr = (g) => D.guia.practicas.filter((p) => p.grupo === g).length;
+  const atajoPr = (cat) => { const g = grupoDeCat(cat); return g ? `<button type="button" class="atajo" data-ir-practicas="${esc(g)}">${IC.calendario}<span>Prácticas de ${esc(g)} (${nPr(g)})</span>${IC.adelante}</button>` : ""; };
+  // las sin fecha van al final
+  const prLista = () => D.guia.practicas.filter((p) => !S.pgrupo || p.grupo === S.pgrupo)
+    .sort((a, b) => (b.orden === "9" ? "0" : b.orden).localeCompare(a.orden === "9" ? "0" : a.orden));
+  /** una actividad de una práctica (o de una sesión de scrum): los minutos a la izquierda; el objetivo, qué se hace y cómo */
+  const itemPr = (it) => `<li class="prac-it"><span class="prac-it__min num">${it.min ? `${it.min}'` : ""}</span><div class="prac-it__txt">
+      ${it.obj ? `<span class="prac-it__obj">${conCantos(it.obj)}</span>` : ""}
+      ${it.act ? `<p class="prac-it__act">${conCantos(it.act)}</p>` : ""}
+      ${it.det ? `<p class="prac-it__det">${conCantos(it.det)}</p>` : ""}
+      ${it.grupo ? `<span class="chip chip--gris">${esc(it.grupo)}</span>` : ""}</div></li>`;
+  let Q_PR = null; // lo que se busca de cada práctica (se arma la primera vez que se usa el buscador)
+  const textoBusca = (p) => norm([p.foco, p.grupo, p.quien, ...p.objetivos, ...p.bloques.flatMap((b) => (b.items || []).map((it) => `${it.obj || ""} ${it.act || ""} ${it.det || ""}`))].join(" "));
+
+  function vPracticas() {
+    const meses = [];
+    prLista().forEach((p) => {
+      const k = p.orden === "9" ? "sin" : p.orden.slice(0, 7);
+      let m = meses.find((x) => x.k === k);
+      if (!m) meses.push((m = { k, items: [] }));
+      m.items.push(p);
+    });
+    const fila = (p) => {
+      const d = p.fecha ? dia(p.fecha) : null;
+      return `<li data-pr="${esc(p.id)}"><button type="button" class="ej prac" data-ir-practica="${esc(p.id)}">
+        <span class="prac__dia">${d ? `<b class="num">${d.getDate()}</b><small>${DIA_S[d.getDay()].slice(0, 3)}</small>` : `<small>${p.semana ? `Sem. ${p.semana}` : "Sin fecha"}</small>`}</span>
+        <span class="ej__txt"><b>${esc(p.foco || "Práctica")}</b><small>${S.pgrupo ? "" : `${esc(p.grupo)} · `}${esc(p.quien)}${p.min ? ` · ${p.min} min` : ""}</small></span>
+        ${IC.adelante}</button></li>`;
+    };
+    const grupos = P_GRUPOS.filter((g) => nPr(g));
+    $("#vista").innerHTML = `
+      <div class="cab">${volver()}${cabTit("Prácticas", "practicas")}</div>
+      <div class="chips-g" role="group" aria-label="Categoría">${[["", "Todas"], ...grupos.map((g) => [g, g])].map(([v, l]) =>
+        `<button type="button" data-pgrupo="${esc(v)}" aria-pressed="${(S.pgrupo || "") === v}">${esc(l)}</button>`).join("")}</div>
+      <section class="sec sec--pegada">
+        <label class="buscar-g"><span class="sr">Buscar una práctica</span>${IC.buscar}<input type="search" id="buscar-pr" value="${esc(S.qp)}" placeholder="Buscar: tackle, ruck, pase…" autocomplete="off" enterkeyhint="search"></label>
+        ${meses.map((m) => `<div class="grupo-ej"><div class="grupo-ej__cab"><h3 class="grupo-cat__tit">${m.k === "sin" ? "Sin fecha" : mayus(MES_S[+m.k.slice(5, 7) - 1])}</h3><span class="num">${pl(m.items.length, "práctica", "prácticas")}</span></div>
+          <ul class="filas-cat">${m.items.map(fila).join("")}</ul></div>`).join("")}
+        <p class="vacio-g" id="sin-pr" hidden>No hay ninguna práctica con esa palabra.</p>
+      </section>`;
+    filtrarPr();
+  }
+  function filtrarPr() {
+    const q = norm((S.qp || "").trim());
+    if (q && !Q_PR) Q_PR = new Map(D.guia.practicas.map((p) => [p.id, textoBusca(p)]));
+    let n = 0;
+    document.querySelectorAll(".grupo-ej").forEach((gr) => {
+      let vis = 0;
+      gr.querySelectorAll("li[data-pr]").forEach((li) => { const ok = !q || Q_PR.get(li.dataset.pr).includes(q); li.hidden = !ok; vis += ok; });
+      gr.hidden = !vis; n += vis;
+    });
+    const v = $("#sin-pr");
+    if (v) v.hidden = n > 0;
+  }
+
+  // una práctica entera, como la escribió el entrenador
+  function vPractica() {
+    const todos = D.guia.practicas, p = todos.find((x) => x.id === S.practica);
+    // "Anterior / Siguiente" por fecha, dentro de la misma lista que se estaba mirando
+    const vistos = prLista(), base = vistos.some((x) => x.id === p.id) ? vistos : todos;
+    const cron = base.filter((x) => x.orden !== "9" || x.id === p.id).sort((a, b) => a.orden.localeCompare(b.orden)), j = cron.indexOf(p);
+    const salto = (k, der) => {
+      const q = cron[k];
+      return `<button type="button"${q ? ` data-ir-practica="${esc(q.id)}" aria-label="${der ? "Siguiente" : "Anterior"}: ${esc(q.foco)}"` : " disabled"}>${der ? "" : IC.atras}<span>${der ? "Siguiente" : "Anterior"}</span>${der ? IC.adelante : ""}</button>`;
+    };
+    const minB = (b) => b.items.reduce((s, it) => s + (it.min || 0), 0);
+    const cuerpo = p.bloques.map((b) => b.agua ? `<p class="prac-agua">${IC.gota}<span>Agua${b.min ? ` · ${b.min} min` : ""}</span></p>`
+      : `${b.b ? `<h3 class="grupo grupo--fila"><span>${esc(b.b)}</span>${minB(b) ? `<span class="num">${minB(b)} min</span>` : ""}</h3>` : ""}
+        <ul class="prac-g">${b.items.map(itemPr).join("")}</ul>`).join("");
+    $("#vista").innerHTML = `
+      <div class="cab">
+        <div class="cab__fila"><button type="button" class="volver" data-volver-pr>${IC.atras}Prácticas</button>
+          <div class="saltos saltos--ej" role="group" aria-label="Otras prácticas">${salto(j - 1)}${salto(j + 1, true)}</div></div>
+        <p class="ej-tag">${esc(p.grupo)} · ${esc(p.quien)}</p>
+        <h2 class="ej-tit">${esc(p.foco || "Práctica")}</h2>
+        <p class="prac-cuando">${IC.calendario}<span>${mayus(cuandoP(p))}${p.min ? ` · ${p.min} minutos` : ""}</span></p>
+      </div>
+      <section class="sec sec--pegada ej-det">
+        ${p.objetivos.length ? `<h3 class="grupo">Objetivos</h3>${lista(p.objetivos, "check-g")}` : ""}
+        ${cuerpo}
+        ${p.cierre ? `<p class="prac-agua prac-agua--fin">${IC.bien}<span>Charla final y elongación</span></p>` : ""}
+        <button type="button" class="btn btn--ancho btn--wa" data-compartir-pr>${IC.compartir}Mandar por WhatsApp</button>
+      </section>`;
+  }
+  /** la práctica en texto, para WhatsApp */
+  function textoPractica(p) {
+    const l = [`*${p.foco || "Práctica"}*`, `${p.grupo} · ${cuandoP(p)}${p.min ? ` · ${p.min} min` : ""}`];
+    if (p.objetivos.length) l.push("", "Objetivos:", ...p.objetivos.map((o) => `• ${o}`));
+    p.bloques.forEach((b) => {
+      if (b.agua) { l.push(`(Agua${b.min ? ` ${b.min}'` : ""})`); return; }
+      if (b.b) l.push("", `*${b.b}*`);
+      b.items.forEach((it) => l.push(`${it.min ? `${it.min}' ` : "• "}${[it.obj, it.act, it.det].filter(Boolean).join(". ") || b.b || "—"}${it.grupo ? ` (${it.grupo})` : ""}`));
+    });
+    if (p.cierre) l.push("", "Charla final y elongación");
+    l.push("", `Práctica de ${p.quien} · Club Los 50`);
+    return l.join("\n");
+  }
+  async function compartirPractica() {
+    const p = D.guia.practicas.find((x) => x.id === S.practica), txt = textoPractica(p);
+    // en el celular abre el menú de compartir (WhatsApp, mail…); en la compu, WhatsApp Web
+    if (navigator.share) {
+      try { await navigator.share({ title: p.foco, text: txt }); return; } catch (e) { if (e.name === "AbortError") return; }
+    }
+    window.open(`https://wa.me/?text=${encodeURIComponent(txt)}`, "_blank", "noopener");
+  }
+
   // ---------- eventos ----------
   document.addEventListener("click", (e) => {
     if (!S) return;
-    const t = e.target.closest("[data-play],[data-reclave],[data-ayuda],[data-cerrar-ayuda],[data-ir],[data-ir-cat],[data-ir-guia],[data-ir-ej],[data-ir-ej-para],[data-ir-ej-tab],[data-ir-line],[data-ir-puesto],[data-volver-ej],[data-rol],[data-quitar-para],[data-tab],[data-anio],[data-ver],[data-ordj]");
+    const t = e.target.closest("[data-play],[data-reclave],[data-ayuda],[data-cerrar-ayuda],[data-ir],[data-ir-cat],[data-ir-guia],[data-ir-ej],[data-ir-ej-para],[data-ir-ej-tab],[data-ir-line],[data-ir-puesto],[data-ir-practica],[data-ir-practicas],[data-pgrupo],[data-volver-pr],[data-compartir-pr],[data-volver-ej],[data-rol],[data-quitar-para],[data-tab],[data-anio],[data-ver],[data-ordj]");
     if (!t || t.disabled) return;
     const ds = t.dataset;
     if (ds.play) reproducir(ds.play);
     else if ("reclave" in ds) { olvidar(); location.reload(); } // vuelve a la misma pantalla después de la clave
     else if (ds.ayuda) abrirAyuda(ds.ayuda, t);
     else if ("cerrarAyuda" in ds) cerrarAyuda();
-    else if (ds.ir) irA({ ver: ds.ir, cat: null, temp: null, gcat: null, tab: null, rol: null, para: null, qe: "" });
+    else if (ds.ir) irA({ ver: ds.ir, cat: null, temp: null, gcat: null, tab: null, rol: null, para: null, qe: "", pgrupo: null, qp: "" });
     else if (ds.irEj) irA({ ver: "ejercicio", ej: ds.irEj });
     else if (ds.irEjPara) irA({ ver: "ejercicios", tab: "juegos", rol: null, para: ds.irEjPara, gcat: null, qe: "" });
     else if (ds.irEjTab) irA({ ver: "ejercicios", tab: ds.irEjTab, rol: null, para: null, gcat: null, qe: "" });
     else if (ds.irLine) irA({ ver: "ejercicios", tab: "line", rol: ds.irLine, para: null, gcat: null, qe: "" });
     else if (ds.irPuesto) irA({ ver: "puesto", puesto: +ds.irPuesto });
+    else if (ds.irPractica) irA({ ver: "practica", practica: ds.irPractica });
+    else if (ds.irPracticas) irA({ ver: "practicas", pgrupo: ds.irPracticas, qp: "", cat: null, gcat: null, temp: null });
+    else if ("pgrupo" in ds) irA({ pgrupo: ds.pgrupo || null }, false);
+    else if ("volverPr" in ds) irA({ ver: "practicas", practica: null }); // vuelve a la lista con el mismo filtro
+    else if ("compartirPr" in ds) compartirPractica();
     else if ("volverEj" in ds) irA({ ver: "ejercicios", ej: null }); // vuelve a la lista con los mismos filtros
     else if ("rol" in ds) irA({ rol: ds.rol || null }, false);
     else if ("quitarPara" in ds) irA({ para: null }, false);
@@ -1224,6 +1396,7 @@
     if (!S) return;
     if (e.target.id === "buscar-canto") { S.q = e.target.value; filtrarCantos(); }
     if (e.target.id === "buscar-ej") { S.qe = e.target.value; filtrarEj(); }
+    if (e.target.id === "buscar-pr") { S.qp = e.target.value; filtrarPr(); }
   });
 
   // ---------- inicio ----------

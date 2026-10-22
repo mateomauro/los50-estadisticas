@@ -1,0 +1,393 @@
+[
+ {
+  "grupo": "M13 y M14",
+  "fecha": "2026-07-14",
+  "min": 26,
+  "bloques": [
+   {
+    "b": "Scrum",
+    "items": [
+     {
+      "min": 3,
+      "obj": "Aumentar el rango de movimiento (ROM)",
+      "act": "Movilidad articular",
+      "det": "Cadera, tobillos, hombros, dorsal"
+     },
+     {
+      "min": 5,
+      "obj": "Practica de postura y fuerza isometrica",
+      "act": "Cuclillas",
+      "det": "Alinear hombros, espalda y cadera. rodillas a 90° <cant tap"
+     },
+     {
+      "min": 5,
+      "obj": "Estabilidad",
+      "act": "Cuadrupedia",
+      "det": "Uno en cuclillas y el otro lo mueve para que intente mantener la estabilidad."
+     },
+     {
+      "min": 5,
+      "obj": "Estabilidad de cadera",
+      "act": "Cuadrupedia",
+      "det": "Carreras en cuclillas manteniendo el cono en la espalda en la zona lumbar. Ver que los jugadores eviten mover la cadera de un lado al otro. Si el cono se cae se vuelve al inicio"
+     },
+     {
+      "min": 8,
+      "obj": "Postura en el ingreso",
+      "act": "1v2",
+      "det": "Trabaja el que esta solo y se corrige la postura. Los jugadores deben animarse a tirar el peso sobre el rival para poder bajar el centro de gravedad, tibias paralelas al piso."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "grupo": "M13 y M14",
+  "fecha": "2026-08-08",
+  "min": 29,
+  "bloques": [
+   {
+    "b": "Scrum",
+    "items": [
+     {
+      "min": 3,
+      "obj": "Aumentar el rango de movimiento (ROM)",
+      "act": "Movilidad articular",
+      "det": "Cadera, tobillos, hombros, dorsal"
+     },
+     {
+      "min": 5,
+      "obj": "Practica de postura y fuerza isometrica",
+      "act": "Cuclillas",
+      "det": "Alinear hombros, espalda y cadera. rodillas a 90° <cant tap"
+     },
+     {
+      "min": 5,
+      "obj": "Estabilidad",
+      "act": "Cuadrupedia 2 vs 1",
+      "det": "Uno en posición de cuclillas con brazos extendidos vs otros dos enfrentados en cuclillas y abrazados,mantener postura, avanzar y retroceder"
+     },
+     {
+      "min": 8,
+      "obj": "Estabilidad",
+      "act": "Cuadrupedia",
+      "det": "Juego: carreras de relevos, salen en cuclillas, con una tortuga en la espalda van hasta un cono y vuelven, cuando regresa a la fila le pasa la tortuga al compañero"
+     },
+     {
+      "min": 8,
+      "obj": "Set up",
+      "act": "Iniciar el set up desde el inicio",
+      "det": "Respetar los pasos. las tomas y la opción de los pies y caderas"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "grupo": "M13 y M14",
+  "fecha": "2026-08-25",
+  "min": 29,
+  "bloques": [
+   {
+    "b": "Scrum",
+    "items": [
+     {
+      "min": 3,
+      "obj": "Aumentar el rango de movimiento (ROM)",
+      "act": "Movilidad articular",
+      "det": "Cadera, tobillos, hombros, dorsal"
+     },
+     {
+      "min": 5,
+      "obj": "Practica de postura y fuerza isometrica",
+      "act": "Cuclillas",
+      "det": "Alinear hombros, espalda y cadera. rodillas a 90° <cant tap"
+     },
+     {
+      "min": 5,
+      "obj": "Estabilidad",
+      "act": "Cuadrupedia",
+      "det": "Uno en posición de cuclillas vs otro enfrentado en cuclillas pero con las manos extendidas en los hombros del anterior"
+     },
+     {
+      "min": 8,
+      "obj": "Estabilidad",
+      "act": "Cuadrupedia",
+      "det": "Juego: dos equipos cada uno en cuadrupedia con un cono en la zona lumbar, gana el equipo que primero le quita los conos al rival"
+     },
+     {
+      "min": 8,
+      "obj": "Set up",
+      "act": "Iniciar el set up desde el inicio",
+      "det": "Respetar los pasos. las tomas y la opción de los pies y caderas"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "grupo": "M15 y M16",
+  "fecha": "2026-07-14",
+  "min": 23,
+  "bloques": [
+   {
+    "b": "Scrum",
+    "items": [
+     {
+      "min": 3,
+      "obj": "Aumentar el rango de movimiento (ROM)",
+      "act": "Movilidad articular",
+      "det": "Cadera, tobillos, hombros, dorsal"
+     },
+     {
+      "min": 5,
+      "obj": "Practica de postura",
+      "act": "Cuclillas",
+      "det": "Alinear hombros, espalda y cadera. rodillas a 90° <cant tap"
+     },
+     {
+      "min": 5,
+      "obj": "Mantener la postura y avance",
+      "act": "1v1",
+      "det": "Entrada, posturas avanzan 2 mts y retroceden 2 mts"
+     },
+     {
+      "min": 5,
+      "obj": "Mantener la postura y avance",
+      "act": "2v2",
+      "det": "Entrada, posturas avanzan 2 mts y retroceden 2 mts. mantener postura, que empujen parejo sin girar"
+     },
+     {
+      "min": 5,
+      "obj": "Set up y coordinacion",
+      "act": "3v3",
+      "det": "SET UP: COORDINACION. foco en la postura van rotando"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "grupo": "M15 y M16",
+  "fecha": "2026-08-08",
+  "min": 28,
+  "bloques": [
+   {
+    "b": "Scrum",
+    "items": [
+     {
+      "min": 3,
+      "obj": "Aumentar el rango de movimiento (ROM)",
+      "act": "Movilidad articular",
+      "det": "Cadera, tobillos, hombros, dorsal"
+     },
+     {
+      "min": 5,
+      "obj": "Practica de postura",
+      "act": "Cuclillas",
+      "det": "Alinear hombros, espalda y cadera. rodillas a 90° <cant tap"
+     },
+     {
+      "min": 5,
+      "obj": "Mantener la postura y avance",
+      "act": "2vs2",
+      "det": "Entrada, posturas avanzan 2 mts y retroceden 2 mts. idem para los costados. CONTROLAR QUE NO SE GIREN que empujen derecho"
+     },
+     {
+      "min": 5,
+      "obj": "Mantener la postura y avance",
+      "act": "5 vs 5",
+      "det": "Entrada, posturas avanzan 2 mts y retroceden 2 mts. idem para los costados. CONTROLAR QUE NO SE GIREN, colocar tortugas en la espalda que no se caigan."
+     },
+     {
+      "min": 10,
+      "obj": "Set up",
+      "act": "8 vs 8",
+      "det": "Respetar los pasos. las tomas y la opción de los pies y caderas"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "grupo": "M15 y M16",
+  "fecha": "2026-08-25",
+  "min": 28,
+  "bloques": [
+   {
+    "b": "Scrum",
+    "items": [
+     {
+      "min": 3,
+      "obj": "Aumentar el rango de movimiento (ROM)",
+      "act": "Movilidad articular",
+      "det": "Cadera, tobillos, hombros, dorsal"
+     },
+     {
+      "min": 5,
+      "obj": "Practica de postura",
+      "act": "Cuclillas",
+      "det": "Alinear hombros, espalda y cadera. rodillas a 90° <cant tap"
+     },
+     {
+      "min": 5,
+      "obj": "Mantener la postura y avance",
+      "act": "2vs1",
+      "det": "Entrada, posturas avanzan 2 mts y retroceden 2 mts. idem para los costados."
+     },
+     {
+      "min": 5,
+      "obj": "Mantener la postura y avance",
+      "act": "3vs2",
+      "det": "Entrada, posturas avanzan 2 mts y retroceden 2 mts. idem para los costados."
+     },
+     {
+      "min": 10,
+      "obj": "Set up",
+      "act": "Explicar y Realizar el SET UP desde el inicio",
+      "det": "Respetar los pasos. las tomas y la opción de los pies y caderas"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "grupo": "M17 a M19",
+  "fecha": "2026-07-14",
+  "min": 11,
+  "bloques": [
+   {
+    "b": "Scrum",
+    "items": [
+     {
+      "min": 3,
+      "obj": "Aumentar el rango de movimiento (ROM)",
+      "act": "Movilidad articular",
+      "det": "Cadera, tobillos, hombros, dorsal"
+     },
+     {
+      "min": 3,
+      "obj": "Practica de postura",
+      "act": "Cuclillas",
+      "det": "Alinear hombros, espalda y cadera. rodillas a 90° <cant tap"
+     },
+     {
+      "min": 5,
+      "grupo": "Primeras",
+      "obj": "Practica del set up e impacto",
+      "act": "Set up en 3v3",
+      "det": "Practica de cantos del set up de los primeras: \"primeras\", \"afuera\". Tomas de los pilas y su paso a paso. NO MOVER AL HOOKER. Inclinacion inicial sobre la pierna delantera."
+     },
+     {
+      "grupo": "Segundas y terceras",
+      "obj": "Conexiones internas y externas con el suelo",
+      "act": "Los 5 con sus conexiones",
+      "det": "Los 5 deben posicionarse en cuadrupedia y tomarse. Al ya deben levantarse y mantener posura evitando moverse y cerrando bien las conexiones. Es un trabajo isometrico."
+     },
+     {
+      "obj": "Set up y avance controlado",
+      "act": "5v5",
+      "det": "Tomas entradas, posturas, presion y avanzar pasos cortos, coordinacion entre los 5 de cada pack"
+     },
+     {
+      "obj": "Practica del set up e impacto",
+      "act": "8v maquina",
+      "det": "Tomas entradas, posturas, presion y avanzar pasos cortos, coordinacion"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "grupo": "M17 a M19",
+  "fecha": "2026-08-08",
+  "min": 21,
+  "bloques": [
+   {
+    "b": "Scrum",
+    "items": [
+     {
+      "min": 3,
+      "obj": "Aumentar el rango de movimiento (ROM)",
+      "act": "Movilidad articular",
+      "det": "Cadera,tobillos,hombros, dorsal"
+     },
+     {
+      "min": 3,
+      "obj": "Practica de postura",
+      "act": "Cuclillas",
+      "det": "Alinear hombros, espalda y cadera. rodillas a 90° <cant tap"
+     },
+     {
+      "min": 5,
+      "obj": "Set up",
+      "act": "1 vs 1 , 2 vs 2, 3vs 3",
+      "det": "Hoocker vs hoocker practicar el hoocking /pilares 2 vs 2, luego primera linea completa 3 vs 3, respetando el set up."
+     },
+     {
+      "obj": "Set up",
+      "act": "5 vs 5",
+      "det": "Los dos segundas se tomany entran contra los otros dos segundas contrarios y se suma la tercera linea"
+     },
+     {
+      "min": 10,
+      "obj": "Set up",
+      "act": "8vs8",
+      "det": "Pack contra pack respetando el set up, entradas y coordinacion."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "grupo": "M17 a M19",
+  "fecha": "2026-08-25",
+  "min": 27,
+  "bloques": [
+   {
+    "b": "Scrum",
+    "items": [
+     {
+      "min": 3,
+      "obj": "Aumentar el rango de movimiento (ROM)",
+      "act": "Movilidad articular",
+      "det": "Cadera,tobillos,hombros, dorsal"
+     },
+     {
+      "min": 3,
+      "obj": "Practica de postura",
+      "act": "Cuclillas",
+      "det": "Alinear hombros, espalda y cadera. rodillas a 90° <cant tap"
+     },
+     {
+      "min": 5,
+      "grupo": "1ras",
+      "obj": "Set up",
+      "act": "3 vs 3",
+      "det": "Iniciar el SET UP desde el hoocker. chequear tomas. caderas y pies. conecciones con el rival"
+     },
+     {
+      "grupo": "2das y 3ras",
+      "obj": "Set up",
+      "act": "5 vs maq",
+      "det": "Los 5 deben posicionarse en cuadrupedia y tomarse. Al ya deben levantarse y mantener posura evitando moverse y cerrando bien las conexiones. Es un trabajo isometrico."
+     },
+     {
+      "min": 8,
+      "grupo": "Pack",
+      "obj": "SET up",
+      "act": "SET UP en maq",
+      "det": "Tomas entradas, posturas, presion y avanzar pasos cortos, coordinacion entre los 5 de cada pack"
+     },
+     {
+      "min": 8,
+      "grupo": "Pack",
+      "obj": "Set up",
+      "act": "8 va 8",
+      "det": "Tomas entradas, posturas, presion y avanzar pasos cortos, coordinacion entre los 5 de cada pack"
+     }
+    ]
+   }
+  ]
+ }
+]

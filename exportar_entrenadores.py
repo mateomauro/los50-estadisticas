@@ -26,6 +26,7 @@ import analisis_metricas as A  # noqa: E402
 import guia_entrenadores as G  # noqa: E402
 import recomendaciones_expertos as R  # noqa: E402
 import tries_analisis as T  # noqa: E402
+import proximos_partidos as PP  # noqa: E402
 
 HERE = Path(__file__).parent
 DESTINO = HERE / "web" / "entrenadores.data.js"
@@ -154,6 +155,7 @@ def main():
         "no_siguieron": no_siguieron(p, i, d),
         "diagnostico": R.DIAGNOSTICO, "diag_web": R.DIAG_WEB, "expertos": R.EXPERTOS, "a_medir": R.A_MEDIR, "fuentes": R.FUENTES,
         "glosario": A.GLOSARIO, "notas": A.NOTAS,
+        "proximos": PP.proximos(),  # el fixture que ya cargó la UAR (la página muestra solo los de hoy en adelante)
         "guia": G.guia(),  # material de Coordinación: qué aprende cada categoría, cantos, zonas y scrum
         # quién hace los tries y cuándo, por categoría y año (tries_analisis.py; en juveniles solo cuándo)
         "tries": {c: v for c, v in T.tries_por_categoria().items() if c in A.ORDEN},

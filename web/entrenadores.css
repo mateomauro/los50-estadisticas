@@ -132,6 +132,7 @@
 .mas--grande summary { font: 700 20px/1.1 var(--cond); text-transform: uppercase; letter-spacing: .02em; }
 /* a la derecha del título de cada tema, el número principal de adentro */
 .mas__tit { flex: 1; min-width: 0; }
+.mas__tit small { display: block; margin-top: 3px; font: 500 14.5px/1.25 var(--base); letter-spacing: 0; text-transform: none; color: var(--suave); }
 .mas__dato { flex: none; padding: 4px 10px; border-radius: 999px; background: #eef1f6; color: var(--texto);
   font: 600 13.5px/1.2 var(--base); letter-spacing: 0; text-transform: none; white-space: nowrap; }
 
@@ -547,6 +548,44 @@
 .puesto-tit__n { flex: none; min-width: 52px; height: 52px; display: grid; place-items: center; padding: 0 12px; border-radius: 14px; background: var(--azul); color: #fff; font-size: 30px; }
 .grupo--ayuda { display: flex; align-items: center; gap: 8px; }
 .grupo--ayuda .ayuda-btn { text-transform: none; letter-spacing: 0; }
+/* próximos partidos: en la lista, local o visitante a la derecha; en la categoría, una tarjeta arriba */
+.cond { padding: 5px 8px; border-radius: 6px; font: 700 12.5px/1 var(--cond); letter-spacing: .02em; white-space: nowrap; }
+.cond--l { background: var(--azul-claro); color: var(--azul-900); }
+.cond--v { background: #eef1f6; color: var(--suave); }
+.prox { display: flex; align-items: flex-start; gap: 12px; margin-top: 12px; padding: 12px 14px; background: var(--sup); border: 1px solid var(--linea); border-radius: 12px; }
+.prox > svg { flex: none; width: 22px; height: 22px; margin-top: 2px; color: var(--azul); }
+.prox__txt { display: grid; gap: 3px; min-width: 0; font-size: 15px; line-height: 1.35; color: var(--suave); }
+.prox__lbl { font-size: 12.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--azul); }
+.prox__txt b { font-size: 17px; font-weight: 700; color: var(--texto); }
+
+/* prácticas: en la lista, el día del mes grande a la izquierda (como un almanaque) */
+.prac { grid-template-columns: 40px minmax(0, 1fr) 18px; }
+.prac__dia { display: grid; justify-items: center; align-content: center; min-height: 40px; line-height: 1; text-align: center; }
+.prac__dia b { font: 700 26px/1 var(--cond); color: var(--azul-900); }
+.prac__dia small { margin-top: 2px; font-size: 12px; font-weight: 600; color: var(--suave); }
+.prac-cuando { display: flex; align-items: center; gap: 8px; margin: 8px 0 0; font-size: 15.5px; color: var(--suave); }
+.prac-cuando svg { flex: none; width: 18px; height: 18px; color: var(--azul); }
+.grupo--fila { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.grupo--fila .num { letter-spacing: 0; text-transform: none; font-weight: 500; }
+/* cada actividad: los minutos a la izquierda; arriba en azul el objetivo, después qué se hace y cómo */
+.prac-g { list-style: none; margin: 0; padding: 0 16px; background: var(--sup); border: 1px solid var(--linea); border-radius: var(--radio); }
+.prac-it { display: grid; grid-template-columns: 38px minmax(0, 1fr); gap: 10px; padding: 12px 0; border-bottom: 1px solid var(--linea); }
+.prac-it:last-child { border-bottom: 0; }
+.prac-it__min { font: 700 22px/1.15 var(--cond); color: var(--azul-900); }
+.prac-it__txt { display: grid; gap: 4px; justify-items: start; min-width: 0; }
+.prac-it__obj { font-size: 12.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--azul); }
+.prac-it__act { margin: 0; font-size: 16.5px; line-height: 1.4; font-weight: 600; overflow-wrap: anywhere; }
+.prac-it__det { margin: 0; font-size: 15.5px; line-height: 1.45; color: var(--suave); overflow-wrap: anywhere; }
+.prac-it .chip { margin-top: 2px; }
+.prac-agua { display: flex; align-items: center; gap: 8px; margin: 12px 0 0; font-size: 14px; color: var(--suave); }
+.prac-agua svg { flex: none; width: 16px; height: 16px; color: var(--azul); }
+.prac-agua--fin { margin-top: 18px; font-size: 15.5px; color: var(--texto); }
+.prac-agua--fin svg { width: 20px; height: 20px; color: var(--verde); }
+.btn--wa { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 20px; min-height: 52px;
+  background: #1f8f4e; border-color: #1f8f4e; color: #fff; font-size: 16px; }
+.btn--wa:hover { background: #18773f; border-color: #18773f; color: #fff; }
+.btn--wa svg { width: 20px; height: 20px; }
+
 /* lo ideal en un partido: un número grande por acción */
 .partido-g { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .partido-g li { display: grid; gap: 5px; align-content: start; padding: 12px 8px; text-align: center; background: var(--sup); border: 1px solid var(--linea); border-radius: 12px; }
