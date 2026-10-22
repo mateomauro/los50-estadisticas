@@ -548,15 +548,14 @@
 .puesto-tit__n { flex: none; min-width: 52px; height: 52px; display: grid; place-items: center; padding: 0 12px; border-radius: 14px; background: var(--azul); color: #fff; font-size: 30px; }
 .grupo--ayuda { display: flex; align-items: center; gap: 8px; }
 .grupo--ayuda .ayuda-btn { text-transform: none; letter-spacing: 0; }
-/* próximos partidos: en la lista, local o visitante a la derecha; en la categoría, una tarjeta arriba */
-.cond { padding: 5px 8px; border-radius: 6px; font: 700 12.5px/1 var(--cond); letter-spacing: .02em; white-space: nowrap; }
-.cond--l { background: var(--azul-claro); color: var(--azul-900); }
-.cond--v { background: #eef1f6; color: var(--suave); }
+/* próximos partidos: el local primero y Los 50 en azul; en la categoría, una tarjeta arriba */
 .prox { display: flex; align-items: flex-start; gap: 12px; margin-top: 12px; padding: 12px 14px; background: var(--sup); border: 1px solid var(--linea); border-radius: 12px; }
 .prox > svg { flex: none; width: 22px; height: 22px; margin-top: 2px; color: var(--azul); }
 .prox__txt { display: grid; gap: 3px; min-width: 0; font-size: 15px; line-height: 1.35; color: var(--suave); }
 .prox__lbl { font-size: 12.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--azul); }
 .prox__txt b { font-size: 17px; font-weight: 700; color: var(--texto); }
+.prox__vs { font-size: 16px; font-weight: 600; color: var(--texto); }
+.nos { color: var(--azul); white-space: nowrap; }
 
 /* prácticas: en la lista, el día del mes grande a la izquierda (como un almanaque) */
 .prac { grid-template-columns: 40px minmax(0, 1fr) 18px; }
