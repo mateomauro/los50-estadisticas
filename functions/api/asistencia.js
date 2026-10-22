@@ -5,6 +5,7 @@
    GET  /api/asistencia?cat=M16  -> { horarios, entrenamientos, listas, chicos } de esa categoría
    GET  /api/asistencia          -> { resumen: { M16: { listas, presentes, ultima } }, chicos: { M16: { alta, baja } } } para la lista de categorías
    POST /api/asistencia  { cat, accion, ..., por? } -> guarda (accion: horarios | entrenamiento | lista | borrar_lista | chico)
+     lista: { fecha, presentes, base? } — con "base" (lo que estaba guardado cuando empezó) se juntan las listas de dos entrenadores
    Todo pide la ficha de la clave de Entrenadores en el encabezado "x-ficha" (la misma de los videos: SHA-256 de la clave + ":los50-videos",
    comparada con el secreto CLAVE_ENTRENADORES de Cloudflare). Cada cambio queda anotado en la tabla "cambios" con la fecha y quién lo hizo. */
 const CATS = ["Plantel superior", "M19", "M17", "M16", "M15", "M14", "M13", "M12", "M11", "M10", "M9", "M8", "M7", "M6"];
@@ -91,10 +92,24 @@ export async function onRequest({ request, env }) {
       : db.prepare("INSERT OR REPLACE INTO entrenamientos (cat, fecha, hora, estado, motivo) VALUES (?, ?, ?, ?, ?)").bind(cat, fecha, hora, estado, motivo),
     anotar({ fecha, estado, hora, motivo })];
   } else if (b.accion === "lista") {
-    const { fecha } = b, presentes = Array.isArray(b.presentes) ? [...new Set(b.presentes.map(String))] : null;
-    if (!FECHA.test(fecha || "") || !presentes || presentes.length > 300 || presentes.some((id) => !ID.test(id))) return mal();
-    ops = [db.prepare("INSERT OR REPLACE INTO listas (cat, fecha, presentes, por, ts) VALUES (?, ?, ?, ?, ?)").bind(cat, fecha, JSON.stringify(presentes), por, ts),
-      anotar({ fecha, presentes: presentes.length })];
+    // si dos entrenadores toman la lista del mismo día, se juntan: "base" es lo que estaba guardado cuando empezó a marcar,
+    // y sobre lo que hay ahora se aplica solo lo que él cambió (los que marcó y los que desmarcó)
+    const { fecha } = b, lista = (v) => (Array.isArray(v) ? [...new Set(v.map(String))] : null);
+    const presentes = lista(b.presentes), base = lista(b.base);
+    if (!FECHA.test(fecha || "") || !presentes || presentes.length > 300 || [...presentes, ...(base || [])].some((id) => !ID.test(id))) return mal();
+    const antes = await db.prepare("SELECT presentes, por FROM listas WHERE cat = ? AND fecha = ?").bind(cat, fecha).first();
+    let final = presentes, quien = por;
+    if (antes && base) {
+      const hay = new Set(JSON.parse(antes.presentes));
+      presentes.filter((id) => !base.includes(id)).forEach((id) => hay.add(id));
+      base.filter((id) => !presentes.includes(id)).forEach((id) => hay.delete(id));
+      final = [...hay];
+    }
+    if (antes && antes.por && por && !antes.por.split(" y ").includes(por)) quien = texto(`${antes.por} y ${por}`, 60);
+    else if (antes && !por) quien = antes.por;
+    ops = [db.prepare("INSERT OR REPLACE INTO listas (cat, fecha, presentes, por, ts) VALUES (?, ?, ?, ?, ?)").bind(cat, fecha, JSON.stringify(final), quien, ts),
+      anotar({ fecha, presentes: final.length })];
+    resp = { ok: true, presentes: final.length };
   } else if (b.accion === "borrar_lista") {
     if (!FECHA.test(b.fecha || "")) return mal();
     ops = [db.prepare("DELETE FROM listas WHERE cat = ? AND fecha = ?").bind(cat, b.fecha), anotar({ fecha: b.fecha })];
