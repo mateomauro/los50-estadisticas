@@ -332,14 +332,14 @@
     // los números en cero no se destacan (un jugador con pocos partidos no ve "0 TRIES" en grande y en color)
     const grandes = `<div class="grandes">${GRANDES.map(([k, u]) =>
       `<div class="grande${j[k] ? "" : " grande--cero"}"><strong class="num">${j[k]}</strong><span>${plural(j[k], u)}</span></div>`).join("")}</div>`;
-    // orden: otras categorías · los 3 números · logros · año a año · sus partidos · sus puntos
+    // orden: otras categorías · los 3 números · logros · sus partidos (el detalle del número grande) · año a año · sus puntos
     const hitos = hitosDe(pid, S.cat).filter((x) => x.tipo !== "debut").slice(0, 2);
     const logros = hitos.length ? `<ul class="hitos">${hitos.map((x) => `<li class="hito hito--${x.tipo}">${esc(x.txt)}</li>`).join("")}</ul>` : "";
     let h;
     if (S.fuente === "oficial") {
-      h = otrasCats(pid) + grandes + logros;
+      h = otrasCats(pid) + grandes + logros + bloquePartidos(pid, j);
       if (S.temp === "todas" && anios.length > 1) h += anioAnio(pid);
-      h += bloquePartidos(pid, j) + bloquePuntos(pid, j);
+      h += bloquePuntos(pid, j);
       $("#ficha-cuerpo").innerHTML = h;
       return;
     }
@@ -417,7 +417,6 @@
     const jugo = !lista ? "" : lista[4] === "T" ? `Jugó con la ${esc(lista[1] || lista[0])}, de titular.`
       : lista[4] === "E" ? `Jugó con la ${esc(lista[1] || lista[0])}: entró desde el banco.`
         : `Estuvo en el banco con la ${esc(lista[1] || lista[0])} y no entró.`;
-    const original = `<a class="pl__original" href="${esc(pl.url)}" target="_blank" rel="noopener noreferrer">Original en la UAR ↗</a>`;
     const verTodo = `<button type="button" class="btn pl__toggle" data-pl="completa" aria-expanded="${S.panelCompleta}">${S.panelCompleta ? `Ver solo lo de ${esc(ap)}` : "Ver toda la planilla"}</button>`;
     let h = `<div class="pl">
       <div class="pl__barra"><span>Planilla oficial de la UAR · n.º ${esc(pl.mid)}</span>
@@ -436,13 +435,12 @@
         <thead><tr><th scope="col">Pos</th><th scope="col">Nombre</th><th scope="col"></th></tr></thead>
         <tbody>${pl.formacion.map(([orden, dorsal, nombre, xpid, rol]) => `<tr${xpid === pid ? ' class="pl--el"' : ""}><td class="num">${esc(dorsal || orden)}</td>
           <td>${esc(nombre)}</td><td class="pl__rol">${ROL_PL[rol]}</td></tr>`).join("")}</tbody></table>`;
-      h += `<div class="pl__acciones pl__acciones--pie">${original}</div></div>`;
-      return h;
+      return h + "</div>";
     }
     const suyas = pl.jugadas.filter((x) => x[0] === nos && x[7] === pid);
     h += suyas.length ? tabla(`Jugadas de ${esc(ap)} en la planilla`, suyas.map((x) => fila(x, esFoco(x))).join(""), false)
       : `<p class="pl__msg">Sin puntos ni tarjetas en este partido.</p>`;
-    h += `<div class="pl__acciones">${verTodo}${original}</div></div>`;
+    h += `<div class="pl__acciones">${verTodo}</div></div>`;
     return h;
   }
   let PARTICIPA = null, cargandoPart = null;  // datos/participaciones.json: se baja recién cuando alguien abre la lista
@@ -453,13 +451,14 @@
   const ROL = { T: "De titular", E: "Entró desde el banco", B: "En el banco, no entró (no cuenta)" };
 
   function bloquePartidos(pid, j) {
-    const tit = j.pj - j.banco;
-    const partes2 = [tit && `<b>${tit}</b> de titular`, j.banco && `<b>${j.banco}</b> desde el banco`,
-      j.sin && `<b>${j.sin}</b> en el banco sin entrar <span class="pj-nocuenta">(no cuentan)</span>`].filter(Boolean);
+    // titular + desde el banco = el número grande de partidos; el banco sin entrar va aparte (no cuenta)
+    const celda = (n, lbl, clase = "") => `<div class="pj-celda${n ? "" : " pj-celda--cero"}${clase}"><b class="num">${n}</b><span>${lbl}</span></div>`;
+    const cuenta = `<div class="pj-cuenta">${celda(j.pj - j.banco, "De titular")}${celda(j.banco, "Desde el banco")}
+      ${celda(j.sin || 0, `Banco sin entrar<span class="sr"> (no cuentan)</span>`, " pj-celda--no")}</div>`;
     const tarjetas = [j.amarillas && `<span class="tarj am" aria-hidden="true"></span>${j.amarillas} ${j.amarillas === 1 ? "amarilla" : "amarillas"}`,
       j.rojas && `<span class="tarj ro" aria-hidden="true"></span>${j.rojas} ${j.rojas === 1 ? "roja" : "rojas"}`].filter(Boolean);
     const debut = hitosDe(pid, S.cat).find((x) => x.tipo === "debut");
-    const resumen = `<p class="pj-resumen">${partes2.join(" · ")}</p>
+    const resumen = `${cuenta}
       ${tarjetas.length ? `<p class="pj-tarjetas">${tarjetas.join(" · ")}</p>` : ""}
       ${debut ? `<p class="pj-debut">${esc(debut.txt)}</p>` : ""}`;
     let lista = "";
@@ -476,10 +475,10 @@
         ${abierto(`p:${mid}`) ? `<li class="pl-fila">${panelPlanilla(mid, pid, null)}</li>` : ""}`).join("")}</ul>
         ${filas.length > 10 ? `<button type="button" class="btn mas" data-accion="todos-partidos">${S.todosPartidos ? "Ver menos" : `Ver todos (${filas.length})`}</button>` : ""}`;
     }
-    return `<div class="bloque" id="sus-partidos"><h3>Sus partidos</h3>
+    return `<div class="bloque" id="sus-partidos">
+      <div class="bloque__cab"><h3>Sus partidos</h3><button type="button" class="ayuda-btn" data-como aria-haspopup="dialog" aria-label="¿Cómo se cuenta?">?</button></div>
       ${resumen}
-      ${lista || `<button type="button" class="btn mas" data-accion="partidos">Ver sus partidos</button>`}
-      <button type="button" class="link pj-como" data-como>¿Cómo se cuenta?</button></div>`;
+      ${lista || `<button type="button" class="btn mas" data-accion="partidos">Ver sus partidos</button>`}</div>`;
   }
 
   function bloquePuntos(pid, j) {
@@ -533,17 +532,18 @@
   function cuandoYComo(ev) {
     if (!ev.length) return "";
     const n = (f) => ev.filter(f).reduce((a, e) => a + e.cant, 0);
+    const total = n(() => true);  // un partido puede tener más de un try
     const t1 = n((e) => e.tiempo === "1T"), t2 = n((e) => e.tiempo === "2T"), ult = n((e) => e.tiempo === "2T" && minutoDelPartido(e) >= 70);
     const banco = n((e) => e.banco), penal = n((e) => e.tipo === 1);
     const puestos = new Map();
     for (const e of ev) if (PUESTO[e.puesto]) puestos.set(PUESTO[e.puesto], (puestos.get(PUESTO[e.puesto]) || 0) + e.cant);
     const de = [...puestos].sort((a, b) => b[1] - a[1]).slice(0, 3);
-    const item = (t, v) => `<span class="cyc__i">${t} <b>${v}</b></span>`;
-    const fila = (dt, partes) => `<div><dt>${dt}</dt><dd>${partes.filter(Boolean).join(" · ")}</dd></div>`;
+    const celda = (v, lbl) => `<div class="cyc__celda${v ? "" : " cyc__celda--cero"}"><b class="num">${v}</b><span>${lbl}</span></div>`;
+    const fila = (dt, celdas) => `<div class="cyc__fila"><dt>${dt}</dt><dd>${celdas.filter(Boolean).join("")}</dd></div>`;
     return `<h4 class="sub">Cuándo y cómo</h4><dl class="cyc">
-      ${fila("Cuándo", [item("1er tiempo", t1), item("2do tiempo", t2), ult && item("últimos 10'", ult)])}
-      ${fila("Cómo", [item("de titular", ev.length - banco), banco && item("desde el banco", banco), penal && item("try penal", penal)])}
-      ${de.length ? fila("Jugando de", de.map(([p, v]) => item(p, v))) : ""}</dl>`;
+      ${fila("Cuándo", [celda(t1, "1er tiempo"), celda(t2, "2do tiempo"), celda(ult, "últimos 10'")])}
+      ${fila("Cómo", [celda(total - banco, "de titular"), celda(banco, "desde el banco"), penal && celda(penal, "try penal")])}
+      ${de.length ? fila("Jugando de", de.map(([p, v]) => celda(v, p))) : ""}</dl>`;
   }
 
   function anioAnio(pid) {

@@ -603,11 +603,24 @@ html:has(dialog[open]) { overflow: hidden; }
 }
 
 /* ---------- ficha: sus partidos y las planillas ---------- */
-.pj-resumen { margin: 0; font-size: var(--t-texto); line-height: 1.5; }
-.pj-resumen b { font-weight: 700; }
-.pj-nocuenta { color: var(--suave); }
-.pj-tarjetas, .pj-debut { margin: 4px 0 0; font-size: var(--t-dato); color: var(--suave); }
-.pj-como { margin-top: 2px; }
+/* titular · desde el banco · banco sin entrar: una tira de tres, el tercero apagado porque no suma */
+.pj-cuenta { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--borde); border-radius: 12px; overflow: hidden; }
+.pj-celda { min-width: 0; padding: 10px 12px 11px; }
+.pj-celda + .pj-celda { border-left: 1px solid var(--borde); }
+.pj-celda b { display: block; font: 700 var(--t-titulo)/1 var(--cond); }
+.pj-celda span { display: block; margin-top: 4px; font-size: var(--t-etiqueta); line-height: 1.25; color: var(--suave); }
+.pj-celda--no { background: var(--fondo); }
+.pj-celda--cero b, .pj-celda--no b { color: var(--tenue); }
+.pj-tarjetas, .pj-debut { margin: 8px 0 0; font-size: var(--t-dato); color: var(--suave); }
+.pj-tarjetas + .pj-debut { margin-top: 2px; }
+/* título de un bloque con su "?" (la explicación va ahí, no en un párrafo) */
+.bloque__cab { display: flex; align-items: center; gap: 10px; margin: 0 0 10px; }
+.bloque__cab h3 { margin: 0; }
+.ayuda-btn { position: relative; flex: none; width: 28px; height: 28px; display: grid; place-items: center; padding: 0; cursor: pointer;
+  background: var(--sup); border: 1.5px solid #b9c6dc; border-radius: 50%; color: var(--azul); font: 700 1rem/1 var(--base);
+  transition: background var(--t), border-color var(--t); }
+.ayuda-btn::before { content: ""; position: absolute; inset: -8px; } /* el dedo la toca fácil: 44 px aunque el círculo sea chico */
+.ayuda-btn:hover { background: var(--azul-claro); border-color: var(--azul); }
 .pj-lista { list-style: none; margin: 0; padding: 0; }
 .pj-lista li { display: grid; grid-template-columns: minmax(64px, auto) minmax(0, 1fr) auto; gap: 10px; align-items: center; min-height: 52px; padding: 6px 0; border-bottom: 1px solid var(--borde); }
 .pj-fecha { font-variant-numeric: tabular-nums; color: var(--suave); font-size: .875rem; }
@@ -652,7 +665,7 @@ html:has(dialog[open]) { overflow: hidden; }
 .pl__corr { display: block; margin-top: 3px; font-size: .75rem; font-weight: 600; color: var(--aviso-texto); }
 .pl__msg { margin: 0; padding: 12px; color: var(--suave); }
 .pl__acciones { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 18px; margin: 12px; }
-.pl__acciones .btn { display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px; font-size: .875rem; text-decoration: none; color: var(--texto); }
+.pl__acciones .btn { flex: 1; display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 12px; font-size: .875rem; text-decoration: none; color: var(--texto); }
 .ver-planilla { border: 0; background: none; }
 .ver-planilla[aria-expanded="true"] { color: var(--azul-900); text-decoration: underline; text-underline-offset: 3px; }
 
@@ -685,8 +698,6 @@ html:has(dialog[open]) { overflow: hidden; }
 .pl__ok svg { width: 14px; height: 14px; color: var(--verde); stroke-width: 2.8; }
 .pl__meta { margin: 2px 12px 0; font-size: var(--t-dato); color: var(--suave); }
 .pl__jugo { margin: 10px 12px 0; font-size: var(--t-texto); font-weight: 600; }
-.pl__original { display: inline-flex; align-items: center; min-height: 44px; font-size: var(--t-dato); color: var(--azul); text-underline-offset: 3px; }
-.pl__acciones--pie { margin-top: 4px; }
 .pl__tabla abbr { text-decoration: none; }
 /* el renglón resaltado: todo en el marrón del amarillo (no gris sobre amarillo) */
 .pl__tabla .pl--el td, .pl__tabla .pl--el td:nth-child(n), .pl__tabla .pl--el i, .pl__tabla .pl--el .pl__rol { color: var(--aviso-texto); }
@@ -734,9 +745,13 @@ html:has(dialog[open]) { overflow: hidden; }
 .te__dato { margin: 4px 0 0; font-size: var(--t-dato); color: var(--suave); }
 
 /* ---------- ficha: cuándo y cómo hizo sus tries ---------- */
-.cyc { margin: 0 0 16px; display: grid; gap: 6px; }
-.cyc div { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: 8px; align-items: baseline; }
-.cyc dt { font-size: var(--t-etiqueta); font-weight: 600; text-transform: uppercase; letter-spacing: .05em; color: var(--suave); }
-.cyc dd { margin: 0; font-size: var(--t-dato); color: var(--suave); }
-.cyc b { color: var(--texto); font-weight: 700; }
-.cyc__i { white-space: nowrap; }
+/* un renglón por pregunta y los números en tres columnas parejas, alineadas de renglón a renglón */
+.cyc { margin: 0 0 20px; }
+.cyc__fila { display: grid; grid-template-columns: 5.75rem minmax(0, 1fr); align-items: center; gap: 8px; padding: 9px 0; border-top: 1px solid var(--borde); }
+.cyc__fila:last-child { border-bottom: 1px solid var(--borde); }
+.cyc dt { font: 600 var(--t-etiqueta)/1.25 var(--base); text-transform: uppercase; letter-spacing: .05em; color: var(--suave); }
+.cyc dd { margin: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.cyc__celda { min-width: 0; }
+.cyc__celda b { display: block; font: 700 var(--t-seccion)/1 var(--cond); color: var(--texto); }
+.cyc__celda span { display: block; margin-top: 3px; font-size: var(--t-etiqueta); line-height: 1.2; color: var(--suave); }
+.cyc__celda--cero b { color: var(--tenue); }
