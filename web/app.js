@@ -12,14 +12,14 @@
   const CD = DD ? Object.fromEntries(DD.columnas.map((c, i) => [c, i + 3])) : {};
 
   // ---------- datos unificados ----------
-  const CAMPOS = ["pj", "banco", "sin", "tries", "conversiones", "penales", "drops", "puntos", "amarillas", "rojas", "form", "form_tit", "form_ing"];
+  const CAMPOS = ["pj", "banco", "sin", "tries", "conversiones", "penales", "drops", "puntos", "amarillas", "rojas", "minutos", "pj_min", "form", "form_tit", "form_ing"];
   const FILAS = D.stats.map((r) => {
-    const f = { pid: r[0], anio: r[1], cat: r[2], f: "o", form: 0, form_tit: 0, form_ing: 0 };
+    const f = { pid: r[0], anio: r[1], cat: r[2], f: "o", form: 0, form_tit: 0, form_ing: 0, minutos: 0, pj_min: 0 };
     for (const c of D.columnas) f[c] = r[COL[c]];
     return f;
   });
   if (DD) for (const r of DD.stats) {
-    FILAS.push({ pid: r[0], anio: r[1], cat: r[2], f: "d", pj: r[CD.pj], banco: 0, sin: 0, amarillas: 0, rojas: 0,
+    FILAS.push({ pid: r[0], anio: r[1], cat: r[2], f: "d", pj: r[CD.pj], banco: 0, sin: 0, amarillas: 0, rojas: 0, minutos: 0, pj_min: 0,
       tries: r[CD.tries], conversiones: r[CD.conversiones], penales: r[CD.penales], drops: r[CD.drops], puntos: r[CD.puntos],
       form_tit: r[CD.form_tit], form_ing: r[CD.form_ing], form: r[CD.form_tit] + r[CD.form_ing] });
   }
@@ -39,6 +39,22 @@
   }
   const ICONO_MEDALLA = '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7.21 15 2.66 7.14a2 2 0 0 1 .13-2.2L4.4 2.8A2 2 0 0 1 6 2h12a2 2 0 0 1 1.6.8l1.6 2.14a2 2 0 0 1 .14 2.2L16.79 15"/><path d="M11 12 5.12 2.2M13 12l5.88-9.8M8 7h8"/><circle cx="12" cy="17" r="5"/><path d="M12 18v-2h-.5"/></svg>';
   const ANIO_INICIO = Math.min(...D.stats.map((r) => r[1]));
+  const miles = (n) => Number(n).toLocaleString("es-AR");
+  const PUESTOS = D.puestos || {};  // la camiseta con la que más veces fue titular
+  // el puesto del equipo en la tabla de cada torneo, por temporada y categoría
+  const TABLAS = new Map();
+  for (const [anio, cat, tor, pos, n, , enCurso] of D.tablas || []) {
+    const k = `${anio}|${cat}`;
+    if (!TABLAS.has(k)) TABLAS.set(k, []);
+    TABLAS.get(k).push({ tor, pos, n, enCurso: !!enCurso });
+  }
+  // quién hizo los tries de cada partido
+  const TRIES = new Map();
+  for (const e of EVENTOS) {
+    if (e.f !== "o" || !e.mid || e.tipo > 1) continue;
+    if (!TRIES.has(e.mid)) TRIES.set(e.mid, new Map());
+    TRIES.get(e.mid).set(e.pid, (TRIES.get(e.mid).get(e.pid) || 0) + e.cant);
+  }
   const activo = (r) => r.pj > 0 || (r.f === "d" && r.puntos > 0);
   const rangoDe = (fs) => { const a = FILAS.filter((r) => fs.includes(r.f)).map((r) => r.anio); return a.length ? [Math.min(...a), Math.max(...a)] : null; };
 
@@ -54,13 +70,14 @@
     temporadas: { lbl: "Temporadas", corto: "Temp.", u: ["temporada", "temporadas"] },
     amarillas: { lbl: "Amarillas", corto: "Am.", u: ["amarilla", "amarillas"] },
     rojas: { lbl: "Rojas", corto: "Ro.", u: ["roja", "rojas"] },
+    minutos: { lbl: "Minutos", corto: "Min.", u: ["minuto", "minutos"] },
     form: { lbl: "En formaciones", corto: "Form.", u: ["formación", "formaciones"] },
   };
   const FUENTES = {
     oficial: { lbl: "Oficial", sub: "Base UAR", f: ["o"], def: "pj",
-      ordenes: ["pj", "tries", "puntos", "conversiones", "penales", "drops", "banco", "sin", "temporadas", "amarillas", "rojas"],
+      ordenes: ["pj", "tries", "puntos", "minutos", "conversiones", "penales", "drops", "banco", "sin", "temporadas", "amarillas", "rojas"],
       principales: ["pj", "tries", "puntos"], sub3: ["pj", "tries", "puntos"],
-      tabla: ["pj", "banco", "sin", "temporadas", "tries", "conversiones", "penales", "drops", "puntos", "amarillas", "rojas"] },
+      tabla: ["pj", "minutos", "banco", "sin", "temporadas", "tries", "conversiones", "penales", "drops", "puntos", "amarillas", "rojas"] },
     diarios: { lbl: "Diarios", sub: "El Eco de Tandil", f: ["d"], def: "pj",
       ordenes: ["pj", "tries", "puntos", "conversiones", "penales", "drops", "temporadas"],
       principales: ["pj", "tries", "puntos"], sub3: ["pj", "tries", "puntos"],
@@ -101,7 +118,7 @@
   }
 
   // ---------- estado (se refleja en la URL para poder compartir links) ----------
-  const S = { fuente: "oficial", vista: "jugadores", cat: 0, temp: "todas", orden: "pj", q: "", jug: null, tipo: null, verTodos: false, verRivales: false, verPartidos: false, todosPartidos: false, panel: null, panelCompleta: false, panelInicial: null };
+  const S = { fuente: "oficial", vista: "jugadores", cat: 0, temp: "todas", orden: "pj", q: "", jug: null, tipo: null, verTodos: false, verRivales: false, verPartidos: false, todosPartidos: false, panel: null, panelCompleta: false, panelInicial: null, panelRes: null };
   const F = () => FUENTES[S.fuente];
 
   function leerURL() {
@@ -291,7 +308,7 @@
       <li><button type="button" class="card" data-j="${esc(j.pid)}">
         <span class="pos${j.pos <= 3 ? " top3" : ""}${j.pos === 1 ? " top1" : ""}"><span class="sr">Puesto </span>${j.pos}</span>
         <span><span class="card__nombre">${nombreHTML(j.nombre)}</span><span class="card__sub">${subtexto(j)}</span></span>
-        <span class="card__dato"><strong class="num">${j[S.orden]}</strong><span>${esc(plural(j[S.orden], o.u))}</span></span>
+        <span class="card__dato"><strong class="num">${S.orden === "minutos" ? miles(j.minutos) : j[S.orden]}</strong><span>${esc(plural(j[S.orden], o.u))}</span></span>
       </button></li>`).join("");
       return;
     }
@@ -309,7 +326,7 @@
           const cls = [k === S.orden ? "act" : "", v === 0 ? "cero" : ""].filter(Boolean).join(" ");
           const ic = k === "amarillas" && v ? '<span class="tarj am" aria-hidden="true"></span>'
             : k === "rojas" && v ? '<span class="tarj ro" aria-hidden="true"></span>' : "";
-          return `<td${cls ? ` class="${cls}"` : ""}>${ic}${v}</td>`;
+          return `<td${cls ? ` class="${cls}"` : ""}>${ic}${k === "minutos" ? miles(v) : v}</td>`;
         }).join("")}
       </tr>`).join("");
   }
@@ -334,13 +351,15 @@
       return;
     }
     const anios = [...j.anios].sort();
-    $("#ficha-meta").innerHTML = etq + (S.temp === "todas" ? rangoTxt([anios[0], anios[anios.length - 1]]) : `Temporada ${esc(S.temp)}`);
+    const puesto = PUESTOS[pid] && PUESTO[PUESTOS[pid]];
+    $("#ficha-meta").innerHTML = etq + (S.temp === "todas" ? rangoTxt([anios[0], anios[anios.length - 1]]) : `Temporada ${esc(S.temp)}`) +
+      (puesto ? `<span class="ficha__puesto">${esc(puesto[0].toUpperCase() + puesto.slice(1))} (${PUESTOS[pid]})</span>` : "");
 
     // los números en cero no se destacan (un jugador con pocos partidos no ve "0 TRIES" en grande y en color)
     const grandes = `<div class="grandes">${GRANDES.map(([k, u]) =>
       `<div class="grande${j[k] ? "" : " grande--cero"}"><strong class="num">${j[k]}</strong><span>${plural(j[k], u)}</span></div>`).join("")}</div>`;
     // orden: otras categorías · los 3 números · logros · sus partidos (el detalle del número grande) · año a año · sus puntos
-    const hitos = hitosDe(pid, S.cat).filter((x) => x.tipo !== "debut").slice(0, 2);
+    const hitos = hitosDe(pid, S.cat).filter((x) => x.tipo !== "debut").slice(0, 3);
     const logros = hitos.length ? `<ul class="hitos">${hitos.map((x) =>
       `<li class="hito hito--${x.tipo}">${x.tipo === "marca" ? ICONO_MEDALLA : ""}${esc(x.txt)}</li>`).join("")}</ul>` : "";
     let h;
@@ -378,13 +397,13 @@
   // ---------- sus partidos: cada partido que se le cuenta, con su planilla ----------
   const ICONO_PLANILLA = '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/></svg>';
   const botonPlanilla = (clave, mid, foco, cuando) => `<button type="button" class="ver-planilla" data-planilla="${esc(clave)}" data-mid="${esc(mid)}"
-    ${foco ? `data-foco="${esc(JSON.stringify(foco))}"` : ""} aria-expanded="${!!(S.panel && S.panel.clave === clave)}"
+    ${foco ? `data-foco="${esc(JSON.stringify(foco))}"` : ""} aria-expanded="${!!abierto(clave)}"
     aria-label="Planilla del partido${cuando ? ` ${esc(cuando)}` : ""}">${ICONO_PLANILLA}Planilla</button>`;
   /** "XVII Torneo Regional Pampeano B-Primera" -> "XVII Torneo Regional Pampeano B" (la categoría ya está elegida) */
   const torneoCorto = (t) => String(t || "")
     .replace(/\s*[-–]?\s*(?:\bde\s+)?\b(pre[\s-]*interm[a-z]*|interm[a-z]*|primera|1ra\.?)(?=\s|$|[^a-záéíóúñ])/gi, "")
     .replace(/\s+(de|del|-)\s*$/i, "").replace(/\s{2,}/g, " ").trim();
-  const abierto = (clave) => S.panel && S.panel.clave === clave;
+  const abierto = (clave) => (S.panel && S.panel.clave === clave) || S.panelRes === clave;
 
   // ---------- la planilla oficial, ahí mismo: las mismas columnas que la planilla de la UAR ----------
   const PLANILLAS = new Map();  // partido -> datos de web/planillas/<partido>.json (o "error")
@@ -419,7 +438,7 @@
         <th scope="col"><abbr title="Puntos">Pun.</abbr></th><th scope="col">Jugador</th></tr></thead>
       <tbody>${filas || '<tr><td colspan="5">Sin incidencias.</td></tr>'}</tbody></table>`;
     const ROL_PL = { T: "titular", E: "suplente, entró", B: "suplente, no entró" };
-    const lista = pl.formacion.find((x) => x[3] === pid);
+    const lista = pid ? pl.formacion.find((x) => x[3] === pid) : null;  // sin jugador (Resultados): la planilla entera
     const [ap] = partes(NOMBRE(pid) || "");
     // la respuesta que se busca al abrir la planilla: con qué camiseta jugó y cómo
     const jugo = !lista ? "" : lista[4] === "T" ? `Jugó con la ${esc(lista[1] || lista[0])}, de titular.`
@@ -435,13 +454,13 @@
       <p class="pl__meta">${esc(pl.fecha)} · ${esc(torneoCorto(pl.torneo))}</p>
       ${ok ? "" : `<p class="pl__control pl__control--no">${ICONO_ALERTA}<span>Ojo: los puntos de la planilla suman ${suma.L} a ${suma.V}, pero el resultado oficial es ${pl.tantos[0]} a ${pl.tantos[1]}.</span></p>`}
       ${jugo ? `<p class="pl__jugo">${jugo}</p>` : ""}`;
-    if (S.panelCompleta) {
-      h += `<div class="pl__acciones">${verTodo}</div>`;
-      const de = (lado) => pl.jugadas.filter((x) => x[0] === lado).map((x) => fila(x, x[7] === pid && (esFoco(x) || !foco))).join("");
+    if (S.panelCompleta || !pid) {
+      if (pid) h += `<div class="pl__acciones">${verTodo}</div>`;
+      const de = (lado) => pl.jugadas.filter((x) => x[0] === lado).map((x) => fila(x, !!pid && x[7] === pid && (esFoco(x) || !foco))).join("");
       h += tabla(`Incidencias LOCAL · ${esc(loc)}`, de("L")) + tabla(`Incidencias VISITANTE · ${esc(vis)}`, de("V"));
       h += `<table class="pl__tabla pl__tabla--lista"><caption>Miembros del equipo · ${esc(CLUB.nombre.replace(/^Club /, ""))}</caption>
         <thead><tr><th scope="col">Pos</th><th scope="col">Nombre</th><th scope="col"></th></tr></thead>
-        <tbody>${pl.formacion.map(([orden, dorsal, nombre, xpid, rol]) => `<tr${xpid === pid ? ' class="pl--el"' : ""}><td class="num">${esc(dorsal || orden)}</td>
+        <tbody>${pl.formacion.map(([orden, dorsal, nombre, xpid, rol]) => `<tr${pid && xpid === pid ? ' class="pl--el"' : ""}><td class="num">${esc(dorsal || orden)}</td>
           <td>${esc(nombre)}</td><td class="pl__rol">${ROL_PL[rol]}</td></tr>`).join("")}</tbody></table>`;
       return h + "</div>";
     }
@@ -466,7 +485,13 @@
     const tarjetas = [j.amarillas && `<span class="tarj am" aria-hidden="true"></span>${j.amarillas} ${j.amarillas === 1 ? "amarilla" : "amarillas"}`,
       j.rojas && `<span class="tarj ro" aria-hidden="true"></span>${j.rojas} ${j.rojas === 1 ? "roja" : "rojas"}`].filter(Boolean);
     const debut = hitosDe(pid, S.cat).find((x) => x.tipo === "debut");
-    const resumen = `${cuenta}
+    // minutos: con los cambios que anota la planilla (si una planilla no los tiene, ese partido no suma)
+    const minutos = j.pj_min ? `<p class="pj-min"><b class="num">${miles(j.minutos)}</b> minutos jugados · <b class="num">${Math.round(j.minutos / j.pj_min)}</b> por partido</p>` : "";
+    // cuánto le falta para el próximo club (100, 200, 300...)
+    const prox = (Math.floor(j.pj / CIEN) + 1) * CIEN, falta = prox - j.pj;
+    const hito = S.temp === "todas" && j.pj >= CIEN / 2 ? `<div class="prox"><div class="prox__barra" aria-hidden="true"><i style="width:${((j.pj % CIEN) / CIEN) * 100}%"></i></div>
+      <p>${falta === 1 ? "Le falta <b>1 partido</b>" : `Le faltan <b>${falta} partidos</b>`} para el Club de los ${prox}</p></div>` : "";
+    const resumen = `${cuenta}${minutos}${hito}
       ${tarjetas.length ? `<p class="pj-tarjetas">${tarjetas.join(" · ")}</p>` : ""}
       ${debut ? `<p class="pj-debut">${esc(debut.txt)}</p>` : ""}`;
     let lista = "";
@@ -637,9 +662,10 @@
     for (const hi of hitosDe(pid, S.cat).slice(0, 3)) {
       texto(x, hi.txt, 36, 600, BASE, "#ffffff", W - 2 * M - 70);
       const w = Math.min(W - 2 * M, x.measureText(hi.txt).width + 70);
-      x.fillStyle = hi.tipo === "debut" ? "rgba(255,255,255,0.07)" : hi.tipo === "marca" ? "rgba(240,199,90,0.34)" : "rgba(242,194,0,0.16)";
+      x.fillStyle = hi.tipo === "debut" ? "rgba(255,255,255,0.07)" : hi.tipo === "marca" ? "rgba(240,199,90,0.34)"
+        : hi.tipo === "mejor" ? "rgba(143,180,245,0.18)" : "rgba(242,194,0,0.16)";
       x.beginPath(); x.roundRect(M, y - 46, w, 66, 33); x.fill();
-      x.fillStyle = hi.tipo === "debut" ? "#c3cad6" : hi.tipo === "marca" ? "#fbe7a1" : "#f2c200";
+      x.fillStyle = hi.tipo === "debut" ? "#c3cad6" : hi.tipo === "marca" ? "#fbe7a1" : hi.tipo === "mejor" ? "#8fb4f5" : "#f2c200";
       x.beginPath(); x.arc(M + 32, y - 13, 9, 0, Math.PI * 2); x.fill();
       x.fillStyle = "#ffffff"; x.fillText(hi.txt, M + 54, y);
       y += 80;
@@ -792,9 +818,20 @@
       }
       const lista = (js) => `<ol class="cien">${js.map((j) => `<li><button type="button" class="cien__j" data-j="${esc(j.pid)}"><strong class="num">${j.pj}</strong>
           <span>${nombreHTML(j.nombre)}</span></button></li>`).join("")}</ol>`;
+      // los que están a 10 partidos o menos del próximo club
+      const faltan = (j) => CIEN - (j.pj % CIEN);
+      const cerca = todos.filter((j) => j.pj >= CIEN - 10 && faltan(j) <= 10).sort((a, b) => faltan(a) - faltan(b) || b.pj - a.pj);
+      const porLlegar = cerca.length ? `<div class="cien__club cien__club--cerca"><h2 class="rec__tit">Están por llegar</h2>
+        <ol class="cien">${cerca.map((j) => `<li><button type="button" class="cien__j" data-j="${esc(j.pid)}"><strong class="num">${j.pj}</strong>
+          <span>${nombreHTML(j.nombre)}<small>${faltan(j) === 1 ? "Falta 1" : `Faltan ${faltan(j)}`}</small></span></button></li>`).join("")}</ol></div>` : "";
       h += `<section class="rec rec--cien">${clubes.length
-        ? clubes.map(([n, js]) => `<div class="cien__club"><h2 class="rec__tit">${ICONO_MEDALLA}Club de los ${n}</h2>${lista(js)}</div>`).join("")
+        ? clubes.map(([n, js]) => `<div class="cien__club"><h2 class="rec__tit">${ICONO_MEDALLA}Club de los ${n}</h2>${lista(js)}</div>`).join("") + porLlegar
         : `<h2 class="rec__tit">Club de los ${CIEN}</h2><p class="rec__intro">Nadie llegó a ${CIEN} todavía. Los más cerca:</p>${lista(todos.slice(0, 5))}`}</section>`;
+      // los que más tries y más puntos hicieron de todos los tiempos
+      const hist = (k) => mejores(todos.filter((j) => j[k] > 0), (j) => j[k]);
+      const enHist = (x) => `en ${x.pj} ${plural(x.pj, ORD.pj.u)}`;
+      h += `<h2 class="rec__grupo">En la historia</h2><div class="rec__grid">
+        ${bloqueRec("Más tries", hist("tries"), enHist)}${bloqueRec("Más puntos", hist("puntos"), enHist)}</div>`;
     }
     h += `<h2 class="rec__grupo">En un partido</h2><div class="rec__grid">
         ${bloqueRec("Más tries", R.triesPartido, enPartido, "tries")}${bloqueRec("Más puntos", R.puntosPartido, enPartido, "puntos")}</div>
@@ -802,11 +839,27 @@
         ${bloqueRec("Más tries", R.triesTemp, enTemp, "tries")}${bloqueRec("Más puntos", R.puntosTemp, enTemp, "puntos")}${bloqueRec("Más partidos", R.pjTemp, enTemp, "partidos")}</div>`;
     $("#records").innerHTML = h;
   }
-  /** hitos de un jugador en una categoría: su partido 100 (200, 300...), récords que tiene y primer partido */
+  /** su partido con más puntos en una categoría (si hizo 10 o más, o 2 tries o más) */
+  const VALOR = [5, 7, 2, 3, 3];
+  function mejorPartido(pid, cat) {
+    const por = new Map();
+    for (const e of EVENTOS) {
+      if (e.f !== "o" || e.pid !== pid || e.cat !== cat || !e.mid) continue;
+      const x = por.get(e.mid) || { pts: 0, tries: 0, rival: e.rival, fecha: e.fecha || "" };
+      x.pts += VALOR[e.tipo] * e.cant;
+      if (e.tipo <= 1) x.tries += e.cant;
+      por.set(e.mid, x);
+    }
+    const mejor = [...por.values()].sort((a, b) => b.pts - a.pts || b.tries - a.tries || b.fecha.localeCompare(a.fecha))[0];
+    return mejor && (mejor.pts >= 10 || mejor.tries >= 2) ? mejor : null;
+  }
+  /** hitos de un jugador en una categoría: su partido 100 (200, 300...), su mejor partido, récords que tiene y primer partido */
   function hitosDe(pid, cat) {
     const out = [];
     const m = MARCA.get(`${pid}|${cat}`);
     if (m) out.push({ tipo: "marca", txt: `Partido ${m.n} · ${fecha(m.fecha)} vs ${D.rivales[m.rival]}` });
+    const mj = mejorPartido(pid, cat);
+    if (mj) out.push({ tipo: "mejor", txt: `Mejor partido: ${mj.pts} pts${mj.tries > 1 ? ` (${mj.tries} tries)` : ""} vs ${D.rivales[mj.rival]} · ${fecha(mj.fecha)}` });
     const R = recordsDe(cat, "todas");
     const rec = [["triesPartido", ["try", "tries"], "en un partido"], ["puntosPartido", ["punto", "puntos"], "en un partido"],
       ["triesTemp", ["try", "tries"], "en una temporada"], ["puntosTemp", ["punto", "puntos"], "en una temporada"],
@@ -849,19 +902,49 @@
     // con todas las temporadas, un título por año con cómo le fue
     const porAnio = new Map();
     for (const p of ps) { const a = porAnio.get(p[0]) || { G: 0, E: 0, P: 0 }; a[letra(p)]++; porAnio.set(p[0], a); }
-    const conAnios = S.temp === "todas" && !toks.length;
+    const conAnios = !toks.length;
     const resAnio = (a) => [a.G && `${a.G} ${a.G === 1 ? "ganado" : "ganados"}`, a.E && `${a.E} ${a.E === 1 ? "empatado" : "empatados"}`,
       a.P && `${a.P} ${a.P === 1 ? "perdido" : "perdidos"}`].filter(Boolean).join(" · ");
     let anioPrev = null;
     $("#resultados").innerHTML = ps.map((p) => `${conAnios && p[0] !== anioPrev && (anioPrev = p[0])
-      ? `<li class="res__anio"><span>${p[0]}</span><small>${resAnio(porAnio.get(p[0]))}</small></li>` : ""}
+      ? `<li class="res__anio"><span>${p[0]}</span><small>${resAnio(porAnio.get(p[0]))}</small>${extraAnio(p[0])}</li>` : ""}
       <li class="res">
         <span class="res__fecha">${fecha(p[2])}${p[2] ? "" : `<small>${p[0]}</small>`}<small>${p[5] === "L" ? "Local" : p[5] === "V" ? "Visitante" : ""}</small></span>
         <span class="res__cuerpo"><span class="res__rival">${esc(D.rivales[p[3]])}${S.fuente === "todo" && p[8] === "d" ? ' <span class="ev-tag ev-tag--diario">diario</span>' : ""}</span>
           <span class="res__torneo">${p[4] >= 0 && D.torneos[p[4]] ? esc(torneoCorto(D.torneos[p[4]])) : ""}</span>
-          ${p[8] === "d" && p[9] >= 0 ? `<a class="ev-nota" href="${esc(DD.urls[p[9]])}" target="_blank" rel="noopener noreferrer">nota ↗</a>` : ""}</span>
+          ${p[8] === "d" && p[9] >= 0 ? `<a class="ev-nota" href="${esc(DD.urls[p[9]])}" target="_blank" rel="noopener noreferrer">nota ↗</a>` : ""}
+          ${p[8] === "o" && p[11] ? triesDe(p[11]) + botonPlanilla(`r:${p[11]}`, p[11], null, `del ${fecha(p[2])} contra ${D.rivales[p[3]]}`) : ""}</span>
         <span class="res__marcador res--${letra(p)}"><b class="num">${p[6]}–${p[7]}</b><i>${letra(p)}</i></span>
-      </li>`).join("");
+      </li>
+      ${p[11] && S.panelRes === `r:${p[11]}` ? `<li class="pl-fila">${panelPlanilla(p[11], null, null)}</li>` : ""}`).join("");
+  }
+  // un jugador en Resultados: el apellido (con la inicial si hay otro con el mismo), y toca para abrir su ficha
+  const APELLIDOS = new Map();
+  for (const n of Object.values(D.jugadores)) { const a = norm(partes(n)[0]); APELLIDOS.set(a, (APELLIDOS.get(a) || 0) + 1); }
+  function btnJug(pid) {
+    const [ap, no] = partes(NOMBRE(pid) || "");
+    const corto = APELLIDOS.get(norm(ap)) > 1 && no ? `${ap} ${no[0]}.` : ap;
+    return `<button type="button" class="res__jug" data-j="${esc(pid)}">${esc(corto)}</button>`;
+  }
+  function triesDe(mid) {
+    const t = TRIES.get(mid);
+    if (!t) return "";
+    return `<span class="res__tries">Tries: ${[...t].sort((a, b) => b[1] - a[1]).map(([pid, n]) => btnJug(pid) + (n > 1 ? ` ${n}` : "")).join(", ")}</span>`;
+  }
+  /** lo mejor de una temporada (el que más tries y el que más puntos hizo) y en qué puesto quedó el equipo en cada tabla */
+  function extraAnio(anio) {
+    if (S.fuente !== "oficial") return "";
+    const js = agregar(S.cat, String(anio));
+    const lider = (k, u = "") => {
+      const max = Math.max(0, ...js.map((j) => j[k]));
+      const quien = js.filter((j) => j[k] === max);
+      return max ? `${quien.slice(0, 2).map((j) => btnJug(j.pid)).join(" y ")}${quien.length > 2 ? " y otros" : ""} (${max}${u})` : "";
+    };
+    const tr = lider("tries"), pt = lider("puntos", " pts");
+    const lideres = [tr && `<span>Más tries: ${tr}</span>`, pt && `<span>Más puntos: ${pt}</span>`].filter(Boolean).join("");
+    const tablas = (TABLAS.get(`${anio}|${S.cat}`) || []).map((t) =>
+      `<span class="res__tabla">${esc(torneoCorto(D.torneos[t.tor]))}: <b>${t.enCurso ? "va " : ""}${t.pos}°</b> de ${t.n}</span>`).join("");
+    return (lideres ? `<span class="res__lideres">${lideres}</span>` : "") + (tablas ? `<span class="res__tablas">${tablas}</span>` : "");
   }
   // algunas planillas cuentan el 2º tiempo desde 0 y otras desde 40
   const minutoDelPartido = (e) => (e.tiempo === "2T" && e.minuto != null && e.minuto <= 40 ? 40 + e.minuto : e.minuto);
@@ -922,6 +1005,35 @@
 
   $("#cards").addEventListener("click", (e) => { const b = e.target.closest("[data-j]"); if (b) abrir(b.dataset.j); });
   $("#records").addEventListener("click", (e) => { const b = e.target.closest("[data-j]"); if (b) abrir(b.dataset.j); });
+  // Resultados: el nombre de un jugador abre su ficha; "Planilla" abre la del partido ahí mismo
+  const enfocarRes = (clave) => { const b = document.querySelector(`#resultados [data-planilla="${CSS.escape(clave)}"]`); if (b) b.focus(); };
+  function abrirPlanillaRes(clave, mid) {
+    S.panelRes = clave; renderResultados(); enfocarRes(clave);
+    if (!PLANILLAS.has(mid)) cargarPlanilla(mid).then(() => { if (S.panelRes === clave) { renderResultados(); enfocarRes(clave); } });
+  }
+  $("#resultados").addEventListener("click", (e) => {
+    const j = e.target.closest("[data-j]");
+    if (j) { abrir(j.dataset.j); return; }
+    const bp = e.target.closest("[data-planilla]");
+    if (bp) {
+      const clave = bp.dataset.planilla;
+      if (S.panelRes === clave) { S.panelRes = null; renderResultados(); enfocarRes(clave); return; }
+      abrirPlanillaRes(clave, bp.dataset.mid);
+      return;
+    }
+    const op = e.target.closest("[data-pl]");
+    if (!op || !S.panelRes) return;
+    const mid = S.panelRes.slice(2);
+    if (op.dataset.pl === "reintentar") { PLANILLAS.delete(mid); abrirPlanillaRes(S.panelRes, mid); }
+    if (op.dataset.pl === "compartir") {
+      const p = PARTIDO.get(mid);
+      const link = location.origin + location.pathname + `?vista=resultados&cat=${SLUG[S.cat]}&temp=${p ? p[0] : ""}&p=${encodeURIComponent(mid)}`;
+      const txt = `Planilla oficial · ${p ? `${CLUB.nombre} vs ${D.rivales[p[3]]}` : CLUB.nombre}`;
+      (navigator.share ? navigator.share({ title: txt, text: txt, url: link })
+        : navigator.clipboard.writeText(link).then(() => aviso("Se copió el link de esta planilla")))
+        .catch((er) => { if (er && er.name !== "AbortError") aviso("No se pudo compartir. Probá de nuevo."); });
+    }
+  });
   $("#tabla tbody").addEventListener("click", (e) => { const r = e.target.closest("[data-j]"); if (r) abrir(r.dataset.j); });
 
   $("#cerrar").addEventListener("click", cerrar);
@@ -1030,6 +1142,10 @@
         " Se muestran sin documentos ni datos personales, y de los rivales no se muestran nombres."],
       ["¿Qué son los récords?", `Los mejores números con datos oficiales, desde ${ANIO_INICIO}. El Club de los ${CIEN} (y el de los 200, 300…) son los que llegaron a esa cantidad de partidos ` +
         `en una categoría; en su ficha queda el partido en que lo cumplieron. "Primer partido registrado" es el primero desde ${ANIO_INICIO}: puede haber jugado antes.`],
+      ["¿Cómo se cuentan los minutos?", "Con los cambios que anota la planilla: cuándo entró y cuándo salió cada uno. " +
+        "Si la planilla de un partido no tiene los cambios, ese partido no suma minutos (el promedio es de los partidos que sí los tienen)."],
+      ["¿Qué es el puesto en cada torneo?", "En Resultados, al lado de cada torneo está en qué puesto quedó el equipo en la tabla, como la publica la UAR. " +
+        "Si el torneo se está jugando, dice \"va\". El puesto de cada jugador es el de la camiseta con la que más veces fue titular."],
       ["¿Qué categorías están?", `${enumerar(CATS)}. Las juveniles no se muestran porque son menores de edad.`],
       ["¿Cuánto vale cada cosa?", "Try 5 puntos, try penal 7, conversión 2, penal 3 y drop 3. Los puntos de cada jugador son los que figuran en la planilla."],
     ];
@@ -1054,6 +1170,14 @@
   montarFuentes();
   montarChips();
   render();
+  if (!S.jug && S.vista === "resultados" && S.panelInicial && PARTIDO.has(S.panelInicial)) {
+    const clave = `r:${S.panelInicial}`;
+    abrirPlanillaRes(clave, S.panelInicial);
+    cargarPlanilla(S.panelInicial).then(() => {
+      const b = document.querySelector(`#resultados [data-planilla="${CSS.escape(clave)}"]`);
+      if (b) b.scrollIntoView({ block: "center" });
+    });
+  }
   if (S.jug) {
     history.replaceState({}, "", url(null)); history.pushState({ ficha: true }, "", url()); mostrarFicha();
     const mid = S.panelInicial;

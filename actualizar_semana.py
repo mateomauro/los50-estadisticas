@@ -26,6 +26,7 @@ PASOS = [
     ["extraer_todo.py", "semanal"],      # lo nuevo de la BD UAR (todas las categorías)
     ["extraer_los50.py", "todos"],       # plantel superior: Excel y web/data.js (página de jugadores)
     ["procesar_todo.py"],                # base datos_uar/los50.db
+    ["exportar_web.py"],                 # web/data.js otra vez, ya con la base: minutos de cada partido y tablas de posiciones
     ["revision.py", "repetidos"],        # fichas repetidas: las seguras se juntan solas, las dudosas se preguntan
     ["analisis_metricas.py"],            # Excel de entrenadores
     ["exportar_entrenadores.py"],        # web/entrenadores.data.js (cifrado)
@@ -34,7 +35,7 @@ PASOS = [
     ["revision.py", "preguntas"],        # preguntas para la página "Revisar datos"
 ]
 # si "repetidos" juntó fichas nuevas, se rearman los datos con ellas
-REARMAR = [["extraer_los50.py", "todos"], ["procesar_todo.py"]]
+REARMAR = [["extraer_los50.py", "todos"], ["procesar_todo.py"], ["exportar_web.py"]]
 UNIFICAR = HERE / "revision" / "unificar.json"
 PREGUNTAS = HERE / "revision" / "preguntas.json"
 SITIO = os.environ.get("SITIO", "https://los50-jugadores.pages.dev")

@@ -714,7 +714,7 @@ html:has(dialog[open]) { overflow: hidden; }
 /* ---------- resultados agrupados por temporada ---------- */
 .res__anio { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding: 16px 14px 8px; border-bottom: 1px solid var(--borde); background: var(--fondo); }
 .res__anio:first-child { border-radius: calc(var(--radio) - 1px) calc(var(--radio) - 1px) 0 0; }
-.res__anio span { font: 700 var(--t-seccion)/1 var(--cond); }
+.res__anio > span:first-child { font: 700 var(--t-seccion)/1 var(--cond); }
 .res__anio small { font-size: var(--t-dato); color: var(--suave); }
 
 /* celular: el encabezado dice solo cuándo se actualizó (en una línea) */
@@ -743,3 +743,31 @@ html:has(dialog[open]) { overflow: hidden; }
 .cyc__celda b { display: block; font: 700 var(--t-seccion)/1 var(--cond); color: var(--texto); }
 .cyc__celda span { display: block; margin-top: 3px; font-size: var(--t-etiqueta); line-height: 1.2; color: var(--suave); }
 .cyc__celda--cero b { color: var(--tenue); }
+
+/* ---------- ficha: puesto, minutos, cuánto le falta para el próximo club y su mejor partido ---------- */
+.ficha__puesto::before { content: "·"; margin: 0 6px; }
+.pj-min { margin: 10px 0 0; font-size: var(--t-dato); color: var(--suave); }
+.pj-min b { font-weight: 700; color: var(--texto); }
+.prox { margin: 12px 0 0; }
+.prox__barra { height: 8px; border-radius: 4px; background: var(--fondo); overflow: hidden; }
+.prox__barra i { display: block; height: 100%; border-radius: 4px; background: linear-gradient(90deg, #f0c75a, #e2ac2f); }
+.prox p { margin: 6px 0 0; font-size: var(--t-dato); color: var(--suave); }
+.prox b { color: var(--aviso-texto); }
+.hito--mejor { background: var(--azul-claro); color: var(--azul-900); }
+.hito--mejor::before { background: var(--azul); }
+
+/* ---------- récords: los que están por llegar ---------- */
+.cien__club--cerca .rec__tit { font-size: var(--t-seccion); color: var(--gris-1); }
+.cien__club--cerca .cien__j strong { color: var(--gris-1); }
+.cien__j small { display: block; margin-top: 2px; font-size: var(--t-etiqueta); color: var(--gris-2); }
+
+/* ---------- resultados: lo mejor del año, las tablas y quién hizo los tries ---------- */
+.res__anio { flex-wrap: wrap; row-gap: 6px; }
+.res__lideres, .res__tablas { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: var(--t-dato); color: var(--suave); }
+.res__tabla { padding: 2px 10px; border: 1px solid var(--borde); border-radius: 999px; background: var(--sup); }
+.res__tabla b { color: var(--texto); }
+.res__tries { display: block; margin-top: 2px; font-size: var(--t-dato); color: var(--suave); line-height: 1.45; }
+.res__jug { padding: 0; border: 0; background: none; font: inherit; color: var(--azul); cursor: pointer; text-decoration: underline; text-decoration-color: rgb(27 95 209 / 35%); text-underline-offset: 3px; }
+.res__jug:hover { text-decoration-color: currentColor; }
+.res__cuerpo .ver-planilla { min-height: 36px; padding: 0; margin-top: 2px; }
+.resultados > .pl-fila { padding: 0 14px 14px !important; }

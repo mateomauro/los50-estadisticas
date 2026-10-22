@@ -2,8 +2,11 @@
 
 Uso:  python exportar_web.py      (tambien lo corre "python extraer_los50.py todos" al final)
 Usa la misma logica de conteo que reporte_jugadores.py. No incluye DNI.
+La duración de cada partido y las tablas de posiciones salen de datos_uar/los50.db (la arma procesar_todo.py);
+si todavía no está, se usan tiempos de 40 minutos y no van las posiciones (actualizar_semana.py lo vuelve a correr después).
 """
 import json
+import sqlite3
 import unicodedata
 from datetime import date
 from pathlib import Path
@@ -13,6 +16,7 @@ import pandas as pd
 HERE = Path(__file__).parent
 ORIGEN = HERE / "Los50_PlantelSuperior_historico.xlsx"
 DESTINO = HERE / "web" / "data.js"
+BASE = HERE / "datos_uar" / "los50.db"
 CATEGORIAS = ["Primera", "Intermedia", "Pre-Intermedia"]
 TIPOS = ["Try", "Try penal", "Conversión", "Penal", "Drop"]
 DIARIOS = HERE / "Los50_Diarios_2008-2016.xlsx"
@@ -133,6 +137,51 @@ def exportar_diarios(nombres_oficiales, rivales, torneos):
             "resultados_por_categoria": resultados, "partidos": partidos}
 
 
+def de_la_base(sql):
+    """Una consulta a la base (vacía si todavía no existe)."""
+    if not BASE.exists():
+        return pd.DataFrame()
+    con = sqlite3.connect(BASE)
+    try:
+        return pd.read_sql(sql, con)
+    except Exception:  # noqa: BLE001 (base vieja, sin esa tabla)
+        return pd.DataFrame()
+    finally:
+        con.close()
+
+
+def minutos_jugados(j, inc, por_tiempo):
+    """Minutos de cada uno en cada partido, con los cambios que anota la planilla (Ingresó / Se retiró, con su minuto).
+    Si la planilla de un partido no tiene ningún cambio de Los 50, ese partido no cuenta para los minutos (no se sabe
+    quién salió), y tampoco el que entró desde el banco sin minuto. Devuelve {(partido, jugador): minutos}."""
+    cam = inc[inc.incidencia.isin(["Ingresó", "Se retiró"]) & inc.player_id.notna() & inc.minuto.notna()].copy()
+    cam["player_id"] = cam.player_id.astype(str).str.replace(r"\.0$", "", regex=True)
+    eventos = {}
+    for r in cam.itertuples():
+        t = por_tiempo.get(r.torneo_id, 40)
+        m = float(r.minuto) + (t if str(r.tiempo) == "2T" and float(r.minuto) <= t else 0)
+        eventos.setdefault((r.partido_id, r.player_id), []).append((min(max(m, 0), 2 * t), r.incidencia))
+    con_cambios = set(cam.partido_id)
+    out = {}
+    for r in j[j.jugo == "Si"].itertuples():
+        if r.partido_id not in con_cambios:
+            continue
+        t = por_tiempo.get(r.torneo_id, 40)
+        evs = sorted(eventos.get((r.partido_id, r.player_id), []))
+        adentro, desde, total = r.rol == "Titular", 0.0, 0.0
+        if not adentro and not any(e == "Ingresó" for _, e in evs):
+            continue  # entró pero la planilla no dice cuándo
+        for m, e in evs:
+            if e == "Ingresó" and not adentro:
+                adentro, desde = True, m
+            elif e == "Se retiró" and adentro:
+                adentro, total = False, total + m - desde
+        if adentro:
+            total += 2 * t - desde
+        out[(r.partido_id, r.player_id)] = int(round(total))
+    return out
+
+
 def sin_acentos(s):
     return unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode()
 
@@ -149,7 +198,14 @@ def main():
     j["pj"] = jugo.astype(int)
     j["banco"] = (jugo & (j.rol == "Suplente")).astype(int)
     j["sin"] = (~jugo & j.estado.isin(["Cerrado", "Iniciado"])).astype(int)
-    cols = ["pj", "banco", "sin", "tries", "conversiones", "penales", "drops", "puntos", "amarillas", "rojas"]
+    # minutos jugados (y en cuántos partidos se saben): duración de cada torneo según la base
+    tor = de_la_base("select tid, minutos_por_tiempo from torneos")
+    por_tiempo = {int(r.tid): int(r.minutos_por_tiempo) for r in tor.itertuples() if pd.notna(r.minutos_por_tiempo) and r.minutos_por_tiempo >= 20}
+    mins = minutos_jugados(j, x["Incidencias"][x["Incidencias"].categoria.isin(CATEGORIAS)], por_tiempo)
+    clave = list(zip(j.partido_id, j.player_id))
+    j["minutos"] = [mins.get(k, 0) for k in clave]
+    j["pj_min"] = [int(k in mins) for k in clave]
+    cols = ["pj", "banco", "sin", "tries", "conversiones", "penales", "drops", "puntos", "amarillas", "rojas", "minutos", "pj_min"]
     g = j.groupby(["player_id", "anio", "categoria"])[cols].sum().reset_index()
     g = g[(g.pj > 0) | (g.sin > 0)]
     stats = [[r.player_id, int(r.anio), CATEGORIAS.index(r.categoria)] + [int(getattr(r, c)) for c in cols]
@@ -170,6 +226,8 @@ def main():
     # puesto del que hizo el punto: la camiseta si era titular (1 a 15); si entró del banco, la camiseta con la que más veces fue titular
     tit = j[(j.rol == "Titular") & jugo].assign(d=pd.to_numeric(j.dorsal, errors="coerce"))
     habitual = tit[tit.d.between(1, 15)].groupby("player_id").d.agg(lambda x: int(x.mode().iloc[0]))
+    veces = tit[tit.d.between(1, 15)].groupby("player_id").size()
+    puestos = {pid: int(d) for pid, d in habitual.items() if veces.get(pid, 0) >= 3}
     def puesto(dorsal, pid):
         d = pd.to_numeric(dorsal, errors="coerce")
         return int(d) if pd.notna(d) and 1 <= d <= 15 else (int(habitual[pid]) if pid in habitual.index else None)
@@ -246,6 +304,26 @@ def main():
             "proximos": [[r.fecha_dt.strftime("%Y-%m-%d"), str(r.hora) if pd.notna(r.hora) else "", i_rival(r.rival),
                           "L" if r.condicion == "Local" else "V", i_torneo(r.torneo)] for r in prox.itertuples()],
         }
+    # en qué puesto quedó (o va) el equipo en la tabla de cada torneo: la tabla donde Los 50 jugó más partidos
+    pos = de_la_base('select tid, fixture_id, posicion, Equipo, "P.J." as pj from posiciones')
+    est = de_la_base("select tid, estado from torneos")
+    activos = {int(r.tid) for r in est.itertuples() if str(r.estado).startswith("Activo")}
+    tablas = []
+    if len(pos):
+        pos["pj"] = pd.to_numeric(pos.pj, errors="coerce").fillna(0)
+        pos["tid"] = pd.to_numeric(pos.tid, errors="coerce")  # en la base es texto; en el Excel, número
+        equipos = pos.groupby("fixture_id").size()
+        nuestros = pos[pos.Equipo.str.upper().str.contains("LOS 50", na=False)]
+        tor_cat = po.drop_duplicates("torneo_id").set_index("torneo_id")
+        for tid, g in nuestros.groupby("tid"):
+            if tid not in tor_cat.index:
+                continue
+            r = g.sort_values(["pj", "fixture_id"]).iloc[-1]
+            if r.pj <= 0 or pd.isna(r.posicion):
+                continue
+            t = tor_cat.loc[tid]
+            tablas.append([int(t.anio), CATEGORIAS.index(t.categoria), i_torneo(t.torneo), int(r.posicion), int(equipos[r.fixture_id]),
+                           int(r.pj), int(tid in activos)])
     # partidos de cada jugador (titular / entró / en el banco sin entrar): se carga aparte, solo al abrir "Sus partidos"
     rol = pd.Series("B", index=j.index).where(~jugo, "E").where(~(jugo & (j.rol == "Titular")), "T")
     jp = j.assign(r=rol, mid=j.partido_id.astype(int).astype(str))[jugo | (j.sin == 1)].sort_values("_f", ascending=False)
@@ -268,6 +346,8 @@ def main():
         "actuaciones": actuaciones,
         "primeros": primeros,
         "marcas": marcas,
+        "puestos": puestos,
+        "tablas": tablas,
         "agenda": agenda,
         "diarios": diarios,
     }
