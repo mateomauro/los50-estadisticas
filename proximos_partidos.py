@@ -49,11 +49,9 @@ def proximos():
     lista = [{"tid": r.tid, "fecha": r.f.strftime("%Y-%m-%d"), "hora": r.hora, "cat": r.categoria, "cond": str(r.condicion or " ")[0],
               "rival": r.rival, "inst": "Amistoso" if r.amistoso else instancia(r.ronda)} for r in p.itertuples()]
     # La UAR arma la final antes de jugar la semifinal, con equipos provisorios (en 2026 puso la final de plata de M19 contra el
-    # mismo rival de la semifinal). Si antes hay una ronda de eliminación sin jugar del mismo torneo, el rival todavía no se sabe.
-    for x in lista:
-        antes = [y for y in lista if y["tid"] == x["tid"] and y["fecha"] < x["fecha"] and 0 < nivel(y["inst"]) < nivel(x["inst"])]
-        if antes:
-            x["rival"], x["depende"] = "", {"fecha": antes[-1]["fecha"], "inst": antes[-1]["inst"]}
+    # mismo rival de la semifinal). Si antes hay una ronda de eliminación sin jugar del mismo torneo, no se muestra: aparece
+    # en la actualización siguiente a esa ronda, cuando la UAR ya cargó el rival de verdad.
+    lista = [x for x in lista if not any(y["tid"] == x["tid"] and y["fecha"] < x["fecha"] and 0 < nivel(y["inst"]) < nivel(x["inst"]) for y in lista)]
     for x in lista:
         del x["tid"]
     return lista
@@ -61,5 +59,4 @@ def proximos():
 
 if __name__ == "__main__":
     for x in proximos():
-        print(x["fecha"], x["hora"], f'{x["cat"]:<6}', "Local    " if x["cond"] == "L" else "Visitante", x["rival"] or "(a definir)", "·", x["inst"],
-              f'· depende de {x["depende"]["inst"]} del {x["depende"]["fecha"]}' if x.get("depende") else "")
+        print(x["fecha"], x["hora"], f'{x["cat"]:<6}', "Local    " if x["cond"] == "L" else "Visitante", x["rival"], "·", x["inst"])

@@ -663,14 +663,9 @@
   const proxDe = (cat) => proxTodos().filter((x) => x.cat === cat);
   const condTxt = (c) => (c === "L" ? "Local" : "Visitante");
   // siempre dice Los 50, con el local primero, así se ve que es un partido nuestro
-  const vsHTML = (x) => (x.depende ? `<span class="nos">LOS 50</span> vs <span class="a-definir">rival a definir</span>`
-    : x.cond === "L" ? `<span class="nos">LOS 50</span> vs ${esc(x.rival)}` : `${esc(x.rival)} vs <span class="nos">LOS 50</span>`);
-  /** abajo del partido: de local o de visitante y la instancia. Si la UAR armó la final antes de jugar la semifinal, de qué depende */
-  const subProx = (x) => {
-    if (!x.depende) return `De ${condTxt(x.cond).toLowerCase()}${x.inst ? ` · ${esc(x.inst)}` : ""}`;
-    const r = x.depende.inst.toLowerCase();
-    return `Si ganamos ${r.startsWith("cuartos") ? "los" : "la"} ${esc(r)} del ${esc(cuandoP({ fecha: x.depende.fecha }).replace(/ de \S+$/, ""))}${x.inst ? ` · ${esc(x.inst)}` : ""}`;
-  };
+  const vsHTML = (x) => (x.cond === "L" ? `<span class="nos">LOS 50</span> vs ${esc(x.rival)}` : `${esc(x.rival)} vs <span class="nos">LOS 50</span>`);
+  /** abajo del partido: de local o de visitante y la instancia */
+  const subProx = (x) => `De ${condTxt(x.cond).toLowerCase()}${x.inst ? ` · ${esc(x.inst)}` : ""}`;
   /** agrupados por día: la hora, la categoría, el rival y si es de local o de visitante */
   function proxHTML(lista) {
     const dias = [...new Set(lista.map((x) => x.fecha))];

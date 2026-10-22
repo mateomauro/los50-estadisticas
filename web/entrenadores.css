@@ -556,7 +556,6 @@
 .prox__txt b { font-size: 17px; font-weight: 700; color: var(--texto); }
 .prox__vs { font-size: 16px; font-weight: 600; color: var(--texto); }
 .nos { color: var(--azul); white-space: nowrap; }
-.a-definir { font-weight: 500; color: var(--suave); }
 .res__sub { display: block; margin-top: 2px; font-size: .875rem; line-height: 1.35; color: var(--suave); }
 
 /* prácticas: en la lista, el día del mes grande a la izquierda (como un almanaque) */
