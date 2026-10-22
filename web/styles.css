@@ -620,8 +620,7 @@ html:has(dialog[open]) { overflow: hidden; }
 .pj-celda span { display: block; margin-top: 4px; font-size: var(--t-etiqueta); line-height: 1.25; color: var(--suave); }
 .pj-celda--no { background: var(--fondo); }
 .pj-celda--cero b, .pj-celda--no b { color: var(--tenue); }
-.pj-tarjetas, .pj-debut { margin: 8px 0 0; font-size: var(--t-dato); color: var(--suave); }
-.pj-tarjetas + .pj-debut { margin-top: 2px; }
+.pj-debut { margin: 4px 0 0; font-size: var(--t-dato); color: var(--suave); }
 /* título de un bloque con su "?" (la explicación va ahí, no en un párrafo) */
 .bloque__cab { display: flex; align-items: center; gap: 10px; margin: 0 0 10px; }
 .bloque__cab h3 { margin: 0; }
@@ -746,13 +745,16 @@ html:has(dialog[open]) { overflow: hidden; }
 
 /* ---------- ficha: puesto, minutos, cuánto le falta para el próximo club y su mejor partido ---------- */
 .ficha__puesto::before { content: "·"; margin: 0 6px; }
-.pj-min { margin: 10px 0 0; font-size: var(--t-dato); color: var(--suave); }
-.pj-min b { font-weight: 700; color: var(--texto); }
-.prox { margin: 12px 0 0; }
+/* el próximo club: título y cuánto falta en un renglón, la barra abajo */
+.prox { margin: 14px 0 0; }
+.prox__txt { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin: 0 0 6px; font-size: var(--t-dato); }
+.prox__txt span { font-weight: 600; color: var(--texto); }
+.prox__txt b { font-weight: 700; color: var(--aviso-texto); }
 .prox__barra { height: 8px; border-radius: 4px; background: var(--fondo); overflow: hidden; }
 .prox__barra i { display: block; height: 100%; border-radius: 4px; background: linear-gradient(90deg, #f0c75a, #e2ac2f); }
-.prox p { margin: 6px 0 0; font-size: var(--t-dato); color: var(--suave); }
-.prox b { color: var(--aviso-texto); }
+/* minutos y tarjetas: un solo renglón de datos */
+.pj-datos { display: flex; flex-wrap: wrap; gap: 2px 14px; margin: 12px 0 0; font-size: var(--t-dato); color: var(--suave); }
+.pj-datos b { font-weight: 700; color: var(--texto); }
 .hito--mejor { background: var(--azul-claro); color: var(--azul-900); }
 .hito--mejor::before { background: var(--azul); }
 
@@ -763,11 +765,18 @@ html:has(dialog[open]) { overflow: hidden; }
 
 /* ---------- resultados: lo mejor del año, las tablas y quién hizo los tries ---------- */
 .res__anio { flex-wrap: wrap; row-gap: 6px; }
-.res__lideres, .res__tablas { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: var(--t-dato); color: var(--suave); }
-.res__tabla { padding: 2px 10px; border: 1px solid var(--borde); border-radius: 999px; background: var(--sup); }
-.res__tabla b { color: var(--texto); }
+.res__lideres { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 2px 18px; font-size: var(--t-dato); color: var(--suave); }
+/* el puesto en cada tabla: una lista pareja, el puesto alineado a la derecha (dos columnas cuando hay lugar) */
+.res__tablas { flex-basis: 100%; list-style: none; margin: 4px 0 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); column-gap: 20px;
+  font-size: var(--t-dato); }
+.res__tablas li { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 5px 0; border-top: 1px solid var(--borde); }
+.res__tablas span { min-width: 0; color: var(--suave); }
+.res__tablas b { flex: none; font-weight: 700; color: var(--texto); font-variant-numeric: tabular-nums; }
+@media (min-width: 720px) { .res__tablas { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .res__tries { display: block; margin-top: 2px; font-size: var(--t-dato); color: var(--suave); line-height: 1.45; }
 .res__jug { padding: 0; border: 0; background: none; font: inherit; color: var(--azul); cursor: pointer; text-decoration: underline; text-decoration-color: rgb(27 95 209 / 35%); text-underline-offset: 3px; }
 .res__jug:hover { text-decoration-color: currentColor; }
-.res__cuerpo .ver-planilla { min-height: 36px; padding: 0; margin-top: 2px; }
+/* el resultado con su letra en un renglón y la planilla abajo, a la derecha */
+.res__score { display: inline-flex; align-items: center; gap: 6px; }
+.res__marcador .ver-planilla { min-height: 36px; padding: 0; }
 .resultados > .pl-fila { padding: 0 14px 14px !important; }

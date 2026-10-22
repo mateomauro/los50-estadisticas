@@ -404,6 +404,13 @@
     .replace(/\s*[-–]?\s*(?:\bde\s+)?\b(pre[\s-]*interm[a-z]*|interm[a-z]*|primera|1ra\.?)(?=\s|$|[^a-záéíóúñ])/gi, "")
     .replace(/\s+(de|del|-)\s*$/i, "").replace(/\s{2,}/g, " ").trim();
   const abierto = (clave) => (S.panel && S.panel.clave === clave) || S.panelRes === clave;
+  /** el nombre corto de un torneo: sin la categoría, sin el código del principio ("01/2026", "2024/07") y sin el año */
+  const sinCodigo = (s) => s.replace(/^\d{1,2}\/\d{4}\s*|^\d{4}\/\d{1,2}\s*/, "").replace(/\b(19|20)\d\d\b/g, "")
+    .replace(/\s+int\.?$/i, "").replace(/\s{2,}/g, " ").replace(/^[\s\-–]+|[\s\-–]+$/g, "").trim();
+  function nombreTorneo(t) {
+    const c = sinCodigo(torneoCorto(t)), n = c.length >= 6 ? c : sinCodigo(String(t || ""));  // "2022 Preintermedia B" no queda en "B"
+    return n ? n[0].toUpperCase() + n.slice(1) : String(t || "");
+  }
 
   // ---------- la planilla oficial, ahí mismo: las mismas columnas que la planilla de la UAR ----------
   const PLANILLAS = new Map();  // partido -> datos de web/planillas/<partido>.json (o "error")
@@ -485,14 +492,16 @@
     const tarjetas = [j.amarillas && `<span class="tarj am" aria-hidden="true"></span>${j.amarillas} ${j.amarillas === 1 ? "amarilla" : "amarillas"}`,
       j.rojas && `<span class="tarj ro" aria-hidden="true"></span>${j.rojas} ${j.rojas === 1 ? "roja" : "rojas"}`].filter(Boolean);
     const debut = hitosDe(pid, S.cat).find((x) => x.tipo === "debut");
-    // minutos: con los cambios que anota la planilla (si una planilla no los tiene, ese partido no suma)
-    const minutos = j.pj_min ? `<p class="pj-min"><b class="num">${miles(j.minutos)}</b> minutos jugados · <b class="num">${Math.round(j.minutos / j.pj_min)}</b> por partido</p>` : "";
     // cuánto le falta para el próximo club (100, 200, 300...)
     const prox = (Math.floor(j.pj / CIEN) + 1) * CIEN, falta = prox - j.pj;
-    const hito = S.temp === "todas" && j.pj >= CIEN / 2 ? `<div class="prox"><div class="prox__barra" aria-hidden="true"><i style="width:${((j.pj % CIEN) / CIEN) * 100}%"></i></div>
-      <p>${falta === 1 ? "Le falta <b>1 partido</b>" : `Le faltan <b>${falta} partidos</b>`} para el Club de los ${prox}</p></div>` : "";
-    const resumen = `${cuenta}${minutos}${hito}
-      ${tarjetas.length ? `<p class="pj-tarjetas">${tarjetas.join(" · ")}</p>` : ""}
+    const hito = S.temp === "todas" && j.pj >= CIEN / 2 ? `<div class="prox">
+      <p class="prox__txt"><span>Club de los ${prox}</span><b>${falta === 1 ? "falta 1 partido" : `faltan ${falta} partidos`}</b></p>
+      <div class="prox__barra" aria-hidden="true"><i style="width:${((j.pj % CIEN) / CIEN) * 100}%"></i></div></div>` : "";
+    // minutos (con los cambios que anota la planilla: si una no los tiene, ese partido no suma) y tarjetas, en un renglón
+    const minutos = j.pj_min ? `<span><b class="num">${miles(j.minutos)}</b> minutos jugados (<b class="num">${Math.round(j.minutos / j.pj_min)}</b> por partido)</span>` : "";
+    const datos = [minutos, ...tarjetas.map((t) => `<span>${t}</span>`)].filter(Boolean);
+    const resumen = `${cuenta}${hito}
+      ${datos.length ? `<p class="pj-datos">${datos.join("")}</p>` : ""}
       ${debut ? `<p class="pj-debut">${esc(debut.txt)}</p>` : ""}`;
     let lista = "";
     if (S.verPartidos && PARTICIPA) {
@@ -911,10 +920,11 @@
       <li class="res">
         <span class="res__fecha">${fecha(p[2])}${p[2] ? "" : `<small>${p[0]}</small>`}<small>${p[5] === "L" ? "Local" : p[5] === "V" ? "Visitante" : ""}</small></span>
         <span class="res__cuerpo"><span class="res__rival">${esc(D.rivales[p[3]])}${S.fuente === "todo" && p[8] === "d" ? ' <span class="ev-tag ev-tag--diario">diario</span>' : ""}</span>
-          <span class="res__torneo">${p[4] >= 0 && D.torneos[p[4]] ? esc(torneoCorto(D.torneos[p[4]])) : ""}</span>
+          <span class="res__torneo">${p[4] >= 0 && D.torneos[p[4]] ? esc(nombreTorneo(D.torneos[p[4]])) : ""}</span>
           ${p[8] === "d" && p[9] >= 0 ? `<a class="ev-nota" href="${esc(DD.urls[p[9]])}" target="_blank" rel="noopener noreferrer">nota ↗</a>` : ""}
-          ${p[8] === "o" && p[11] ? triesDe(p[11]) + botonPlanilla(`r:${p[11]}`, p[11], null, `del ${fecha(p[2])} contra ${D.rivales[p[3]]}`) : ""}</span>
-        <span class="res__marcador res--${letra(p)}"><b class="num">${p[6]}–${p[7]}</b><i>${letra(p)}</i></span>
+          ${p[8] === "o" && p[11] ? triesDe(p[11]) : ""}</span>
+        <span class="res__marcador res--${letra(p)}"><span class="res__score"><b class="num">${p[6]}–${p[7]}</b><i>${letra(p)}</i></span>
+          ${p[8] === "o" && p[11] ? botonPlanilla(`r:${p[11]}`, p[11], null, `del ${fecha(p[2])} contra ${D.rivales[p[3]]}`) : ""}</span>
       </li>
       ${p[11] && S.panelRes === `r:${p[11]}` ? `<li class="pl-fila">${panelPlanilla(p[11], null, null)}</li>` : ""}`).join("");
   }
@@ -943,8 +953,9 @@
     const tr = lider("tries"), pt = lider("puntos", " pts");
     const lideres = [tr && `<span>Más tries: ${tr}</span>`, pt && `<span>Más puntos: ${pt}</span>`].filter(Boolean).join("");
     const tablas = (TABLAS.get(`${anio}|${S.cat}`) || []).map((t) =>
-      `<span class="res__tabla">${esc(torneoCorto(D.torneos[t.tor]))}: <b>${t.enCurso ? "va " : ""}${t.pos}°</b> de ${t.n}</span>`).join("");
-    return (lideres ? `<span class="res__lideres">${lideres}</span>` : "") + (tablas ? `<span class="res__tablas">${tablas}</span>` : "");
+      `<li><span>${esc(nombreTorneo(D.torneos[t.tor]))}</span><b>${t.enCurso ? "va " : ""}${t.pos}° de ${t.n}</b></li>`).join("");
+    return (lideres ? `<span class="res__lideres">${lideres}</span>` : "") +
+      (tablas ? `<ul class="res__tablas" aria-label="Puesto en cada torneo">${tablas}</ul>` : "");
   }
   // algunas planillas cuentan el 2º tiempo desde 0 y otras desde 40
   const minutoDelPartido = (e) => (e.tiempo === "2T" && e.minuto != null && e.minuto <= 40 ? 40 + e.minuto : e.minuto);
