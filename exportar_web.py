@@ -224,6 +224,11 @@ def main():
     # primer partido jugado de cada jugador en cada categoría (los registros empiezan en 2017)
     primeros = [[pid, CATEGORIAS.index(cat), g.fdt.iloc[0].strftime("%Y-%m-%d"), i_rival(g.rival.iloc[0])]
                 for (pid, cat), g in jj.sort_values("fdt").groupby(["player_id", "categoria"])]
+    # el partido 100, 200, 300... de cada jugador en cada categoría: el premio dorado de su ficha
+    marcas = [[pid, CATEGORIAS.index(cat), n, g.fdt.iloc[n - 1].strftime("%Y-%m-%d"), i_rival(g.rival.iloc[n - 1]),
+               str(int(g.partido_id.iloc[n - 1]))]
+              for (pid, cat), g in jj.sort_values("fdt").groupby(["player_id", "categoria"])
+              for n in range(100, len(g) + 1, 100)]
     # último resultado y próximos partidos de cada categoría
     pa = x["Partidos"]
     pa = pa[pa.categoria.isin(CATEGORIAS)].copy()
@@ -262,6 +267,7 @@ def main():
         "partidos": partidos,
         "actuaciones": actuaciones,
         "primeros": primeros,
+        "marcas": marcas,
         "agenda": agenda,
         "diarios": diarios,
     }

@@ -31,6 +31,13 @@
   const NOMBRE = (pid) => D.jugadores[pid] || (DD && DD.jugadores[pid]) || null;
   const ACT = (D.actuaciones || []).map((a) => ({ pid: a[0], cat: a[1], anio: a[2], fecha: a[3], rival: a[4], tries: a[5], puntos: a[6] }));
   const PRIMERO = new Map((D.primeros || []).map((p) => [`${p[0]}|${p[1]}`, { fecha: p[2], rival: p[3] }]));
+  // el partido 100, 200, 300... de cada uno en cada categoría (queda el más alto)
+  const MARCA = new Map();
+  for (const [pid, cat, n, f, rival] of D.marcas || []) {
+    const k = `${pid}|${cat}`;
+    if (!MARCA.has(k) || MARCA.get(k).n < n) MARCA.set(k, { n, fecha: f, rival });
+  }
+  const ICONO_MEDALLA = '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7.21 15 2.66 7.14a2 2 0 0 1 .13-2.2L4.4 2.8A2 2 0 0 1 6 2h12a2 2 0 0 1 1.6.8l1.6 2.14a2 2 0 0 1 .14 2.2L16.79 15"/><path d="M11 12 5.12 2.2M13 12l5.88-9.8M8 7h8"/><circle cx="12" cy="17" r="5"/><path d="M12 18v-2h-.5"/></svg>';
   const ANIO_INICIO = Math.min(...D.stats.map((r) => r[1]));
   const activo = (r) => r.pj > 0 || (r.f === "d" && r.puntos > 0);
   const rangoDe = (fs) => { const a = FILAS.filter((r) => fs.includes(r.f)).map((r) => r.anio); return a.length ? [Math.min(...a), Math.max(...a)] : null; };
@@ -334,7 +341,8 @@
       `<div class="grande${j[k] ? "" : " grande--cero"}"><strong class="num">${j[k]}</strong><span>${plural(j[k], u)}</span></div>`).join("")}</div>`;
     // orden: otras categorías · los 3 números · logros · sus partidos (el detalle del número grande) · año a año · sus puntos
     const hitos = hitosDe(pid, S.cat).filter((x) => x.tipo !== "debut").slice(0, 2);
-    const logros = hitos.length ? `<ul class="hitos">${hitos.map((x) => `<li class="hito hito--${x.tipo}">${esc(x.txt)}</li>`).join("")}</ul>` : "";
+    const logros = hitos.length ? `<ul class="hitos">${hitos.map((x) =>
+      `<li class="hito hito--${x.tipo}">${x.tipo === "marca" ? ICONO_MEDALLA : ""}${esc(x.txt)}</li>`).join("")}</ul>` : "";
     let h;
     if (S.fuente === "oficial") {
       h = otrasCats(pid) + grandes + logros + bloquePartidos(pid, j);
@@ -629,9 +637,9 @@
     for (const hi of hitosDe(pid, S.cat).slice(0, 3)) {
       texto(x, hi.txt, 36, 600, BASE, "#ffffff", W - 2 * M - 70);
       const w = Math.min(W - 2 * M, x.measureText(hi.txt).width + 70);
-      x.fillStyle = hi.tipo === "debut" ? "rgba(255,255,255,0.07)" : "rgba(242,194,0,0.16)";
+      x.fillStyle = hi.tipo === "debut" ? "rgba(255,255,255,0.07)" : hi.tipo === "marca" ? "rgba(240,199,90,0.34)" : "rgba(242,194,0,0.16)";
       x.beginPath(); x.roundRect(M, y - 46, w, 66, 33); x.fill();
-      x.fillStyle = hi.tipo === "debut" ? "#c3cad6" : "#f2c200";
+      x.fillStyle = hi.tipo === "debut" ? "#c3cad6" : hi.tipo === "marca" ? "#fbe7a1" : "#f2c200";
       x.beginPath(); x.arc(M + 32, y - 13, 9, 0, Math.PI * 2); x.fill();
       x.fillStyle = "#ffffff"; x.fillText(hi.txt, M + 54, y);
       y += 80;
@@ -789,11 +797,11 @@
         ${bloqueRec("Más tries", R.triesTemp, enTemp, "tries")}${bloqueRec("Más puntos", R.puntosTemp, enTemp, "puntos")}${bloqueRec("Más partidos", R.pjTemp, enTemp, "partidos")}</div>`;
     $("#records").innerHTML = h;
   }
-  /** hitos de un jugador en una categoría: club de los 100, primer partido y récords que tiene */
+  /** hitos de un jugador en una categoría: su partido 100 (200, 300...), récords que tiene y primer partido */
   function hitosDe(pid, cat) {
     const out = [];
-    const total = agregar(cat, "todas").find((j) => j.pid === pid);
-    if (total && total.pj >= CIEN) out.push({ tipo: "cien", txt: `Club de los ${CIEN}` });
+    const m = MARCA.get(`${pid}|${cat}`);
+    if (m) out.push({ tipo: "marca", txt: `Partido ${m.n} · ${fecha(m.fecha)} vs ${D.rivales[m.rival]}` });
     const R = recordsDe(cat, "todas");
     const rec = [["triesPartido", ["try", "tries"], "en un partido"], ["puntosPartido", ["punto", "puntos"], "en un partido"],
       ["triesTemp", ["try", "tries"], "en una temporada"], ["puntosTemp", ["punto", "puntos"], "en una temporada"],

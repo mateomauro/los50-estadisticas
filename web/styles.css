@@ -547,8 +547,14 @@ html:has(dialog[open]) { overflow: hidden; }
 .hito { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px; font-size: .875rem; font-weight: 600;
   background: var(--fondo); color: var(--texto); }
 .hito::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--suave); }
-.hito--cien, .hito--record { background: var(--aviso-fondo); color: var(--aviso-texto); }
-.hito--cien::before, .hito--record::before { background: var(--amarilla); }
+.hito--record { background: var(--aviso-fondo); color: var(--aviso-texto); }
+.hito--record::before { background: var(--amarilla); }
+/* el partido 100, 200, 300...: un premio, en dorado y con medalla */
+.hito--marca { padding: 5px 12px 5px 8px; border: 1px solid #d29d24; color: #3b2800;
+  background: linear-gradient(135deg, #fbe7a1 0%, #f0c75a 55%, #e2ac2f 100%);
+  box-shadow: 0 1px 2px rgb(120 80 0 / 18%), inset 0 1px 0 rgb(255 255 255 / 55%); }
+.hito--marca::before { display: none; }
+.hito--marca svg { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
 /* ---------- B: compartir la ficha ---------- */
 .compartir { display: inline-flex; align-items: center; gap: 6px; height: 44px; padding: 0 14px 0 12px; border: 0; border-radius: 12px;
