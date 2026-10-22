@@ -575,7 +575,7 @@
 .aviso--error { background: var(--rojo); color: #fff; }
 .aviso--error .link { color: #fff; font-size: 16px; font-weight: 700; }
 .aviso--espera { background: var(--negro); color: #fff; }
-[data-ver="lista"] .aviso { bottom: calc(max(16px, env(safe-area-inset-bottom)) + 88px); }
+[data-pantalla="lista"] .aviso { bottom: calc(max(16px, env(safe-area-inset-bottom)) + 88px); }
 @keyframes aviso-entra { from { transform: translateY(14px); opacity: 0; } }
 .cargando { margin: 0; padding: 24px 0; text-align: center; font-size: 16px; color: var(--suave); }
 /* hoy (o el próximo entrenamiento): lo primero de la pantalla, con un solo botón grande */

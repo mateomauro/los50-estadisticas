@@ -330,7 +330,7 @@
     $("#app").classList.toggle("app--ancha", S.ver === "inicio"); // el inicio usa dos columnas en la compu (y el pie se alinea con eso)
     GRAF.pend = [];
     soltarVideos();
-    $("#vista").dataset.ver = S.ver;
+    $("#vista").dataset.pantalla = S.ver; // ojo: no "data-ver", que es el de los botones "Ver todos"
     ({ inicio: vInicio, cat: vCategoria, club: vClub, consejos: vConsejos, guia: vGuia, cantos: vCantos, scrum: vScrum, ejercicios: vEjercicios, ejercicio: vEjercicio, puestos: vPuestos, puesto: vPuesto, practicas: vPracticas, practica: vPractica, proximos: vProximos,
       asistencia: vAsistencia, asis: vAsis, lista: vLista, chicos: vChicos })[S.ver]();
     dibujarGraficos();
@@ -1504,6 +1504,10 @@
   }
 
   // los formularios chicos (suspender, cambiar la hora, agregar, días, borrar): aparecen en el lugar, sin ventanas
+  // la hora se elige de una lista (de 7 a 23, cada 15 minutos): más fácil que escribirla y igual en todos los celulares
+  const HORAS = Array.from({ length: 65 }, (_, i) => { const m = 7 * 60 + i * 15; return `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`; });
+  const elegirHora = (id, valor) => `<select id="${id}" class="asis-input asis-input--hora">${[...new Set([...HORAS, valor].filter(Boolean))].sort()
+    .map((h) => `<option${h === valor ? " selected" : ""}>${esc(h)}</option>`).join("")}</select>`;
   const volverBtn = `<button type="button" class="btn-sec" data-form="">Volver</button>`;
   const formSuspender = (s, activos) => `<div class="asis-form"><span class="asis-form__l">¿Por qué se suspende?</span>
       <div class="chips-g chips-g--asis" role="group" aria-label="Motivo">${["Lluvia", "Cancha en mal estado", "Otro"].map((m) =>
@@ -1512,7 +1516,7 @@
       ${s.lista ? `<p class="asis-form__aviso">Este día ya tiene lista (vinieron ${vinieron(s.lista, activos)} de ${activos.length}). Si lo suspendés, esa lista no cuenta.</p>` : ""}
       <div class="asis-form__btns"><button type="button" class="btn btn--peligro btn--alto" data-cancelar-ok="${s.fecha}">Suspender el entrenamiento</button>${volverBtn}</div></div>`;
   const formHora = (s) => `<div class="asis-form"><label class="asis-form__campo">Nueva hora para el ${esc(cuandoP(s))}
-      <input id="hora-nueva" class="asis-input asis-input--hora" type="time" value="${esc(s.hora || "")}" required></label>
+      ${elegirHora("hora-nueva", s.hora || "18:00")}</label>
       <div class="asis-form__btns"><button type="button" class="btn btn--ok btn--alto" data-hora-ok="${s.fecha}">Cambiar la hora</button>${volverBtn}</div></div>`;
   const formBorrarExtra = (s) => `<div class="asis-form"><span class="asis-form__l">¿Borrar el entrenamiento agregado del ${esc(cuandoP(s))}?</span>
       <div class="asis-form__btns"><button type="button" class="btn btn--peligro btn--alto" data-deshacer="${s.fecha}">Borrarlo</button>${volverBtn}</div></div>`;
@@ -1520,12 +1524,12 @@
   const diaLibre = (d) => { let f = masDias(hoyISO(), 1); while (sesiones(d, f, f).length) f = masDias(f, 1); return f; };
   const formAgregar = (d) => `<div class="asis-form"><span class="asis-form__l">Un entrenamiento que no está en los días de siempre</span>
       <div class="asis-form__fila"><label class="asis-form__campo">Día<input id="fecha-nueva" class="asis-input" type="date" value="${diaLibre(d)}" required></label>
-        <label class="asis-form__campo">Hora<input id="hora-agregar" class="asis-input asis-input--hora" type="time" value="${esc((d.horarios[0] || {}).hora || "18:00")}" required></label></div>
+        <label class="asis-form__campo">Hora${elegirHora("hora-agregar", (d.horarios[0] || {}).hora || "18:00")}</label></div>
       <div class="asis-form__btns"><button type="button" class="btn btn--ok btn--alto" data-agregar-ok>${IC.mas}Agregar</button>${volverBtn}</div></div>`;
   const formDias = (d) => `<div class="asis-form"><span class="asis-form__l">Tocá los días que entrena</span>
       <div class="chips-g chips-g--asis chips-g--dias" role="group" aria-label="Días">${[1, 2, 3, 4, 5, 6, 0].map((n) =>
         `<button type="button" data-dia="${n}" aria-pressed="${d.horarios.some((h) => h.dia === n)}">${mayus(DIA_S[n].slice(0, 3))}</button>`).join("")}</div>
-      <label class="asis-form__campo">A qué hora<input id="hora-dias" class="asis-input asis-input--hora" type="time" value="${esc((d.horarios[0] || {}).hora || "18:00")}" required></label>
+      <label class="asis-form__campo">A qué hora${elegirHora("hora-dias", (d.horarios[0] || {}).hora || "18:00")}</label>
       <div class="asis-form__btns"><button type="button" class="btn btn--ok btn--alto" data-horarios-ok>Guardar los días</button>${d.horarios.length ? volverBtn : ""}</div></div>`;
 
   /** el entrenamiento de hoy (o el próximo): lo primero, con un solo botón grande */
