@@ -569,7 +569,7 @@
         ${px ? `<div class="prox">${IC.calendario}<span class="prox__txt"><span class="prox__lbl">Próximo partido</span>
           <b>${esc(mayus(cuandoP(px)))}${px.hora ? ` · ${esc(px.hora)}` : ""}</b>
           <span class="prox__vs">${vsHTML(px)}</span>
-          <span>De ${condTxt(px.cond).toLowerCase()}${px.inst ? ` · ${esc(px.inst)}` : ""}</span></span></div>` : ""}
+          <span>${subProx(px)}</span></span></div>` : ""}
         ${D.guia && gDe(cat) ? `<button type="button" class="atajo" data-ir-guia="${esc(cat)}">${IC.libro}<span>Qué tiene que aprender ${esc(cat)}</span>${IC.adelante}</button>` : ""}
         ${D.guia ? atajoPr(cat) : ""}
       </div>
@@ -663,14 +663,21 @@
   const proxDe = (cat) => proxTodos().filter((x) => x.cat === cat);
   const condTxt = (c) => (c === "L" ? "Local" : "Visitante");
   // siempre dice Los 50, con el local primero, así se ve que es un partido nuestro
-  const vsHTML = (x) => (x.cond === "L" ? `<span class="nos">LOS 50</span> vs ${esc(x.rival)}` : `${esc(x.rival)} vs <span class="nos">LOS 50</span>`);
+  const vsHTML = (x) => (x.depende ? `<span class="nos">LOS 50</span> vs <span class="a-definir">rival a definir</span>`
+    : x.cond === "L" ? `<span class="nos">LOS 50</span> vs ${esc(x.rival)}` : `${esc(x.rival)} vs <span class="nos">LOS 50</span>`);
+  /** abajo del partido: de local o de visitante y la instancia. Si la UAR armó la final antes de jugar la semifinal, de qué depende */
+  const subProx = (x) => {
+    if (!x.depende) return `De ${condTxt(x.cond).toLowerCase()}${x.inst ? ` · ${esc(x.inst)}` : ""}`;
+    const r = x.depende.inst.toLowerCase();
+    return `Si ganamos ${r.startsWith("cuartos") ? "los" : "la"} ${esc(r)} del ${esc(cuandoP({ fecha: x.depende.fecha }).replace(/ de \S+$/, ""))}${x.inst ? ` · ${esc(x.inst)}` : ""}`;
+  };
   /** agrupados por día: la hora, la categoría, el rival y si es de local o de visitante */
   function proxHTML(lista) {
     const dias = [...new Set(lista.map((x) => x.fecha))];
     return dias.map((f) => `<h3 class="grupo">${esc(mayus(cuandoP({ fecha: f })))}</h3>
       <ol class="resultados">${lista.filter((x) => x.fecha === f).map((x) => `<li class="res">
         <span class="res__fecha num">${esc(x.hora || "–")}</span>
-        <span class="res__cuerpo">${S.fcat ? "" : `<span class="chip chip--cat">${esc(x.cat)}</span>`}<span class="res__rival">${vsHTML(x)}</span><span class="res__torneo">De ${condTxt(x.cond).toLowerCase()}${x.inst ? ` · ${esc(x.inst)}` : ""}</span></span></li>`).join("")}</ol>`).join("");
+        <span class="res__cuerpo">${S.fcat ? "" : `<span class="chip chip--cat">${esc(x.cat)}</span>`}<span class="res__rival">${vsHTML(x)}</span><span class="res__sub">${subProx(x)}</span></span></li>`).join("")}</ol>`).join("");
   }
 
   // las categorías que tienen partidos por delante, en el orden de siempre (las que no están en la lista, al final)
