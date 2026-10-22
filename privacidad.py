@@ -18,6 +18,18 @@ _DNI_TEXTO = re.compile(r">(\s*)(?:\d{7,8}|\d{1,2}\.\d{3}\.\d{3})(\s*)<")       
 _DNI_LINK = re.compile(r"(/Trainings/checkPlayerCertification/\d+)/\d+", re.I)   # el link de certificar lleva el DNI
 _MAIL = re.compile(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+")
 _DNI_CELDA = re.compile(r"\d{7,8}|\d{1,2}\.\d{3}\.\d{3}")
+# DNI pegado a un nombre: "Entrenador LOCAL: Juan Pérez 28200425", "Juan Pérez 11991906 (No oficial)", "Juan Pérez(25665521)".
+# En el texto de las planillas no hay otros números de 7 u 8 cifras (revisado en las 3.000 páginas, octubre 2026).
+_DNI_EN_TEXTO = re.compile(r"(?<![\d.])(?:\d{7,8}|\d{1,2}\.\d{3}\.\d{3})(?![\d.])")
+_NODO = re.compile(r">([^<]+)<")
+_CODIGO = re.compile(r"(<script\b.*?</script>|<style\b.*?</style>|<!--.*?-->)", re.S | re.I)
+
+
+def _sin_dni_en_texto(html):
+    partes = _CODIGO.split(html)  # el código de la página (scripts, estilos, comentarios) no se toca
+    for i in range(0, len(partes), 2):
+        partes[i] = _NODO.sub(lambda m: ">" + _DNI_EN_TEXTO.sub("[DNI]", m.group(1)) + "<", partes[i])
+    return "".join(partes)
 
 
 def limpiar(html):
@@ -25,6 +37,7 @@ def limpiar(html):
         return html
     html = _CAMPO.sub(r"\1\3", html)
     html = _DNI_TEXTO.sub(r">\1[DNI]\2<", html)
+    html = _sin_dni_en_texto(html)
     html = _DNI_LINK.sub(r"\1/0", html)
     return _MAIL.sub("[mail]", html)
 

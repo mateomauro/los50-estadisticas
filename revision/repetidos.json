@@ -1,0 +1,44 @@
+[
+ {
+  "id": "dup-206236-245421",
+  "tipo": "repetido",
+  "titulo": "¿Es la misma persona?",
+  "motivo": "Nacieron el mismo día y el nombre está escrito parecido. Nunca jugaron el mismo partido.",
+  "ids": [
+   "206236",
+   "245421"
+  ],
+  "fichas": [
+   {
+    "id": "206236",
+    "nombre": "Christiansen, Emmanuel",
+    "nacio": "05/10/2007",
+    "partidos": 114,
+    "anios": "2022–2026",
+    "categorias": "Pre-Intermedia, M19, M17, M16, M15"
+   },
+   {
+    "id": "245421",
+    "nombre": "Christiansen, Emanuel",
+    "nacio": "05/10/2007",
+    "partidos": 33,
+    "anios": "2017–2018",
+    "categorias": "Intermedia, Pre-Intermedia, M19"
+   }
+  ],
+  "opciones": [
+   [
+    "si",
+    "Sí, es la misma persona"
+   ],
+   [
+    "no",
+    "No, son distintos"
+   ],
+   [
+    "nose",
+    "No sé"
+   ]
+  ]
+ }
+]

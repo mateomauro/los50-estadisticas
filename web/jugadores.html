@@ -8,12 +8,25 @@
   <meta name="theme-color" content="#0B0D12">
   <link rel="icon" type="image/png" href="img/favicon.png">
   <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="preload" href="fonts/barlow-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/barlow-condensed-700.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="styles.css">
+  <script>
+    /* Animación de entrada (intro.js, la eligió el club: marcador 0 → 50). Una vez por semana en cada dispositivo
+       (WhatsApp abre cada link como una visita nueva) y no cuando se entra por el link de un jugador. ?intro=N la fuerza. */
+    (function () {
+      var INTRO = "2";
+      try {
+        var p = new URLSearchParams(location.search);
+        var vista = +localStorage.getItem("los50-intro") || 0;
+        var auto = INTRO && !p.has("j") && Date.now() - vista > 7 * 864e5 && !matchMedia("(prefers-reduced-motion: reduce)").matches;
+        var v = p.get("intro") || (auto ? INTRO : null);
+        if (v === "1" || v === "2" || v === "3") { window.INTRO = v; document.documentElement.classList.add("intro-pendiente"); }
+      } catch (e) { /* sin animación */ }
+    })();
+  </script>
 </head>
-<body>
+<body class="cargando">
   <a class="skip" href="#lista">Ir a la lista de jugadores</a>
 
   <header class="top">
@@ -22,14 +35,18 @@
         <img class="top__escudo" src="img/escudo-160.webp" width="160" height="173" alt="">
       </a>
       <div class="top__textos">
-        <h1 class="top__titulo">Los 50 <span>Jugadores</span></h1>
-        <p class="top__sub">Plantel superior · <span id="rango"></span></p>
-        <p class="top__act" id="act-top"></p>
+        <h1 class="top__titulo">Los 50 <span id="titulo-vista">Jugadores</span></h1>
+        <p class="top__sub"><span class="top__ps">Plantel superior · </span><span id="act-top"></span></p>
       </div>
       <a class="top__inicio" href="index.html">
         <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>Inicio</a>
     </div>
-    <nav class="fuentes" id="fuentes" role="group" aria-label="De dónde salen los datos"></nav>
+    <nav class="vistas" id="vistas" aria-label="Secciones">
+      <button type="button" data-vista="jugadores" aria-pressed="true">Jugadores</button>
+      <button type="button" data-vista="resultados" aria-pressed="false">Resultados</button>
+      <button type="button" data-vista="records" aria-pressed="false">Récords</button>
+    </nav>
+    <nav class="fuentes" id="fuentes" role="group" aria-label="De dónde salen los datos" hidden></nav>
   </header>
 
   <section class="filtros" aria-label="Filtros">
@@ -38,33 +55,37 @@
 
       <div class="fila">
         <label class="buscar">
-          <span class="sr">Buscar jugador</span>
+          <span class="sr">Buscá a un jugador</span>
           <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-          <input id="q" type="search" placeholder="Buscar jugador" autocomplete="off" enterkeyhint="search">
+          <input id="q" type="search" placeholder="Buscá a un jugador" autocomplete="off" enterkeyhint="search">
         </label>
         <label class="temp">
           <span class="temp__lbl">Temporada</span>
-          <select id="temp"></select>
+          <select id="temp"><option value="todas">Todas</option></select>
         </label>
-      </div>
-
-      <div class="orden">
-        <span class="orden__lbl" id="orden-lbl">Ordenar por</span>
-        <div class="chips" role="group" aria-labelledby="orden-lbl" id="chips"></div>
       </div>
     </div>
   </section>
 
   <main id="lista" class="lista" tabindex="-1">
-    <div class="vistas" id="vistas" role="group" aria-label="Qué ver">
-      <button type="button" data-vista="jugadores" aria-pressed="true">Jugadores</button>
-      <button type="button" data-vista="resultados" aria-pressed="false">Resultados del equipo</button>
+    <div class="orden">
+      <span class="sr" id="orden-lbl">Ordenar por</span>
+      <div class="chips" role="group" aria-labelledby="orden-lbl" id="chips"></div>
     </div>
     <p class="aviso" id="aviso" hidden></p>
-    <p class="resumen" id="resumen" aria-live="polite"></p>
-    <div class="balance" id="balance" hidden></div>
+    <p class="resumen" id="resumen" aria-live="polite">Cargando jugadores…</p>
+    <!-- Resultados: el último partido y cómo le fue (en la compu, columna fija a la izquierda) -->
+    <div class="res-lado">
+      <div class="agenda" id="agenda" hidden></div>
+      <div class="balance" id="balance" hidden></div>
+      <details class="te" id="tries-eq" hidden></details>
+    </div>
     <ol class="resultados" id="resultados" hidden></ol>
-    <ol class="cards" id="cards"></ol>
+    <div class="records" id="records" hidden></div>
+    <ol class="cards" id="cards">
+      <li class="esqueleto" aria-hidden="true"></li><li class="esqueleto" aria-hidden="true"></li><li class="esqueleto" aria-hidden="true"></li>
+      <li class="esqueleto" aria-hidden="true"></li><li class="esqueleto" aria-hidden="true"></li><li class="esqueleto" aria-hidden="true"></li>
+    </ol>
     <div class="tabla-wrap" id="tabla-wrap">
       <table class="tabla" id="tabla"><thead></thead><tbody></tbody></table>
     </div>
@@ -72,30 +93,57 @@
       <p id="vacio-txt">No encontramos jugadores con ese nombre.</p>
       <button type="button" class="btn" id="limpiar">Borrar búsqueda</button>
     </div>
+    <div class="en-otras" id="en-otras" hidden></div>
   </main>
 
   <footer class="pie">
-    <p><b>Oficial:</b> planillas cargadas en la base de datos de la UAR. Actualizado el <span id="actualizado"></span>.
-      Partidos jugados = de titular + entrando desde el banco.</p>
-    <p><b>Diarios:</b> notas de El Eco de Tandil. Datos parciales y no oficiales: solo partidos publicados.</p>
+    <p>Datos oficiales de la base de datos de la UAR · actualizado el <span id="actualizado"></span>.</p>
+    <p class="pie__links">
+      <button type="button" class="pie__link" data-como>¿Cómo se cuenta?</button>
+      <a class="pie__link" href="revisar.html">Revisar datos (para el club)</a>
+    </p>
   </footer>
+
+  <dialog class="ficha" id="como" aria-labelledby="como-titulo">
+    <div class="ficha__hoja">
+      <div class="ficha__agarre" aria-hidden="true"></div>
+      <div class="ficha__top">
+        <div>
+          <h2 id="como-titulo" class="ficha__nombre" tabindex="-1">¿Cómo se cuenta?</h2>
+        </div>
+        <button type="button" class="cerrar" id="cerrar-como" aria-label="Cerrar">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+      <div class="ficha__cuerpo"><dl class="como" id="como-lista"></dl></div>
+    </div>
+  </dialog>
 
   <dialog class="ficha" id="ficha" aria-labelledby="ficha-nombre">
     <div class="ficha__hoja">
       <div class="ficha__agarre" aria-hidden="true"></div>
-      <header class="ficha__top">
+      <div class="ficha__top">
         <div>
-          <h2 id="ficha-nombre" class="ficha__nombre"></h2>
+          <h2 id="ficha-nombre" class="ficha__nombre" tabindex="-1"></h2>
           <p class="ficha__meta" id="ficha-meta"></p>
         </div>
         <button type="button" class="cerrar" id="cerrar" aria-label="Cerrar ficha">
           <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>
         </button>
-      </header>
+      </div>
       <div class="ficha__cuerpo" id="ficha-cuerpo"></div>
+      <div class="ficha__pie">
+        <button type="button" class="compartir" id="compartir">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 15V3M7 8l5-5 5 5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg><span>Compartir su ficha</span></button>
+      </div>
     </div>
+    <!-- dentro de la ficha, para que se vea y se lea por encima de ella -->
+    <div class="toast" id="toast-ficha" role="status" aria-live="polite"></div>
   </dialog>
 
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="intro.js"></script>
   <script src="data.js"></script>
   <script src="app.js"></script>
 </body>

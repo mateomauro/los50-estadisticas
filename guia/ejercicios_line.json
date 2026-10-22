@@ -1,0 +1,520 @@
+[
+ {
+  "id": "line-lanzador-1",
+  "tipo": "Line",
+  "grupo": "Lanzador",
+  "paso": 1,
+  "nombre": "Toma y lanzo al pad en el suelo",
+  "como": [],
+  "foco": [
+   "Terminar con manos enfrentadas, apunto a donde lanzo, máxima potencia (tríceps)."
+  ],
+  "material": "1 pelota cada 2",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-lanzador-2",
+  "tipo": "Line",
+  "grupo": "Lanzador",
+  "paso": 2,
+  "nombre": "Acostado boca arriba en bolsa de tackle lanzo hacia arriba",
+  "como": [],
+  "foco": [
+   "Apunto a donde lanzo, máxima potencia (tríceps). Si se va para atrás, soltó antes; si se va para adelante, soltó tarde."
+  ],
+  "material": "Bolsa de tackle y pelota",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-lanzador-3",
+  "tipo": "Line",
+  "grupo": "Lanzador",
+  "paso": 3,
+  "nombre": "Lanzo sentado solo utilizando brazos",
+  "como": [],
+  "foco": [
+   "Terminación con manos enfrentadas, dejo manos a donde lanzo."
+  ],
+  "material": "Bolsa de tackle",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-lanzador-4",
+  "tipo": "Line",
+  "grupo": "Lanzador",
+  "paso": 4,
+  "nombre": "Lanzo arrodillado solo usando brazos",
+  "como": [],
+  "foco": [
+   "Terminación de las manos por encima de la vista, no bajar brazos. Sin hamacarse."
+  ],
+  "material": "",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-lanzador-5",
+  "tipo": "Line",
+  "grupo": "Lanzador",
+  "paso": 5,
+  "nombre": "Lanzo arrodillado por encima de valla/alambrado, modificando distancia",
+  "como": [],
+  "foco": [
+   "Terminación de las manos por encima de la vista, no bajar brazos. Sin hamacarse."
+  ],
+  "material": "Valla o el alambrado del club",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-lanzador-6",
+  "tipo": "Line",
+  "grupo": "Lanzador",
+  "paso": 6,
+  "nombre": "Lanzo arrodillado agregando minibands en codos según necesidad",
+  "como": [],
+  "foco": [
+   "Terminación de las manos por encima de la vista, no bajar brazos, sin hamacarse, contracción de abdominales y glúteos."
+  ],
+  "material": "Vallas o alambrado",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-lanzador-7",
+  "tipo": "Line",
+  "grupo": "Lanzador",
+  "paso": 7,
+  "nombre": "Lanzo parado sin usar el core, core solo contraído",
+  "como": [],
+  "foco": [
+   "Observar movilidad escapular y de hombro. Cerrar codos, explotar tríceps."
+  ],
+  "material": "",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-lanzador-8",
+  "tipo": "Line",
+  "grupo": "Lanzador",
+  "paso": 8,
+  "nombre": "Lanzo parado a mayores distancias usando todo el cuerpo",
+  "como": [],
+  "foco": [
+   "Terminación de manos, utilización de tronco, iniciar con pelota cargada."
+  ],
+  "material": "",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-saltador-1",
+  "tipo": "Line",
+  "grupo": "Saltador",
+  "paso": 1,
+  "nombre": "Arrodillado recibo con brazos extendidos y mirada en la pelota",
+  "como": [],
+  "foco": [
+   "Cuerpo en tensión."
+  ],
+  "material": "1 pelota cada 2",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-saltador-2",
+  "tipo": "Line",
+  "grupo": "Saltador",
+  "paso": 2,
+  "nombre": "Arrodillado recibo con brazos extendidos a los lados del cuerpo",
+  "como": [],
+  "foco": [
+   "Cuerpo en tensión."
+  ],
+  "material": "1 pelota cada 2",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-saltador-3",
+  "tipo": "Line",
+  "grupo": "Saltador",
+  "paso": 3,
+  "nombre": "Arrodillado recibo con brazos extendidos pelota pasada",
+  "como": [],
+  "foco": [
+   "Cuerpo en tensión."
+  ],
+  "material": "1 pelota cada 2",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-saltador-4",
+  "tipo": "Line",
+  "grupo": "Saltador",
+  "paso": 4,
+  "nombre": "Parado recibo con brazos extendidos y mirada en la bola",
+  "como": [],
+  "foco": [
+   "Cuerpo en tensión."
+  ],
+  "material": "1 pelota cada 2",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-saltador-5",
+  "tipo": "Line",
+  "grupo": "Saltador",
+  "paso": 5,
+  "nombre": "Parado recibo con brazos extendidos a los lados del cuerpo",
+  "como": [],
+  "foco": [
+   "Cuerpo en tensión."
+  ],
+  "material": "1 pelota cada 2",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-saltador-6",
+  "tipo": "Line",
+  "grupo": "Saltador",
+  "paso": 6,
+  "nombre": "Parado recibo con brazos extendidos pelota pasada",
+  "como": [],
+  "foco": [
+   "Cuerpo en tensión."
+  ],
+  "material": "1 pelota cada 2",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-saltador-7",
+  "tipo": "Line",
+  "grupo": "Saltador",
+  "paso": 7,
+  "nombre": "Parado recibo con una mano y delivery con dos manos",
+  "como": [],
+  "foco": [
+   "Delivery veloz, core contraído."
+  ],
+  "material": "1 pelota cada 2",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-saltador-8",
+  "tipo": "Line",
+  "grupo": "Saltador",
+  "paso": 8,
+  "nombre": "Arrodillado en bolsa de tackle, core fuerte y equilibrio, delivery",
+  "como": [],
+  "foco": [
+   "Delivery veloz, core contraído."
+  ],
+  "material": "1 pelota cada 2",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-saltador-9",
+  "tipo": "Line",
+  "grupo": "Saltador",
+  "paso": 9,
+  "nombre": "Recibir con salto a máxima altura",
+  "como": [],
+  "foco": [
+   "Saltar con \"gemelos\" sin contramovimiento. Puntas de pie como bailarina. Codos dentro, manos a la altura de la cara."
+  ],
+  "material": "1 pelota cada 2",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-saltador-10",
+  "tipo": "Line",
+  "grupo": "Saltador",
+  "paso": 10,
+  "nombre": "Recibir con salto previo movimiento (un paso adelante)",
+  "como": [],
+  "foco": [
+   "Saltar con \"gemelos\" sin contramovimiento. Puntas de pie como bailarina. Codos dentro, manos a la altura de la cara."
+  ],
+  "material": "1 pelota cada 2",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-saltador-11",
+  "tipo": "Line",
+  "grupo": "Saltador",
+  "paso": 11,
+  "nombre": "Saltos explosivos de gemelos sin contramovimiento",
+  "como": [],
+  "foco": [
+   "Saltar con \"gemelos\" sin contramovimiento. Puntas de pie como bailarina. Codos dentro, manos a la altura de la cara."
+  ],
+  "material": "1 pelota cada 2",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-saltador-12",
+  "tipo": "Line",
+  "grupo": "Saltador",
+  "paso": 12,
+  "nombre": "Me tocan y salto con gemelos sin contramovimiento",
+  "como": [],
+  "foco": [
+   "Saltar con \"gemelos\" sin contramovimiento. Puntas de pie como bailarina. Codos dentro, manos a la altura de la cara."
+  ],
+  "material": "1 pelota cada 2",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-saltador-13",
+  "tipo": "Line",
+  "grupo": "Saltador",
+  "paso": 13,
+  "nombre": "Un paso para atrás y salto sin contramovimiento",
+  "como": [],
+  "foco": [
+   "Saltar con \"gemelos\" sin contramovimiento. Puntas de pie como bailarina. Codos dentro, manos a la altura de la cara."
+  ],
+  "material": "1 pelota cada 2",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-saltador-14",
+  "tipo": "Line",
+  "grupo": "Saltador",
+  "paso": 14,
+  "nombre": "De perfil y salto sin contramovimiento",
+  "como": [],
+  "foco": [
+   "Saltar con \"gemelos\" sin contramovimiento. Puntas de pie como bailarina. Codos dentro, manos a la altura de la cara."
+  ],
+  "material": "1 pelota cada 2",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-saltador-15",
+  "tipo": "Line",
+  "grupo": "Saltador",
+  "paso": 15,
+  "nombre": "De perfil a la orden van a la derecha o a la izquierda y saltan",
+  "como": [],
+  "foco": [
+   "Saltar con \"gemelos\" sin contramovimiento. Puntas de pie como bailarina. Codos dentro, manos a la altura de la cara."
+  ],
+  "material": "1 pelota cada 2",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-levantador-1",
+  "tipo": "Line",
+  "grupo": "Levantador",
+  "paso": 1,
+  "nombre": "Posición básica en inicio y finalización y lo desestabilizan",
+  "como": [],
+  "foco": [
+   "Estabilidad y fuerza isométrica."
+  ],
+  "material": "",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-levantador-2",
+  "tipo": "Line",
+  "grupo": "Levantador",
+  "paso": 2,
+  "nombre": "De frente, a la orden hacer el gesto de levantar bien explosivo",
+  "como": [],
+  "foco": [
+   "Explosivo sin perder equilibrio y meterse abajo."
+  ],
+  "material": "",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-levantador-3",
+  "tipo": "Line",
+  "grupo": "Levantador",
+  "paso": 3,
+  "nombre": "De frente girar a la derecha y gesto de levantar explosivo",
+  "como": [],
+  "foco": [
+   "Mirar giros, sin contramovimiento. Meterse abajo y explosivo. Evitar muchos movimientos de pies. Deben hacer pasos concretos y seguros."
+  ],
+  "material": "",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-levantador-4",
+  "tipo": "Line",
+  "grupo": "Levantador",
+  "paso": 4,
+  "nombre": "Lo mismo, girando a la izquierda",
+  "como": [],
+  "foco": [
+   "Mirar giros, sin contramovimiento. Meterse abajo y explosivo. Evitar muchos movimientos de pies. Deben hacer pasos concretos y seguros."
+  ],
+  "material": "",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-levantador-5",
+  "tipo": "Line",
+  "grupo": "Levantador",
+  "paso": 5,
+  "nombre": "De perfil a la orden voy a la bolsa que me dicen y lanzo al aire (gesto técnico)",
+  "como": [],
+  "foco": [
+   "Sin contramovimiento. Velocidad. Agazapado. Evitar muchos movimientos de pies. Deben hacer pasos concretos y seguros."
+  ],
+  "material": "Bolsa de tackle",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-levantador-6",
+  "tipo": "Line",
+  "grupo": "Levantador",
+  "paso": 6,
+  "nombre": "Lo mismo, pero de frente",
+  "como": [],
+  "foco": [
+   "Sin contramovimiento. Velocidad. Agazapado. Evitar muchos movimientos de pies. Deben hacer pasos concretos y seguros."
+  ],
+  "material": "Bolsa de tackle",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-levantador-7",
+  "tipo": "Line",
+  "grupo": "Levantador",
+  "paso": 7,
+  "nombre": "Carreras de una levantada de bolsa a la orden",
+  "como": [],
+  "foco": [
+   "Sin contramovimiento. Velocidad. Agazapado. Evitar muchos movimientos de pies. Deben hacer pasos concretos y seguros."
+  ],
+  "material": "Bolsa de tackle",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-levantador-8",
+  "tipo": "Line",
+  "grupo": "Levantador",
+  "paso": 8,
+  "nombre": "Carrera de levantada de dos bolsas según la orden",
+  "como": [],
+  "foco": [
+   "Sin contramovimiento. Velocidad. Agazapado. Evitar muchos movimientos de pies. Deben hacer pasos concretos y seguros."
+  ],
+  "material": "Bolsa de tackle",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-trios-1",
+  "tipo": "Line",
+  "grupo": "Tríos",
+  "paso": 1,
+  "nombre": "En el lugar a la orden arriba y sostener",
+  "como": [],
+  "foco": [
+   "Técnica."
+  ],
+  "material": "Conos",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-trios-2",
+  "tipo": "Line",
+  "grupo": "Tríos",
+  "paso": 2,
+  "nombre": "Dos pasos hacia atrás y salto",
+  "como": [],
+  "foco": [
+   "Velocidad de pies sin contramovimiento."
+  ],
+  "material": "Conos",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-trios-3",
+  "tipo": "Line",
+  "grupo": "Tríos",
+  "paso": 3,
+  "nombre": "Dos pasos hacia delante y arriba",
+  "como": [],
+  "foco": [
+   "Velocidad de pies sin contramovimiento."
+  ],
+  "material": "Conos",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-trios-4",
+  "tipo": "Line",
+  "grupo": "Tríos",
+  "paso": 4,
+  "nombre": "Saltador entra y arriba",
+  "como": [],
+  "foco": [
+   "Coordinación, sin contramovimiento."
+  ],
+  "material": "Conos",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-trios-5",
+  "tipo": "Line",
+  "grupo": "Tríos",
+  "paso": 5,
+  "nombre": "Carreras dentro del line yendo al espacio",
+  "como": [],
+  "foco": [
+   "Velocidad sin contramovimiento."
+  ],
+  "material": "Conos",
+  "cats": [],
+  "fotos": []
+ },
+ {
+  "id": "line-trios-6",
+  "tipo": "Line",
+  "grupo": "Tríos",
+  "paso": 6,
+  "nombre": "Competencia de tríos solo máxima velocidad",
+  "como": [],
+  "foco": [
+   "Velocidad sin contramovimiento."
+  ],
+  "material": "Conos",
+  "cats": [],
+  "fotos": []
+ }
+]

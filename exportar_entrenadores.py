@@ -23,7 +23,9 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 sys.argv = sys.argv[:1]
 import analisis_metricas as A  # noqa: E402
+import guia_entrenadores as G  # noqa: E402
 import recomendaciones_expertos as R  # noqa: E402
+import tries_analisis as T  # noqa: E402
 
 HERE = Path(__file__).parent
 DESTINO = HERE / "web" / "entrenadores.data.js"
@@ -120,6 +122,12 @@ def no_siguieron(p, i, d):
     return tabla(pd.DataFrame(filas).sort_values(["cat", "anio", "jugo", "planillas"], ascending=[True, True, False, False]))
 
 
+def fotos():
+    """Las fotos de los ejercicios (guia/fotos) como data URL. Van cifradas en un archivo aparte (entrenadores.fotos.json),
+    que la página baja solo cuando se abre un ejercicio con fotos: así no pesa en cada entrada."""
+    return {f.stem: "data:image/webp;base64," + base64.b64encode(f.read_bytes()).decode("ascii") for f in sorted(G.FOTOS.glob("*.webp"))}
+
+
 def main():
     d = A.cargar()
     p, i = A.preparar(d)
@@ -146,12 +154,16 @@ def main():
         "no_siguieron": no_siguieron(p, i, d),
         "diagnostico": R.DIAGNOSTICO, "diag_web": R.DIAG_WEB, "expertos": R.EXPERTOS, "a_medir": R.A_MEDIR, "fuentes": R.FUENTES,
         "glosario": A.GLOSARIO, "notas": A.NOTAS,
-
+        "guia": G.guia(),  # material de Coordinación: qué aprende cada categoría, cantos, zonas y scrum
+        # quién hace los tries y cuándo, por categoría y año (tries_analisis.py; en juveniles solo cuándo)
+        "tries": {c: v for c, v in T.tries_por_categoria().items() if c in A.ORDEN},
     }
     crudo = json.dumps(datos, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+    fotos_ = json.dumps(fotos(), separators=(",", ":")).encode("utf-8")
+    destino_fotos = DESTINO.with_name("entrenadores.fotos.json")
     sin_fecha = dict(datos, actualizado="")
-    huella = hashlib.sha256(json.dumps(sin_fecha, ensure_ascii=False, sort_keys=True).encode("utf-8") + clave().encode("utf-8")).hexdigest()
-    if DESTINO.exists() and HUELLA.exists() and HUELLA.read_text().strip() == huella:
+    huella = hashlib.sha256(json.dumps(sin_fecha, ensure_ascii=False, sort_keys=True).encode("utf-8") + fotos_ + clave().encode("utf-8")).hexdigest()
+    if DESTINO.exists() and destino_fotos.exists() and HUELLA.exists() and HUELLA.read_text().strip() == huella:
         print(f"Sin cambios en los datos de entrenadores: {DESTINO.name} queda igual")
         return
 
@@ -162,8 +174,11 @@ def main():
     sobre = {"v": 1, "vueltas": VUELTAS, "sal": b64(sal), "iv": b64(iv), "datos": b64(cifrado)}
     DESTINO.write_text("/* Sección Entrenadores: datos cifrados (se abren con la clave). Generado por exportar_entrenadores.py */\n"
                        f"window.ENTRENADORES={json.dumps(sobre)};\n", encoding="utf-8")
+    # las fotos, con la misma llave (misma sal) y otro iv
+    iv_f = os.urandom(12)
+    destino_fotos.write_text(json.dumps({"v": 1, "iv": b64(iv_f), "datos": b64(AESGCM(k).encrypt(iv_f, gzip.compress(fotos_, 9), None))}), encoding="utf-8")
     HUELLA.write_text(huella)
-    print(f"Listo: {DESTINO} ({DESTINO.stat().st_size // 1024} KB; sin cifrar {len(crudo) // 1024} KB)")
+    print(f"Listo: {DESTINO} ({DESTINO.stat().st_size // 1024} KB; sin cifrar {len(crudo) // 1024} KB) y {destino_fotos.name} ({destino_fotos.stat().st_size // 1024} KB)")
 
 
 if __name__ == "__main__":

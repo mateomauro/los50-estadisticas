@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Los 50 · Revisar datos</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#0B0D12">
+  <link rel="icon" type="image/png" href="img/favicon.png">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <link rel="preload" href="fonts/barlow-condensed-700.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="revisar.css">
+</head>
+<body class="ent">
+  <!-- ingreso con clave -->
+  <main class="candado" id="candado">
+    <form class="candado__caja" id="form-clave" autocomplete="off">
+      <img class="candado__escudo" src="img/escudo-160.webp" width="160" height="173" alt="Escudo del Club Los 50">
+      <h1 class="candado__titulo">Revisar datos</h1>
+      <p class="candado__sub">Para la persona del club que conoce los partidos: preguntas sobre planillas que pueden tener un error.</p>
+      <label class="candado__campo">
+        <span class="sr">Clave</span>
+        <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+        <input id="clave" type="password" placeholder="Clave" autocomplete="current-password" enterkeyhint="go" required>
+        <button type="button" class="candado__ver" id="ver-clave" aria-label="Mostrar la clave" aria-pressed="false">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </label>
+      <label class="candado__recordar"><input type="checkbox" id="recordar"> Recordar en este dispositivo</label>
+      <p class="candado__error" id="error-clave" role="alert" hidden></p>
+      <button class="candado__entrar" type="submit" id="entrar">Entrar</button>
+      <a class="candado__volver" href="jugadores.html">← Volver a Jugadores</a>
+    </form>
+  </main>
+
+  <!-- las preguntas (se muestran al entrar con la clave) -->
+  <div class="app" id="app" hidden>
+    <header class="top">
+      <div class="top__in">
+        <a class="top__home" href="index.html" aria-label="Volver al inicio">
+          <img class="top__escudo" src="img/escudo-160.webp" width="160" height="173" alt="">
+        </a>
+        <div class="top__textos">
+          <h1 class="top__titulo">Los 50 <span>Revisar datos</span></h1>
+          <p class="top__sub">Planillas de la base UAR</p>
+        </div>
+        <a class="top__inicio" href="jugadores.html">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>Jugadores</a>
+      </div>
+    </header>
+
+    <main class="vista rev" id="vista" tabindex="-1">
+      <p class="rev__cuenta" id="cuenta" aria-live="polite"></p>
+      <p class="rev__intro">Las planillas las carga a mano gente del club y a veces tienen errores. Estos son los casos que el sistema
+        no puede arreglar solo. Contestá lo que sepas: si no sabés, tocá <b>No sé</b> y queda como está.</p>
+      <ol class="rev__lista" id="lista"></ol>
+      <p class="rev__fin" id="fin" hidden><b>¡Listo!</b> Contestaste todo. Gracias: se aplica solo en la próxima actualización.</p>
+      <div class="rev__vacio" id="vacio" hidden>
+        <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.4l2.8 2.8L16.2 9.8"/></svg>
+        <p><b>No hay nada para revisar.</b> Los datos están en orden. Cuando aparezca algo dudoso en una planilla nueva, va a estar acá.</p>
+      </div>
+    </main>
+
+    <footer class="pie rev__pie">
+      <p>Lo que contestes se aplica solo en la próxima actualización (lunes a miércoles a la mañana). Hasta entonces podés cambiar la respuesta.</p>
+      <p><button type="button" class="link" id="salir">Cerrar sesión</button></p>
+    </footer>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="revisar.js"></script>
+</body>
+</html>

@@ -16,6 +16,9 @@ DESTINO = HERE / "web" / "data.js"
 CATEGORIAS = ["Primera", "Intermedia", "Pre-Intermedia"]
 TIPOS = ["Try", "Try penal", "Conversión", "Penal", "Drop"]
 DIARIOS = HERE / "Los50_Diarios_2008-2016.xlsx"
+# Los datos de diarios (no oficiales) no se muestran en la web: solo datos oficiales de la UAR (decidido 21/10/2026).
+# El Excel de diarios sigue igual; con True vuelven a aparecer las pestañas Oficial / Diarios / Todo.
+MOSTRAR_DIARIOS = False
 TIPO_D = {"try": "Try", "try penal": "Try penal", "conversion": "Conversión", "penal": "Penal", "drop": "Drop"}
 VALOR_D = {"try": 5, "try penal": 7, "conversion": 2, "penal": 3, "drop": 3}
 ALIAS_DIARIOS = {"BIGUE": "Biguá", "MAR DEL PLATA CLUB": "Mar del Plata Club", "UNIVERSITARIO DE BAHIA BLANCA": "Universitario (BB)",
@@ -161,13 +164,27 @@ def main():
     inc["rival_n"] = inc.rival.map(rival)
     rivales = sorted(inc.rival_n.unique())
     torneos = sorted(inc.torneo.unique())
+    # [..., partido, lo que figuraba en la planilla si el club lo corrigió]
+    figuraba = inc.figuraba.fillna("").map(lambda n: nombre_lindo(n) if n else "") if "figuraba" in inc else pd.Series("", index=inc.index)
+    inc = inc.assign(fig=figuraba)
+    # puesto del que hizo el punto: la camiseta si era titular (1 a 15); si entró del banco, la camiseta con la que más veces fue titular
+    tit = j[(j.rol == "Titular") & jugo].assign(d=pd.to_numeric(j.dorsal, errors="coerce"))
+    habitual = tit[tit.d.between(1, 15)].groupby("player_id").d.agg(lambda x: int(x.mode().iloc[0]))
+    def puesto(dorsal, pid):
+        d = pd.to_numeric(dorsal, errors="coerce")
+        return int(d) if pd.notna(d) and 1 <= d <= 15 else (int(habitual[pid]) if pid in habitual.index else None)
+    # desde el banco = suplente en la planilla (no por la camiseta)
+    suplente = set(zip(j.partido_id[j.rol == "Suplente"], j.player_id[j.rol == "Suplente"]))
+    # [..., partido, lo que figuraba si el club lo corrigió, puesto, 1 si entró desde el banco]
     puntos = [[r.player_id, int(r.anio), CATEGORIAS.index(r.categoria), r.fecha_dt.strftime("%Y-%m-%d"),
                rivales.index(r.rival_n), torneos.index(r.torneo), str(r.tiempo), int(r.minuto) if pd.notna(r.minuto) else None,
-               TIPOS.index(r.incidencia)]
+               TIPOS.index(r.incidencia), str(int(r.partido_id)), r.fig,
+               puesto(r.dorsal if (r.partido_id, r.player_id) not in suplente else None, r.player_id),
+               int((r.partido_id, r.player_id) in suplente)]
               for r in inc.sort_values("fecha_dt", ascending=False).itertuples()]
 
     usados = {s[0] for s in stats}
-    diarios = exportar_diarios(nombres, rivales, torneos)
+    diarios = exportar_diarios(nombres, rivales, torneos) if MOSTRAR_DIARIOS else None
 
     # resultados oficiales del equipo (partidos jugados con resultado)
     po = x["Partidos"]
@@ -181,10 +198,57 @@ def main():
         if r.torneo not in torneos:
             torneos.append(r.torneo)
         partidos.append([int(r.anio), CATEGORIAS.index(r.categoria), r.fecha_dt.strftime("%Y-%m-%d"), rivales.index(rv),
-                         torneos.index(r.torneo), "L" if r.condicion == "Local" else "V", int(r.tantos_los50), int(r.tantos_rival), "o", -1, 0])
+                         torneos.index(r.torneo), "L" if r.condicion == "Local" else "V", int(r.tantos_los50), int(r.tantos_rival), "o", -1, 0,
+                         str(int(r.partido_id))])
     if diarios:
         partidos += diarios.pop("partidos")
     partidos.sort(key=lambda p: (p[0], p[2]), reverse=True)
+
+    def i_rival(nombre):
+        rv = rival(nombre)
+        if rv not in rivales:
+            rivales.append(rv)
+        return rivales.index(rv)
+
+    def i_torneo(t):
+        if t not in torneos:
+            torneos.append(t)
+        return torneos.index(t)
+
+    # actuaciones destacadas (2 tries o más, o 10 puntos o más en un partido): para los récords de un partido
+    jj = j[jugo].copy()
+    jj["fdt"] = jj["_f"]  # (itertuples no deja usar columnas que empiezan con "_")
+    dest = jj[(jj.tries >= 2) | (jj.puntos >= 10)]
+    actuaciones = [[r.player_id, CATEGORIAS.index(r.categoria), int(r.anio), r.fdt.strftime("%Y-%m-%d"), i_rival(r.rival),
+                    int(r.tries), int(r.puntos)] for r in dest.itertuples()]
+    # primer partido jugado de cada jugador en cada categoría (los registros empiezan en 2017)
+    primeros = [[pid, CATEGORIAS.index(cat), g.fdt.iloc[0].strftime("%Y-%m-%d"), i_rival(g.rival.iloc[0])]
+                for (pid, cat), g in jj.sort_values("fdt").groupby(["player_id", "categoria"])]
+    # último resultado y próximos partidos de cada categoría
+    pa = x["Partidos"]
+    pa = pa[pa.categoria.isin(CATEGORIAS)].copy()
+    pa["fecha_dt"] = pd.to_datetime(pa.fecha, format="%d/%m/%Y", errors="coerce")
+    hoy = pd.Timestamp(date.today())
+    agenda = {}
+    for c in CATEGORIAS:
+        g = pa[pa.categoria == c]
+        jug = g[g.resultado.isin(["G", "E", "P"])].sort_values("fecha_dt")
+        prox = g[(g.estado == "Pendiente") & (g.fecha_dt >= hoy)].sort_values("fecha_dt").head(3)
+        u = jug.iloc[-1] if len(jug) else None
+        agenda[CATEGORIAS.index(c)] = {
+            "ultimo": [u.fecha_dt.strftime("%Y-%m-%d"), i_rival(u.rival), "L" if u.condicion == "Local" else "V",
+                       int(u.tantos_los50), int(u.tantos_rival), i_torneo(u.torneo)] if u is not None else None,
+            "proximos": [[r.fecha_dt.strftime("%Y-%m-%d"), str(r.hora) if pd.notna(r.hora) else "", i_rival(r.rival),
+                          "L" if r.condicion == "Local" else "V", i_torneo(r.torneo)] for r in prox.itertuples()],
+        }
+    # partidos de cada jugador (titular / entró / en el banco sin entrar): se carga aparte, solo al abrir "Sus partidos"
+    rol = pd.Series("B", index=j.index).where(~jugo, "E").where(~(jugo & (j.rol == "Titular")), "T")
+    jp = j.assign(r=rol, mid=j.partido_id.astype(int).astype(str))[jugo | (j.sin == 1)].sort_values("_f", ascending=False)
+    participaciones = {pid: g[["mid", "r"]].values.tolist() for pid, g in jp.groupby("player_id")}
+    (HERE / "web" / "datos").mkdir(exist_ok=True)
+    (HERE / "web" / "datos" / "participaciones.json").write_text(
+        json.dumps(participaciones, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+
     data = {
         "actualizado": date.today().strftime("%d/%m/%Y"),
         "categorias": CATEGORIAS,
@@ -196,6 +260,9 @@ def main():
         "stats": stats,
         "puntos": puntos,
         "partidos": partidos,
+        "actuaciones": actuaciones,
+        "primeros": primeros,
+        "agenda": agenda,
         "diarios": diarios,
     }
     DESTINO.parent.mkdir(exist_ok=True)

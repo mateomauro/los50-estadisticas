@@ -1,0 +1,108 @@
+/* Los 50 · Revisar datos — usa los colores de styles.css. Mobile first.
+   Va publicada en la web de Jugadores, sin Entrenadores: la pantalla de clave está copiada acá (es la misma de entrenadores.css). */
+.ent { background: var(--fondo); }
+
+/* ---------- ingreso con clave ---------- */
+.candado {
+  min-height: 100dvh; display: grid; place-items: center; padding: max(24px, env(safe-area-inset-top)) 16px 24px;
+  background: var(--negro) radial-gradient(120% 80% at 50% 0%, #10307c 0%, #0a1430 45%, var(--negro) 80%);
+}
+.candado__caja { width: 100%; max-width: 400px; display: grid; justify-items: center; gap: 12px; padding: 28px 20px 22px;
+  background: #151a24; border: 1px solid #2c3445; border-radius: 20px; color: #fff; }
+.candado__escudo { width: 72px; height: auto; filter: drop-shadow(0 6px 18px rgb(0 0 0 / 50%)); }
+.candado__titulo { margin: 4px 0 0; font: 700 34px/1 var(--cond); letter-spacing: .02em; text-transform: uppercase; }
+.candado__sub { margin: 0 0 6px; text-align: center; color: #aab3c2; font-size: 15px; line-height: 1.45; }
+.candado__campo { position: relative; width: 100%; display: block; }
+.candado__campo > svg { position: absolute; left: 14px; top: 50%; translate: 0 -50%; color: #8a93a5; pointer-events: none; }
+.candado__campo input { width: 100%; min-height: 52px; padding: 12px 52px 12px 44px; border-radius: 12px; border: 1px solid #3a4253;
+  background: #0d1118; color: #fff; font-size: 17px; letter-spacing: .02em; caret-color: #8fb4f5; }
+.candado__campo input:focus { outline: none; border-color: #8fb4f5; box-shadow: 0 0 0 3px rgb(143 180 245 / 25%); }
+.candado__ver { position: absolute; right: 4px; top: 50%; translate: 0 -50%; width: 44px; height: 44px; border: 0; border-radius: 10px;
+  background: transparent; color: #aab3c2; display: grid; place-items: center; }
+.candado__ver[aria-pressed="true"] { color: #8fb4f5; }
+.candado__recordar { width: 100%; display: flex; align-items: center; gap: 10px; min-height: 44px; color: #c3cad6; font-size: 15px; cursor: pointer; }
+.candado__recordar input { width: 20px; height: 20px; accent-color: var(--azul); }
+.candado__error { width: 100%; margin: 0; padding: 10px 12px; border-radius: 10px; background: rgb(214 40 40 / 16%); color: #ffb4b4; font-size: 14px; }
+.candado__entrar { width: 100%; min-height: 52px; border: 0; border-radius: 12px; background: var(--azul); color: #fff;
+  font: 700 20px/1 var(--cond); letter-spacing: .06em; text-transform: uppercase; transition: background var(--t); }
+.candado__entrar:hover { background: #2a6fe0; }
+.candado__entrar:disabled { opacity: .7; cursor: progress; }
+.candado__volver { display: inline-flex; align-items: center; min-height: 44px; margin-top: 4px; color: #aab3c2; font-size: 14px; text-decoration: none; padding: 0 10px; }
+.candado__volver:hover { color: #fff; }
+.candado__volver svg { width: 18px; height: 18px; margin-right: 2px; }
+
+/* ---------- base ---------- */
+.vista { max-width: 860px; margin: 0 auto; padding: 4px 16px 16px; outline: none; }
+.ent .pie { max-width: 860px; } /* el pie arranca en el mismo borde que el contenido */
+@media (min-width: 1024px) {
+  .top { padding: 18px 0; }
+  .vista { padding: 8px 24px 28px; }
+}
+
+.rev { max-width: 720px; }
+.rev__cuenta { margin: 22px 0 6px; font: 700 1.625rem/1.1 var(--cond); letter-spacing: .015em; text-transform: uppercase; }
+.rev__cuenta .num { color: var(--azul); }
+.rev__cuenta span { color: var(--suave); font-weight: 600; }
+.rev__intro { margin: 0 0 18px; font-size: 0.9375rem; line-height: 1.5; color: var(--suave); max-width: 62ch; }
+.rev__intro b { color: var(--texto); }
+.rev__lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+
+.rev__vacio { margin: 28px 0; display: flex; gap: 14px; align-items: flex-start; padding: 18px; border-radius: var(--radio);
+  background: var(--verde-fondo); color: #14532b; }
+.rev__vacio svg { width: 28px; height: 28px; flex: none; color: var(--verde); }
+.rev__vacio p { margin: 0; font-size: 1rem; line-height: 1.5; }
+
+/* ---------- una pregunta ---------- */
+.preg { background: var(--sup); border: 1px solid var(--borde); border-radius: var(--radio); padding: 16px; }
+.preg__tipo { margin: 0 0 4px; font: 600 0.7812rem/1.2 var(--base); letter-spacing: .06em; text-transform: uppercase; color: var(--suave); }
+.preg__titulo { margin: 0; font: 700 1.4375rem/1.15 var(--cond); letter-spacing: .01em; text-wrap: balance; }
+.preg__torneo { margin: 2px 0 0; font-size: 0.8438rem; color: var(--suave); }
+.preg__dice { margin: 12px 0 0; padding: 10px 12px; border-radius: 10px; background: var(--fondo); font-size: 0.9375rem; line-height: 1.45; }
+.preg__dice span { display: block; margin-bottom: 2px; font: 600 0.75rem/1.2 var(--base); letter-spacing: .06em; text-transform: uppercase; color: var(--suave); }
+.preg__pregunta { margin: 12px 0 0; font-size: 1.0625rem; font-weight: 600; line-height: 1.4; }
+.preg__motivo { margin: 10px 0 0; font-size: 0.875rem; line-height: 1.45; color: var(--suave); }
+
+.preg__fichas { margin-top: 12px; display: grid; gap: 6px; }
+.preg__y { justify-self: center; font: 600 0.8125rem/1 var(--base); color: var(--suave); }
+.rep { display: grid; gap: 2px; padding: 10px 12px; border-radius: 10px; background: var(--fondo); font-size: 0.9062rem; color: var(--suave); }
+.rep__nombre { font-size: 1.0625rem; color: var(--texto); }
+.rep b.num { color: var(--texto); }
+.rep__cats { font-size: 0.8438rem; }
+
+/* respuestas: sí y no iguales (no empujar a ninguna), "No sé" más suave */
+.preg__ops { margin-top: 14px; display: grid; gap: 8px; }
+.op { min-height: 48px; padding: 10px 14px; border-radius: 12px; border: 1.5px solid #c9d0dc; background: var(--sup);
+  font-weight: 600; font-size: 1rem; line-height: 1.2; transition: border-color var(--t), background var(--t); }
+@media (hover: hover) { .op:hover { border-color: var(--azul); background: var(--azul-claro); } }
+.op:disabled { opacity: .55; cursor: progress; }
+.op--nose { border-color: transparent; background: none; color: var(--suave); font-weight: 500; }
+@media (hover: hover) { .op--nose:hover { border-color: transparent; background: var(--fondo); color: var(--texto); } }
+.preg__quien .op--si { background: var(--azul); border-color: var(--azul); color: #fff; }
+@media (hover: hover) { .preg__quien .op--si:hover { background: #2a6fe0; } }
+
+.preg__quien { margin-top: 14px; }
+.preg__elegir { display: grid; gap: 6px; font-weight: 600; }
+.preg__elegir select { min-height: 48px; padding: 10px 12px; border-radius: 12px; border: 1.5px solid #c9d0dc; background: var(--sup); font-size: 1rem; }
+.preg__elegir select:focus { outline: none; border-color: var(--azul); box-shadow: 0 0 0 3px rgb(27 95 209 / 20%); }
+
+.preg--hecha { background: transparent; }
+.preg--hecha .preg__dice, .preg--hecha .rep { background: var(--sup); }
+.preg__hecha { margin-top: 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; padding: 10px 12px; border-radius: 10px;
+  background: var(--verde-fondo); color: #14532b; font-size: 0.9375rem; }
+.preg__hecha svg { flex: none; color: var(--verde); stroke-width: 2.6; }
+.preg__hecha span { flex: 1; min-width: 12ch; }
+.preg__hecha .link { padding: 6px 0; color: #14532b; }
+
+@media (min-width: 640px) {
+  .preg { padding: 20px 22px; }
+  .preg__fichas { grid-template-columns: 1fr auto 1fr; align-items: stretch; }
+  .preg__y { align-self: center; }
+  /* "Sí" y "No" del mismo ancho; "No sé" al costado, más suave */
+  .preg__ops { grid-template-columns: repeat(2, minmax(160px, auto)) auto; justify-content: start; }
+  .preg__quien .preg__ops { grid-template-columns: repeat(2, auto); }
+}
+.rev__pie { max-width: 720px; }
+@media (min-width: 1024px) { .rev__pie { padding-inline: 24px; } }
+@media (prefers-reduced-motion: reduce) { .op { transition: none; } }
+.rev__fin { margin: 16px 0 0; padding: 14px 16px; border-radius: var(--radio); background: var(--verde-fondo); color: #14532b; font-size: 1rem; }
+.link { display: inline-flex; align-items: center; min-height: 44px; }

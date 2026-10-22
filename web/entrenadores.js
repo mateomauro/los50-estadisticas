@@ -1,5 +1,6 @@
 /* Los 50 · Entrenadores — los datos vienen cifrados en window.ENTRENADORES (exportar_entrenadores.py).
-   Se abren con la clave (PBKDF2 + AES-GCM, WebCrypto). Pantallas: elegir categoría, la categoría (5 preguntas), Todo el club y Consejos. */
+   Se abren con la clave (PBKDF2 + AES-GCM, WebCrypto). Pantallas: elegir categoría, la categoría (5 preguntas), Todo el club, Consejos
+   y la guía del club (qué aprende cada categoría, cantos y zonas, scrum), que sale del material de Coordinación. */
 (() => {
   "use strict";
   const $ = (s, r = document) => r.querySelector(s);
@@ -7,7 +8,9 @@
   const deB64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
   const aB64 = (buf) => btoa(String.fromCharCode(...new Uint8Array(buf)));
   const SOBRE = window.ENTRENADORES;
+  let LLAVE_ACTUAL = null; // la llave abierta, para las fotos (que van cifradas aparte)
   const LLAVE = "los50-ent-llave";
+  const FICHA = "los50-ent-ficha"; // para los videos: Cloudflare la pide para entregar cada pedacito (functions/videos)
 
   // ---------- abrir con la clave ----------
   async function derivar(clave) {
@@ -21,17 +24,30 @@
     return JSON.parse(txt);
   }
   const guardada = () => { try { return localStorage.getItem(LLAVE) || sessionStorage.getItem(LLAVE); } catch (e) { return null; } };
-  function guardar(raw, siempre) {
-    try { (siempre ? localStorage : sessionStorage).setItem(LLAVE, raw); } catch (e) { /* sin almacenamiento: pide la clave cada vez */ }
+  const hexDe = (buf) => [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
+  const fichaDe = async (clave) => hexDe(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(`${clave}:los50-videos`)));
+  /** la ficha va en una cookie que solo se manda a /videos (así la pide el reproductor del teléfono también) */
+  function ponerFicha(ficha, siempre) {
+    if (ficha) document.cookie = `los50v=${ficha}; Path=/videos; SameSite=Strict${location.protocol === "https:" ? "; Secure" : ""}${siempre ? "; Max-Age=31536000" : ""}`;
   }
-  function olvidar() { try { localStorage.removeItem(LLAVE); sessionStorage.removeItem(LLAVE); } catch (e) { /* nada */ } }
+  function guardar(raw, siempre, ficha) {
+    try { const s = siempre ? localStorage : sessionStorage; s.setItem(LLAVE, raw); s.setItem(FICHA, ficha); } catch (e) { /* sin almacenamiento: pide la clave cada vez */ }
+    ponerFicha(ficha, siempre);
+  }
+  function olvidar() {
+    try { [localStorage, sessionStorage].forEach((s) => { s.removeItem(LLAVE); s.removeItem(FICHA); }); } catch (e) { /* nada */ }
+    document.cookie = "los50v=; Path=/videos; Max-Age=0";
+  }
 
   async function intentarGuardada() {
     const raw = guardada();
     if (!raw || !SOBRE) return false;
     try {
       const llave = await crypto.subtle.importKey("raw", deB64(raw), "AES-GCM", true, ["decrypt"]);
-      iniciar(await descifrar(llave));
+      const datos = await descifrar(llave);
+      LLAVE_ACTUAL = llave;
+      try { ponerFicha(localStorage.getItem(FICHA) || sessionStorage.getItem(FICHA), !!localStorage.getItem(LLAVE)); } catch (e) { /* nada */ }
+      iniciar(datos);
       return true;
     } catch (e) { olvidar(); return false; } // los datos se actualizaron con otra clave: se pide de nuevo
   }
@@ -49,7 +65,8 @@
       if (!SOBRE) throw new Error("sin datos");
       const llave = await derivar($("#clave").value);
       const datos = await descifrar(llave);
-      guardar(aB64(await crypto.subtle.exportKey("raw", llave)), $("#recordar").checked);
+      LLAVE_ACTUAL = llave;
+      guardar(aB64(await crypto.subtle.exportKey("raw", llave)), $("#recordar").checked, await fichaDe($("#clave").value));
       iniciar(datos);
     } catch (e2) {
       err.textContent = SOBRE ? "La clave no es correcta. Probá de nuevo." : "No se encontraron los datos de esta sección.";
@@ -72,14 +89,25 @@
   const slug = (c) => c.toLowerCase().replace(/[^a-z0-9]+/g, "-");
   const PS = ["Primera", "Intermedia", "Pre-Intermedia", "M23"];
   const prom = (vals) => { const v = vals.filter((x) => typeof x === "number"); return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null; };
+  // íconos de Lucide (lucide.dev, licencia ISC: web/vendor/lucide-LICENSE.txt), todos con el mismo trazo
   const IC = {
-    atras: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>',
-    adelante: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>',
-    alerta: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.4v.1"/></svg>',
-    bien: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.4l2.8 2.8L16.2 9.8"/></svg>',
-    medir: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4.5" width="14" height="16" rx="2"/><path d="M9 4.5h6V7H9zM9 12h6M9 16h4"/></svg>',
-    gente: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c.6-3.4 3-5.4 6-5.4s5.4 2 6 5.4"/><circle cx="17" cy="9" r="2.5"/><path d="M16.5 14.7c2.3.2 4 1.9 4.5 4.6"/></svg>',
-    idea: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>',
+    atras: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>',
+    adelante: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>',
+    alerta: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>',
+    bien: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>',
+    medir: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2M12 11h4M12 16h4M8 11h.01M8 16h.01"/></svg>',
+    gente: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+    idea: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5M9 18h6M10 22h4"/></svg>',
+    libro: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7v14M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>',
+    canto: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 18-5v12L3 14v-3zM11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>',
+    escudo: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>',
+    cono: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.3 6.2a4.55 4.55 0 0 0 5.4 0M7.9 10.7c.9.8 2.4 1.3 4.1 1.3s3.2-.5 4.1-1.3M13.9 3.5a1.93 1.93 0 0 0-3.8-.1l-3 10c-.1.2-.1.4-.1.6 0 1.7 2.2 3 5 3s5-1.3 5-3c0-.2 0-.4-.1-.5ZM7.5 12.2l-4.7 2.7c-.5.3-.8.7-.8 1.1s.3.8.8 1.1l7.6 4.5c.9.5 2.1.5 3 0l7.6-4.5c.7-.3 1-.7 1-1.1s-.3-.8-.8-1.1l-4.7-2.8"/></svg>',
+    play: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3l14 9-14 9z"/></svg>',
+    camiseta: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>',
+    buscar: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>',
+    barras: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16M18 17V9M13 17V5M8 17v-3"/></svg>',
+    sube: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 7-7 7 7M12 19V5"/></svg>',
+    baja: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>',
   };
 
   function iniciar(datos) {
@@ -89,6 +117,7 @@
       res: t("resumen"), torneos: t("torneos"), rivales: t("rivales"), ret: t("retencion"),
       camino: t("camino"), era: t("edad_relativa"), fis: t("fisico"), partidos: t("partidos"), jug: t("jugadores"), noSig: t("no_siguieron"),
       diag: datos.diag_web, expertos: datos.expertos, medir: datos.a_medir, fuentes: datos.fuentes, glosario: datos.glosario,
+      guia: datos.guia || null, tries: datos.tries || null,
     };
     const anios = D.res.map((r) => r["Año"]);
     D.desde = Math.min(...anios); D.hasta = Math.max(...anios);
@@ -96,24 +125,43 @@
     $("#actualizado").textContent = D.act;
     $("#candado").hidden = true;
     $("#app").hidden = false;
-    S = { ver: "inicio", cat: null, temp: null, ordenJ: "pj", verJ: false, verP: false, verN: false, abiertos: new Set() };
+    S = { ver: "inicio", cat: null, temp: null, gcat: null, tab: null, q: "", ordenJ: "pj", verJ: false, verP: false, verN: false, verR: false, rol: null, para: null, ej: null, puesto: null, qe: "", abiertos: new Set() };
     leerURL();
     render();
-    addEventListener("popstate", () => { leerURL(); render(); });
+    addEventListener("popstate", () => {
+      if (ayudaAbierta()) { cerrarAyuda(false); return; } // el "atrás" del celular cierra la ayuda y deja la pantalla como estaba
+      if (saltarPop) { saltarPop = false; return; }        // la ayuda se cerró con "Entendido": no hay que redibujar
+      leerURL(); render();
+    });
   }
 
-  // ---------- URL: ?cat=m17&temp=2026 · ?ver=club · ?ver=consejos ----------
+  // ---------- URL: ?cat=m17&temp=2026 · ?ver=club · ?ver=consejos · ?ver=guia · ?guia=m10 · ?ver=cantos&tab=zonas · ?ver=scrum · ?ver=puestos · ?puesto=10 ----------
   function leerURL() {
     const p = new URLSearchParams(location.search);
     const c = D.cats.find((x) => slug(x) === p.get("cat"));
+    const g = D.guia ? gCats().find((x) => slug(x) === p.get("guia")) : null;
+    const hayPuestos = !!(D.guia && D.guia.puestos);
+    const vistas = ["club", "consejos"].concat(D.guia ? ["guia", "cantos", "scrum"] : [], D.guia && D.guia.ejercicios ? ["ejercicios"] : [], hayPuestos ? ["puestos"] : []);
+    const ej = D.guia && D.guia.ejercicios ? D.guia.ejercicios.find((x) => x.id === p.get("ejercicio")) : null;
+    const pu = hayPuestos && puestoDe(+p.get("puesto")) ? +p.get("puesto") : null;
     S.cat = c || null;
-    S.ver = c ? "cat" : ["club", "consejos"].includes(p.get("ver")) ? p.get("ver") : "inicio";
+    S.gcat = g || null;
+    S.ej = ej ? ej.id : null;
+    S.puesto = pu;
+    S.ver = c ? "cat" : g ? "guia" : ej ? "ejercicio" : pu ? "puesto" : vistas.includes(p.get("ver")) ? p.get("ver") : "inicio";
     S.temp = /^\d{4}$/.test(p.get("temp") || "") ? +p.get("temp") : null;
+    S.tab = p.get("tab");
+    S.rol = p.get("rol");
+    S.para = p.get("para");
   }
   function url() {
     const p = new URLSearchParams();
     if (S.ver === "cat") { p.set("cat", slug(S.cat)); if (S.temp) p.set("temp", S.temp); }
-    else if (S.ver !== "inicio") p.set("ver", S.ver);
+    else if (S.ver === "guia" && S.gcat) p.set("guia", slug(S.gcat));
+    else if (S.ver === "ejercicio") p.set("ejercicio", S.ej);
+    else if (S.ver === "puesto") p.set("puesto", S.puesto);
+    else if (S.ver === "ejercicios") { p.set("ver", S.ver); if (S.tab) p.set("tab", S.tab); if (S.rol) p.set("rol", S.rol); if (S.para) p.set("para", S.para); }
+    else if (S.ver !== "inicio") { p.set("ver", S.ver); if (S.tab) p.set("tab", S.tab); }
     const qs = p.toString();
     return location.pathname + (qs ? "?" + qs : "");
   }
@@ -128,102 +176,285 @@
   const filasCat = (cat) => D.res.filter((r) => r["Categoría"] === cat).sort((a, b) => a["Año"] - b["Año"]);
   const ultimaTemp = (cat) => filasCat(cat).at(-1)["Año"];
   const pl = (n, uno, varios) => `${n} ${n === 1 ? uno : varios}`;
-  const resultadoTxt = (r) => [`ganó ${r.G}`, r.E ? `empató ${r.E}` : "", `perdió ${r.P}`].filter(Boolean).join(", ");
 
-  // ---------- gráficos (SVG, sin librerías) ----------
-  /** barras por año; la del año elegido en azul y una línea punteada con el promedio de todos los años */
-  function barras(datos, { sel, tipo = "d", promedio = null, alto = 160 } = {}) {
-    // con promedio se deja lugar a la derecha para escribirlo en la punta de la línea punteada
-    // el ancho del dibujo es el ancho real en pantalla: así los números se ven del mismo tamaño en celular y en compu
-    const n = datos.length, W = anchoGraf(), padR = promedio != null ? 74 : 0, Wb = W - padR, padT = 24, padB = 24, H = W > 600 ? alto + 40 : alto;
-    const vals = datos.map((d) => d.y ?? 0).concat(promedio ?? 0), max = Math.max(1, ...vals), min = Math.min(0, ...vals);
-    const y = (v) => padT + ((max - v) / (max - min || 1)) * (H - padT - padB);
-    const ancho = Wb / n, bw = Math.min(30, ancho * 0.6);
-    let h = `<svg class="graf" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(datos.map((d) => `${d.x}: ${fmt(d.y, tipo)}`).join(", "))}${promedio != null ? `. Promedio: ${fmt(promedio, tipo)}` : ""}">`;
-    h += `<line class="graf__cero" x1="0" x2="${Wb}" y1="${y(0)}" y2="${y(0)}"/>`;
-    if (promedio != null) {
-      const yp = y(promedio);
-      h += `<line class="graf__prom" x1="0" x2="${Wb + 6}" y1="${yp}" y2="${yp}"/>`;
-      h += `<text class="graf__prom-lbl" x="${Wb + 12}" y="${yp - 3}">Promedio</text><text class="graf__prom-n" x="${Wb + 12}" y="${yp + 14}">${esc(fmt(promedio, tipo))}</text>`;
-    }
-    datos.forEach((d, i) => {
-      const cx = ancho * i + ancho / 2, v = d.y, s = d.x === sel ? " sel" : "";
-      if (v != null) {
-        const y0 = y(Math.max(0, v)), y1 = y(Math.min(0, v));
-        h += `<rect class="graf__barra${s}" x="${cx - bw / 2}" y="${y0}" width="${bw}" height="${Math.max(2, y1 - y0)}" rx="4"/>`;
-        h += `<text class="graf__val${s}" x="${cx}" y="${y0 - 7}">${esc(fmt(v, tipo))}</text>`;
-      }
-      h += `<text class="graf__x${s}" x="${cx}" y="${H - 6}">${d.x}</text>`;
-    });
-    return h + "</svg>";
+  // ---------- gráficos (Chart.js, servido desde web/vendor) ----------
+  // Cada gráfico se arma como un <canvas> dentro del texto de la pantalla y se dibuja después de pintarla (dibujarGraficos).
+  // Al tocar una barra se ve el número exacto. Mismos colores que el resto de la sección (styles.css / entrenadores.css).
+  const COL = { azul: "#1b5fd1", claro: "#c3d0ea", rojo: "#d9483b", texto: "#0b0d12", suave: "#545d6e", linea: "#c9d1de", banda: "#e9edf4", sup: "#ffffff" };
+  const LETRA = '"Barlow", system-ui, sans-serif', LETRA_C = '"Barlow Condensed", "Arial Narrow", sans-serif';
+  const quieto = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const GRAF = { pend: [], vivos: [] };
+
+  // los números arriba de cada barra, con un borde del color del fondo para que se lean aunque les pase la línea de lo normal
+  const pValores = { id: "valores", afterDatasetsDraw(ch, _a, o) {
+    const { ctx } = ch;
+    ch.data.datasets.forEach((ds, k) => ch.getDatasetMeta(k).data.forEach((barra, i) => {
+      const v = ds.data[i];
+      if (v == null) return;
+      const sel = ch.data.labels[i] === o.sel, txt = o.texto(v, barra.width);
+      ctx.save();
+      ctx.font = `${sel ? 700 : 600} ${o.chico ? (sel ? 12 : 11) : (sel ? 13 : 12)}px ${LETRA}`;
+      ctx.textAlign = "center"; ctx.textBaseline = "bottom"; ctx.lineJoin = "round";
+      ctx.lineWidth = 4; ctx.strokeStyle = sel && o.banda ? COL.banda : COL.sup;
+      ctx.strokeText(txt, barra.x, barra.y - 5);
+      ctx.fillStyle = sel ? COL.texto : COL.suave;
+      ctx.fillText(txt, barra.x, barra.y - 5);
+      ctx.restore();
+    }));
+  } };
+  // la línea punteada de lo normal (el promedio de todos los años), con su número escrito en la punta
+  const pNormal = { id: "normal",
+    beforeDatasetsDraw(ch, _a, o) {
+      const { ctx, chartArea: a, scales: { y } } = ch;
+      (o.lineas || []).forEach(({ v, color }) => {
+        const yy = y.getPixelForValue(v);
+        ctx.save(); ctx.setLineDash([5, 5]); ctx.lineWidth = 1.5; ctx.strokeStyle = color; ctx.globalAlpha = .6;
+        ctx.beginPath(); ctx.moveTo(a.left, yy); ctx.lineTo(a.right + (o.etiqueta ? 6 : 0), yy); ctx.stroke(); ctx.restore();
+      });
+    },
+    afterDraw(ch, _a, o) {
+      if (!o.etiqueta || !(o.lineas || []).length) return;
+      const { ctx, chartArea: a, scales: { y } } = ch, yy = y.getPixelForValue(o.lineas[0].v);
+      ctx.save(); ctx.textAlign = "left";
+      ctx.font = `600 11px ${LETRA}`; ctx.fillStyle = COL.suave; ctx.fillText("Lo normal", a.right + 12, yy - 4);
+      ctx.font = `700 15px ${LETRA_C}`; ctx.fillStyle = COL.texto; ctx.fillText(o.etiqueta, a.right + 12, yy + 13);
+      ctx.restore();
+    } };
+  // en el de puntos, el año elegido va con un fondo gris detrás (se pinta antes que todo, así no tapa el año de abajo)
+  const pBanda = { id: "banda", beforeDraw(ch, _a, o) {
+    const i = ch.data.labels.indexOf(o.sel);
+    if (i < 0) return;
+    const { ctx, chartArea: a, scales: { x } } = ch, w = x.width / ch.data.labels.length, cx = x.getPixelForValue(i);
+    ctx.save(); ctx.fillStyle = COL.banda; ctx.beginPath();
+    if (ctx.roundRect) ctx.roundRect(cx - w / 2 + 2, a.top - 16, w - 4, a.bottom - a.top + 38, 8);
+    else ctx.rect(cx - w / 2 + 2, a.top - 16, w - 4, a.bottom - a.top + 38);
+    ctx.fill(); ctx.restore();
+  } };
+
+  /** opciones comunes: sin ejes ni grilla (los números van arriba de las barras), los años abajo y el elegido en negrita */
+  function opciones({ sel, derecha = 0, tooltip }) {
+    const elegido = (c) => c.tick && c.tick.label === sel;
+    return {
+      responsive: true, maintainAspectRatio: false,
+      animation: quieto ? false : { duration: 500, easing: "easeOutQuart" },
+      layout: { padding: { top: 24, right: derecha } },
+      interaction: { mode: "index", intersect: false },
+      scales: {
+        x: { grid: { display: false }, border: { color: COL.linea },
+          // los años siempre derechos (en el celular, un poco más chicos para que entren)
+          ticks: { maxRotation: 0, autoSkip: false, color: (c) => (elegido(c) ? COL.texto : COL.suave),
+            font: (c) => ({ family: LETRA, size: c.chart.width < 420 ? 11 : 12, weight: elegido(c) ? 700 : 500 }) } },
+        y: { display: false, beginAtZero: true, grace: "6%" },
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: { backgroundColor: COL.texto, padding: 10, cornerRadius: 8, boxPadding: 5, usePointStyle: true,
+          titleFont: { family: LETRA, size: 13, weight: "700" }, bodyFont: { family: LETRA, size: 13 }, footerFont: { family: LETRA, size: 12, weight: "500" },
+          footerColor: "#c3cad6", ...tooltip },
+      },
+    };
   }
-  const anchoGraf = () => Math.round(Math.max(280, Math.min(820, $("#vista").clientWidth - 32) - 18));
+  const lienzo = (id, txt, doble) => `<div class="graf-caja${doble ? " graf-caja--doble" : ""}"><canvas id="${id}" role="img" aria-label="${esc(txt)}">${esc(txt)}</canvas></div>`;
+
+  /** barras por año; la del año elegido en azul y una línea punteada con lo normal (el promedio de todos los años) */
+  function barras(datos, { sel, tipo = "d", promedio = null } = {}) {
+    const id = `graf-${GRAF.pend.length}`, s = String(sel), labels = datos.map((d) => String(d.x));
+    const o = opciones({ sel: s, derecha: promedio != null ? 70 : 0, tooltip: { displayColors: false, callbacks: {
+      label: (c) => fmt(c.raw, tipo), footer: () => (promedio != null ? `Lo normal: ${fmt(promedio, tipo)}` : "") } } });
+    o.plugins.valores = { sel: s, texto: (v) => fmt(v, tipo) };
+    o.plugins.normal = { lineas: promedio != null ? [{ v: promedio, color: COL.texto }] : [], etiqueta: promedio != null ? fmt(promedio, tipo) : "" };
+    GRAF.pend.push({ id, config: {
+      type: "bar",
+      data: { labels, datasets: [{ data: datos.map((d) => d.y), backgroundColor: labels.map((l) => (l === s ? COL.azul : COL.claro)),
+        hoverBackgroundColor: labels.map((l) => (l === s ? "#164fb0" : "#a9bce2")), borderRadius: 4, maxBarThickness: 30, categoryPercentage: .72, barPercentage: .82 }] },
+      options: o,
+      plugins: [pNormal, pValores],
+    } });
+    return lienzo(id, datos.map((d) => `${d.x}: ${fmt(d.y, tipo)}`).join(", ") + (promedio != null ? `. Lo normal: ${fmt(promedio, tipo)}` : ""));
+  }
 
   /** puntos por partido: dos barras por año (azul = los que hace, roja = los que le hacen), siempre los mismos dos colores.
-      El año elegido va con un fondo gris detrás; las líneas punteadas son los promedios de todos los años. */
+      El año elegido va con un fondo gris detrás; las líneas punteadas son lo normal de cada una. */
   function barrasDobles(datos, { sel } = {}) {
-    const n = datos.length, W = anchoGraf(), padT = 26, padB = 26, H = W > 600 ? 220 : 190;
+    const id = `graf-${GRAF.pend.length}`, s = String(sel), labels = datos.map((d) => String(d.x));
     const pa = prom(datos.map((d) => d.a)), pb = prom(datos.map((d) => d.b));
-    const max = Math.max(1, ...datos.flatMap((d) => [d.a ?? 0, d.b ?? 0]));
-    const y = (v) => padT + ((max - v) / max) * (H - padT - padB);
-    const ancho = W / n, bw = Math.min(20, ancho * 0.34), dec = ancho >= 60;
-    const num = (v) => (dec ? fmt(v, "d") : String(Math.round(v)));
-    let h = `<svg class="graf" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(datos.map((d) => `${d.x}: hace ${fmt(d.a, "d")}, le hacen ${fmt(d.b, "d")}`).join("; "))}. Promedios: hace ${fmt(pa, "d")}, le hacen ${fmt(pb, "d")}">`;
-    datos.forEach((d, i) => { if (d.x === sel) h += `<rect class="graf__banda" x="${ancho * i + 2}" y="4" width="${ancho - 4}" height="${H - 8}" rx="8"/>`; });
-    h += `<line class="graf__cero" x1="0" x2="${W}" y1="${y(0)}" y2="${y(0)}"/>`;
-    datos.forEach((d, i) => {
-      const cx = ancho * i + ancho / 2, s = d.x === sel ? " sel" : "";
-      [[d.a, "a", cx - bw / 2 - 1], [d.b, "b", cx + bw / 2 + 1]].forEach(([v, k, x]) => {
-        if (v == null) return;
-        h += `<rect class="graf__${k}" x="${x - bw / 2}" y="${y(v)}" width="${bw}" height="${Math.max(2, y(0) - y(v))}" rx="3"/>`;
-        h += `<text class="graf__val graf__val--chico${s}" x="${x}" y="${y(v) - 5}">${esc(num(v))}</text>`;
-      });
-      h += `<text class="graf__x${s}" x="${cx}" y="${H - 8}">${d.x}</text>`;
-    });
-    h += `<line class="graf__prom graf__prom--a" x1="0" x2="${W}" y1="${y(pa)}" y2="${y(pa)}"/><line class="graf__prom graf__prom--b" x1="0" x2="${W}" y1="${y(pb)}" y2="${y(pb)}"/>`;
-    return h + "</svg>";
+    const barra = (k, color, nombre, tocada) => ({ label: nombre, data: datos.map((d) => d[k]), backgroundColor: color, hoverBackgroundColor: tocada, borderRadius: 3, maxBarThickness: 20,
+      categoryPercentage: .72, barPercentage: .9, pointStyle: "rectRounded" });
+    const o = opciones({ sel: s, tooltip: { callbacks: { label: (c) => `${c.dataset.label}: ${fmt(c.raw, "d")}`,
+      footer: () => `Lo normal: hace ${fmt(pa, "d")} y le hacen ${fmt(pb, "d")}` } } });
+    // con barras finitas (celular) los números van redondeados, para que entren
+    o.plugins.valores = { sel: s, chico: true, banda: true, texto: (v, w) => (w >= 16 ? fmt(v, "d") : String(Math.round(v))) };
+    o.plugins.normal = { lineas: [{ v: pa, color: COL.azul }, { v: pb, color: COL.rojo }] };
+    o.plugins.banda = { sel: s };
+    GRAF.pend.push({ id, config: {
+      type: "bar",
+      data: { labels, datasets: [barra("a", COL.azul, "Hizo", "#164fb0"), barra("b", COL.rojo, "Le hicieron", "#c23a2e")] },
+      options: o,
+      plugins: [pBanda, pNormal, pValores],
+    } });
+    return lienzo(id, datos.map((d) => `${d.x}: hace ${fmt(d.a, "d")}, le hacen ${fmt(d.b, "d")}`).join("; ") + `. Lo normal: hace ${fmt(pa, "d")}, le hacen ${fmt(pb, "d")}`, true);
+  }
+
+  /** después de pintar la pantalla: se borran los gráficos de antes y se dibujan los nuevos */
+  function dibujarGraficos() {
+    GRAF.vivos.forEach((g) => g.destroy());
+    GRAF.vivos = !window.Chart ? [] : GRAF.pend.filter((g) => document.getElementById(g.id)).map((g) => new Chart(document.getElementById(g.id), g.config));
+    GRAF.pend = [];
   }
 
   // ---------- pantallas ----------
   function render() {
-    ({ inicio: vInicio, cat: vCategoria, club: vClub, consejos: vConsejos })[S.ver]();
+    $("#app").classList.toggle("app--ancha", S.ver === "inicio"); // el inicio usa dos columnas en la compu (y el pie se alinea con eso)
+    GRAF.pend = [];
+    soltarVideos();
+    ({ inicio: vInicio, cat: vCategoria, club: vClub, consejos: vConsejos, guia: vGuia, cantos: vCantos, scrum: vScrum, ejercicios: vEjercicios, ejercicio: vEjercicio, puestos: vPuestos, puesto: vPuesto })[S.ver]();
+    dibujarGraficos();
+    ponerFotos();
   }
-  /** sección desplegable: arranca cerrada y recuerda si la abriste (al ordenar o "ver todos" no se cierra) */
-  const desple = (id, titulo, contenido) =>
-    `<details class="mas mas--grande" data-sec="${id}"${S.abiertos.has(id) ? " open" : ""}><summary>${titulo}</summary><div class="mas__in">${contenido}</div></details>`;
-  const volver = (txt = "Categorías") => `<button type="button" class="volver" data-ir="inicio">${IC.atras}${txt}</button>`;
+  /** sección desplegable: arranca cerrada y recuerda si la abriste (al ordenar o "ver todos" no se cierra).
+      Con "dato" se muestra a la derecha del título el número principal de adentro ("18 partidos", "78% volvió"). */
+  const desple = (id, titulo, contenido, dato = "") =>
+    `<details class="mas mas--grande" data-sec="${id}"${S.abiertos.has(id) ? " open" : ""}><summary><span class="mas__tit">${titulo}</span>${dato ? `<span class="mas__dato num">${dato}</span>` : ""}</summary><div class="mas__in">${contenido}</div></details>`;
+  /** al lado de la respuesta: si fue mejor o peor que lo normal (el promedio de todos los años), con lo normal entre paréntesis */
+  const tendencia = (dif, umbral, normal) => dif > umbral ? `<p class="tend tend--mejor">${IC.sube}Mejor que lo normal (${normal})</p>`
+    : dif < -umbral ? `<p class="tend tend--peor">${IC.baja}Peor que lo normal (${normal})</p>` : `<p class="tend">Como lo normal (${normal})</p>`;
+  const volver = (txt = "Inicio", a = "inicio") => `<button type="button" class="volver" data-ir="${a}">${IC.atras}${txt}</button>`;
 
-  // inicio: elegir la categoría
+  // ---------- ayuda: el "?" al lado de un título abre la explicación (en el celular sale desde abajo) ----------
+  // así la pantalla queda limpia: el número y la frase que lo dice en palabras quedan a la vista, el "cómo se lee" va acá
+  const AYUDA = {
+    categorias: () => ["Elegí tu categoría", ["Tocá una categoría para ver sus partidos, sus jugadores y qué tiene que aprender.",
+      `Los números son de ${D.hasta}: los partidos oficiales que están cargados en la página de la UAR.`,
+      "Los infantiles no juegan partidos oficiales: ahí se ve qué tiene que aprender cada categoría."]],
+    ultimos: () => ["Últimos partidos cargados", [`Datos al ${D.act}.`,
+      "Si un partido del fin de semana no aparece, es porque todavía no cargaron su planilla en la página de la UAR."]],
+    comparar: () => ["Cómo se leen estos gráficos", ["Cada barra es un año. La que está resaltada es el año que estás mirando: se cambia con las flechas de arriba.",
+      "La línea punteada es lo normal: el promedio de todos los años. Si la barra pasa la línea, ese año estuvo por encima de lo normal.",
+      "En el de puntos, la barra azul son los que hizo y la roja los que le hicieron, cada una con su línea de lo normal.",
+      "Arriba de cada gráfico dice si fue mejor o peor que lo normal."]],
+    siguenCat: () => ["¿Los chicos siguen?", ["De los chicos que estuvieron en la planilla de la categoría cada año (jugando o en el banco), qué parte volvió a aparecer en una planilla del club al año siguiente, en cualquier categoría.",
+      "El año que está en curso todavía no se puede saber: hay que esperar a que arranque la temporada que viene.",
+      "Un chico que sigue entrenando pero no entró en ninguna planilla, o que se fue a otro club, cuenta como que no siguió."]],
+    tries: () => ["Los tries: quién y cuándo", ["Sale de las planillas de la UAR: la camiseta del que hizo cada try y el minuto.",
+      "La planilla no dice de qué jugada vino el try (line, scrum, contraataque), así que eso no se puede saber.",
+      "Si el que lo hizo entró del banco, cuenta en el puesto donde más veces fue titular. El try penal no tiene jugador.",
+      "En juveniles la camiseta no siempre es el puesto: ahí solo se ve cuándo fueron los tries."]],
+    pase: () => ["¿Llegan a Primera?", ["De los M19 de cada año, qué parte apareció en planillas de Primera, Intermedia o Pre-Intermedia en los 2 años siguientes."]],
+    siguen: () => {
+      const u = Math.max(...D.ret.map((r) => r["Año"]));
+      return ["¿Los chicos siguen jugando?", ["De los chicos que estuvieron en la planilla de cada categoría ese año (jugando o en el banco), qué parte volvió a aparecer en una planilla del club al año siguiente.",
+        "Verde es lo mejor, amarillo es regular y rojo quiere decir que se están yendo muchos chicos.", "Una raya (–) quiere decir que no hay datos de esa categoría ese año.",
+        ...(u < D.hasta ? [`${D.hasta} todavía no aparece: recién se va a saber quién volvió cuando arranque la temporada que viene.`] : [])]];
+    },
+    camino: () => ["Camino a Primera", ["Cuántos jugadores debutaron en Primera cada año, la edad promedio de los titulares y cuántos partidos tenían antes, en promedio.",
+      "Si debutan pocos y los titulares tienen cada vez más partidos, el equipo envejece y no se renueva."]],
+    nacieron: () => ["¿En qué parte del año nacieron?", ["En muchos clubes juegan más los nacidos en enero, febrero y marzo, porque a esa edad son más grandes, y se pierden los de fin de año.",
+      "Si las 4 partes son parecidas, el club no está dejando afuera a los más chicos."]],
+    peso: () => ["Peso promedio", ["Lo que dice la ficha de la UAR de los que jugaron este año.", "Es un solo dato por jugador y sin fecha: sirve para arrancar a trabajar con la nutricionista."]],
+    consejos: () => ["Consejos", ["Lo que muestran los datos del club y qué hacer con eso.",
+      "Para trabajar: lo que conviene mejorar. Está bien: lo que hay que mantener. Falta medir: lo que todavía no se puede saber con las planillas de la UAR."]],
+    guiaCats: () => ["Qué aprende cada categoría", ["Lo que el club busca enseñar en cada categoría, de M6 a M19: la frase guía, qué priorizar en ataque y en defensa, y qué evitar.",
+      "Lo definió la Coordinación de Rugby del club (Magali Fazzi) en 2026."]],
+    guiaCat: () => ["De dónde sale esto", ["Es lo que la Coordinación de Rugby del club (Magali Fazzi) definió para esta categoría en 2026.",
+      "Las frases de arriba son las frases guía: lo que el chico tiene que poder decir y hacer en esta categoría."]],
+    cantos: () => ["Cantos y zonas", ["Los cantos del club con lo que quiere decir cada uno, las zonas y los canales de la cancha, y el modelo de juego.",
+      "Sale del material de la Coordinación de Rugby del club (Magali Fazzi), 2026."]],
+    scrum: () => ["Scrum seguro", ["Qué se puede hacer en cada edad, cómo se enseña, el set up del club, la entrada y el empuje.",
+      "Sale del protocolo de scrum de la Coordinación de Rugby del club (Magali Fazzi), 2026."]],
+    ejercicios: () => ["Ejercicios", ["Los ejercicios de line y maul de la Coordinación de Rugby (Magali Fazzi) y los juegos que más usan los entrenadores de infantiles en sus planificaciones.",
+      "Los de line están en orden, de lo más fácil a lo más difícil para cada rol.", "Tocá uno para ver cómo se hace, en qué fijarse y qué material hace falta."]],
+    puestos: () => ["Los puestos", ["Lo que el club espera de cada puesto, del 1 al 15: qué tiene que saber hacer, lo mental y lo ideal en un partido.",
+      "Sale del perfil del jugador de la Coordinación de Rugby del club (Magali Fazzi)."]],
+    partidoPuesto: () => ["En un partido", ["Lo ideal para este puesto en un partido entero: por ejemplo, cuántos tackles tiene que hacer.",
+      "Sirve para mirar los videos de los partidos y ver si el jugador llega.",
+      "Rucks en ataque: las veces que entra a un ruck cuando el equipo tiene la pelota. Contactos: las veces que lleva la pelota al choque. Quiebres: las veces que pasa la línea de defensa. Recuperadas: las pelotas que le gana al rival."]],
+    medir: () => ["Qué empezar a medir", ["Son datos que las planillas de la UAR no tienen y que sirven para saber si los chicos mejoran.",
+      "Tocá cada uno para ver qué medir, cada cuánto, quién y cómo."]],
+  };
+  const ayudaBtn = (k) => `<button type="button" class="ayuda-btn" data-ayuda="${k}" aria-haspopup="dialog" aria-label="Qué quiere decir: ${esc(AYUDA[k]()[0])}">?</button>`;
+  const cabTit = (texto, k) => `<h2 class="cab__cat">${texto}${k ? ayudaBtn(k) : ""}</h2>`;
+  const tit = (texto, k) => `<div class="tit"><h2 class="h2">${texto}${k ? ayudaBtn(k) : ""}</h2></div>`;
+  let ayudaDesde = null, saltarPop = false;
+  const ayudaAbierta = () => { const c = $("#ayuda"); return !!c && !c.hidden; };
+  function abrirAyuda(k, boton) {
+    const [t, parrafos] = AYUDA[k]();
+    let caja = $("#ayuda");
+    if (!caja) {
+      document.body.insertAdjacentHTML("beforeend", `<div class="ayuda" id="ayuda" hidden><div class="ayuda__fondo" data-cerrar-ayuda></div>
+        <div class="ayuda__caja" role="dialog" aria-modal="true" aria-labelledby="ayuda-t"><h2 class="ayuda__t" id="ayuda-t"></h2><div class="ayuda__txt"></div>
+        <button type="button" class="ayuda__ok" data-cerrar-ayuda>Entendido</button></div></div>`);
+      caja = $("#ayuda");
+    }
+    $("#ayuda-t").textContent = t;
+    $(".ayuda__txt", caja).innerHTML = parrafos.map((p) => `<p>${esc(p)}</p>`).join("");
+    caja.hidden = false;
+    ayudaDesde = boton;
+    history.pushState({ ayuda: true }, "", location.href); // así el "atrás" del celular la cierra
+    $(".ayuda__ok", caja).focus();
+  }
+  function cerrarAyuda(desdeBoton = true) {
+    if (!ayudaAbierta()) return;
+    $("#ayuda").hidden = true;
+    if (ayudaDesde && ayudaDesde.isConnected) ayudaDesde.focus();
+    if (desdeBoton && history.state && history.state.ayuda) { saltarPop = true; history.back(); }
+  }
+  /** una opción de menú: ícono, nombre, una línea que dice qué hay y la flecha (mismo estilo que las filas de categoría) */
+  const opcion = (ir, ic, nom, que) => `<li><button type="button" class="menu__it" data-ir="${ir}"><span class="menu__ic">${ic}</span>
+    <span class="menu__txt"><b>${nom}</b><small>${que}</small></span>${IC.adelante}</button></li>`;
+
+  // inicio: a la izquierda lo principal (elegir la categoría); a la derecha, la guía, los últimos partidos y todo el club.
+  // En el celular va todo en una columna, en ese orden.
   function vInicio() {
-    const boton = (cat) => {
+    // las categorías como una tabla de posiciones: una fila por categoría, con ganados, empatados y perdidos
+    // en los mismos colores que adentro de la categoría. Toda la fila se toca.
+    const fila = (cat) => {
       const r = filasCat(cat).at(-1);
-      return `<li><button type="button" class="elegir" data-ir-cat="${esc(cat)}">
-        <span class="elegir__nom">${esc(cat)}</span>
-        <span class="elegir__res">${r["Año"]}: ${resultadoTxt(r)}</span>${IC.adelante}</button></li>`;
+      const n = (k, v) => `<span class="fila-cat__n fila-cat__n--${k}${v ? "" : " fila-cat__n--cero"} num">${v}</span>`;
+      return `<li><button type="button" class="fila-cat" data-ir-cat="${esc(cat)}"
+        aria-label="${esc(cat)}, ${r["Año"]}: ${pl(r.PJ, "partido", "partidos")}. Ganó ${r.G}, empató ${r.E}, perdió ${r.P}">
+        <span class="fila-cat__nom">${esc(cat)}<small>${r["Año"] !== D.hasta ? `${r["Año"]} · ` : ""}${pl(r.PJ, "partido", "partidos")}</small></span>
+        ${n("g", r.G)}${n("e", r.E)}${n("p", r.P)}${IC.adelante}</button></li>`;
     };
-    $("#vista").innerHTML = `
+    const tabla = (titulo, cats) => `<div class="grupo-cat">
+        <div class="grupo-cat__cab"><h3 class="grupo-cat__tit">${titulo}</h3><span aria-hidden="true">Ganó</span><span aria-hidden="true">Empató</span><span aria-hidden="true">Perdió</span></div>
+        <ul class="filas-cat">${cats.map(fila).join("")}</ul></div>`;
+    // los infantiles no tienen partidos en la UAR: su fila lleva directo a lo que tienen que aprender
+    const filaInf = (c) => `<li><button type="button" class="fila-cat fila-cat--inf" data-ir-guia="${esc(c.cat)}">
+        <span class="fila-cat__nom">${esc(c.cat)}${c.apodo ? `<small>${esc(c.apodo)}</small>` : ""}</span>
+        <span class="fila-cat__etapa">${esc(c.etapa)}</span>${IC.adelante}</button></li>`;
+    $("#vista").innerHTML = `<div class="inicio">
       <section class="sec">
-        <h2 class="h2">Elegí una categoría</h2>
-        <p class="sub">Partidos oficiales cargados en las planillas de la UAR, de ${D.desde} a ${D.hasta}.</p>
-        <h3 class="grupo">Plantel superior</h3>
-        <ul class="elegir-lista">${D.cats.filter((c) => PS.includes(c)).map(boton).join("")}</ul>
-        <h3 class="grupo">Juveniles</h3>
-        <ul class="elegir-lista">${D.cats.filter((c) => !PS.includes(c)).map(boton).join("")}</ul>
+        ${tit("Elegí tu categoría", "categorias")}
+        ${tabla("Plantel superior", D.cats.filter((c) => PS.includes(c)))}
+        ${tabla("Juveniles", D.cats.filter((c) => !PS.includes(c)))}
+        ${D.guia ? `<div class="grupo-cat">
+          <div class="grupo-cat__cab"><h3 class="grupo-cat__tit">Infantiles</h3></div>
+          <ul class="filas-cat">${D.guia.infantiles.slice().reverse().map(filaInf).join("")}</ul></div>` : ""}
       </section>
-      <section class="sec">
-        <h2 class="h2">Últimos partidos cargados</h2>
-        <p class="sub">Datos al ${esc(D.act)}. Si un partido del fin de semana no aparece, todavía no cargaron su planilla en la BD UAR.</p>
-        <ol class="resultados">${D.partidos.slice(0, 5).map((p) => partidoHTML(p, true)).join("")}</ol>
-      </section>
-      <section class="sec">
-        <h2 class="h2">Todo el club</h2>
-        <ul class="elegir-lista elegir-lista--club">
-          <li><button type="button" class="elegir elegir--club" data-ir="club"><span class="elegir__ic">${IC.gente}</span>
-            <span class="elegir__nom">¿Los chicos siguen?</span><span class="elegir__res">Quiénes siguen jugando y quiénes llegan a Primera</span>${IC.adelante}</button></li>
-          <li><button type="button" class="elegir elegir--club" data-ir="consejos"><span class="elegir__ic">${IC.idea}</span>
-            <span class="elegir__nom">Consejos</span><span class="elegir__res">Qué trabajar y qué empezar a medir</span>${IC.adelante}</button></li>
-        </ul>
-      </section>`;
+      <div class="inicio__lado">
+        ${D.guia ? `<section class="sec">
+          ${tit("Guía del club")}
+          <ul class="menu">
+            ${opcion("guia", IC.libro, "Qué aprende cada categoría", "Frase guía, prioridades y qué evitar")}
+            ${D.guia.puestos ? opcion("puestos", IC.camiseta, "Los puestos", "Qué se espera del 1 al 15") : ""}
+            ${opcion("cantos", IC.canto, "Cantos y zonas", `Los ${D.guia.cantos.length} cantos y las zonas de la cancha`)}
+            ${opcion("scrum", IC.escudo, "Scrum seguro", "Qué se hace en cada edad y el set up")}
+            ${D.guia.ejercicios ? opcion("ejercicios", IC.cono, "Ejercicios", "Line, maul y juegos para entrenar") : ""}
+          </ul>
+        </section>` : ""}
+        <section class="sec">
+          ${tit("Últimos partidos cargados", "ultimos")}
+          <ol class="resultados">${D.partidos.slice(0, 5).map((p) => partidoHTML(p, true)).join("")}</ol>
+        </section>
+        <section class="sec">
+          ${tit("Todo el club")}
+          <ul class="menu">
+            ${opcion("club", IC.gente, "¿Los chicos siguen?", "Cuántos siguen y llegan a Primera")}
+            ${opcion("consejos", IC.idea, "Consejos", "Qué trabajar y qué empezar a medir")}
+          </ul>
+        </section>
+      </div>
+    </div>`;
   }
 
   // categoría: las 5 preguntas
@@ -243,8 +474,14 @@
     const pos = (t) => { const m = (t["Posición en la tabla"] || "").split(" | ").at(-1).match(/(\d+)º de (\d+)/); return m ? `Terminó ${m[1]}º de ${m[2]}` : ""; };
     const tor = D.torneos.filter((x) => x["Categoría"] === cat && x["Año"] === a);
 
-    // 2. comparado con todos los años
+    // 2. comparado con todos los años: arriba de cada gráfico, la respuesta en palabras y si fue mejor o peor que lo normal
     const promGan = prom(filas.map((x) => x["% victorias"]));
+    const pf = r["PF por partido"], pc = r["PC por partido"];
+    const promPF = prom(filas.map((x) => x["PF por partido"])), promPC = prom(filas.map((x) => x["PC por partido"]));
+    const titGan = r["% victorias"] == null ? "" : `<p class="titular">Ganó el <b>${fmt(r["% victorias"], "%")}</b> de los partidos</p>
+      ${tendencia(r["% victorias"] - promGan, 3, fmt(promGan, "%"))}`;
+    const titPts = pf == null || pc == null ? "" : `<p class="titular">Hizo <span class="junto"><i class="punto punto--a"></i><b>${fmt(pf, "d")}</b></span> y le hicieron <span class="junto"><i class="punto punto--b"></i><b>${fmt(pc, "d")}</b></span> puntos por partido</p>
+      ${tendencia((pf - pc) - (promPF - promPC), 2, `${fmt(promPF, "d")} y ${fmt(promPC, "d")}`)}`;
     // 3. partidos y rivales
     const parts = D.partidos.filter((x) => x.cat === cat && x.anio === a), verP = S.verP ? parts : parts.slice(0, 6);
     const riv = D.rivales.filter((x) => x["Categoría"] === cat);
@@ -258,17 +495,46 @@
     const pase = ret.filter((x) => x["% pasaje a plantel superior"] != null);
     const paseSel = pase.filter((x) => x["Año"] <= a).at(-1);
 
-    // más datos
-    // un renglón por dato: la barra azul es el año elegido y la rayita punteada el promedio de todos los años
-    const masFila = (lbl, expl, k, extra = "") => {
+    // local, visitante y más
+    // un renglón por dato: la barra azul es el año elegido y la rayita, lo normal (el promedio de todos los años).
+    // Abajo del título va una línea solo si agrega algo para leer el número (no si repite el título).
+    const masFila = (lbl, k, nota = "") => {
       const v = r[k], p = prom(filas.map((x) => x[k]));
       if (v == null) return "";
       const pos = (x) => `${Math.max(0, Math.min(100, x))}%`;
       return `<li class="dato-e"><b class="dato-e__tit">${lbl}</b>
-        <span class="dato-e__val num"><strong>${fmt(v, "%")}</strong><small>promedio ${fmt(p, "%")}</small></span>
-        <span class="dato-e__exp">${expl}${extra}</span>
+        <span class="dato-e__val num"><strong>${fmt(v, "%")}</strong><small>lo normal: ${fmt(p, "%")}</small></span>
+        ${nota ? `<span class="dato-e__exp">${nota}</span>` : ""}
         <span class="dato-e__barra" aria-hidden="true"><i style="width:${pos(v)}"></i>${p != null ? `<b style="left:${pos(p)}"></b>` : ""}</span></li>`;
     };
+    const verR = S.verR ? riv : riv.slice(0, 8);
+
+    // los tries: quién los hace y cuándo (en juveniles, solo cuándo: la camiseta no siempre es el puesto)
+    const tr = D.tries && D.tries[cat] && D.tries[cat][a];
+    let triesHTML = "";
+    if (tr) {
+      const af = tr.a_favor, ec = tr.en_contra;
+      // un renglón por dato con lo que hizo (azul) y lo que le hicieron (rojo); arriba, una sola vez, qué es cada número
+      const fila = (lbl, x, y) => `<div class="duelo duelo--c"><span class="duelo__lbl">${lbl}</span>
+        <strong class="duelo__n duelo__n--a num">${x}</strong>
+        <span class="duelo__barra" aria-hidden="true"><i style="flex-grow:${x || 0.001}"></i><i style="flex-grow:${y || 0.001}"></i></span>
+        <strong class="duelo__n duelo__n--b num">${y}</strong></div>`;
+      const tabla = (filas) => `<div class="duelos duelos--c"><div class="duelo duelo--c duelo--cab" aria-hidden="true"><span></span><span class="duelo__n--a">Hizo</span><span></span><span class="duelo__n--b">Le hicieron</span></div>
+        ${filas.filter(Boolean).map(([l, k, sub]) => fila(l, sub ? af.lineas[k] : af[k], sub ? ec.lineas[k] : ec[k])).join("")}</div>`;
+      const mas = (x) => (x.forwards > x.backs ? "forwards" : x.backs > x.forwards ? "backs" : "");
+      const quien = af.lineas && ec.lineas ? `<h3 class="grupo">¿Quién los hace?</h3>
+        <p class="titular">${!af.tries ? "No hizo tries" : mas(af) ? `Hace más tries con los <b>${mas(af)}</b>` : "Hace tries parejo con forwards y backs"}
+          y ${!ec.tries ? "no le hicieron tries" : mas(ec) ? `se los hacen más los <b>${mas(ec)}</b>` : "se los hacen parejo forwards y backs"}</p>
+        ${tabla([["Forwards", "forwards"], ["Backs", "backs"],
+          ["Primera línea<small>1 al 3</small>", "primera", 1], ["Segunda línea<small>4 y 5</small>", "segunda", 1], ["Tercera línea<small>6 al 8</small>", "tercera", 1],
+          ["Medios<small>9 y 10</small>", "medios", 1], ["Centros<small>12 y 13</small>", "centros", 1], ["Wings y fullback<small>11, 14 y 15</small>", "wings_fullback", 1],
+          af.try_penal || ec.try_penal ? ["Try penal", "try_penal"] : null])}` : "";
+      triesHTML = desple("tries", "Los tries: quién y cuándo", `
+        ${quien}
+        <h3 class="grupo">¿Cuándo?</h3>
+        <p class="titular">En los últimos 10 minutos hizo <b>${af.ultimos10}</b> y le hicieron <b>${ec.ultimos10}</b>${ayudaBtn("tries")}</p>
+        ${tabla([["1er tiempo", "t1"], ["2º tiempo", "t2"], ["Últimos 10 minutos", "ultimos10"], ["Entrando del banco", "banco"]])}`);
+    }
 
     $("#vista").innerHTML = `
       <div class="cab">
@@ -277,15 +543,16 @@
           <h2 class="cab__cat">${esc(cat)}</h2>
           <div class="anio" role="group" aria-label="Año">
             <button type="button" data-anio="${i > 0 ? anios[i - 1] : ""}" aria-label="Año anterior"${i > 0 ? "" : " disabled"}>${IC.atras}</button>
-            <span class="anio__n num" aria-live="polite">${a}</span>
+            <span class="anio__n num" aria-live="polite"><small>Año</small>${a}</span>
             <button type="button" data-anio="${i < anios.length - 1 ? anios[i + 1] : ""}" aria-label="Año siguiente"${i < anios.length - 1 ? "" : " disabled"}>${IC.adelante}</button>
           </div>
         </div>
+        ${D.guia && gDe(cat) ? `<button type="button" class="atajo" data-ir-guia="${esc(cat)}">${IC.libro}<span>Qué tiene que aprender ${esc(cat)}</span>${IC.adelante}</button>` : ""}
       </div>
 
       <section class="sec">
-        <h2 class="h2">Cómo le fue en ${a}</h2>
-        <p class="sub">${r.PJ} partidos oficiales.${r.PJ < 5 ? " Son pocos: los números pueden engañar." : ""}</p>
+        <div class="tit"><h2 class="h2">Cómo le fue en ${a}</h2><span class="tit__meta num">${pl(r.PJ, "partido", "partidos")}</span></div>
+        ${r.PJ < 5 ? `<p class="tend tend--ojo">Son pocos partidos: los números pueden engañar</p>` : ""}
         <div class="gep">
           <div class="gep__c gep--g"><strong class="num">${r.G}</strong><span>${r.G === 1 ? "ganado" : "ganados"}</span></div>
           <div class="gep__c gep--e"><strong class="num">${r.E}</strong><span>${r.E === 1 ? "empatado" : "empatados"}</span></div>
@@ -299,56 +566,54 @@
       </section>
 
       <section class="sec">
-        <h2 class="h2">¿Mejor o peor que otros años?</h2>
-        <p class="sub">Cada barra es un año. La azul es ${a}. La línea punteada es el promedio de todos los años.</p>
-        <h3 class="grupo">Partidos ganados</h3>
-        <div class="graf-wrap">${barras(filas.map((x) => ({ x: x["Año"], y: x["% victorias"] })), { sel: a, tipo: "%", promedio: promGan })}</div>
-        <h3 class="grupo">Puntos por partido</h3>
-        <p class="ley"><span><i class="ley--a"></i>los que hace · promedio <b>${fmt(prom(filas.map((x) => x["PF por partido"])), "d")}</b></span>
-          <span><i class="ley--b"></i>los que le hacen · promedio <b>${fmt(prom(filas.map((x) => x["PC por partido"])), "d")}</b></span>
-          <span><i class="ley--prom"></i>promedios</span></p>
-        <div class="graf-wrap">${barrasDobles(filas.map((x) => ({ x: x["Año"], a: x["PF por partido"], b: x["PC por partido"] })), { sel: a })}</div>
+        ${tit("¿Mejor o peor que otros años?", "comparar")}
+        <div class="bloque-graf">${titGan}
+          <div class="graf-wrap">${barras(filas.map((x) => ({ x: x["Año"], y: x["% victorias"] })), { sel: a, tipo: "%", promedio: promGan })}</div></div>
+        <div class="bloque-graf">${titPts}
+          <div class="graf-wrap">${barrasDobles(filas.map((x) => ({ x: x["Año"], a: x["PF por partido"], b: x["PC por partido"] })), { sel: a })}</div></div>
       </section>
 
       <section class="sec desplegables">
-        ${desple("partidos", `Contra quién jugó en ${a}`, `
+        ${videosDe("cats", cat).length ? desple("videos", "Videos de partidos", `<div class="videos-ej">${videosDe("cats", cat).map(tarjetaVideo).join("")}</div>`,
+          pl(videosDe("cats", cat).length, "video", "videos")) : ""}
+        ${desple("partidos", "Contra quién jugó", `
           <ol class="resultados">${verP.map(partidoHTML).join("")}</ol>
           ${parts.length > 6 ? `<button type="button" class="btn btn--ancho" data-ver="P">${S.verP ? "Ver menos" : `Ver los ${parts.length} partidos`}</button>` : ""}
-          ${riv.length ? `<h3 class="grupo">Contra cada rival, sumando todos los años</h3>
-            <p class="ley"><span><i class="ley--g"></i>ganamos</span><span><i class="ley--e"></i>empatamos</span><span><i class="ley--p"></i>perdimos</span></p>
-            <ul class="rivales-e">${riv.map((x) => `<li><div class="rivales-e__fila"><b>${esc(x.Rival)}</b><span class="num">${x.PJ} partidos</span></div>
-              <div class="rivales-e__barra num" role="img" aria-label="Ganamos ${x.G}, empatamos ${x.E}, perdimos ${x.P}">${[["g", x.G], ["e", x.E], ["p", x.P]].filter(([, n]) => n).map(([k, n]) => `<i class="${k}" style="flex-grow:${n}">${n}</i>`).join("")}</div></li>`).join("")}</ul>` : ""}`)}
+          ${riv.length ? `<div class="grupo-fila"><h3 class="grupo">Contra cada rival, todos los años</h3>
+            <p class="ley"><span><i class="ley--g"></i>ganamos</span><span><i class="ley--e"></i>empatamos</span><span><i class="ley--p"></i>perdimos</span></p></div>
+            <ul class="rivales-e">${verR.map((x) => `<li><div class="rivales-e__fila"><b>${esc(x.Rival)}</b><span class="num">${x.PJ} partidos</span></div>
+              <div class="rivales-e__barra num" role="img" aria-label="Ganamos ${x.G}, empatamos ${x.E}, perdimos ${x.P}">${[["g", x.G], ["e", x.E], ["p", x.P]].filter(([, n]) => n).map(([k, n]) => `<i class="${k}" style="flex-grow:${n}">${n}</i>`).join("")}</div></li>`).join("")}</ul>
+            ${riv.length > 8 ? `<button type="button" class="btn btn--ancho" data-ver="R">${S.verR ? "Ver menos" : `Ver los ${riv.length} rivales`}</button>` : ""}` : ""}`,
+          pl(parts.length, "partido", "partidos"))}
 
-        ${desple("jugadores", `Quiénes jugaron en ${a}`, `
-          <p class="sub">Partidos = de titular o entrando del banco. Tocá un título para ordenar.</p>
+        ${desple("jugadores", "Quiénes jugaron", `
           <div class="tabla-e-wrap"><table class="tabla-e">
             <thead><tr><th scope="col" class="izq">Jugador</th>${[["pj", "Partidos"], ["tries", "Tries"], ["pts", "Puntos"]].map(([k, l]) =>
               `<th scope="col"${k === S.ordenJ ? ' aria-sort="descending"' : ""}><button type="button" data-ordj="${k}">${l}</button></th>`).join("")}</tr></thead>
             <tbody>${verJ.map((j) => `<tr><td class="izq">${nombreHTML(j.nombre)}</td><td>${j.pj}</td><td>${j.tries}</td><td>${j.pts}</td></tr>`).join("")}</tbody>
           </table></div>
-          ${jug.length > 12 ? `<button type="button" class="btn btn--ancho" data-ver="J">${S.verJ ? "Ver menos" : `Ver los ${jug.length} jugadores`}</button>` : ""}`)}
+          ${jug.length > 12 ? `<button type="button" class="btn btn--ancho" data-ver="J">${S.verJ ? "Ver menos" : `Ver los ${jug.length} jugadores`}</button>` : ""}`,
+          pl(jug.length, "jugador", "jugadores"))}
 
-        ${ret.length ? desple("siguen", "¿Los chicos siguen jugando?", `
-          <p class="sub">De los chicos que estuvieron en la planilla de ${esc(cat)} cada año (jugando o en el banco), qué parte volvió a aparecer en una planilla del club al año siguiente, en cualquier categoría.</p>
+        ${triesHTML}
+
+        ${ret.length ? desple("siguen", "¿Los chicos siguen?", `
+          ${retSel ? `<p class="titular">De los <b>${retSel.Jugadores}</b> de ${retSel["Año"]}, volvieron <b>${retSel["Siguen la temporada siguiente"]}</b> en ${sigTemp(retSel["Año"])}${ayudaBtn("siguenCat")}</p>` : ""}
           <div class="graf-wrap">${barras(ret.map((x) => ({ x: x["Año"], y: x["% retención"] })), { sel: retSel ? retSel["Año"] : null, tipo: "%", promedio: prom(ret.map((x) => x["% retención"])) })}</div>
-          ${retSel ? `<p class="frase">De los <b>${retSel.Jugadores}</b> que estuvieron en planillas en ${retSel["Año"]}, <b>${retSel["Siguen la temporada siguiente"]}</b> volvieron a aparecer en ${sigTemp(retSel["Año"])}.${retSel["Año"] < a ? ` Para ${a} todavía no se sabe: hay que esperar al año que viene.` : ""}</p>` : ""}
           ${retSel ? listaNoSiguieron(cat, retSel["Año"], sigTemp(retSel["Año"])) : ""}
-          <p class="sub sub--nota">Un chico que sigue entrenando pero no entró en ninguna planilla, o que se fue a otro club, cuenta como que no siguió.</p>
-          ${pase.length ? `<h3 class="grupo">¿Llegan a Primera?</h3>
-            <p class="sub">De los M19 de cada año, qué parte apareció en planillas de Primera, Intermedia o Pre-Intermedia en los 2 años siguientes.</p>
-            <div class="graf-wrap">${barras(pase.map((x) => ({ x: x["Año"], y: x["% pasaje a plantel superior"] })), { sel: paseSel ? paseSel["Año"] : null, tipo: "%", promedio: prom(pase.map((x) => x["% pasaje a plantel superior"])) })}</div>
-            ${paseSel ? `<p class="frase">De los <b>${paseSel.Jugadores}</b> M19 de ${paseSel["Año"]}, <b>${paseSel["Pasaron a plantel superior (en 2 temporadas)"]}</b> ya aparecieron en planillas de plantel superior.</p>` : ""}` : ""}`) : ""}
+          ${pase.length ? `<h3 class="grupo grupo--sep">¿Llegan a Primera?</h3>
+            ${paseSel ? `<p class="titular">De los <b>${paseSel.Jugadores}</b> M19 de ${paseSel["Año"]}, <b>${paseSel["Pasaron a plantel superior (en 2 temporadas)"]}</b> ya jugaron en el plantel superior${ayudaBtn("pase")}</p>` : ""}
+            <div class="graf-wrap">${barras(pase.map((x) => ({ x: x["Año"], y: x["% pasaje a plantel superior"] })), { sel: paseSel ? paseSel["Año"] : null, tipo: "%", promedio: prom(pase.map((x) => x["% pasaje a plantel superior"])) })}</div>` : ""}`,
+          retSel ? `${fmt(retSel["% retención"], "%")} volvió` : "") : ""}
 
-        ${desple("mas", "Más datos para analizar", `
-          <p class="sub">Salen de los minutos que se anotan en la planilla.</p>
-          <p class="ley"><span><i class="ley--a"></i>${a}</span><span><i class="ley--prom"></i>promedio de todos los años</span></p>
+        ${desple("mas", "Local, visitante y más", `
           <ul class="datos-e">
-            ${masFila("Hizo el primer tanto del partido", "En qué parte de los partidos el primer tanto fue nuestro.", "% marcamos primero",
-              r["% victorias cuando marcamos primero"] != null ? ` Cuando lo hizo, ganó el ${fmt(r["% victorias cuando marcamos primero"], "%")}.` : "")}
-            ${masFila("Ganó jugando en casa", "Partidos ganados de local.", "% victorias de local")}
-            ${masFila("Ganó jugando afuera", "Partidos ganados de visitante.", "% victorias de visitante")}
-            ${masFila("Conversiones que entraron", "Qué parte de los tries se convirtió (el try penal no cuenta, porque no se patea).", "% conversiones")}
-            ${masFila("Puntos en contra en el 2º tiempo", "Qué parte de los puntos que le hicieron fue en el 2º tiempo. Más de 60% puede ser cansancio.", "% PC en 2º tiempo")}
+            ${masFila("Hizo el primer tanto del partido", "% marcamos primero",
+              r["% victorias cuando marcamos primero"] != null ? `Cuando lo hizo, ganó el ${fmt(r["% victorias cuando marcamos primero"], "%")}.` : "")}
+            ${masFila("Ganó jugando en casa", "% victorias de local")}
+            ${masFila("Ganó jugando afuera", "% victorias de visitante")}
+            ${masFila("Conversiones que entraron", "% conversiones", "El try penal no cuenta, porque no se patea.")}
+            ${masFila("Puntos en contra en el 2º tiempo", "% PC en 2º tiempo", "Más de 60% puede ser cansancio.")}
           </ul>`)}
       </section>`;
   }
@@ -359,8 +624,8 @@
     const ver = S.verN ? l : l.slice(0, 8);
     const detalle = (x) => x.jugo ? `${x.jugo === 1 ? "jugó 1 partido" : `jugó ${x.jugo} partidos`}` : `solo en el banco (${x.planillas === 1 ? "1 partido" : `${x.planillas} partidos`})`;
     return `<h3 class="grupo">Los que no volvieron a aparecer en ${sig} (${l.length})</h3>
-      <ul class="lista">${ver.map((x) => `<li><span class="lista__txt"><span>${nombreHTML(x.nombre)}</span><small>${detalle(x)} en ${esc(cat)} ${anio}</small></span>
-        <span class="chip chip--gris">último: ${fecha(x.ultimo)}</span></li>`).join("")}</ul>
+      <ul class="lista">${ver.map((x) => `<li><span class="lista__txt"><span>${nombreHTML(x.nombre)}</span><small>${detalle(x)}</small></span>
+        <span class="chip chip--gris">último partido: ${fecha(x.ultimo)}</span></li>`).join("")}</ul>
       ${l.length > 8 ? `<button type="button" class="btn btn--ancho" data-ver="N">${S.verN ? "Ver menos" : `Ver los ${l.length}`}</button>` : ""}`;
   }
   function nombreHTML(n) {
@@ -378,27 +643,35 @@
     const celda = (v) => v == null ? "<td>–</td>" : `<td><span class="pct ${v >= 80 ? "pct--a" : v >= 65 ? "pct--b" : "pct--c"}">${Math.round(v)}%</span></td>`;
     const fisCats = [...new Set(D.fis.map((f) => f["Categoría"]))];
     const kg = (c, l) => fmt((D.fis.find((x) => x["Categoría"] === c && x["Línea"] === l) || {})["Peso promedio (kg)"], "d");
+    // las respuestas en palabras, arriba de cada tabla
+    const u = ultimos.at(-1), delAnio = D.ret.filter((x) => x["Año"] === u && x["% retención"] != null);
+    const peor = delAnio.sort((x, y) => x["% retención"] - y["% retención"])[0];
+    const titRet = peor ? `<p class="titular">En ${u}, la que más chicos perdió fue <b>${esc(peor["Categoría"])}</b>: volvió el <b>${fmt(peor["% retención"], "%")}</b></p>` : "";
+    // "despareja" = muchos más nacidos a principio de año (ene-mar) que a fin de año (oct-dic)
+    const desp = D.era.filter((x) => x["Nacidos ene-mar %"] - x["oct-dic %"] >= 15).map((x) => x["Categoría"]);
+    const titEra = `<p class="titular">${desp.length ? `En <b>${esc(desp.join(", ").replace(/, ([^,]*)$/, " y $1"))}</b> hay muchos más nacidos a principio de año`
+      : "En todas las categorías las 4 partes son parecidas: <b>está bien</b>"}</p>`;
     $("#vista").innerHTML = `
       <div class="cab">${volver()}<h2 class="cab__cat">Todo el club</h2></div>
 
       <section class="sec">
-        <h2 class="h2">¿Los chicos siguen jugando?</h2>
-        <p class="sub">De los chicos que estuvieron en la planilla de cada categoría ese año (jugando o en el banco), qué parte volvió a aparecer en una planilla del club al año siguiente.</p>
+        ${tit("¿Los chicos siguen jugando?", "siguen")}
+        ${titRet}
         <p class="ley"><span class="pct pct--a">80% o más</span><span class="pct pct--b">65 a 79%</span><span class="pct pct--c">menos de 65%</span></p>
         <div class="tabla-e-wrap"><table class="tabla-e"><thead><tr><th scope="col" class="izq">Categoría</th>${ultimos.map((a) => `<th scope="col">${a}</th>`).join("")}</tr></thead>
           <tbody>${D.cats.map((c) => `<tr><th scope="row" class="izq">${esc(c)}</th>${ultimos.map((a) => celda((D.ret.find((r) => r["Categoría"] === c && r["Año"] === a) || {})["% retención"])).join("")}</tr>`).join("")}</tbody></table></div>
       </section>
 
       <section class="sec">
-        <h2 class="h2">Camino a Primera</h2>
-        <p class="sub">Cuántos jugadores debutaron en Primera cada año y cuántos partidos tenía antes, en promedio, el equipo titular. Si debutan pocos y ese número sube, el equipo envejece.</p>
-        <div class="tabla-e-wrap"><table class="tabla-e"><thead><tr><th scope="col" class="izq">Año</th><th scope="col">Debutaron</th><th scope="col">Edad del equipo titular</th><th scope="col">Partidos que ya tenía</th></tr></thead>
+        ${tit("Camino a Primera", "camino")}
+        ${fraseCamino()}
+        <div class="tabla-e-wrap"><table class="tabla-e"><thead><tr><th scope="col" class="izq">Año</th><th scope="col">Debutaron</th><th scope="col">Edad titulares</th><th scope="col">Partidos previos</th></tr></thead>
           <tbody>${D.camino.filter((r) => r["Año"] >= 2019).map((r) => `<tr><th scope="row" class="izq">${r["Año"]}</th><td>${r["Debutaron en Primera"] ?? "–"}</td><td>${fmt(r["Edad promedio del XV titular"], "d")}</td><td>${r["Partidos previos en plantel superior del XV (promedio)"] ?? "–"}</td></tr>`).join("")}</tbody></table></div>
       </section>
 
       <section class="sec">
-        <h2 class="h2">¿En qué parte del año nacieron?</h2>
-        <p class="sub">En muchos clubes juegan más los nacidos en enero-marzo, que son más grandes, y se pierden los de fin de año. Si las 4 partes son parecidas, está bien.</p>
+        ${tit("¿En qué parte del año nacieron?", "nacieron")}
+        ${titEra}
         <p class="ley"><i class="q1"></i>ene-mar <i class="q2"></i>abr-jun <i class="q3"></i>jul-sep <i class="q4"></i>oct-dic</p>
         <ul class="era">${D.era.map((r) => {
           const q = [r["Nacidos ene-mar %"], r["abr-jun %"], r["jul-sep %"], r["oct-dic %"]];
@@ -407,11 +680,19 @@
       </section>
 
       ${D.fis.length ? `<section class="sec">
-        <h2 class="h2">Peso promedio ${D.fis[0].Temporada}</h2>
-        <p class="sub">Lo que dice la ficha de la UAR de los que jugaron este año. Es un solo dato por jugador y sin fecha: sirve para arrancar con la nutricionista.</p>
+        ${tit(`Peso promedio ${D.fis[0].Temporada}`, "peso")}
         <div class="tabla-e-wrap"><table class="tabla-e"><thead><tr><th scope="col" class="izq">Categoría</th><th scope="col">Forwards</th><th scope="col">Backs</th></tr></thead>
           <tbody>${fisCats.map((c) => `<tr><th scope="row" class="izq">${esc(c)}</th><td>${kg(c, "Forward")} kg</td><td>${kg(c, "Back")} kg</td></tr>`).join("")}</tbody></table></div>
       </section>` : ""}`;
+  }
+
+  /** el último año del camino a Primera dicho en palabras, comparado con 4 años antes */
+  function fraseCamino() {
+    const k = "Partidos previos en plantel superior del XV (promedio)";
+    const filas = D.camino.filter((r) => r["Año"] >= 2019 && r[k] != null).sort((x, y) => x["Año"] - y["Año"]), u = filas.at(-1);
+    if (!u) return "";
+    const antes = filas.find((r) => r["Año"] === u["Año"] - 4);
+    return `<p class="titular">En ${u["Año"]} debutaron <b>${u["Debutaron en Primera"] ?? 0}</b> en Primera, y los titulares ya tenían <b>${u[k]}</b> partidos cada uno${antes ? ` (en ${antes["Año"]}, ${antes[k]})` : ""}</p>`;
   }
 
   // consejos
@@ -419,14 +700,12 @@
     const grupo = (tipo, h) => { const it = D.diag.filter((d) => d[0] === tipo); return it.length ? `<h3 class="grupo">${h}</h3><ul class="diag">${it.map(diagItem).join("")}</ul>` : ""; };
     const pri = { Alta: "alta", Media: "media", Baja: "baja" };
     $("#vista").innerHTML = `
-      <div class="cab">${volver()}<h2 class="cab__cat">Consejos</h2></div>
+      <div class="cab">${volver()}${cabTit("Consejos", "consejos")}</div>
       <section class="sec">
-        <p class="sub">Lo que muestran los datos del club y qué hacer con eso.</p>
         ${grupo("alerta", "Para trabajar")}${grupo("bien", "Está bien")}${grupo("medir", "Falta medir")}
       </section>
       <section class="sec">
-        <h2 class="h2">Qué empezar a medir</h2>
-        <p class="sub">Lo que las planillas de la UAR no tienen. Tocá cada uno para ver cómo.</p>
+        ${tit("Qué empezar a medir", "medir")}
         <div class="acordeon">${D.medir.map(([q, quien, cada, como, cats]) => `<details><summary><span>${esc(q.split(" (")[0].split(":")[0])}</span></summary>
           <dl class="mini-dl"><div><dt>Qué</dt><dd>${esc(q)}</dd></div><div><dt>Cada cuánto</dt><dd>${esc(cada)}</dd></div><div><dt>Quién</dt><dd>${esc(quien)}</dd></div><div><dt>Cómo</dt><dd>${esc(como)}</dd></div><div><dt>Categorías</dt><dd>${esc(cats)}</dd></div></dl></details>`).join("")}</div>
       </section>
@@ -442,15 +721,486 @@
     <span class="diag__ic">${IC[tipo]}</span>
     <span class="diag__txt"><b>${esc(t)}</b><span>${esc(dato)}</span><strong>${esc(hacer)}</strong></span></li>`;
 
+  // ---------- videos (Cloudflare R2, los entrega functions/videos solo con la ficha de la clave) ----------
+  // Cada video muestra su tapa con un botón grande de play; el video recién se baja al tocarlo, así no gasta datos.
+  // En el iPhone lo reproduce el propio teléfono; en el resto, hls.js (web/vendor), que se baja la primera vez que hace falta.
+  const durTxt = (s) => s >= 3600 ? `${Math.floor(Math.round(s / 60) / 60)} h ${Math.round(s / 60) % 60} min` // un partido entero
+    : `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, "0")}`;
+  const videosDe = (campo, valor) => Object.entries((D.guia && D.guia.videos) || {}).filter(([, v]) => v[campo].includes(valor)).map(([id, v]) => ({ id, ...v }));
+  const tarjetaVideo = (v) => `<figure class="video-ej" data-video="${esc(v.id)}">
+      <button type="button" class="video-ej__tapa" data-play="${esc(v.id)}" aria-label="Ver el video: ${esc(v.titulo)} (${durTxt(v.duracion)})">
+        <img src="${VACIA}" data-foto="video-${esc(v.id)}" alt="" width="560" height="315"><span class="video-ej__play">${IC.play}</span></button>
+      <figcaption><b>${esc(v.titulo)}</b><span class="num">${durTxt(v.duracion)}</span></figcaption></figure>`;
+  let hlsProm = null;
+  const cargarHls = () => (hlsProm ??= new Promise((ok, mal) => {
+    const s = document.createElement("script");
+    s.src = "vendor/hls.light.min.js";
+    s.onload = () => ok(window.Hls);
+    s.onerror = () => { hlsProm = null; mal(new Error("sin hls.js")); };
+    document.head.append(s);
+  }));
+  const REPRODUCTORES = new Map(); // se sueltan al cambiar de pantalla
+  function soltarVideos() { REPRODUCTORES.forEach((h) => h.destroy()); REPRODUCTORES.clear(); }
+  async function reproducir(id) {
+    const fig = document.querySelector(`.video-ej[data-video="${CSS.escape(id)}"]`);
+    const tapa = fig && fig.querySelector(".video-ej__tapa");
+    if (!tapa) return;
+    const url = `videos/${id}/master.m3u8`, img = tapa.querySelector("img");
+    const video = document.createElement("video");
+    video.controls = true; video.playsInline = true; video.setAttribute("playsinline", ""); video.preload = "auto";
+    if (img && img.src.startsWith("data:image/webp")) video.poster = img.src;
+    const aviso = (txt) => { fig.querySelector(".video-ej__error")?.remove(); fig.insertAdjacentHTML("beforeend", `<p class="video-ej__error" role="alert">${txt}</p>`); };
+    // quien guardó la clave antes de que hubiera videos no tiene la ficha: con un toque la vuelve a poner
+    const sinPermiso = () => aviso(`Para ver los videos hay que volver a poner la clave. <button type="button" class="link" data-reclave>Poner la clave</button>`);
+    const NO_ABRE = "No se pudo abrir el video. Revisá la señal y probá de nuevo.";
+    tapa.replaceWith(video);
+    if (video.canPlayType("application/vnd.apple.mpegurl")) {
+      video.src = url;
+      // el reproductor del iPhone no dice por qué falló: se le pregunta a la web
+      video.addEventListener("error", () => fetch(url, { cache: "no-store" }).then((r) => (r.status === 403 ? sinPermiso() : aviso(NO_ABRE)), () => aviso(NO_ABRE)), { once: true });
+    } else {
+      try {
+        const Hls = await cargarHls();
+        if (!Hls.isSupported()) return aviso("Este navegador no puede mostrar el video. Probá con Chrome o Safari.");
+        const h = new Hls({ capLevelToPlayerSize: true });
+        h.on(Hls.Events.ERROR, (_e, d) => {
+          if (!d.fatal) return;
+          if (d.response && d.response.code === 403) sinPermiso(); else aviso(NO_ABRE);
+          h.destroy(); REPRODUCTORES.delete(id);
+        });
+        h.loadSource(url); h.attachMedia(video); REPRODUCTORES.set(id, h);
+      } catch (e) { return aviso("No se pudo cargar el reproductor. Revisá la señal y probá de nuevo."); }
+    }
+    video.play().catch(() => { /* si el teléfono no deja arrancar solo, queda el botón de play del video */ });
+  }
+
+  // ---------- ejercicios: line, maul y los juegos de las planificaciones ----------
+  // Pensado para usar en la cancha con el celular: filtros grandes arriba, una fila por ejercicio y, al tocarlo,
+  // el ejercicio en pantalla completa con "Anterior / Siguiente" para recorrerlos con una mano.
+  const TIPOS_EJ = [["todos", "Todos"], ["line", "Line"], ["maul", "Maul"], ["juegos", "Juegos"]];
+  const ROLES_LINE = ["Lanzador", "Saltador", "Levantador", "Tríos"];
+  const tabEj = () => (["line", "maul", "juegos"].includes(S.tab) ? S.tab : "todos");
+  /** los ejercicios que se ven con los filtros de arriba (sin contar lo que se escribe en el buscador), en el orden de la lista */
+  const ejLista = () => D.guia.ejercicios.filter((e) => {
+    const tab = tabEj();
+    if (tab !== "todos" && norm(e.tipo) !== tab) return false;
+    if (tab === "line" && S.rol && e.grupo !== S.rol) return false;
+    return !S.para || e.cats.includes(S.para);
+  });
+
+  function vEjercicios() {
+    const tab = tabEj(), grupos = [];
+    ejLista().forEach((e) => {
+      const k = `${e.tipo} · ${e.grupo}`;
+      let gr = grupos.find((x) => x.k === k);
+      if (!gr) grupos.push((gr = { k, items: [] }));
+      gr.items.push(e);
+    });
+    const fila = (e) => `<li data-q="${esc(norm([e.nombre, e.grupo, e.tipo, e.material, ...e.foco, ...e.como, videosDe("ejercicios", e.id).length ? "video" : ""].join(" ")))}">
+      <button type="button" class="ej${e.paso ? "" : " ej--sin-paso"}" data-ir-ej="${esc(e.id)}">
+        ${e.paso ? `<span class="ej__paso num">${e.paso}</span>` : ""}
+        <span class="ej__txt"><b>${esc(e.nombre)}</b>${e.foco[0] ? `<small>${conCantos(e.foco[0])}</small>` : ""}${e.material ? `<span class="ej__mat">${IC.cono}${esc(e.material)}</span>` : ""}${videosDe("ejercicios", e.id).length ? `<span class="ej__video">${IC.play}Con video</span>` : ""}</span>
+        ${IC.adelante}</button></li>`;
+    $("#vista").innerHTML = `
+      <div class="cab">${volver()}${cabTit("Ejercicios", "ejercicios")}</div>
+      ${pestanas(TIPOS_EJ, tab)}
+      ${tab === "line" ? `<div class="chips-g" role="group" aria-label="Rol en el line">${[["", "Todos"], ...ROLES_LINE.map((r) => [r, r])].map(([v, l]) =>
+        `<button type="button" data-rol="${v}" aria-pressed="${(S.rol || "") === v}">${l}</button>`).join("")}</div>` : ""}
+      ${S.para ? `<p class="filtro-g"><span>Solo los juegos que usan en <b>${esc(S.para)}</b></span><button type="button" class="link" data-quitar-para>Ver todos</button></p>` : ""}
+      <section class="sec sec--pegada">
+        <label class="buscar-g"><span class="sr">Buscar un ejercicio</span>${IC.buscar}<input type="search" id="buscar-ej" value="${esc(S.qe)}" placeholder="Buscar: salto, tackle, conos…" autocomplete="off" enterkeyhint="search"></label>
+        ${grupos.map((gr) => `<div class="grupo-ej"><div class="grupo-ej__cab"><h3 class="grupo-cat__tit">${esc(gr.k)}</h3><span class="num">${gr.items[0].tipo === "Juegos" ? pl(gr.items.length, "juego", "juegos") : pl(gr.items.length, "ejercicio", "ejercicios")}</span></div>
+          <ul class="filas-cat">${gr.items.map(fila).join("")}</ul></div>`).join("")}
+        <p class="vacio-g" id="sin-ej" hidden>No hay ningún ejercicio con esa palabra.</p>
+      </section>`;
+    filtrarEj();
+  }
+  function filtrarEj() {
+    const q = norm((S.qe || "").trim());
+    let n = 0;
+    document.querySelectorAll(".grupo-ej").forEach((gr) => {
+      let vis = 0;
+      gr.querySelectorAll("li[data-q]").forEach((li) => { const ok = !q || li.dataset.q.includes(q); li.hidden = !ok; vis += ok; });
+      gr.hidden = !vis; n += vis;
+    });
+    const v = $("#sin-ej");
+    if (v) v.hidden = n > 0;
+  }
+
+  // un ejercicio en pantalla completa
+  function vEjercicio() {
+    const todos = D.guia.ejercicios, e = todos.find((x) => x.id === S.ej);
+    // se recorre la misma lista que se estaba mirando (si se entró con un link directo, todos)
+    const vistos = ejLista(), orden = vistos.some((x) => x.id === e.id) ? vistos : todos, j = orden.findIndex((x) => x.id === e.id);
+    const total = todos.filter((x) => x.tipo === e.tipo && x.grupo === e.grupo).length;
+    const salto = (k, der) => {
+      const ok = k >= 0 && k < orden.length;
+      return `<button type="button"${ok ? ` data-ir-ej="${esc(orden[k].id)}" aria-label="${der ? "Siguiente" : "Anterior"}: ${esc(orden[k].nombre)}"` : " disabled"}>${der ? "" : IC.atras}<span>${der ? "Siguiente" : "Anterior"}</span>${der ? IC.adelante : ""}</button>`;
+    };
+    const bloque = (t, h) => `<h3 class="grupo">${t}</h3>${h}`, vids = videosDe("ejercicios", e.id);
+    $("#vista").innerHTML = `
+      <div class="cab">
+        <div class="cab__fila"><button type="button" class="volver" data-volver-ej>${IC.atras}Ejercicios</button>
+          <div class="saltos saltos--ej" role="group" aria-label="Otros ejercicios">${salto(j - 1)}${salto(j + 1, true)}</div></div>
+        <p class="ej-tag">${esc(e.tipo)} · ${esc(e.grupo)}${e.paso ? ` · paso ${e.paso} de ${total}` : ""}</p>
+        <h2 class="ej-tit">${esc(e.nombre)}</h2>
+      </div>
+      <section class="sec sec--pegada ej-det">
+        ${vids.length ? bloque(vids.length === 1 ? "Video" : "Videos", `<div class="videos-ej">${vids.map(tarjetaVideo).join("")}</div>`) : ""}
+        ${e.como.length ? bloque("Cómo se hace", `<div class="txt-g">${e.como.map((p) => `<p>${conCantos(p)}</p>`).join("")}</div>`) : ""}
+        ${e.foco.length ? bloque(e.tipo === "Juegos" ? "Qué se trabaja" : "En qué fijarse", lista(e.foco, "check-g")) : ""}
+        ${e.material ? bloque("Material", `<p class="ej-mat">${IC.cono}<span>${esc(e.material)}</span></p>`) : ""}
+        ${e.cats.length ? bloque("Lo usan en", `<p class="claves-g">${e.cats.map((c) => `<span class="chip">${esc(c)}</span>`).join("")}</p>`) : ""}
+        ${e.fotos.length ? bloque("Fotos", `<div class="fotos-ej">${e.fotos.map((f, n) =>
+          `<figure><img src="${VACIA}" data-foto="${esc(f)}" alt="Foto ${n + 1} de la actividad «${esc(e.nombre)}»" width="560" height="340" decoding="async"></figure>`).join("")}</div>`) : ""}
+      </section>`;
+  }
+
+  // mientras se abren las fotos, cada lugar muestra una imagen transparente sobre el fondo gris (nunca un cuadro roto)
+  const VACIA = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+  // las fotos van cifradas en un archivo aparte: se bajan y se abren (con la misma llave) la primera vez que hacen falta
+  let fotosProm = null;
+  const fotos = () => (fotosProm ??= fetch("entrenadores.fotos.json", { cache: "no-cache" })
+    .then((r) => r.json())
+    .then(async (f) => {
+      const plano = await crypto.subtle.decrypt({ name: "AES-GCM", iv: deB64(f.iv) }, LLAVE_ACTUAL, deB64(f.datos));
+      return JSON.parse(await new Response(new Blob([plano]).stream().pipeThrough(new DecompressionStream("gzip"))).text());
+    })
+    .catch(() => { fotosProm = null; return {}; }));
+  function ponerFotos() {
+    const imgs = document.querySelectorAll("img[data-foto]");
+    if (!imgs.length) return;
+    // una foto que falta se saca; un video sin tapa queda igual (fondo oscuro con el play)
+    fotos().then((f) => imgs.forEach((img) => { if (f[img.dataset.foto]) img.src = f[img.dataset.foto]; else if (!img.closest(".video-ej")) img.closest("figure").remove(); }));
+  }
+
+  // ---------- guía del club (material de Coordinación de Rugby) ----------
+  const gCats = () => [...D.guia.infantiles, ...D.guia.juveniles].map((c) => c.cat);
+  const gDe = (cat) => D.guia.infantiles.find((c) => c.cat === cat) || D.guia.juveniles.find((c) => c.cat === cat);
+  const esInf = (cat) => D.guia.infantiles.some((c) => c.cat === cat);
+  const norm = (s) => String(s).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  /** los cantos del club que aparecen en un texto se resaltan (MALÓN, CONTROL…) */
+  let reCantos;
+  const conCantos = (txt) => {
+    reCantos ??= new RegExp(`(^|[^\\p{L}])(${D.guia.cantos.map((c) => c[2]).sort((a, b) => b.length - a.length).join("|")})(?![\\p{L}])`, "gu");
+    return esc(txt).replace(reCantos, '$1<b class="canto-i">$2</b>');
+  };
+  /** texto de las planillas: viñetas, párrafos y subtítulos */
+  function textoHTML(bl) {
+    let h = "", ul = false;
+    for (const [t, x] of bl) {
+      if (t === "li") { h += `${ul ? "" : '<ul class="txt-g__ul">'}<li>${conCantos(x)}</li>`; ul = true; continue; }
+      if (ul) { h += "</ul>"; ul = false; }
+      h += t === "h" ? `<h4 class="txt-g__h">${esc(x)}</h4>` : `<p>${conCantos(x)}</p>`;
+    }
+    return `<div class="txt-g">${h}${ul ? "</ul>" : ""}</div>`;
+  }
+  const lista = (items, cls = "txt-g__ul") => `<ul class="${cls}">${items.map((x) => `<li>${conCantos(x)}</li>`).join("")}</ul>`;
+  const scrumDe = (cat) => {
+    const e = D.guia.scrum.edades;
+    return e.find((x) => x[0] === cat) || (+cat.slice(1) >= 15 ? e.find((x) => x[0].startsWith("M15")) : null);
+  };
+  const pestanas = (tabs, sel) => `<div class="seg seg--g${tabs.length === 4 ? " seg--4" : ""}" role="group" aria-label="Qué ver">${tabs.map(([k, l]) =>
+    `<button type="button" data-tab="${k}" aria-pressed="${k === sel}">${l}</button>`).join("")}</div>`;
+
+  function vGuia() { return S.gcat ? vGuiaCat() : vGuiaLista(); }
+
+  // la lista de categorías, con su frase guía
+  function vGuiaLista() {
+    const g = D.guia;
+    // una fila por categoría, igual que en el inicio: el nombre y su frase guía
+    const fila = (c, txt) => `<li><button type="button" class="fila-cat fila-cat--inf" data-ir-guia="${esc(c.cat)}">
+        <span class="fila-cat__nom">${esc(c.cat)}${c.apodo ? `<small>${esc(c.apodo)}</small>` : ""}</span>
+        <span class="fila-cat__etapa">${txt}</span>${IC.adelante}</button></li>`;
+    const grupo = (titulo, filas) => `<div class="grupo-cat"><div class="grupo-cat__cab"><h3 class="grupo-cat__tit">${titulo}</h3></div><ul class="filas-cat">${filas}</ul></div>`;
+    $("#vista").innerHTML = `
+      <div class="cab">${volver()}${cabTit("Qué aprende cada categoría", "guiaCats")}</div>
+      <section class="sec sec--pegada">
+        ${grupo("Infantiles", g.infantiles.map((c) => fila(c, `“${esc(c.semillas.ataque[0] || "")}”`)).join(""))}
+        ${grupo("Juveniles", g.juveniles.map((c) => fila(c, esc(g.lemas_juv[c.cat] || ""))).join(""))}
+      </section>
+      <section class="sec">
+        <h2 class="h2">En infantiles, siempre</h2>
+        ${lista(g.valores, "check-g")}
+      </section>
+      <section class="sec">
+        <h2 class="h2">Lo que tiene que saber al llegar a M13</h2>
+        ${lista(g.llegar_m13, "check-g")}
+      </section>`;
+  }
+
+  // una categoría: frases guía, cómo son, ataque, defensa, qué cambia y qué evitar
+  /** en la guía de una categoría: los juegos que usan en esa categoría, o (juveniles) los ejercicios de line y maul */
+  function atajoEj(cat) {
+    if (!D.guia.ejercicios) return "";
+    const jg = D.guia.ejercicios.filter((e) => e.cats.includes(cat)).length;
+    return jg ? `<button type="button" class="atajo" data-ir-ej-para="${esc(cat)}">${IC.cono}<span>Juegos que usan en ${esc(cat)} (${jg})</span>${IC.adelante}</button>`
+      : esInf(cat) ? "" : `<button type="button" class="atajo" data-ir-ej-tab="line">${IC.cono}<span>Ejercicios de line y maul</span>${IC.adelante}</button>`;
+  }
+  function vGuiaCat() {
+    const g = D.guia, cat = S.gcat, c = gDe(cat), cats = gCats(), i = cats.indexOf(cat), inf = esInf(cat), sc = scrumDe(cat);
+    const salto = (j, lbl) => {
+      const ok = j >= 0 && j < cats.length;
+      return `<button type="button" data-ir-guia="${ok ? esc(cats[j]) : ""}"${ok ? ` aria-label="${lbl}: ${esc(cats[j])}"` : " disabled"}>${j < i ? IC.atras : ""}<span>${ok ? esc(cats[j]) : ""}</span>${j > i ? IC.adelante : ""}</button>`;
+    };
+    // las frases guía de infantiles van entre comillas (son textuales); el resumen de juveniles no
+    const semilla = (lbl, frases, comillas = true) => frases.length ? `<div class="semilla"><span class="semilla__lbl">${lbl}</span>${frases.map((f) =>
+      `<b class="semilla__txt">${comillas ? `“${esc(f)}”` : esc(f)}</b>`).join("")}</div>` : "";
+    const secciones = inf
+      ? [["como", "Cómo son a esta edad", c.como_son], ["objetivo", "Qué buscamos", c.objetivo], ["ataque", "En ataque", c.ataque],
+        ["defensa", "En defensa", c.defensa], ["progresion", `Qué cambia desde ${i > 0 ? cats[i - 1] : ""}`, c.progresion]]
+      : [["ataque", "En ataque", c.ataque.concat(c.ataque_ojo.length ? [["h", "Atención"], ...c.ataque_ojo] : [])],
+        ["defensa", "En defensa", c.defensa.concat(c.defensa_ojo.length ? [["h", "Atención"], ...c.defensa_ojo] : [])]];
+    $("#vista").innerHTML = `
+      <div class="cab">
+        ${volver("Todas las categorías", "guia")}
+        <div class="cab__fila">
+          <h2 class="cab__cat">${esc(cat)}${c.apodo ? `<small>${esc(c.apodo)}</small>` : ""}${ayudaBtn("guiaCat")}</h2>
+          <div class="saltos" role="group" aria-label="Otras categorías">${salto(i - 1, "Categoría anterior")}${salto(i + 1, "Categoría siguiente")}</div>
+        </div>
+        ${c.etapa ? `<p class="etapa">${esc(c.etapa)}</p>` : ""}
+      </div>
+
+      <section class="sec sec--pegada">
+        ${inf
+          ? `<div class="semillas">${semilla("En ataque", c.semillas.ataque)}${semilla("En defensa", c.semillas.defensa)}</div>`
+          : `<div class="semillas semillas--una">${semilla("En pocas palabras", [g.lemas_juv[cat]].filter(Boolean), false)}</div>
+             <h3 class="grupo">Palabras clave de juveniles</h3>
+             <p class="claves-g"><span class="claves-g__lbl">Ataque</span>${g.claves.ataque.map((x) => `<span class="chip">${esc(x)}</span>`).join("")}</p>
+             <p class="claves-g"><span class="claves-g__lbl">Defensa</span>${g.claves.defensa.map((x) => `<span class="chip">${esc(x)}</span>`).join("")}</p>`}
+        ${sc ? `<button type="button" class="atajo" data-ir="scrum">${IC.escudo}<span><b>Scrum en ${esc(cat)}:</b> ${esc(sc[1])}${sc[2] ? ` ${esc(sc[2])}` : ""}</span>${IC.adelante}</button>` : ""}
+        ${atajoEj(cat)}
+        ${D.cats.includes(cat) ? `<button type="button" class="atajo" data-ir-cat="${esc(cat)}">${IC.barras}<span>Cómo le fue a ${esc(cat)} en los partidos</span>${IC.adelante}</button>` : ""}
+      </section>
+
+      <section class="sec desplegables">
+        ${secciones.filter(([, , bl]) => bl.length).map(([id, t, bl]) => desple(`g-${id}`, t, textoHTML(bl))).join("")}
+      </section>
+
+      ${inf && c.evitar.length ? `<section class="sec">
+        <h2 class="h2">Lo que hay que evitar</h2>
+        <ul class="evitar-g">${c.evitar.map(([, x]) => `<li>${IC.alerta}<span>${conCantos(x)}</span></li>`).join("")}</ul>
+      </section>` : ""}`;
+  }
+
+  /** la cancha vista desde arriba, atacando hacia arriba: las 4 zonas (a lo largo) o los 4 canales (a lo ancho) */
+  function cancha(modo) {
+    const W = 240, H = 400, x0 = 12, x1 = W - 12, u = (H - 8) / 120, y = (m) => 4 + m * u, cx = W / 2;
+    // metros desde la línea de pelota muerta rival: ingoal rival 0-10, 22 rival 32, 10 rival 50, mitad 60, nuestros 10 70, nuestras 22 88, ingoal 110-120
+    // zona: [desde, hasta, dónde va el nombre] (el de la amarilla va arriba de los 10 rivales para no quedar sobre la línea)
+    const zonas = { verde: [10, 32, 21], amarilla: [32, 70, 41], azul: [70, 88, 79], roja: [88, 110, 99] };
+    let h = `<svg class="cancha" viewBox="0 0 ${W} ${H}" role="img" aria-label="${modo === "zonas"
+      ? "Cancha atacando hacia arriba. Desde nuestro ingoal: zona roja hasta nuestras 22, zona azul hasta nuestros 10, zona amarilla hasta las 22 rivales y zona verde hasta el ingoal rival."
+      : "Cancha vista desde arriba con los 4 canales a lo ancho, numerados del 1 al 4."}">`;
+    h += `<rect class="cancha__piso" x="${x0}" y="${y(0)}" width="${x1 - x0}" height="${y(120) - y(0)}" rx="6"/>`;
+    if (modo === "zonas") {
+      for (const [k, [a, b, t]] of Object.entries(zonas)) {
+        h += `<rect class="cancha__z cancha__z--${k}" x="${x0}" y="${y(a)}" width="${x1 - x0}" height="${y(b) - y(a)}"/>`;
+        h += `<text class="cancha__t${k === "amarilla" ? " cancha__t--osc" : ""}" x="${cx}" y="${y(t) + 6}">${k.toUpperCase()}</text>`;
+      }
+    } else {
+      const an = (x1 - x0) / 4;
+      for (let k = 0; k < 4; k++) {
+        h += `<rect class="cancha__c cancha__c--${k + 1}" x="${x0 + an * k}" y="${y(10)}" width="${an}" height="${y(110) - y(10)}"/>`;
+        h += `<circle class="cancha__nc" cx="${x0 + an * (k + 0.5)}" cy="${y(41)}" r="15"/><text class="cancha__n" x="${x0 + an * (k + 0.5)}" y="${y(41) + 6}">${k + 1}</text>`;
+      }
+    }
+    [[10, ""], [32, "22"], [50, "10"], [60, "50"], [70, "10"], [88, "22"], [110, ""]].forEach(([m, n]) => {
+      h += `<line class="cancha__l${n === "10" ? " cancha__l--p" : ""}" x1="${x0}" x2="${x1}" y1="${y(m)}" y2="${y(m)}"/>`;
+      // el número va arriba de la línea: de los 10 rivales a nuestros 10 cae sobre la zona amarilla, donde el blanco no se lee
+      if (n) h += `<text class="cancha__m${modo === "zonas" && m >= 50 && m <= 70 ? " cancha__m--osc" : ""}" x="${x0 + 5}" y="${y(m) - 4}">${n}</text>`;
+    });
+    [10, 110].forEach((m) => { h += `<path class="cancha__palos" d="M${cx - 8} ${y(m) - 7}V${y(m) + 7}M${cx + 8} ${y(m) - 7}V${y(m) + 7}M${cx - 8} ${y(m)}H${cx + 8}"/>`; });
+    h += `<text class="cancha__ig" x="${cx}" y="${y(5) + 4}">Ingoal rival</text><text class="cancha__ig" x="${cx}" y="${y(115) + 4}">Nuestro ingoal</text>`;
+    return h + "</svg>";
+  }
+
+  // cantos, zonas de la cancha y cómo decidimos
+  function vCantos() {
+    const g = D.guia, tab = ["cantos", "zonas", "decisiones"].includes(S.tab) ? S.tab : "cantos";
+    let cuerpo;
+    if (tab === "cantos") {
+      cuerpo = `<section class="sec sec--pegada">
+        <label class="buscar-g"><span class="sr">Buscar un canto</span>${IC.buscar}<input type="search" id="buscar-canto" value="${esc(S.q)}" placeholder="Buscar: tren, pick and go, lado…" autocomplete="off" enterkeyhint="search"></label>
+        ${["Ataque", "Lados", "Defensa"].map((gr) => `<div class="cantos-g"><h3 class="grupo">${gr}</h3><ul class="cantos">${g.cantos.filter((x) => x[0] === gr).map(([, sit, cod, sig]) =>
+          `<li data-q="${esc(norm(`${cod} ${sit} ${sig} ${gr}`))}"><span class="canto__cod">${esc(cod)}</span>${sit !== gr ? `<span class="chip chip--gris">${esc(sit)}</span>` : ""}<p>${esc(sig)}</p></li>`).join("")}</ul></div>`).join("")}
+        <p class="vacio-g" id="sin-cantos" hidden>No hay ningún canto con esa palabra.</p>
+      </section>`;
+    } else if (tab === "zonas") {
+      const items = (t, l) => l.length ? `<h4 class="txt-g__h">${t}</h4>${lista(l)}` : "";
+      cuerpo = `<section class="sec sec--pegada">
+        <h2 class="h2">Las 4 zonas</h2>
+        <div class="cancha-g">${cancha("zonas")}
+          <ul class="zonas-g">${g.zonas.slice().reverse().map(([k, rango, nombre, con, sin]) => `<li class="zona-g zona-g--${k}">
+            <b class="zona-g__nom">Zona ${k}</b><span class="zona-g__sub">${esc(nombre)} · ${esc(rango)}</span>
+            ${items("Con pelota", con)}${items("Sin pelota", sin)}</li>`).join("")}</ul>
+        </div>
+      </section>
+      <section class="sec">
+        <h2 class="h2">Los 4 canales</h2>
+        <div class="cancha-g">${cancha("canales")}
+          <ol class="canales-g">${g.canales.map((x, i) => `<li><span class="canales-g__n">${i + 1}</span>${esc(x)}</li>`).join("")}</ol>
+        </div>
+      </section>`;
+    } else {
+      cuerpo = `<section class="sec sec--pegada">
+        <div class="semillas">${[["ataque", "Con pelota"], ["defensa", "Sin pelota"]].map(([k, lbl]) => `<div class="semilla"><span class="semilla__lbl">${lbl}</span>
+          <b class="semilla__txt">${esc(g.filosofia[k][0])}</b><p>${esc(g.filosofia[k][1])}</p></div>`).join("")}</div>
+      </section>
+      <section class="sec">
+        <h2 class="h2">¿Cuándo hay oportunidad?</h2>
+        ${lista(g.oportunidad, "check-g")}
+      </section>
+      <section class="sec">
+        <h2 class="h2">Qué decidimos</h2>
+        <h3 class="grupo">En ataque</h3><div class="txt-g">${lista(g.decisiones.ataque)}</div>
+        <h3 class="grupo">En defensa</h3><div class="txt-g">${lista(g.decisiones.defensa)}</div>
+      </section>
+      <section class="sec">
+        <h2 class="h2">Los 5 pilares del club</h2>
+        <ul class="pilares-g">${g.pilares.map(([p, t]) => `<li><b>${esc(p)}</b><span>${esc(t)}</span></li>`).join("")}</ul>
+      </section>`;
+    }
+    $("#vista").innerHTML = `
+      <div class="cab">${volver()}${cabTit("Cantos y zonas", "cantos")}</div>
+      ${pestanas([["cantos", "Cantos"], ["zonas", "Zonas"], ["decisiones", "Modelo"]], tab)}
+      ${cuerpo}`;
+    if (tab === "cantos") filtrarCantos();
+  }
+  function filtrarCantos() {
+    const q = norm(S.q.trim());
+    let n = 0;
+    document.querySelectorAll(".cantos-g").forEach((gr) => {
+      let vis = 0;
+      gr.querySelectorAll("li[data-q]").forEach((li) => { const ok = !q || li.dataset.q.includes(q); li.hidden = !ok; vis += ok; });
+      gr.hidden = !vis; n += vis;
+    });
+    const v = $("#sin-cantos");
+    if (v) v.hidden = n > 0;
+  }
+
+  // scrum: regla de oro, qué se hace en cada edad, el set up y la entrada
+  function vScrum() {
+    const s = D.guia.scrum, tab = ["edad", "setup", "entrada"].includes(S.tab) ? S.tab : "edad";
+    const pasos = (items) => `<ol class="pasos">${items.map(([t, d], i) => `<li><span class="pasos__n">${i + 1}</span><span class="pasos__t">${esc(t)}</span>${d ? `<div class="pasos__d">${d}</div>` : ""}</li>`).join("")}</ol>`;
+    let cuerpo;
+    if (tab === "edad") {
+      cuerpo = `<section class="sec sec--pegada">
+        <h2 class="h2">Qué se hace en cada edad</h2>
+        <ul class="edades-g">${s.edades.map(([c, q, nota]) => `<li><b class="edades-g__cat">${esc(c)}</b><span>${esc(q)}${nota ? `<small>${esc(nota)}</small>` : ""}</span></li>`).join("")}</ul>
+      </section>
+      <section class="sec">
+        <h2 class="h2">Cómo se enseña</h2>
+        ${pasos(s.metodo.map(([t, d]) => [t, esc(d)]))}
+      </section>`;
+    } else if (tab === "setup") {
+      cuerpo = `<section class="sec sec--pegada">
+        <h2 class="h2">Antes de empezar</h2>
+        ${lista(s.principios, "check-g")}
+      </section>
+      <section class="sec">
+        <h2 class="h2">El set up, paso a paso</h2>
+        <ol class="setup-g">${s.setup.map(([p, canto, items], i) => `<li><details data-sec="su${i}"${S.abiertos.has(`su${i}`) ? " open" : ""}><summary>
+          <span class="pasos__n">${i + 1}</span><span class="setup-g__p">${esc(p)}</span>${canto ? `<span class="chip">Canto: ${esc(canto)}</span>` : ""}</summary>
+          <div class="setup-g__in">${lista(items)}</div></details></li>`).join("")}</ol>
+      </section>`;
+    } else {
+      cuerpo = `<section class="sec sec--pegada">
+        <h2 class="h2">La entrada</h2>
+        <p class="titular titular--abre">El impacto es una acción coordinada de todo el pack</p>
+        ${pasos(s.entrada.map(([c, items]) => [c, lista(items)]))}
+      </section>
+      <section class="sec">
+        <h2 class="h2">El empuje</h2>
+        <div class="empuje-g">${s.empuje.map(([c, t]) => `<div><b>${esc(c)}</b><span>${esc(t)}</span></div>`).join("")}</div>
+        <div class="txt-g">${lista(s.empuje_notas)}</div>
+      </section>`;
+    }
+    $("#vista").innerHTML = `
+      <div class="cab">${volver()}${cabTit("Scrum seguro", "scrum")}</div>
+      <section class="sec sec--pegada">
+        <h2 class="h2">Regla de oro</h2>
+        ${pasos(s.regla.map((x, i) => [x, s.regla_txt[i] ? esc(s.regla_txt[i]) : ""]))}
+      </section>
+      ${pestanas([["edad", "Por edad"], ["setup", "Set up"], ["entrada", "Entrada"]], tab)}
+      ${cuerpo}`;
+  }
+
+  // ---------- los puestos (perfil del jugador de Coordinación) ----------
+  // El equipo dibujado como se para en la cancha: cada número se toca y lleva a lo que se espera de ese puesto.
+  const puestoDe = (n) => D.guia.puestos.find((p) => p.n.includes(n));
+  const FORMACION = [[1, 2, 3], [4, 5], [6, 8, 7], [9], [10], [11, 12, 13, 14], [15]];
+  // lo ideal en un partido, en este orden (NORTE VERDE no se muestra hasta saber qué es)
+  const PARTIDO = [["tackles", "Tackles"], ["rucks", "Rucks en ataque"], ["contactos", "Contactos"], ["pases", "Pases"], ["quiebres", "Quiebres"], ["recuperadas", "Recuperadas"]];
+  // a qué ejercicios de line lleva cada puesto (el rol que cumple en el line)
+  const LINE_DE = { 2: "Lanzador", 4: "Saltador", 5: "Saltador", 7: "Saltador", 8: "Levantador" };
+
+  function vPuestos() {
+    const boton = (n) => {
+      const p = puestoDe(n);
+      return `<button type="button" class="puesto" data-ir-puesto="${n}" aria-label="${n}, ${esc(p.nombre)}"><b class="num">${n}</b><small>${esc(p.corto)}</small></button>`;
+    };
+    const fila = (ns) => `<div class="formacion__fila${ns.length === 4 ? " formacion__fila--linea" : ""}">${ns.map(boton).join("")}</div>`;
+    $("#vista").innerHTML = `
+      <div class="cab">${volver()}${cabTit("Los puestos", "puestos")}</div>
+      <section class="sec sec--pegada">
+        <div class="formacion">
+          <h3 class="formacion__tit">Forwards</h3>${FORMACION.slice(0, 3).map(fila).join("")}
+          <h3 class="formacion__tit">Backs</h3>${FORMACION.slice(3).map(fila).join("")}
+        </div>
+      </section>`;
+  }
+
+  // un puesto: qué tiene que saber hacer, lo ideal en un partido, lo mental y con qué entrenarlo
+  function vPuesto() {
+    const todos = D.guia.puestos, p = puestoDe(S.puesto), j = todos.indexOf(p), n = p.n[0];
+    const salto = (k, der) => {
+      const q = todos[k];
+      return `<button type="button"${q ? ` data-ir-puesto="${q.n[0]}" aria-label="${der ? "Siguiente" : "Anterior"}: ${esc(q.nombre)}"` : " disabled"}>${der ? "" : IC.atras}<span>${der ? "Siguiente" : "Anterior"}</span>${der ? IC.adelante : ""}</button>`;
+    };
+    const atajos = (n <= 8 ? `<button type="button" class="atajo" data-ir="scrum">${IC.escudo}<span><b>Scrum seguro:</b> qué se hace en cada edad y el set up</span>${IC.adelante}</button>` : "")
+      + (LINE_DE[n] ? `<button type="button" class="atajo" data-ir-line="${LINE_DE[n]}">${IC.cono}<span><b>Ejercicios de line</b> del ${LINE_DE[n].toLowerCase()}</span>${IC.adelante}</button>` : "");
+    $("#vista").innerHTML = `
+      <div class="cab">
+        <div class="cab__fila">${volver("Puestos", "puestos")}
+          <div class="saltos saltos--ej" role="group" aria-label="Otros puestos">${salto(j - 1)}${salto(j + 1, true)}</div></div>
+        <p class="ej-tag">${n <= 8 ? "Forward" : "Back"}</p>
+        <h2 class="ej-tit puesto-tit"><span class="puesto-tit__n num">${p.n.join(" y ")}</span>${esc(p.nombre)}</h2>
+      </div>
+      <section class="sec sec--pegada">
+        <h3 class="grupo">Qué tiene que saber hacer</h3>
+        <ul class="pilares-g">${p.destrezas.map(([d, t]) => `<li><b>${esc(d)}</b><span>${esc(t)}</span></li>`).join("")}</ul>
+        <h3 class="grupo grupo--ayuda">En un partido${ayudaBtn("partidoPuesto")}</h3>
+        <ul class="partido-g">${PARTIDO.map(([k, l]) => `<li><b class="num">${p.partido[k]}</b><span>${l}</span></li>`).join("")}</ul>
+        <h3 class="grupo">Lo mental</h3>
+        <p class="claves-g">${p.mental.map((m) => `<span class="chip">${esc(m)}</span>`).join("")}</p>
+        ${atajos ? `<h3 class="grupo">Para entrenarlo</h3>${atajos}` : ""}
+      </section>`;
+  }
+
   // ---------- eventos ----------
   document.addEventListener("click", (e) => {
     if (!S) return;
-    const t = e.target.closest("[data-ir],[data-ir-cat],[data-anio],[data-ver],[data-ordj]");
+    const t = e.target.closest("[data-play],[data-reclave],[data-ayuda],[data-cerrar-ayuda],[data-ir],[data-ir-cat],[data-ir-guia],[data-ir-ej],[data-ir-ej-para],[data-ir-ej-tab],[data-ir-line],[data-ir-puesto],[data-volver-ej],[data-rol],[data-quitar-para],[data-tab],[data-anio],[data-ver],[data-ordj]");
     if (!t || t.disabled) return;
     const ds = t.dataset;
-    if (ds.ir) irA({ ver: ds.ir, cat: null, temp: null });
-    else if (ds.irCat) irA({ ver: "cat", cat: ds.irCat, temp: null, verJ: false, verP: false, verN: false });
-    else if (ds.anio) irA({ temp: +ds.anio, verJ: false, verP: false, verN: false }, false);
+    if (ds.play) reproducir(ds.play);
+    else if ("reclave" in ds) { olvidar(); location.reload(); } // vuelve a la misma pantalla después de la clave
+    else if (ds.ayuda) abrirAyuda(ds.ayuda, t);
+    else if ("cerrarAyuda" in ds) cerrarAyuda();
+    else if (ds.ir) irA({ ver: ds.ir, cat: null, temp: null, gcat: null, tab: null, rol: null, para: null, qe: "" });
+    else if (ds.irEj) irA({ ver: "ejercicio", ej: ds.irEj });
+    else if (ds.irEjPara) irA({ ver: "ejercicios", tab: "juegos", rol: null, para: ds.irEjPara, gcat: null, qe: "" });
+    else if (ds.irEjTab) irA({ ver: "ejercicios", tab: ds.irEjTab, rol: null, para: null, gcat: null, qe: "" });
+    else if (ds.irLine) irA({ ver: "ejercicios", tab: "line", rol: ds.irLine, para: null, gcat: null, qe: "" });
+    else if (ds.irPuesto) irA({ ver: "puesto", puesto: +ds.irPuesto });
+    else if ("volverEj" in ds) irA({ ver: "ejercicios", ej: null }); // vuelve a la lista con los mismos filtros
+    else if ("rol" in ds) irA({ rol: ds.rol || null }, false);
+    else if ("quitarPara" in ds) irA({ para: null }, false);
+    else if (ds.irCat) irA({ ver: "cat", cat: ds.irCat, temp: null, verJ: false, verP: false, verN: false, verR: false });
+    else if (ds.irGuia) irA({ ver: "guia", gcat: ds.irGuia, cat: null, temp: null });
+    else if (ds.tab) { irA({ tab: ds.tab, rol: null, para: null }, false); $(`[data-tab="${ds.tab}"]`).focus(); }
+    else if (ds.anio) irA({ temp: +ds.anio, verJ: false, verP: false, verN: false, verR: false }, false);
     else if (ds.ver) { S["ver" + ds.ver] = !S["ver" + ds.ver]; render(); }
     else if (ds.ordj) { S.ordenJ = ds.ordj; render(); }
   });
@@ -461,11 +1211,19 @@
     if (d.open) S.abiertos.add(d.dataset.sec); else S.abiertos.delete(d.dataset.sec);
   }, true);
 
-  // si cambia el ancho de la pantalla (girar el celular), se vuelven a dibujar los gráficos
-  let tRes, anchoPrev = innerWidth;
-  addEventListener("resize", () => {
-    clearTimeout(tRes);
-    tRes = setTimeout(() => { if (S && Math.abs(innerWidth - anchoPrev) > 40) { anchoPrev = innerWidth; render(); } }, 200);
+  // la ayuda se cierra con Escape; mientras está abierta, el foco no se va a la pantalla de atrás (solo tiene el botón "Entendido")
+  document.addEventListener("keydown", (e) => {
+    const caja = $("#ayuda");
+    if (!caja || caja.hidden) return;
+    if (e.key === "Escape") cerrarAyuda();
+    else if (e.key === "Tab") { e.preventDefault(); $(".ayuda__ok", caja).focus(); }
+  });
+
+  // buscador de cantos: filtra sin volver a dibujar la pantalla (así no se pierde el teclado)
+  document.addEventListener("input", (e) => {
+    if (!S) return;
+    if (e.target.id === "buscar-canto") { S.q = e.target.value; filtrarCantos(); }
+    if (e.target.id === "buscar-ej") { S.qe = e.target.value; filtrarEj(); }
   });
 
   // ---------- inicio ----------

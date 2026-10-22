@@ -1,0 +1,15 @@
+# Cloudflare Pages: la web (carpeta web/) y la función de "Revisar datos" (carpeta functions/).
+# La clave de "Revisar datos" no va acá: es el secreto CLAVE_REVISION del proyecto en Cloudflare (y .dev.vars para probar en la compu).
+name = "clublos50"
+pages_build_output_dir = "web"
+compatibility_date = "2026-10-20"
+
+# donde se guardan las respuestas del club
+[[kv_namespaces]]
+binding = "REVISION"
+id = "local"
+
+# los videos de Entrenadores (functions/videos). El bucket se crea antes de publicar esto; la clave es el secreto CLAVE_ENTRENADORES
+[[r2_buckets]]
+binding = "VIDEOS"
+bucket_name = "los50-videos"

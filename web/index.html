@@ -8,20 +8,19 @@
   <meta name="theme-color" content="#0B0D12">
   <link rel="icon" type="image/png" href="img/favicon.png">
   <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="preload" href="fonts/barlow-condensed-700.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="styles.css">
   <script>
     /* Links viejos (?j=..., ?cat=..., etc.) eran de la página de jugadores: se mandan ahí. */
     if (/[?&](j|cat|fuente|vista|temp|orden|q)=/.test(location.search)) location.replace("jugadores.html" + location.search + location.hash);
     /* Animación de entrada: INTRO = "1", "2" o "3" (null = sin animación).
-       Se muestra una vez por visita; ?intro=N la fuerza (para probar). */
+       Se muestra una vez por semana en cada dispositivo (WhatsApp abre cada link como una visita nueva); ?intro=N la fuerza. */
     (function () {
       var INTRO = "2"; // elegida por el club: marcador 0 → 50
       try {
         var p = new URLSearchParams(location.search);
-        var auto = INTRO && !sessionStorage.getItem("los50-intro") && !matchMedia("(prefers-reduced-motion: reduce)").matches;
+        var vista = +localStorage.getItem("los50-intro") || 0;
+        var auto = INTRO && Date.now() - vista > 7 * 864e5 && !matchMedia("(prefers-reduced-motion: reduce)").matches;
         var v = p.get("intro") || (auto ? INTRO : null);
         if (v === "1" || v === "2" || v === "3") { window.INTRO = v; document.documentElement.classList.add("intro-pendiente"); }
       } catch (e) { /* sin animación */ }

@@ -2,11 +2,14 @@
 
 Uso:  python actualizar_semana.py
 
-1. Baja de la BD UAR solo lo nuevo (extraer_todo.py semanal).
-2. Regenera la web de jugadores, la base, el Excel y la sección de entrenadores.
-3. Escribe informe.md con los partidos de la última semana: si ya están cerrados y con la planilla completa.
-4. Si hay algo para revisar, escribe aviso.md (el workflow lo convierte en un aviso de GitHub, que llega por mail).
+1. Trae lo que contestó el club en la página "Revisar datos" (revision.py respuestas).
+2. Baja de la BD UAR solo lo nuevo (extraer_todo.py semanal).
+3. Regenera la web de jugadores, la base, el Excel y la sección de entrenadores.
+   Las fichas repetidas seguras se juntan solas; las dudosas quedan como preguntas para el club.
+4. Escribe informe.md con los partidos de la última semana: si ya están cerrados y con la planilla completa.
+5. Si hay algo para revisar, escribe aviso.md (el workflow lo convierte en un aviso de GitHub, que llega por mail).
 """
+import json
 import os
 import sqlite3
 import subprocess
@@ -19,14 +22,22 @@ import pandas as pd
 
 HERE = Path(__file__).parent
 PASOS = [
+    ["revision.py", "respuestas"],       # lo que contestó el club en "Revisar datos"
     ["extraer_todo.py", "semanal"],      # lo nuevo de la BD UAR (todas las categorías)
     ["extraer_los50.py", "todos"],       # plantel superior: Excel y web/data.js (página de jugadores)
     ["procesar_todo.py"],                # base datos_uar/los50.db
+    ["revision.py", "repetidos"],        # fichas repetidas: las seguras se juntan solas, las dudosas se preguntan
     ["analisis_metricas.py"],            # Excel de entrenadores
     ["exportar_entrenadores.py"],        # web/entrenadores.data.js (cifrado)
     ["auditoria_datos.py"],              # errores de carga en las planillas
-    ["revisar_planillas.py"],            # casos que hay que preguntar al club
+    ["revisar_planillas.py"],            # casos raros de las planillas
+    ["revision.py", "preguntas"],        # preguntas para la página "Revisar datos"
 ]
+# si "repetidos" juntó fichas nuevas, se rearman los datos con ellas
+REARMAR = [["extraer_los50.py", "todos"], ["procesar_todo.py"]]
+UNIFICAR = HERE / "revision" / "unificar.json"
+PREGUNTAS = HERE / "revision" / "preguntas.json"
+SITIO = os.environ.get("SITIO", "https://los50-jugadores.pages.dev")
 CATEGORIAS = ["Primera", "Intermedia", "Pre-Intermedia", "M23", "M19", "M17", "M16", "M15", "M14", "M13"]
 PUNTOS = {"Try": 5, "Try penal": 7, "Conversión": 2, "Penal": 3, "Drop": 3}
 
@@ -40,7 +51,11 @@ def correr(paso):
     print(f"<<< {paso[0]} ok ({(time.time() - t0) / 60:.1f} min)", flush=True)
 
 
-def informe(hoy):
+def ids_preguntas():
+    return {p["id"] for p in json.loads(PREGUNTAS.read_text(encoding="utf-8"))} if PREGUNTAS.exists() else set()
+
+
+def informe(hoy, antes):
     con = sqlite3.connect(HERE / "datos_uar" / "los50.db")
     p = pd.read_sql("select * from partidos where amistoso = 0", con)
     i = pd.read_sql("select mid, equipo, incidencia from incidencias", con)
@@ -69,11 +84,9 @@ def informe(hoy):
     lineas += ["", "## Próximos partidos", ""]
     lineas += [f"- **{r.categoria}** {r.f:%d/%m} {r.hora or ''} vs {r.rival} ({r.condicion})" for r in proximos.itertuples()] or ["Ninguno cargado todavía."]
 
-    revisar = 0
-    xl = HERE / "Los50_Revisar_planillas.xlsx"
-    if xl.exists():
-        revisar = len(pd.read_excel(xl, sheet_name="Casos para revisar"))
-    lineas += ["", f"## Para revisar con el club: {revisar} caso(s)", ""]
+    ahora = ids_preguntas()
+    nuevas = ahora - antes
+    lineas += ["", f"## Preguntas para el club en Revisar datos: {len(ahora)} ({len(nuevas)} nuevas)", "", f"{SITIO}/revisar", ""]
     texto = "\n".join(lineas) + "\n"
     (HERE / "informe.md").write_text(texto, encoding="utf-8")
     if os.environ.get("GITHUB_STEP_SUMMARY"):
@@ -81,24 +94,29 @@ def informe(hoy):
             f.write(texto)
     print(texto)
 
-    # aviso: el miércoles, si a algún partido todavía le falta la planilla; cualquier día, si hay casos nuevos para revisar
+    # aviso: el miércoles, si a algún partido todavía le falta la planilla; cualquier día, si hay preguntas nuevas para el club
     aviso = HERE / "aviso.md"
     aviso.unlink(missing_ok=True)
     motivos = []
     if faltan and hoy.weekday() >= 2:
         motivos.append("Partidos que todavía no tienen la planilla completa en la BD UAR:\n" + "\n".join(f"- {x}" for x in faltan))
-    if revisar:
-        motivos.append(f"Hay {revisar} caso(s) de planillas para revisar con el club (ver el Excel Los50_Revisar_planillas.xlsx "
-                       "en los archivos de esta actualización).")
+    if nuevas:
+        motivos.append(f"Hay {len(nuevas)} pregunta(s) nueva(s) para el club sobre datos dudosos de las planillas. "
+                       f"Pasale este link a quien conozca los partidos (entra con la clave de revisión): {SITIO}/revisar")
     if motivos:
         aviso.write_text("\n\n".join(motivos) + "\n", encoding="utf-8")
 
 
 def main():
     t0 = time.time()
+    antes = ids_preguntas()
     for paso in PASOS:
+        previo = UNIFICAR.read_bytes() if UNIFICAR.exists() else b""
         correr(paso)
-    informe(date.today())
+        if paso == ["revision.py", "repetidos"] and UNIFICAR.exists() and UNIFICAR.read_bytes() != previo:
+            for p in REARMAR:
+                correr(p)
+    informe(date.today(), antes)
     print(f"Listo en {(time.time() - t0) / 60:.1f} min")
 
 

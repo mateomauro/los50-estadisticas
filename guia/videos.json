@@ -1,0 +1,141 @@
+{
+ "lanzar-sentado": {
+  "titulo": "Lanzar sentado y acostado",
+  "duracion": 152,
+  "ejercicios": [
+   "line-lanzador-2",
+   "line-lanzador-3"
+  ],
+  "cats": []
+ },
+ "lanzar-acostado": {
+  "titulo": "Lanzar acostado, sobre pelota de pilates",
+  "duracion": 65,
+  "ejercicios": [
+   "line-lanzador-2"
+  ],
+  "cats": []
+ },
+ "movilidad-hooker": {
+  "titulo": "Movilidad del hooker",
+  "duracion": 56,
+  "ejercicios": [
+   "line-lanzador-7"
+  ],
+  "cats": []
+ },
+ "movilidad-dorsal": {
+  "titulo": "Movilidad dorsal",
+  "duracion": 23,
+  "ejercicios": [
+   "line-lanzador-7"
+  ],
+  "cats": []
+ },
+ "lanzar-distancia": {
+  "titulo": "Lanzar a distancia",
+  "duracion": 355,
+  "ejercicios": [
+   "line-lanzador-8"
+  ],
+  "cats": []
+ },
+ "lanzar-pelotas": {
+  "titulo": "Lanzar con distintas pelotas",
+  "duracion": 28,
+  "ejercicios": [
+   "line-lanzador-8"
+  ],
+  "cats": []
+ },
+ "line-trios": {
+  "titulo": "Line: levantada y salto",
+  "duracion": 110,
+  "ejercicios": [
+   "line-trios-1",
+   "line-trios-4"
+  ],
+  "cats": []
+ },
+ "impacto-mas1": {
+  "titulo": "Impacto del +1",
+  "duracion": 9,
+  "ejercicios": [
+   "maul-of-1"
+  ],
+  "cats": []
+ },
+ "impacto-salta": {
+  "titulo": "Impacto del +1 (Salta)",
+  "duracion": 18,
+  "ejercicios": [
+   "maul-of-1"
+  ],
+  "cats": []
+ },
+ "impacto-jujuy": {
+  "titulo": "Impacto del +1 (Jujuy)",
+  "duracion": 9,
+  "ejercicios": [
+   "maul-of-1"
+  ],
+  "cats": []
+ },
+ "impacto-cordoba": {
+  "titulo": "Impacto del +1 (Córdoba)",
+  "duracion": 8,
+  "ejercicios": [
+   "maul-of-1"
+  ],
+  "cats": []
+ },
+ "cunas-mas1": {
+  "titulo": "Cuñas y +1",
+  "duracion": 109,
+  "ejercicios": [
+   "maul-of-2"
+  ],
+  "cats": []
+ },
+ "maul-escudos": {
+  "titulo": "Maul contra escudos",
+  "duracion": 261,
+  "ejercicios": [
+   "maul-of-2"
+  ],
+  "cats": []
+ },
+ "line-maul": {
+  "titulo": "Line y maul",
+  "duracion": 210,
+  "ejercicios": [
+   "maul-of-3"
+  ],
+  "cats": []
+ },
+ "secuencia-maul": {
+  "titulo": "Secuencia de maul",
+  "duracion": 106,
+  "ejercicios": [
+   "maul-of-3"
+  ],
+  "cats": []
+ },
+ "def-maul": {
+  "titulo": "Defensa de maul: giro y derrumbe",
+  "duracion": 212,
+  "ejercicios": [
+   "maul-def-3"
+  ],
+  "cats": []
+ },
+ "partido-2026-03-07": {
+  "titulo": "Partido contra Sociedad Sportiva, 7 de marzo de 2026",
+  "duracion": 6879,
+  "ejercicios": [],
+  "cats": [
+   "M16",
+   "M17"
+  ]
+ }
+}

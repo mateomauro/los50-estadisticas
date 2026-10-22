@@ -6,6 +6,7 @@ Solo plantel superior: Primera por un lado; Intermedia, Pre-Intermedia y M23 por
 Solo hace lecturas: GET de paginas "view" y POST a los filtros de busqueda.
 """
 import gzip
+import json
 import re
 import sys
 from collections import defaultdict
@@ -367,16 +368,56 @@ CORRECCIONES = {
     ("271126", "2T", 37, "Penal"): {"player_id": "326920", "dorsal": "20", "jugador": "Benedetto, Alejandro"},
 }
 
+# Revisión de datos (revision.py): fichas repetidas seguras y lo que contestó el club en la página "Revisar datos"
+UNIFICAR_MANUAL = dict(UNIFICAR_IDS)
+
+
+def _revision(nombre, vacio):
+    f = HERE / "revision" / nombre
+    return json.loads(f.read_text(encoding="utf-8")) if f.exists() else vacio
+
+
+UNIFICAR_IDS.update(_revision("unificar.json", {}))
+# (partido, tiempo, minuto, incidencia, jugador que figuraba) -> jugador correcto, "quitar" (no existió) o "quitar_una" (cargada dos veces)
+ARREGLOS = {}
+for _r in _revision("respuestas.json", {}).values():
+    if _r["tipo"] == "planilla" and _r["respuesta"] in ("otro", "no", "una"):
+        for _c in _r["claves"]:
+            ARREGLOS[tuple(_c)] = ({"player_id": _r["player_id"], "dorsal": _r["dorsal"], "jugador": _r["jugador"]}
+                                   if _r["respuesta"] == "otro" else "quitar" if _r["respuesta"] == "no" else "quitar_una")
+
+
+# jugadas que el club confirmó que no existieron (se sacan de las estadísticas, pero la planilla de la web las muestra tachadas)
+QUITADAS = {}
+
 
 def aplicar_correcciones(mid, incid, plantel):
+    QUITADAS.pop(mid, None)
     for lado in incid.values():
         for i in lado:
             fix = CORRECCIONES.get((mid, i["tiempo"], i["minuto"], i["incidencia"]))
             if fix:
+                i["figuraba"] = NOMBRES.get(i["jugador"], i["jugador"])  # lo que dice la planilla (se muestra en la web)
+                i["figuraba_dorsal"] = i["dorsal"]
                 i.update(fix, detalle=(i["detalle"] + " [corregido: figuraba a otro jugador]").strip())
             i["jugador"] = NOMBRES.get(i["jugador"], i["jugador"])
             if i.get("player_id"):
                 i["player_id"] = UNIFICAR_IDS.get(str(i["player_id"]), i["player_id"])
+    if ARREGLOS:
+        for k, lado in incid.items():
+            limpio, sacadas = [], set()
+            for i in lado:
+                clave = (mid, i["tiempo"], i["minuto"], i["incidencia"], str(i.get("player_id") or ""))
+                fix = ARREGLOS.get(clave)
+                if fix == "quitar" or (fix == "quitar_una" and clave not in sacadas):
+                    sacadas.add(clave)
+                    QUITADAS.setdefault(mid, []).append(dict(i))
+                    continue
+                if isinstance(fix, dict):
+                    i["figuraba"], i["figuraba_dorsal"] = i["jugador"], i["dorsal"]
+                    i.update(fix, detalle=(i["detalle"] + " [corregido por el club]").strip())
+                limpio.append(i)
+            incid[k] = limpio
     for k, lado in plantel.items():
         vistos, limpio = set(), []
         for j in lado:
@@ -435,6 +476,54 @@ def categoria_ps(t):
     return None
 
 
+# ---------------------------------------------------------------- planillas para la web
+CATEGORIAS_WEB = ("Primera", "Intermedia", "Pre-Intermedia")
+PLANILLAS_WEB = HERE / "web" / "planillas"
+DE_PUNTOS = ("Try", "Try penal", "Conversión", "Penal", "Drop")
+TARJETAS = ("Amarilla", "Roja", "Tarjeta azul")
+
+
+def planilla_web(p, incid, lado, t, formacion):
+    """La planilla de un partido como se ve en la web: lo de Los 50 con nombres; del rival, solo puntos y tarjetas (sin nombres)."""
+    from exportar_web import nombre_lindo, rival as rival_lindo
+    riv = "V" if lado == "L" else "L"
+    jugadas = []
+    for i in incid[lado]:
+        if i["incidencia"] in DE_PUNTOS + TARJETAS + ("Ingresó", "Se retiró"):
+            jugadas.append([lado, i["tiempo"], i["minuto"], i["incidencia"], i["puntos"], i["dorsal"],
+                            nombre_lindo(i["jugador"]), i.get("player_id") or "", nombre_lindo(i["figuraba"]) if i.get("figuraba") else "",
+                            i.get("figuraba_dorsal", "")])
+    for i in incid[riv]:
+        if i["incidencia"] in DE_PUNTOS + TARJETAS:
+            jugadas.append([riv, i["tiempo"], i["minuto"], i["incidencia"], i["puntos"], i["dorsal"], "", "", ""])
+    quitadas = [[lado, i["tiempo"], i["minuto"], i["incidencia"], i["puntos"], i["dorsal"], nombre_lindo(i["jugador"]),
+                 i.get("player_id") or ""] for i in QUITADAS.get(p["partido_id"], [])]
+    orden = lambda j: ({"1T": 0, "2T": 1}.get(j[1], 2), j[2] if j[2] is not None else 999)
+    return {
+        "mid": p["partido_id"], "categoria": t["categoria"], "torneo": t["torneo"], "ronda": p["ronda"], "instancia": p["instancia"],
+        "fecha": p["fecha"], "hora": p["hora"], "estado": p["estado"],
+        "arbitro": re.sub(r"\s*\[DNI\]", "", p["referee"]).strip(),
+        "lado": lado, "equipos": [rival_lindo(p["equipo_L"]) if lado == "V" else CLUB_NAME.title(),
+                    rival_lindo(p["equipo_V"]) if lado == "L" else CLUB_NAME.title()],
+        "tantos": [p["score_L"], p["score_V"]], "url": f"{BASE}/Matches/view/{p['partido_id']}",
+        "jugadas": sorted(jugadas, key=orden), "quitadas": quitadas,
+        "formacion": [[o, d, nombre_lindo(n), pid, r] for o, d, n, pid, r in formacion],
+    }
+
+
+def guardar_planillas(planillas):
+    """web/planillas/<partido>.json (solo se reescribe si cambió, para no ensuciar el historial)."""
+    PLANILLAS_WEB.mkdir(parents=True, exist_ok=True)
+    nuevas = 0
+    for pl in planillas:
+        f = PLANILLAS_WEB / f"{pl['mid']}.json"
+        txt = json.dumps(pl, ensure_ascii=False, separators=(",", ":"))
+        if not f.exists() or f.read_text(encoding="utf-8") != txt:
+            f.write_text(txt, encoding="utf-8")
+            nuevas += 1
+    print(f"  planillas para la web: {len(planillas)} ({nuevas} nuevas o cambiadas)")
+
+
 # ---------------------------------------------------------------- main
 def main():
     s = login()
@@ -447,7 +536,7 @@ def main():
     torneos = [t for t in torneos if t["categoria"] and t["categoria"] != DUDOSO]
     print(f"  {len(torneos)} torneos de plantel superior {ARG} ({len(dudosos)} sin categoria clara, quedan aparte)")
 
-    partidos, jug_partido, incid_rows = [], [], []
+    partidos, jug_partido, incid_rows, planillas = [], [], [], []
     for t in torneos:
         detalle_torneo(s, t)
         mids = listar_partidos(s, t)
@@ -493,6 +582,7 @@ def main():
             # pendientes, suspendidos y walkovers no cuentan como partido jugado
             se_jugo = p["estado"] in ("Cerrado", "Iniciado")
             asis = asistencia[lado]
+            formacion = []
             for j in plantel[lado]:
                 key = j["player_id"] or j["jugador"]
                 st = stats.get(key, {})
@@ -506,6 +596,8 @@ def main():
                     # en ~50 planillas los cambios estan cargados al reves y el que entra figura como "Se retiro"
                     jugo = titular or st.get("eventos", 0) > 0
                 jugo = jugo and se_jugo
+                formacion.append([j["orden"], j["dorsal"], j["jugador"], j["player_id"] or "",
+                                  "T" if jugo and rol == "Titular" else "E" if jugo else "B"])
                 jug_partido.append({
                     **base, "rival": p[f"equipo_{rival}"], "estado": p["estado"], "player_id": j["player_id"],
                     "documento": j["documento"], "jugador": j["jugador"], "dorsal": j["dorsal"],
@@ -513,6 +605,9 @@ def main():
                     **{k: st.get(k, 0) for k in ("tries", "conversiones", "penales", "drops", "puntos",
                                                  "amarillas", "rojas")},
                 })
+
+            if res and t["categoria"] in CATEGORIAS_WEB:
+                planillas.append(planilla_web(p, incid, lado, t, formacion))
 
     df_t = pd.DataFrame([{k: v for k, v in t.items() if not k.startswith("_")} for t in torneos])
     df_p = pd.DataFrame(partidos)
@@ -618,6 +713,7 @@ def main():
         import reporte_jugadores
         reporte_jugadores.main()
         exportar_web.main()
+        guardar_planillas(planillas)
 
 
 if __name__ == "__main__":

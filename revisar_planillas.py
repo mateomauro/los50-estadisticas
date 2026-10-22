@@ -1,13 +1,17 @@
 """Arma Los50_Revisar_planillas.xlsx: los casos de las planillas que solo puede aclarar alguien que estuvo en el partido.
 Lee auditoria_datos.xlsx (python auditoria_datos.py) y Los50_PlantelSuperior_historico.xlsx.
-Las respuestas después se pasan a CORRECCIONES en extraer_los50.py.
+También deja los casos en revision/planillas.json para la página "Revisar datos" (revision.py arma las preguntas).
 """
+import hashlib
+import json
 import re
 from pathlib import Path
 
 import pandas as pd
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.worksheet.datavalidation import DataValidation
+
+from exportar_web import rival as rival_lindo
 
 HERE = Path(__file__).parent
 DESTINO = HERE / "Los50_Revisar_planillas.xlsx"
@@ -24,8 +28,8 @@ REVISADOS = {
 }
 
 aud = pd.read_excel(HERE / "auditoria_datos.xlsx", sheet_name=None)
-hist = pd.read_excel(HERE / "Los50_PlantelSuperior_historico.xlsx", sheet_name=["Partidos", "Incidencias"])
-P, I = hist["Partidos"], hist["Incidencias"]
+hist = pd.read_excel(HERE / "Los50_PlantelSuperior_historico.xlsx", sheet_name=["Partidos", "Incidencias", "Planteles por partido"])
+P, I, J = hist["Partidos"], hist["Incidencias"], hist["Planteles por partido"]
 url = P.set_index("partido_id").url
 pateos = I[I.incidencia.isin(PATADAS)]
 
@@ -42,6 +46,17 @@ def limpio(txt):
 
 def cant(n, inc):
     return f"1 {inc.lower()}" if n == 1 else f"{n} {PLURAL.get(inc, inc.lower())}"
+
+
+def pid(x):
+    return str(int(x)) if pd.notna(x) else ""
+
+
+def clave(mid, momento, inc, jugador):
+    """Lo que identifica la jugada en extraer_los50.ARREGLOS: (partido, tiempo, minuto, incidencia, jugador)."""
+    t, m = minuto(momento)
+    fila = I[(I.partido_id == mid) & (I.jugador == jugador)]
+    return [str(mid), t, int(m), inc, pid(fila.player_id.iloc[0]) if len(fila) else ""]
 
 
 def otros_pateadores(mid, jugador):
@@ -67,7 +82,8 @@ for (mid, jug, inc), g in f.groupby(["partido_id", "jugador", "incidencia"], sor
         "tipo": "Ya había salido", "momentos": momentos,
         "dice": f"Le anota {cant(len(g), inc)} ({momentos}), pero también dice que salió de la cancha ({limpio(r['sus cambios'])}).",
         "pregunta": f"¿{'Los' if len(g) > 1 else 'Lo'} hizo {jug}? Si es así, solo está mal el minuto del cambio.",
-        "otros": otros_pateadores(mid, jug) if inc in PATADAS else ""})
+        "otros": otros_pateadores(mid, jug) if inc in PATADAS else "",
+        "claves": [clave(mid, m, inc, jug) for m in g.momento], "opciones": "quien"})
 
 # 2) conversiones lejos de cualquier try (y el partido con más conversiones que tries)
 c = aud["Conversión sin try cerca"]
@@ -83,7 +99,8 @@ for _, r in c.iterrows():
         "tipo": "Conversión sin try", "momentos": limpio(r.momento),
         "dice": f"Conversión de {r.jugador} en el {limpio(r.momento)}, pero los tries de Los 50 fueron en: {limpio(r['tries del partido'])}.{extra}",
         "pregunta": "¿Esa conversión existió? Puede ser solo el minuto mal, o que en realidad fue un penal.",
-        "otros": otros_pateadores(r.partido_id, r.jugador)})
+        "otros": otros_pateadores(r.partido_id, r.jugador),
+        "claves": [clave(r.partido_id, r.momento, "Conversión", r.jugador)], "opciones": "existio"})
 
 # 3) la misma patada cargada dos veces en el mismo minuto
 d = aud["Incidencia duplicada"]
@@ -92,7 +109,8 @@ for _, r in d.iterrows():
         "fecha": r.fecha, "categoria": r.categoria, "rival": r.rival, "torneo": r.torneo, "jugador": r.jugador, "partido_id": r.partido_id,
         "tipo": "Cargada dos veces", "momentos": limpio(r.momento),
         "dice": f"Dos {PLURAL.get(r.incidencia, r.incidencia).lower()} de {r.jugador} en el mismo minuto ({limpio(r.momento)}).",
-        "pregunta": "¿Fueron dos o es una sola cargada dos veces?", "otros": otros_pateadores(r.partido_id, r.jugador)})
+        "pregunta": "¿Fueron dos o es una sola cargada dos veces?", "otros": otros_pateadores(r.partido_id, r.jugador),
+        "claves": [clave(r.partido_id, r.momento, r.incidencia, r.jugador)], "opciones": "dos"})
 
 # 4) en los torneos nuevos, patadas de jugadores que casi nunca patearon
 total = pateos.groupby("jugador").size()
@@ -108,15 +126,36 @@ for (jug, tor), g in raros.groupby(["jugador", "torneo"]):
             "tipo": "Pateador poco común", "momentos": ", ".join(f"{t} {m:g}'" for t, m in zip(gg.tiempo, gg.minuto)),
             "dice": f"Le anota {tipos}. " + ("Es la única patada que tiene en toda la historia." if total[jug] == 1 else
                     f"En toda la historia tiene {total[jug]} patadas{', todas en este torneo' if total[jug] == len(g) else ''}."),
-            "pregunta": f"¿Pateó {jug} en ese partido?", "otros": otros_pateadores(mid, jug)})
+            "pregunta": f"¿Pateó {jug} en ese partido?", "otros": otros_pateadores(mid, jug),
+            "claves": [[str(mid), t, int(m), inc, pid(p)] for t, m, inc, p in zip(gg.tiempo, gg.minuto, gg.incidencia, gg.player_id)],
+            "opciones": "quien"})
 
-df = pd.DataFrame(filas)
+df = pd.DataFrame(filas, columns=["fecha", "categoria", "rival", "torneo", "jugador", "partido_id", "tipo", "momentos", "dice",
+                                  "pregunta", "otros", "claves", "opciones"])
 df = df[~df.partido_id.isin(REVISADOS)]
 df["_f"] = pd.to_datetime(df.fecha, dayfirst=True)
 df = df.sort_values("_f", ascending=False).drop(columns="_f").reset_index(drop=True)
 df.insert(0, "N°", range(1, len(df) + 1))
 df["planilla"] = df.partido_id.map(url)
-out = df.rename(columns={"fecha": "Fecha", "categoria": "Categoría", "rival": "Rival", "torneo": "Torneo", "jugador": "Jugador",
+# ---------- para la página "Revisar datos" ----------
+OPCIONES = {
+    "quien": [["si", "Sí, fue él"], ["otro", "No, fue otro"], ["nose", "No sé"]],
+    "existio": [["si", "Sí, existió"], ["no", "No existió"], ["nose", "No sé"]],
+    "dos": [["si", "Fueron dos"], ["una", "Era una sola"], ["nose", "No sé"]],
+}
+web = []
+for r in df.itertuples():
+    plantel = J[J.partido_id == r.partido_id].sort_values("dorsal")
+    ident = hashlib.sha1(f"{r.partido_id}|{r.tipo}|{r.jugador}|{r.momentos}".encode()).hexdigest()[:12]
+    web.append({"id": f"pla-{ident}", "tipo": "planilla", "caso": r.tipo,
+                "titulo": f"{r.categoria} vs {rival_lindo(r.rival)} · {r.fecha}", "torneo": r.torneo, "dice": r.dice, "pregunta": r.pregunta,
+                "otros": r.otros, "opciones": OPCIONES[r.opciones], "claves": r.claves,
+                "jugadores": [[pid(p), str(int(d)) if pd.notna(d) else "", j] for p, d, j in zip(plantel.player_id, plantel.dorsal, plantel.jugador)
+                              if pd.notna(p)] if r.opciones == "quien" else []})
+(HERE / "revision").mkdir(exist_ok=True)
+(HERE / "revision" / "planillas.json").write_text(json.dumps(web, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+
+out = df.drop(columns=["claves", "opciones"]).rename(columns={"fecha": "Fecha", "categoria": "Categoría", "rival": "Rival", "torneo": "Torneo", "jugador": "Jugador",
                          "tipo": "Tipo de caso", "dice": "Qué dice la planilla", "pregunta": "Pregunta",
                          "otros": "Otros que patearon ese partido", "planilla": "Ver planilla (UAR)"})
 out["Respuesta"] = ""

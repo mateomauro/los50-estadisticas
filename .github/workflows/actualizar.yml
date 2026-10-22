@@ -33,6 +33,7 @@ jobs:
           UAR_USER: ${{ secrets.UAR_USER }}
           UAR_PASS: ${{ secrets.UAR_PASS }}
           CLAVE_ENTRENADORES: ${{ secrets.CLAVE_ENTRENADORES }}
+          CLAVE_REVISION: ${{ secrets.CLAVE_REVISION }}
           PYTHONIOENCODING: utf-8
           TZ: America/Argentina/Buenos_Aires
         run: python actualizar_semana.py
@@ -42,8 +43,8 @@ jobs:
         run: |
           git config user.name "los50-actualizador"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A web datos_uar
-          git diff --cached --quiet -- web || echo "web=si" >> "$GITHUB_OUTPUT"
+          git add -A web datos_uar revision
+          git diff --cached --quiet -- web revision || echo "web=si" >> "$GITHUB_OUTPUT"
           if git diff --cached --quiet; then
             echo "Sin cambios"
           else
@@ -51,13 +52,20 @@ jobs:
             git push
           fi
 
-      - name: Publicar la web en Cloudflare Pages (clublos50.pages.dev)
+      # dos webs separadas, cada una solo con lo suyo (las arma armar_sitios.py):
+      # los50-jugadores.pages.dev (Jugadores y Revisar datos) y los50-entrenadores.pages.dev (Entrenadores, con clave).
+      # Entrenadores se suma a la lista cuando Mateo dé el OK; hasta entonces queda como estaba en clublos50.pages.dev.
+      - name: Publicar las webs en Cloudflare Pages
         if: steps.guardar.outputs.web == 'si' || github.event_name == 'workflow_dispatch'
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           WRANGLER_SEND_METRICS: "false"
-        run: npx --yes wrangler@4.151.3 pages deploy web --project-name clublos50 --branch main --commit-dirty=true
+        run: |
+          python armar_sitios.py
+          for web in jugadores; do
+            (cd "sitios/$web" && npx --yes wrangler@4.151.3 pages deploy --branch main --commit-dirty=true)
+          done
 
       - name: Excel de esta actualización
         if: always()

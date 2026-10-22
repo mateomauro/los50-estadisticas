@@ -28,7 +28,7 @@
   document.body.appendChild(el);
   html.classList.remove("intro-pendiente");
   html.classList.add("intro-activa");
-  try { sessionStorage.setItem("los50-intro", "1"); } catch (e) { /* sin almacenamiento: se vuelve a mostrar */ }
+  try { localStorage.setItem("los50-intro", String(Date.now())); } catch (e) { /* sin almacenamiento: se vuelve a mostrar */ }
 
   const $ = (s) => el.querySelector(s);
   const $$ = (s) => el.querySelectorAll(s);
@@ -57,7 +57,7 @@
     const n = $(".intro__marcador");
     anim(n, [{ opacity: 0, transform: "scale(.85)" }, { opacity: 1, transform: "scale(1)" }], { duration: 300 });
     await new Promise((fin) => {
-      const t0 = performance.now(), dur = 1150;
+      const t0 = performance.now(), dur = 850;
       const paso = (t) => {
         const p = Math.min(1, (t - t0) / dur);
         n.textContent = Math.round(50 * (1 - Math.pow(1 - p, 3)));
@@ -71,7 +71,7 @@
       { opacity: 0, transform: "scale(.4)" },
       { opacity: 1, transform: "scale(1.07)", offset: .7 },
       { opacity: 1, transform: "scale(1)" }], { duration: 560 });
-    await esperar(800);
+    await esperar(550);
   }
 
   // ---------- 3: las sierras ----------
@@ -113,7 +113,7 @@
 
   el.addEventListener("click", () => salida(true));
   addEventListener("keydown", () => salida(true), { once: true });
-  anim($(".intro__saltar"), [{ opacity: 0 }, { opacity: 1 }], { duration: 400, delay: 900 });
+  anim($(".intro__saltar"), [{ opacity: 0 }, { opacity: 1 }], { duration: 400, delay: 600 });
 
   (async () => {
     const img = $(".intro__escudo img");

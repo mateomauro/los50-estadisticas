@@ -35,11 +35,14 @@
   font: 700 20px/1 var(--cond); letter-spacing: .06em; text-transform: uppercase; transition: background var(--t); }
 .candado__entrar:hover { background: #2a6fe0; }
 .candado__entrar:disabled { opacity: .7; cursor: progress; }
-.candado__volver { margin-top: 4px; color: #aab3c2; font-size: 14px; text-decoration: none; padding: 10px; }
+.candado__volver { display: inline-flex; align-items: center; min-height: 44px; margin-top: 4px; color: #aab3c2; font-size: 14px; text-decoration: none; padding: 0 10px; }
 .candado__volver:hover { color: #fff; }
+.candado__volver svg { width: 18px; height: 18px; margin-right: 2px; }
 
 /* ---------- base ---------- */
 .vista { max-width: 860px; margin: 0 auto; padding: 4px 16px 16px; outline: none; }
+.ent .pie { max-width: 860px; } /* el pie arranca en el mismo borde que el contenido */
+.ent .app--ancha .pie { max-width: 1200px; }
 .sec { margin: 26px 0 34px; }
 .h2 { margin: 0 0 4px; font: 700 26px/1.1 var(--cond); letter-spacing: .015em; text-transform: uppercase; text-wrap: balance; }
 .sub { margin: 0 0 12px; font-size: 15px; line-height: 1.45; color: var(--suave); max-width: 60ch; }
@@ -50,23 +53,6 @@
 .link { border: 0; background: none; padding: 8px 0; color: var(--azul); font-size: 14px; text-decoration: underline; text-underline-offset: 3px; }
 .num { font-variant-numeric: tabular-nums; }
 
-/* ---------- elegir categoría ---------- */
-.elegir-lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
-.elegir {
-  width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "nom flecha" "res flecha";
-  align-items: center; gap: 2px 10px; min-height: 72px; padding: 12px 14px 12px 16px; text-align: left;
-  background: var(--sup); border: 1px solid var(--linea); border-radius: var(--radio);
-  transition: border-color var(--t), transform var(--t), background var(--t);
-}
-.elegir:hover { border-color: #b9c6dc; }
-.elegir:active { transform: scale(.985); background: #fafbfd; }
-.elegir__nom { grid-area: nom; font: 700 25px/1 var(--cond); letter-spacing: .02em; text-transform: uppercase; }
-.elegir__res { grid-area: res; font-size: 14.5px; color: var(--suave); }
-.elegir > svg { grid-area: flecha; width: 22px; height: 22px; color: var(--azul); }
-.elegir--club { grid-template-columns: 44px minmax(0, 1fr) auto; grid-template-areas: "ic nom flecha" "ic res flecha"; column-gap: 12px; }
-.elegir__ic { grid-area: ic; width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: var(--azul-claro); color: var(--azul); }
-.elegir__ic svg { width: 24px; height: 24px; }
-.elegir--club .elegir__nom { font-size: 21px; }
 
 /* ---------- cabecera de una pantalla: volver + nombre + año ---------- */
 .cab { padding-top: 10px; }
@@ -81,7 +67,8 @@
 .anio button:hover:not(:disabled) { background: var(--azul-claro); color: var(--azul); }
 .anio button:disabled { opacity: .3; cursor: default; }
 .anio button svg { width: 22px; height: 22px; }
-.anio__n { min-width: 74px; text-align: center; font: 700 28px/1 var(--cond); }
+.anio__n { min-width: 74px; display: grid; justify-items: center; gap: 2px; font: 700 28px/1 var(--cond); }
+.anio__n small { font: 600 11px/1 var(--base); letter-spacing: .06em; text-transform: uppercase; color: var(--suave); }
 
 /* ---------- 1. cómo le fue ---------- */
 .gep { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
@@ -102,6 +89,14 @@
 .duelo__barra { display: flex; gap: 2px; height: 10px; border-radius: 5px; overflow: hidden; }
 .duelo__barra i { flex: 1 1 0; background: var(--azul); }
 .duelo__barra i + i { background: var(--rojo-graf); }
+/* versión con muchos renglones (los tries): "Hizo" y "Le hicieron" van una sola vez arriba */
+.duelos--c { margin-top: 12px; }
+.duelo--c { grid-template-columns: minmax(0, 2fr) 48px minmax(60px, 1fr) 48px; padding: 9px 0; }
+.duelo--c .duelo__lbl small { display: block; margin-top: 2px; font-size: 12.5px; font-weight: 500; color: var(--suave); }
+.duelo--c .duelo__n { font: 700 22px/1 var(--cond); }
+.duelo--c .duelo__n--a { color: var(--azul-900); } .duelo--c .duelo__n--b { color: var(--rojo); }
+.duelo--cab { padding: 4px 0 6px; }
+.duelo--cab span { justify-self: center; font-size: 12px; font-weight: 600; white-space: nowrap; }
 
 .lista { list-style: none; margin: 0; padding: 0; background: var(--sup); border: 1px solid var(--linea); border-radius: var(--radio); }
 .lista li { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 14px; border-bottom: 1px solid var(--linea); }
@@ -112,25 +107,10 @@
 
 /* ---------- 2. gráficos ---------- */
 .graf-wrap { background: var(--sup); border: 1px solid var(--linea); border-radius: var(--radio); padding: 10px 8px 4px; }
-.graf { display: block; width: 100%; height: auto; max-height: 240px; }
-.graf rect, .graf text { stroke: none; }
-.graf__cero { stroke: #c9d1de; stroke-width: 1; }
-.graf__prom { stroke: var(--negro); stroke-width: 1.5; stroke-dasharray: 5 5; opacity: .55; }
-.graf__barra { fill: #c3d0ea; } .graf__barra.sel { fill: var(--azul); }
-.graf__a { fill: var(--azul); } .graf__b { fill: var(--rojo-graf); }
-.graf__banda { fill: #e9edf4; }
-.graf__prom--a { stroke: var(--azul); opacity: .7; } .graf__prom--b { stroke: var(--rojo-graf); opacity: .7; }
-.graf__val--chico { font-size: 11px; }
-.graf__val--chico.sel { font-size: 12px; }
-.graf .graf__val--chico.sel { stroke: #e9edf4; } /* el año elegido tiene fondo gris: el borde del número va del mismo gris */
-.graf__val { font: 600 12px var(--base); fill: var(--suave); text-anchor: middle; }
-/* los números de las barras se leen aunque la línea del promedio les pase por encima */
-.graf .graf__val { stroke: var(--sup); stroke-width: 4px; stroke-linejoin: round; paint-order: stroke; }
-.graf__prom-lbl { font: 600 11px var(--base); fill: var(--suave); }
-.graf__prom-n { font: 700 15px var(--cond); fill: var(--texto); }
-.graf__val.sel { fill: var(--texto); font-weight: 700; font-size: 13px; }
-.graf__x { font: 500 12px var(--base); fill: var(--suave); text-anchor: middle; }
-.graf__x.sel { fill: var(--texto); font-weight: 700; }
+/* el gráfico (Chart.js) ocupa todo el ancho de la tarjeta; el alto es fijo para que no salte al cargar */
+.graf-caja { position: relative; height: 190px; }
+.graf-caja--doble { height: 210px; }
+.graf-caja canvas { display: block; }
 .ley { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 14px; margin: 0 0 8px; font-size: 13.5px; color: var(--suave); }
 .ley i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: -9px; }
 .ley--a { background: var(--azul); } .ley--b { background: var(--rojo-graf); }
@@ -150,6 +130,38 @@
 .mas[open] summary::after { transform: rotate(-135deg); }
 .mas[open] summary { margin-bottom: 10px; }
 .mas--grande summary { font: 700 20px/1.1 var(--cond); text-transform: uppercase; letter-spacing: .02em; }
+/* a la derecha del título de cada tema, el número principal de adentro */
+.mas__tit { flex: 1; min-width: 0; }
+.mas__dato { flex: none; padding: 4px 10px; border-radius: 999px; background: #eef1f6; color: var(--texto);
+  font: 600 13.5px/1.2 var(--base); letter-spacing: 0; text-transform: none; white-space: nowrap; }
+
+/* ---------- la respuesta: arriba del gráfico o la tabla, corta y grande ---------- */
+.titular { margin: 0; font: 500 17.5px/1.35 var(--base); color: var(--texto); text-wrap: balance; }
+.titular b { font: 700 23px/1 var(--cond); letter-spacing: .01em; font-variant-numeric: tabular-nums; }
+.tit + .titular { margin-top: -2px; }
+.titular + .ley, .titular + .tabla-e-wrap, .titular + .era, .titular + .graf-wrap { margin-top: 12px; }
+/* el "?" va pegado al final del título o de la respuesta (si el título ocupa dos renglones, no se va al borde) */
+.h2 .ayuda-btn, .titular .ayuda-btn, .cab__cat .ayuda-btn { display: inline-grid; vertical-align: 3px; margin-left: 8px; text-transform: none; letter-spacing: 0; }
+.cab__cat .ayuda-btn { vertical-align: 8px; margin-left: 10px; }
+.titular--abre { margin-bottom: 12px; }
+.junto { white-space: nowrap; }
+/* los dos colores del gráfico de puntos van en la misma frase: así no hace falta otra leyenda */
+.punto { display: inline-block; width: 11px; height: 11px; margin: 0 5px 0 2px; border-radius: 50%; vertical-align: 1px; }
+.punto--a { background: var(--azul); } .punto--b { background: var(--rojo-graf); }
+/* mejor o peor que lo normal */
+.tend { display: inline-flex; align-items: center; gap: 5px; margin: 8px 0 12px; padding: 5px 11px 5px 9px; border-radius: 999px;
+  background: #eef1f6; color: var(--suave); font-size: 14px; font-weight: 600; line-height: 1.2; }
+.tend svg { flex: none; width: 15px; height: 15px; stroke-width: 2.5; }
+.tend--mejor { background: var(--verde-fondo); color: var(--verde); }
+.tend--peor { background: var(--rojo-fondo); color: var(--rojo); }
+.tend--ojo { background: var(--ambar-fondo); color: var(--ambar); margin-top: 0; }
+.bloque-graf + .bloque-graf { margin-top: 26px; }
+.tit__meta { font-size: 15px; font-weight: 600; color: var(--suave); }
+.tit__meta::before { content: "·"; margin-right: 8px; }
+.grupo-fila { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 0 14px; margin: 22px 0 8px; }
+.grupo-fila .grupo { margin: 0; }
+.grupo-fila .ley { margin: 0; }
+.grupo--sep { margin-top: 26px; }
 .rivales { list-style: none; margin: 0; padding: 0; background: var(--sup); border: 1px solid var(--linea); border-radius: var(--radio); }
 .rivales li { display: grid; grid-template-columns: minmax(0, 1fr) 80px 64px; gap: 10px; align-items: center; padding: 11px 14px; border-bottom: 1px solid var(--linea); }
 .rivales li:last-child { border-bottom: 0; }
@@ -165,9 +177,12 @@
 .tabla-e tr:last-child > * { border-bottom: 0; }
 .tabla-e thead th { font-size: 12px; font-weight: 600; color: var(--suave); text-transform: uppercase; letter-spacing: .03em; line-height: 1.2; vertical-align: bottom; }
 .tabla-e .izq { text-align: left; padding-left: 14px; }
-.tabla-e th button { min-height: 36px; border: 0; background: none; padding: 4px 2px; font: inherit; color: inherit; text-transform: inherit; }
-.tabla-e th[aria-sort] button { color: var(--azul); }
-.tabla-e th[aria-sort] button::after { content: ""; display: inline-block; width: 6px; height: 6px; margin-left: 5px; border: solid currentColor; border-width: 0 2px 2px 0; transform: translateY(-3px) rotate(45deg); }
+/* los títulos que ordenan se ven como botones (azules, con flechita), así no hace falta explicarlo */
+.tabla-e th button { min-height: 40px; border: 0; background: none; padding: 4px 6px; border-radius: 8px; font: inherit; color: var(--azul); text-transform: inherit; }
+.tabla-e th button:hover { background: var(--azul-claro); }
+.tabla-e th button::after { content: ""; display: inline-block; width: 6px; height: 6px; margin-left: 5px; border: solid currentColor; border-width: 0 2px 2px 0; transform: translateY(-3px) rotate(45deg); opacity: .35; }
+.tabla-e th[aria-sort] button { color: var(--azul-900); }
+.tabla-e th[aria-sort] button::after { opacity: 1; }
 .tabla-e tbody th { font-weight: 600; }
 
 /* ---------- más datos (clases propias: .datos ya existe en la página de jugadores) ---------- */
@@ -228,13 +243,11 @@
 
 /* ---------- pantallas más anchas ---------- */
 @media (min-width: 640px) {
-  .elegir-lista { grid-template-columns: 1fr 1fr; }
   .diag { grid-template-columns: 1fr 1fr; }
 }
 @media (min-width: 1024px) {
-  .top { padding: 18px 24px; }
+  .top { padding: 18px 0; }
   .vista { padding: 8px 24px 28px; }
-  .elegir-lista { grid-template-columns: repeat(3, 1fr); }
 }
 
 /* secciones desplegables de la categoría */
@@ -257,3 +270,313 @@
 .rivales-e__barra i { flex: 1 1 0; min-width: 24px; display: grid; place-items: center; font: 700 13px/1 var(--base); font-style: normal; color: #fff; }
 .rivales-e__barra .g { background: var(--verde); } .rivales-e__barra .e { background: #9aa3b2; } .rivales-e__barra .p { background: var(--rojo-graf); }
 .chip--cat { display: inline-block; margin-bottom: 3px; padding: 2px 8px; font-size: 12px; }
+
+/* ---------- guía del club: qué aprende cada categoría, cantos y zonas, scrum ---------- */
+.sec--pegada { margin-top: 16px; }
+
+/* ---------- ayuda: el "?" al lado del título y la ventanita que abre ---------- */
+.tit { display: flex; align-items: center; gap: 10px; margin: 0 0 8px; }
+.tit .h2 { margin: 0; }
+.ayuda-btn { position: relative; flex: none; width: 28px; height: 28px; display: grid; place-items: center; padding: 0;
+  background: var(--sup); border: 1.5px solid #b9c6dc; border-radius: 50%; color: var(--azul); font: 700 16px/1 var(--base);
+  transition: background var(--t), border-color var(--t); }
+.ayuda-btn::before { content: ""; position: absolute; inset: -8px; } /* se toca fácil: el área es de 44 px aunque el círculo sea chico */
+.ayuda-btn:hover { background: var(--azul-claro); border-color: var(--azul); }
+.ayuda { position: fixed; inset: 0; z-index: 100; display: grid; align-items: end; justify-items: center; }
+.ayuda__fondo { position: absolute; inset: 0; background: rgb(11 13 18 / 50%); animation: ayuda-fondo 200ms ease-out; }
+.ayuda__caja { position: relative; width: 100%; max-width: 520px; max-height: 85dvh; overflow-y: auto;
+  padding: 22px 20px max(20px, env(safe-area-inset-bottom)); background: var(--sup); border-radius: 20px 20px 0 0;
+  box-shadow: 0 -10px 34px rgb(11 13 18 / 22%); animation: ayuda-sube 280ms cubic-bezier(.2, .8, .2, 1); }
+.ayuda__t { margin: 0 0 10px; font: 700 24px/1.1 var(--cond); letter-spacing: .015em; text-transform: uppercase; text-wrap: balance; }
+.ayuda__txt p { margin: 0 0 10px; font-size: 16.5px; line-height: 1.5; max-width: 60ch; }
+.ayuda__ok { width: 100%; min-height: 50px; margin-top: 8px; border: 0; border-radius: 12px; background: var(--negro); color: #fff;
+  font: 700 19px/1 var(--cond); letter-spacing: .05em; text-transform: uppercase; }
+.ayuda__ok:hover { background: #22283a; }
+@keyframes ayuda-sube { from { transform: translateY(100%); } }
+@keyframes ayuda-aparece { from { opacity: 0; transform: translateY(12px) scale(.97); } }
+@keyframes ayuda-fondo { from { opacity: 0; } }
+/* ---------- categorías del inicio: una tabla por grupo, como una tabla de posiciones ----------
+   el título del grupo y "Ganó / Empató / Perdió" arriba, una fila por categoría (toda la fila se toca) */
+.grupo-cat { margin-top: 20px; }
+.grupo-cat__cab, .fila-cat { display: grid; grid-template-columns: minmax(0, 1fr) repeat(3, 46px) 18px; align-items: center; column-gap: 5px; }
+.grupo-cat__cab { padding: 0 15px 7px; font: 600 11.5px/1.2 var(--base); letter-spacing: .04em; text-transform: uppercase; color: var(--suave); }
+.grupo-cat__cab > span { text-align: center; }
+.grupo-cat__tit { grid-column: 1; margin: 0; font: 600 13px/1.2 var(--base); letter-spacing: .06em; text-transform: uppercase; color: var(--suave); }
+.filas-cat { list-style: none; margin: 0; padding: 0; overflow: hidden; background: var(--sup); border: 1px solid var(--linea); border-radius: var(--radio); }
+.filas-cat li + li { border-top: 1px solid var(--linea); }
+.fila-cat { width: 100%; min-height: 60px; padding: 9px 14px; border: 0; background: none; text-align: left; color: var(--texto); transition: background var(--t); }
+.fila-cat:hover { background: #f6f8fb; }
+.fila-cat:active { background: var(--azul-claro); }
+.fila-cat:focus-visible { outline-offset: -3px; } /* la lista recorta lo que sale de cada fila */
+.fila-cat__nom { display: grid; gap: 4px; font: 700 20px/1 var(--cond); letter-spacing: .02em; text-transform: uppercase; }
+.fila-cat__nom small { font: 400 13px/1 var(--base); letter-spacing: 0; text-transform: none; color: var(--suave); }
+.fila-cat__n { justify-self: stretch; padding: 6px 0 5px; border-radius: 8px; text-align: center; font: 700 22px/1 var(--cond); }
+.fila-cat__n--g { background: var(--verde-fondo); color: var(--verde); }
+.fila-cat__n--e { background: #eef1f6; color: var(--suave); }
+.fila-cat__n--p { background: var(--rojo-fondo); color: var(--rojo); }
+.fila-cat__n--cero { background: #f4f6f9; color: #7a8292; }
+.fila-cat > svg { justify-self: end; width: 18px; height: 18px; color: var(--azul); transition: transform var(--t); }
+.fila-cat:hover > svg { transform: translateX(2px); }
+.fila-cat--inf { grid-template-columns: 70px minmax(0, 1fr) 20px; }
+.fila-cat--inf .fila-cat__nom small { font-size: 12px; }
+.fila-cat__etapa { font-size: 15.5px; line-height: 1.3; color: var(--suave); }
+
+/* menú del inicio (guía y todo el club): mismas filas que las categorías, con un ícono */
+.menu { list-style: none; margin: 0; padding: 0; overflow: hidden; background: var(--sup); border: 1px solid var(--linea); border-radius: var(--radio); }
+.menu li + li { border-top: 1px solid var(--linea); }
+.menu__it { width: 100%; display: grid; grid-template-columns: 40px minmax(0, 1fr) 18px; align-items: center; gap: 14px; min-height: 66px;
+  padding: 12px 14px; border: 0; background: none; text-align: left; color: var(--texto); transition: background var(--t); }
+.menu__it:hover { background: #f6f8fb; }
+.menu__it:active { background: var(--azul-claro); }
+.menu__it:focus-visible { outline-offset: -3px; }
+.menu__ic { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 11px; background: var(--azul-claro); color: var(--azul); }
+.menu__ic svg { width: 22px; height: 22px; }
+.menu__txt { display: grid; gap: 4px; }
+.menu__txt b { font: 700 19px/1.1 var(--cond); letter-spacing: .02em; text-transform: uppercase; }
+.menu__txt small { font-size: 14px; line-height: 1.35; color: var(--suave); }
+.menu__it > svg { justify-self: end; width: 18px; height: 18px; color: var(--azul); transition: transform var(--t); }
+.menu__it:hover > svg { transform: translateX(2px); }
+/* los últimos partidos, con el mismo borde que el resto de la sección (la lista viene de la página pública) */
+.ent .resultados { border-color: var(--linea); box-shadow: none; }
+
+/* ---------- ejercicios (para usar en la cancha con el celular: botones grandes, letra grande) ---------- */
+.ent .seg--4 { grid-template-columns: repeat(4, 1fr); }
+.chips-g { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 0; }
+.chips-g button { min-height: 42px; padding: 0 16px; border: 1px solid var(--linea); border-radius: 999px; background: var(--sup);
+  font: 600 15px/1 var(--base); color: var(--texto); transition: background var(--t), color var(--t), border-color var(--t); }
+.chips-g button:hover { border-color: #b9c6dc; }
+.chips-g button[aria-pressed="true"] { background: var(--negro); border-color: var(--negro); color: #fff; }
+.filtro-g { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 12px; margin: 12px 0 0; padding: 10px 14px;
+  background: var(--azul-claro); border-radius: 12px; font-size: 15px; color: var(--azul-900); }
+.filtro-g .link { padding: 4px 0; min-height: 32px; font-weight: 600; }
+.grupo-ej { margin-top: 20px; }
+.grupo-ej__cab { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 0 15px 7px; font-size: 13px; color: var(--suave); }
+.ej { width: 100%; display: grid; grid-template-columns: 30px minmax(0, 1fr) 18px; align-items: center; gap: 12px; min-height: 64px;
+  padding: 12px 14px; border: 0; background: none; text-align: left; color: var(--texto); transition: background var(--t); }
+.ej--sin-paso { grid-template-columns: minmax(0, 1fr) 18px; }
+.ej:hover { background: #f6f8fb; }
+.ej:active { background: var(--azul-claro); }
+.ej:focus-visible { outline-offset: -3px; }
+.ej > svg { justify-self: end; width: 18px; height: 18px; color: var(--azul); }
+.ej__paso { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; background: var(--negro); color: #fff; font: 700 16px/1 var(--cond); }
+.ej__txt { display: grid; gap: 4px; min-width: 0; }
+.ej__txt b { font-size: 16.5px; line-height: 1.3; font-weight: 600; }
+.ej__txt small { font-size: 14px; line-height: 1.35; color: var(--suave); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.ej__mat { display: flex; align-items: center; gap: 5px; font-size: 13.5px; color: var(--suave); }
+.ej__mat svg { flex: none; width: 15px; height: 15px; color: var(--ambar); }
+/* un ejercicio en pantalla completa */
+.saltos--ej button { min-width: 0; padding: 0 12px; font: 600 15px/1 var(--base); letter-spacing: 0; }
+.ej-tag { margin: 14px 0 0; font: 600 13px/1.2 var(--base); letter-spacing: .06em; text-transform: uppercase; color: var(--azul); }
+.ej-tit { margin: 6px 0 0; font: 700 30px/1.08 var(--cond); letter-spacing: .01em; text-transform: uppercase; text-wrap: balance; }
+.ej-det .grupo:first-child { margin-top: 6px; }
+.ej-mat { display: flex; align-items: center; gap: 10px; margin: 0; padding: 14px 16px; background: var(--sup); border: 1px solid var(--linea);
+  border-radius: var(--radio); font-size: 16.5px; line-height: 1.4; }
+.ej-mat svg { flex: none; width: 24px; height: 24px; color: var(--ambar); }
+/* videos: la tapa con un play grande; al tocarlo aparece el video ahí mismo */
+.videos-ej { display: grid; gap: 12px; }
+.video-ej { margin: 0; overflow: hidden; background: var(--sup); border: 1px solid var(--linea); border-radius: var(--radio); }
+.video-ej__tapa { position: relative; display: block; width: 100%; padding: 0; border: 0; aspect-ratio: 16 / 9; background: #1a1e27; cursor: pointer; }
+.video-ej__tapa img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.video-ej__play { position: absolute; inset: 0; margin: auto; width: 68px; height: 68px; display: grid; place-items: center; border-radius: 50%;
+  background: rgb(11 13 18 / 72%); color: #fff; box-shadow: 0 4px 18px rgb(0 0 0 / 35%); transition: transform var(--t), background var(--t); }
+.video-ej__play svg { width: 28px; height: 28px; margin-left: 4px; fill: currentColor; }
+.video-ej__tapa:hover .video-ej__play { background: var(--azul); transform: scale(1.05); }
+.video-ej video { display: block; width: 100%; aspect-ratio: 16 / 9; background: #000; }
+.video-ej figcaption { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 10px 14px; font-size: 15px; line-height: 1.35; }
+.video-ej figcaption span { flex: none; color: var(--suave); }
+.video-ej__error { margin: 0; padding: 10px 14px; background: var(--rojo-fondo); color: var(--rojo); font-size: 14.5px; line-height: 1.4; }
+.video-ej__error .link { display: block; min-height: 44px; padding: 10px 0 2px; color: inherit; font-size: 15px; font-weight: 700; }
+.ej__video { display: inline-flex; align-items: center; gap: 5px; font-size: 13.5px; font-weight: 600; color: var(--azul); }
+.ej__video svg { width: 12px; height: 12px; fill: currentColor; }
+.fotos-ej { display: grid; gap: 10px; }
+.fotos-ej figure { margin: 0; overflow: hidden; border-radius: var(--radio); border: 1px solid var(--linea); background: #e9edf4; aspect-ratio: 560 / 340; }
+.fotos-ej img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.cab__cat small { margin-left: 8px; font: 600 15px/1 var(--base); letter-spacing: 0; text-transform: none; color: var(--suave); }
+.etapa { margin: 6px 0 0; font: 600 15px/1.3 var(--base); color: var(--azul-900); }
+
+/* botón chico que lleva a otra parte de la guía (desde la categoría o al scrum) */
+.atajo { width: 100%; display: flex; align-items: center; gap: 10px; min-height: 52px; margin-top: 12px; padding: 10px 14px; text-align: left;
+  background: var(--azul-claro); border: 1px solid #cfdcf6; border-radius: 12px; color: var(--azul-900); font-size: 15px; line-height: 1.35;
+  transition: border-color var(--t), transform var(--t); }
+.atajo:hover { border-color: #9fb9ea; }
+.atajo:active { transform: scale(.985); }
+.atajo > svg { flex: none; width: 22px; height: 22px; color: var(--azul); }
+.atajo > span { flex: 1; }
+.atajo > svg:last-child { width: 18px; height: 18px; }
+
+/* anterior / siguiente categoría */
+.saltos { display: flex; gap: 6px; }
+.saltos button { display: inline-flex; align-items: center; justify-content: center; gap: 2px; min-width: 64px; min-height: 44px; padding: 0 10px;
+  background: var(--sup); border: 1px solid var(--linea); border-radius: 11px; font: 700 18px/1 var(--cond); letter-spacing: .02em; color: var(--texto); }
+.saltos button:hover:not(:disabled) { background: var(--azul-claro); color: var(--azul); border-color: #cfdcf6; }
+.saltos button:disabled { visibility: hidden; }
+.saltos svg { width: 18px; height: 18px; }
+
+/* frases guía (concepto semilla) y filosofía: tarjeta oscura como el encabezado */
+.semillas { display: grid; gap: 8px; }
+.semilla { display: grid; gap: 8px; align-content: start; padding: 16px 16px 18px; border-radius: var(--radio); color: #fff;
+  background: var(--negro) radial-gradient(120% 140% at 100% 0%, var(--azul-900) 0%, var(--negro) 70%); }
+.semilla__lbl { font: 600 12.5px/1 var(--base); letter-spacing: .08em; text-transform: uppercase; color: #8fb4f5; }
+.semilla__txt { font: 700 25px/1.12 var(--cond); letter-spacing: .01em; text-wrap: balance; }
+.semilla p { margin: 0; font-size: 15px; line-height: 1.45; color: #c3cad6; max-width: 60ch; }
+.claves-g { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0 0 12px; }
+.claves-g__lbl { flex-basis: 100%; font-size: 13.5px; font-weight: 600; color: var(--suave); }
+
+/* texto de las planillas dentro de los desplegables */
+.txt-g { padding: 14px 16px 6px; background: var(--sup); border: 1px solid var(--linea); border-radius: var(--radio); font-size: 16.5px; line-height: 1.5; }
+.txt-g p { margin: 0 0 10px; max-width: 68ch; }
+.txt-g__ul { list-style: none; margin: 0 0 10px; padding: 0; display: grid; gap: 8px; }
+.txt-g__ul li { position: relative; padding-left: 18px; max-width: 68ch; }
+.txt-g__ul li::before { content: ""; position: absolute; left: 3px; top: .62em; width: 6px; height: 6px; border-radius: 50%; background: var(--azul); }
+.txt-g__h { margin: 16px 0 8px; font: 600 13px/1 var(--base); letter-spacing: .06em; text-transform: uppercase; color: var(--suave); }
+.txt-g > .txt-g__h:first-child { margin-top: 2px; }
+.canto-i { color: var(--azul); font-weight: 700; letter-spacing: .02em; }
+
+/* listas con ícono: lo que hay que evitar (rojo) y lo que tiene que estar (verde) */
+.evitar-g, .check-g { list-style: none; margin: 0; padding: 4px 16px; background: var(--sup); border: 1px solid var(--linea); border-radius: var(--radio); }
+.evitar-g li, .check-g li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; padding: 11px 0; border-bottom: 1px solid var(--linea); font-size: 16.5px; line-height: 1.45; }
+.evitar-g li:last-child, .check-g li:last-child { border-bottom: 0; }
+.evitar-g svg, .check-g li::before { width: 22px; height: 22px; margin-top: 1px; }
+.evitar-g svg { color: var(--rojo); }
+.check-g li::before { content: ""; background: var(--verde);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='m9 12 2 2 4-4'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='m9 12 2 2 4-4'/%3E%3C/svg%3E") center / contain no-repeat; }
+
+/* pestañas (el mismo control de la página de jugadores, sobre blanco) */
+.ent .seg--g { margin: 14px 0 0; background: var(--sup); border: 1px solid var(--linea); }
+.ent .seg--g button { min-height: 44px; font-size: 17px; }
+
+/* cantos */
+.buscar-g { position: relative; display: block; margin-bottom: 4px; }
+.buscar-g > svg { position: absolute; left: 14px; top: 50%; translate: 0 -50%; color: var(--suave); pointer-events: none; }
+.buscar-g input { width: 100%; min-height: 50px; padding: 10px 14px 10px 44px; background: var(--sup); border: 1px solid var(--linea); border-radius: 12px; font-size: 17px; caret-color: var(--azul); }
+.buscar-g input::placeholder { color: #6b7385; }
+.buscar-g input:focus { outline: none; border-color: var(--azul); box-shadow: 0 0 0 3px rgb(27 95 209 / 18%); }
+.cantos { list-style: none; margin: 0; padding: 0 16px; background: var(--sup); border: 1px solid var(--linea); border-radius: var(--radio); }
+.cantos li { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; padding: 13px 0; border-bottom: 1px solid var(--linea); }
+.cantos li:last-child { border-bottom: 0; }
+.canto__cod { font: 700 23px/1 var(--cond); letter-spacing: .04em; color: var(--azul-900); }
+.cantos p { flex-basis: 100%; margin: 0; font-size: 16.5px; line-height: 1.45; }
+.vacio-g { margin: 14px 0 0; padding: 16px; text-align: center; color: var(--suave); background: var(--sup); border: 1px dashed var(--linea); border-radius: var(--radio); }
+
+/* la cancha */
+.cancha-g { display: grid; gap: 14px; }
+.cancha { display: block; width: 100%; max-width: 230px; height: auto; margin: 0 auto; }
+.cancha text { stroke: none; text-anchor: middle; }
+.cancha__piso { fill: #232a37; }
+.cancha__z { opacity: .94; }
+.cancha__z--roja { fill: var(--rojo-graf); } .cancha__z--azul { fill: var(--azul); } .cancha__z--amarilla { fill: var(--amarilla); } .cancha__z--verde { fill: var(--verde); }
+.cancha__c--1, .cancha__c--3 { fill: #1d4f9e; } .cancha__c--2, .cancha__c--4 { fill: #2b66c2; }
+.cancha__l { stroke: rgb(255 255 255 / 80%); stroke-width: 1.5; }
+.cancha__l--p { stroke-dasharray: 5 5; }
+.cancha__palos { stroke: #fff; stroke-width: 2; fill: none; }
+.cancha__t { font: 700 19px var(--cond); letter-spacing: .1em; fill: #fff; }
+.cancha__t--osc { fill: var(--negro); }
+.cancha .cancha__m { font: 600 10px var(--base); fill: rgb(255 255 255 / 85%); text-anchor: start; }
+.cancha .cancha__m--osc { fill: rgb(11 13 18 / 75%); }
+.cancha__ig { font: 600 10.5px var(--base); letter-spacing: .06em; text-transform: uppercase; fill: #aab3c2; }
+.cancha__nc { fill: var(--sup); }
+.cancha__n { font: 700 18px var(--cond); fill: var(--azul-900); }
+.zonas-g { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.zona-g { --zona: var(--suave); padding: 12px 16px 4px; background: var(--sup); border: 1px solid var(--linea); border-radius: 12px; }
+.zona-g--roja { --zona: var(--rojo-graf); } .zona-g--azul { --zona: var(--azul); } .zona-g--amarilla { --zona: var(--amarilla); } .zona-g--verde { --zona: var(--verde); }
+/* el color de la zona va en una muestra al lado del nombre, como en las leyendas de los gráficos */
+.zona-g__nom { display: flex; align-items: center; gap: 9px; font: 700 21px/1.1 var(--cond); letter-spacing: .02em; text-transform: uppercase; }
+.zona-g__nom::before { content: ""; flex: none; width: 14px; height: 14px; border-radius: 4px; background: var(--zona); }
+.zona-g__sub { display: block; margin-top: 2px; font-size: 14px; color: var(--suave); }
+.zona-g .txt-g__h { margin: 12px 0 6px; }
+.zona-g .txt-g__ul { font-size: 16px; }
+.canales-g { list-style: none; margin: 0; padding: 4px 16px; background: var(--sup); border: 1px solid var(--linea); border-radius: var(--radio); }
+.canales-g li { display: flex; align-items: center; gap: 12px; min-height: 48px; border-bottom: 1px solid var(--linea); font-size: 15.5px; font-weight: 600; }
+.canales-g li:last-child { border-bottom: 0; }
+.canales-g__n { width: 30px; height: 30px; flex: none; display: grid; place-items: center; border-radius: 50%; background: #1d4f9e; color: #fff; font: 700 17px/1 var(--cond); }
+
+/* decidir: los 5 pilares */
+.pilares-g { list-style: none; margin: 0; padding: 4px 16px; background: var(--sup); border: 1px solid var(--linea); border-radius: var(--radio); }
+.pilares-g li { display: grid; gap: 3px; padding: 12px 0; border-bottom: 1px solid var(--linea); }
+.pilares-g li:last-child { border-bottom: 0; }
+.pilares-g b { font: 700 20px/1.1 var(--cond); letter-spacing: .02em; text-transform: uppercase; }
+.pilares-g span { font-size: 16px; line-height: 1.45; color: var(--suave); }
+
+/* pasos numerados: regla de oro, cómo se enseña, la entrada */
+.pasos { list-style: none; margin: 0; padding: 6px 16px; background: var(--sup); border: 1px solid var(--linea); border-radius: var(--radio); }
+.pasos > li { position: relative; display: grid; grid-template-columns: 30px minmax(0, 1fr); column-gap: 12px; padding: 12px 0; }
+.pasos > li + li::before { content: ""; position: absolute; left: 14px; top: -12px; width: 2px; height: 24px; background: var(--linea); } /* une un número con el siguiente */
+.pasos__n { grid-row: span 2; position: relative; z-index: 1; width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%;
+  background: var(--negro); color: #fff; font: 700 17px/1 var(--cond); }
+.pasos__t { align-self: center; min-height: 30px; display: flex; align-items: center; font: 700 21px/1.1 var(--cond); letter-spacing: .02em; text-transform: uppercase; }
+.pasos__d { grid-column: 2; margin-top: 2px; font-size: 16px; line-height: 1.45; color: var(--suave); }
+.pasos__d .txt-g__ul { margin: 6px 0 0; color: var(--texto); }
+
+/* scrum por edad */
+.edades-g { list-style: none; margin: 0; padding: 4px 16px; background: var(--sup); border: 1px solid var(--linea); border-radius: var(--radio); }
+.edades-g li { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 12px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--linea); font-size: 16.5px; line-height: 1.45; }
+.edades-g li:last-child { border-bottom: 0; }
+.edades-g__cat { font: 700 22px/1 var(--cond); letter-spacing: .02em; }
+.edades-g small { display: block; margin-top: 2px; font-size: 13.5px; color: var(--suave); }
+
+/* set up: un desplegable por puesto */
+.setup-g { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.setup-g details { background: var(--sup); border: 1px solid var(--linea); border-radius: 12px; }
+.setup-g summary { display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 10px 14px; cursor: pointer; list-style: none; }
+.setup-g summary::-webkit-details-marker { display: none; }
+.setup-g summary::after { content: ""; flex: none; width: 8px; height: 8px; border: solid var(--suave); border-width: 0 2px 2px 0; transform: rotate(45deg) translateY(-2px); transition: transform var(--t); }
+.setup-g details[open] summary::after { transform: rotate(-135deg); }
+.setup-g .pasos__n { grid-row: auto; flex: none; }
+.setup-g__p { flex: 1; font: 700 20px/1.1 var(--cond); letter-spacing: .02em; text-transform: uppercase; }
+.setup-g__in { padding: 0 16px 6px 56px; font-size: 16.5px; line-height: 1.5; }
+
+/* el empuje: los dos cantos del ala */
+.empuje-g { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+.empuje-g div { display: grid; gap: 4px; padding: 14px 16px; border-radius: var(--radio); background: var(--negro); color: #fff; }
+.empuje-g b { font: 700 32px/1 var(--cond); letter-spacing: .04em; }
+.empuje-g span { font-size: 15px; color: #c3cad6; }
+
+/* los puestos: el equipo como se para en la cancha (forwards arriba, backs abajo) */
+.formacion { display: grid; gap: 8px; padding: 12px 12px 18px; background: var(--sup); border: 1px solid var(--linea); border-radius: var(--radio); }
+.formacion__tit { margin: 6px 2px 0; font: 600 13px/1 var(--base); letter-spacing: .06em; text-transform: uppercase; color: var(--suave); }
+.formacion__fila { display: flex; justify-content: center; gap: 8px; }
+.formacion__fila--linea { justify-content: space-between; }
+.puesto { width: clamp(62px, 19vw, 84px); min-height: 62px; display: grid; place-items: center; align-content: center; gap: 3px; padding: 8px 4px;
+  background: var(--azul-claro); border: 1.5px solid #cfdcf6; border-radius: 14px; color: var(--azul-900); transition: border-color var(--t), transform var(--t); }
+.puesto:hover { border-color: var(--azul); }
+.puesto:active { transform: scale(.96); }
+.puesto b { font: 700 28px/1 var(--cond); }
+.puesto small { font-size: 12px; font-weight: 600; line-height: 1.15; text-align: center; color: var(--suave); }
+.puesto-tit { display: flex; align-items: center; gap: 12px; }
+.puesto-tit__n { flex: none; min-width: 52px; height: 52px; display: grid; place-items: center; padding: 0 12px; border-radius: 14px; background: var(--azul); color: #fff; font-size: 30px; }
+.grupo--ayuda { display: flex; align-items: center; gap: 8px; }
+.grupo--ayuda .ayuda-btn { text-transform: none; letter-spacing: 0; }
+/* lo ideal en un partido: un número grande por acción */
+.partido-g { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.partido-g li { display: grid; gap: 5px; align-content: start; padding: 12px 8px; text-align: center; background: var(--sup); border: 1px solid var(--linea); border-radius: 12px; }
+.partido-g b { font: 700 34px/1 var(--cond); color: var(--azul-900); }
+.partido-g span { font-size: 13.5px; line-height: 1.25; color: var(--suave); }
+
+@media (min-width: 640px) {
+  .fotos-ej, .videos-ej { grid-template-columns: 1fr 1fr; }
+  .ej-tit { font-size: 36px; }
+  .graf-caja { height: 230px; }
+  .graf-caja--doble { height: 250px; }
+  .ayuda { align-items: center; padding: 24px; }
+  .ayuda__caja { border-radius: 18px; padding-bottom: 20px; animation-name: ayuda-aparece; animation-duration: 220ms; }
+  .grupo-cat__cab, .fila-cat { grid-template-columns: minmax(0, 1fr) repeat(3, 72px) 20px; column-gap: 6px; }
+  .fila-cat__nom { font-size: 22px; }
+  .fila-cat--inf { grid-template-columns: 90px minmax(0, 1fr) 20px; }
+  .semillas { grid-template-columns: 1fr 1fr; }
+  .semillas--una { grid-template-columns: 1fr; }
+  .cancha-g { grid-template-columns: 250px minmax(0, 1fr); align-items: start; }
+  .cancha { position: sticky; top: 12px; }
+  .formacion { padding: 16px 24px 24px; }
+  .partido-g { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+}
+/* inicio en la compu: lo principal a la izquierda, lo que acompaña a la derecha */
+@media (min-width: 1024px) {
+  .app--ancha .vista { max-width: 1200px; } /* mismo ancho que el encabezado: los bordes quedan alineados */
+  .inicio { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); column-gap: 40px; align-items: start; }
+  .inicio__lado .res { grid-template-columns: 72px minmax(0, 1fr) auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .atajo, .puesto, .fila-cat, .fila-cat > svg, .ej, .chips-g button, .video-ej__play, .menu__it, .menu__it > svg, .ayuda-btn, .setup-g summary::after, .mas summary::after, .acordeon summary::after { transition: none; }
+  .ayuda__fondo, .ayuda__caja { animation: none; }
+}

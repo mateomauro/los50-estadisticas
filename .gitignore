@@ -26,3 +26,16 @@ Ver_animaciones.html
 diarios/eleco_textos.jsonl
 diarios/lotes/
 diarios/__pycache__/
+
+# Cloudflare en la compu (clave de prueba y datos locales)
+.dev.vars
+.wrangler/
+
+# revisiones de diseño (impeccable)
+.impeccable/
+
+# videos de Entrenadores convertidos (se suben a Cloudflare R2, pesan mucho para GitHub)
+videos_hls/
+
+# las webs que se publican (las arma armar_sitios.py desde web/ y functions/)
+sitios/
