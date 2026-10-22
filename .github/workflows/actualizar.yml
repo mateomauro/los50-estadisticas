@@ -54,7 +54,7 @@ jobs:
 
       # dos webs separadas, cada una solo con lo suyo (las arma armar_sitios.py):
       # los50-jugadores.pages.dev (Jugadores y Revisar datos) y los50-entrenadores.pages.dev (Entrenadores, con clave).
-      # Entrenadores se suma a la lista cuando Mateo dé el OK; hasta entonces queda como estaba en clublos50.pages.dev.
+      # clublos50.pages.dev (la dirección de antes) manda cada link a la web nueva que le toca.
       - name: Publicar las webs en Cloudflare Pages
         if: steps.guardar.outputs.web == 'si' || github.event_name == 'workflow_dispatch'
         env:
@@ -63,7 +63,7 @@ jobs:
           WRANGLER_SEND_METRICS: "false"
         run: |
           python armar_sitios.py
-          for web in jugadores; do
+          for web in jugadores entrenadores viejo; do
             (cd "sitios/$web" && npx --yes wrangler@4.151.3 pages deploy --branch main --commit-dirty=true)
           done
 

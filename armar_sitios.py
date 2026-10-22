@@ -23,9 +23,8 @@ JUGADORES = "https://los50-jugadores.pages.dev"
 ENTRENADORES = "https://los50-entrenadores.pages.dev"
 FECHA = "2026-10-20"  # compatibility_date de Cloudflare
 KV_REVISION = "05ed25b09f7a43588efaa5302425f758"  # donde se guardan las respuestas de Revisar datos (no es secreto)
-# la asistencia de Entrenadores (base D1 los50-asistencia). Se crea al publicar Entrenadores:
-# npx wrangler d1 create los50-asistencia  -> el id que devuelve va acá
-D1_ASISTENCIA = ""
+# la asistencia de Entrenadores (base D1 los50-asistencia, creada el 22/10/2026 con npx wrangler d1 create los50-asistencia)
+D1_ASISTENCIA = "42bf4f5c-49b1-402d-9c97-b0b6076a1fae"
 
 SITIOS_WEB = {
     "jugadores": {
@@ -60,11 +59,8 @@ id = "{KV_REVISION}"
         "carpetas": ["fonts", "img", "vendor"],
         "functions": ["videos/[[path]].js", "api/asistencia.js"],
         "otros": [],
-        # "Volver a la web del club" va a la web de Jugadores; al cerrar sesión vuelve a la clave
-        "links": [
-            ("index.html", 'href="index.html"', f'href="{JUGADORES}/"'),
-            ("entrenadores.js", 'location.href = "index.html"', 'location.href = "./"'),
-        ],
+        # no tiene links a la web de Jugadores: las dos están separadas del todo
+        "links": [],
         "headers": "/*\n  X-Robots-Tag: noindex, nofollow\n",
         "toml": '''[[r2_buckets]]
 binding = "VIDEOS"
@@ -145,12 +141,14 @@ def armar(nombre, c):
     if c.get("headers"):
         (pub / "_headers").write_text(c["headers"], encoding="utf-8")
     (dest / "wrangler.toml").write_text(_toml(c["proyecto"], c["toml"]), encoding="utf-8")
-    # nada de la otra web
+    # nada de la otra web: ni sus páginas ni su dirección
     otra = "entrenadores" if nombre == "jugadores" else "jugadores"
+    url_otra = ENTRENADORES if nombre == "jugadores" else JUGADORES
     for f in pub.rglob("*"):
         if f.is_file() and f.suffix in (".html", ".js") and f.name not in ("data.js", "entrenadores.data.js"):
-            if f"{otra}.html" in f.read_text(encoding="utf-8", errors="ignore"):
-                raise SystemExit(f"armar_sitios: {nombre}/{f.relative_to(pub)} todavía apunta a {otra}.html")
+            s = f.read_text(encoding="utf-8", errors="ignore")
+            if f"{otra}.html" in s or url_otra in s:
+                raise SystemExit(f"armar_sitios: {nombre}/{f.relative_to(pub)} todavía apunta a la web de {otra}")
     if nombre == "entrenadores" and not D1_ASISTENCIA:
         print("  ojo: falta D1_ASISTENCIA; publicada así, la asistencia no anda")
     peso = sum(f.stat().st_size for f in dest.rglob("*") if f.is_file())
