@@ -23,6 +23,9 @@ JUGADORES = "https://los50-jugadores.pages.dev"
 ENTRENADORES = "https://los50-entrenadores.pages.dev"
 FECHA = "2026-10-20"  # compatibility_date de Cloudflare
 KV_REVISION = "05ed25b09f7a43588efaa5302425f758"  # donde se guardan las respuestas de Revisar datos (no es secreto)
+# la asistencia de Entrenadores (base D1 los50-asistencia). Se crea al publicar Entrenadores:
+# npx wrangler d1 create los50-asistencia  -> el id que devuelve va acá
+D1_ASISTENCIA = ""
 
 SITIOS_WEB = {
     "jugadores": {
@@ -55,7 +58,7 @@ id = "{KV_REVISION}"
         "paginas": {"index.html": "entrenadores.html"},
         "archivos": ["entrenadores.js", "entrenadores.css", "entrenadores.data.js", "entrenadores.fotos.json", "styles.css"],
         "carpetas": ["fonts", "img", "vendor"],
-        "functions": ["videos/[[path]].js"],
+        "functions": ["videos/[[path]].js", "api/asistencia.js"],
         "otros": [],
         # "Volver a la web del club" va a la web de Jugadores; al cerrar sesión vuelve a la clave
         "links": [
@@ -66,7 +69,12 @@ id = "{KV_REVISION}"
         "toml": '''[[r2_buckets]]
 binding = "VIDEOS"
 bucket_name = "los50-videos"
-''',
+''' + (f'''
+[[d1_databases]]
+binding = "ASISTENCIA"
+database_name = "los50-asistencia"
+database_id = "{D1_ASISTENCIA}"
+''' if D1_ASISTENCIA else ""),
     },
 }
 
@@ -143,6 +151,8 @@ def armar(nombre, c):
         if f.is_file() and f.suffix in (".html", ".js") and f.name not in ("data.js", "entrenadores.data.js"):
             if f"{otra}.html" in f.read_text(encoding="utf-8", errors="ignore"):
                 raise SystemExit(f"armar_sitios: {nombre}/{f.relative_to(pub)} todavía apunta a {otra}.html")
+    if nombre == "entrenadores" and not D1_ASISTENCIA:
+        print("  ojo: falta D1_ASISTENCIA; publicada así, la asistencia no anda")
     peso = sum(f.stat().st_size for f in dest.rglob("*") if f.is_file())
     print(f"{nombre}: {sum(1 for f in pub.rglob('*') if f.is_file())} archivos, {peso / 1e6:.1f} MB")
 

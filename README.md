@@ -9,8 +9,9 @@ Estadísticas del Club Los 50 de Tandil sacadas de las planillas oficiales de la
   La actualización automática las vuelve a publicar cada vez que cambian los datos. La dirección de antes,
   clublos50.pages.dev, va a mandar cada link a la web nueva que le toca (los links compartidos siguen andando).
   **Por ahora (22/10/2026) solo está publicada Jugadores.** Entrenadores sigue como estaba en clublos50.pages.dev hasta
-  que el club dé el OK; entonces: sumar `entrenadores` a la lista del paso "Publicar" del workflow, publicarla y publicar
-  `sitios/viejo` (el reenvío).
+  que el club dé el OK; entonces: crear la base de la asistencia (`npx wrangler d1 create los50-asistencia`) y poner su
+  id en `D1_ASISTENCIA` de `armar_sitios.py`, sumar `entrenadores` a la lista del paso "Publicar" del workflow, publicarla
+  y publicar `sitios/viejo` (el reenvío).
 - **Actualización automática**: GitHub la corre los lunes, martes y miércoles a las 9:00 (`.github/workflows/actualizar.yml`).
   Baja solo lo nuevo, regenera todo y deja un informe con los partidos de la semana. Si falta alguna planilla o hay algo
   para revisar con el club, abre un aviso en la pestaña *Issues* (llega por mail).
