@@ -1540,7 +1540,7 @@
       : s.lista ? `<p class="hoy__estado">${IC.tilde}<span>Vinieron <b>${vinieron(s.lista, activos)} de ${activos.length}</b> · ${tomoTxt(s.lista)}</span></p>`
       : s.estado === "movido" ? `<p class="hoy__nota">Cambió la hora (antes ${esc(s.antes)})</p>` : "";
     const principal = s.estado === "cancelado" ? `<button type="button" class="btn-sec btn-sec--ancho" data-deshacer="${s.fecha}">Deshacer: vuelve a haber entrenamiento</button>`
-      : s.fecha <= hoy ? `<button type="button" class="btn btn--ok btn--grande" data-ir-lista="${s.fecha}">${IC.lista}${b ? "Seguir la lista" : s.lista ? "Corregir la lista" : "Tomar lista"}</button>` : "";
+      : s.fecha <= hoy ? `<button type="button" class="btn btn--ok btn--grande" data-ir-lista="${s.fecha}">${IC.lista}${b ? "Seguir la lista" : s.lista ? "Sumar a alguien que llegó tarde" : "Tomar lista"}</button>` : "";
     const otras = s.estado === "cancelado" ? "" : `<div class="acc-2">
         <button type="button" class="btn-sec" data-form="suspender:${s.fecha}">${s.estado === "extra" ? "Borrarlo" : "Suspender"}</button>
         <button type="button" class="btn-sec" data-form="hora:${s.fecha}">Cambiar la hora</button></div>`;
@@ -1695,7 +1695,7 @@
       cuerpo = `
         ${!nombre || S.cambiarNombre ? `<label class="asis-form__campo lista-quien">¿Quién toma lista?<input id="por" class="asis-input" maxlength="60" value="${esc(nombre)}" placeholder="Tu nombre" autocomplete="name"></label>` : ""}
         ${s.lista ? `<p class="lista-info">Ya hay una lista guardada: vinieron ${vinieron(s.lista, activos)} de ${total}, ${tomoTxt(s.lista)}. Lo que cambies se suma a esa lista.</p>` : ""}
-        <div class="lista-cab"><span>Tocá a los que vinieron</span>${n ? "" : `<button type="button" class="btn-sec btn-sec--chico" data-todos>Marcar a todos</button>`}</div>
+        <div class="lista-cab"><span>${s.lista ? "Tocá a los que llegaron tarde" : "Tocá a los que vinieron"}</span>${n ? "" : `<button type="button" class="btn-sec btn-sec--chico" data-todos>Marcar a todos</button>`}</div>
         ${total > 30 ? `<label class="buscar-g asis-buscar"><span class="sr">Buscar un chico</span>${IC.buscar}<input type="search" id="buscar-chico" placeholder="Buscar por apellido" autocomplete="off" enterkeyhint="search"></label>` : ""}
         <ul class="lista-g" id="lista-chicos">${activos.map((c) => `<li data-q="${esc(norm(c.nombre))}"><button type="button" class="lista-it" data-marca="${esc(c.id)}" aria-pressed="${S.marcas.has(c.id)}">
           <span class="lista-it__ic">${IC.tilde}</span><span class="lista-it__nom">${nombreHTML(c.nombre)}</span></button></li>`).join("")}</ul>
@@ -1764,7 +1764,7 @@
       <h3 class="hoy__dia">${s && s.hora ? `A las ${esc(s.hora)}` : esc(mayus(cuandoP({ fecha: hoy })))}</h3>
       ${b ? `<p class="hoy__estado hoy__estado--ojo">${IC.alerta}<span>Tenés la lista sin guardar (${b.marcas.length} marcados)</span></p>`
         : s && s.lista ? `<p class="hoy__estado">${IC.tilde}<span>Vinieron <b>${vinieron(s.lista, activos)} de ${activos.length}</b> · ${tomoTxt(s.lista)}</span></p>` : ""}
-      <button type="button" class="btn btn--ok btn--grande" data-ir-hoy="${esc(cat)}|${hoy}">${IC.lista}${b ? "Seguir la lista" : s && s.lista ? "Corregir la lista" : "Tomar lista"}</button>
+      <button type="button" class="btn btn--ok btn--grande" data-ir-hoy="${esc(cat)}|${hoy}">${IC.lista}${b ? "Seguir la lista" : s && s.lista ? "Sumar a alguien que llegó tarde" : "Tomar lista"}</button>
       <button type="button" class="link hoy__otra" data-ir="asistencia">Otra categoría</button></div></section>`;
   }
 
