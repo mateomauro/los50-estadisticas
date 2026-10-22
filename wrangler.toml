@@ -13,3 +13,10 @@ id = "local"
 [[r2_buckets]]
 binding = "VIDEOS"
 bucket_name = "los50-videos"
+
+# la asistencia de Entrenadores (functions/api/asistencia.js). En la compu es una base local; la de verdad se crea al publicar
+# (npx wrangler d1 create los50-asistencia) y su id va en el wrangler.toml de la web de Entrenadores. Las tablas se crean solas.
+[[d1_databases]]
+binding = "ASISTENCIA"
+database_name = "los50-asistencia"
+database_id = "local"
