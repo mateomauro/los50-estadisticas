@@ -646,7 +646,7 @@
     }
     // pie
     x.fillStyle = "rgba(255,255,255,0.14)"; x.fillRect(M, H - 130, W - 2 * M, 2);
-    texto(x, "", 30, 500, BASE, "#aab3c2"); x.fillText(S.fuente === "oficial" ? "Estadísticas oficiales · Base de datos UAR" : `Datos: ${F().sub} (no oficiales)`, M, H - 76);
+    texto(x, "", 30, 500, BASE, "#aab3c2"); x.fillText(S.fuente === "oficial" ? "La historia de cada jugador · Datos oficiales UAR" : `Datos: ${F().sub} (no oficiales)`, M, H - 76);
     x.textAlign = "right"; texto(x, "", 30, 600, BASE, "#8fb4f5"); x.fillText(location.host || "", W - M, H - 76); x.textAlign = "left";
     return new Promise((ok) => c.toBlob(ok, "image/png"));
   }
@@ -715,7 +715,6 @@
     $("#resultados").hidden = v !== "resultados";
     $("#balance").hidden = v !== "resultados";
     $("#records").hidden = v !== "records";
-    if (v !== "resultados") $("#tries-eq").hidden = true;
     document.body.classList.remove("cargando");
     renderAgenda();
     ({ jugadores: renderLista, resultados: renderResultados, records: renderRecords })[v]();
@@ -784,12 +783,18 @@
     const enTemp = (x) => `Temporada ${x.anio}`;
     let h = "";
     if (temp === "todas") {
-      const todos = agregar(cat, "todas"), cien = todos.filter((j) => j.pj >= CIEN).sort((a, b) => b.pj - a.pj);
-      const lista = cien.length ? cien : [...todos].sort((a, b) => b.pj - a.pj).slice(0, 5);
-      h += `<section class="rec rec--cien"><h2 class="rec__tit">Club de los ${CIEN}</h2>
-        ${cien.length ? "" : `<p class="rec__intro">Nadie llegó a ${CIEN} todavía. Los más cerca:</p>`}
-        <ol class="cien">${lista.map((j) => `<li><button type="button" class="cien__j" data-j="${esc(j.pid)}"><strong class="num">${j.pj}</strong>
-          <span>${nombreHTML(j.nombre)}</span></button></li>`).join("")}</ol></section>`;
+      // un club por cada centena (100, 200, 300...): el más alto arriba, y cada uno figura en el más alto al que llegó
+      const todos = [...agregar(cat, "todas")].sort((a, b) => b.pj - a.pj);  // (copia: agregar() está memorizado)
+      const clubes = [];
+      for (let k = Math.floor((todos[0]?.pj || 0) / CIEN); k >= 1; k--) {
+        const js = todos.filter((j) => Math.floor(j.pj / CIEN) === k);
+        if (js.length) clubes.push([k * CIEN, js]);
+      }
+      const lista = (js) => `<ol class="cien">${js.map((j) => `<li><button type="button" class="cien__j" data-j="${esc(j.pid)}"><strong class="num">${j.pj}</strong>
+          <span>${nombreHTML(j.nombre)}</span></button></li>`).join("")}</ol>`;
+      h += `<section class="rec rec--cien">${clubes.length
+        ? clubes.map(([n, js]) => `<div class="cien__club"><h2 class="rec__tit">${ICONO_MEDALLA}Club de los ${n}</h2>${lista(js)}</div>`).join("")
+        : `<h2 class="rec__tit">Club de los ${CIEN}</h2><p class="rec__intro">Nadie llegó a ${CIEN} todavía. Los más cerca:</p>${lista(todos.slice(0, 5))}`}</section>`;
     }
     h += `<h2 class="rec__grupo">En un partido</h2><div class="rec__grid">
         ${bloqueRec("Más tries", R.triesPartido, enPartido, "tries")}${bloqueRec("Más puntos", R.puntosPartido, enPartido, "puntos")}</div>
@@ -840,7 +845,6 @@
     $("#limpiar").hidden = !toks.length;
     if (!ps.length) $("#vacio-txt").textContent = toks.length ? `No hay partidos contra “${S.q}” en ${CATS[S.cat]}.`
       : `No hay resultados de ${CATS[S.cat]} en esta fuente${S.temp === "todas" ? "" : " para " + S.temp}.`;
-    renderTriesEquipo(ps);
     const letra = (p) => (p[6] > p[7] ? "G" : p[6] === p[7] ? "E" : "P");
     // con todas las temporadas, un título por año con cómo le fue
     const porAnio = new Map();
@@ -859,35 +863,8 @@
         <span class="res__marcador res--${letra(p)}"><b class="num">${p[6]}–${p[7]}</b><i>${letra(p)}</i></span>
       </li>`).join("");
   }
-  // ---------- cómo hace los tries el equipo: por puesto y por momento del partido ----------
-  // (la planilla no dice de qué jugada vino cada try; sí la camiseta del que lo hizo y el minuto)
-  const LINEAS = [["Primera línea", [1, 2, 3]], ["Segunda línea", [4, 5]], ["Tercera línea", [6, 7, 8]], ["Medios", [9, 10]],
-    ["Centros", [12, 13]], ["Wings y fullback", [11, 14, 15]]];
   // algunas planillas cuentan el 2º tiempo desde 0 y otras desde 40
   const minutoDelPartido = (e) => (e.tiempo === "2T" && e.minuto != null && e.minuto <= 40 ? 40 + e.minuto : e.minuto);
-  function renderTriesEquipo(ps) {
-    const el = $("#tries-eq");
-    const mids = new Set(ps.map((p) => p[11]).filter(Boolean));
-    const t = EVENTOS.filter((e) => e.f === "o" && (e.tipo === 0 || e.tipo === 1) && e.cat === S.cat && mids.has(e.mid));
-    if (!t.length) { el.hidden = true; return; }
-    const fw = t.filter((e) => e.puesto && e.puesto <= 8).length, bk = t.filter((e) => e.puesto >= 9).length;
-    const pc = (n) => `${Math.round((n / t.length) * 100)}%`;
-    const lineas = LINEAS.map(([l, nums]) => [l, t.filter((e) => nums.includes(e.puesto)).length]);
-    const max = Math.max(1, ...lineas.map((x) => x[1]));
-    const t1 = t.filter((e) => e.tiempo === "1T").length, t2 = t.filter((e) => e.tiempo === "2T").length;
-    const ult = t.filter((e) => e.tiempo === "2T" && minutoDelPartido(e) >= 70).length;
-    const banco = t.filter((e) => e.banco).length, penal = t.filter((e) => e.tipo === 1).length;
-    if (S.teAbierto == null) S.teAbierto = ESCRITORIO.matches;  // en la compu se ve abierto; en el celular, plegado
-    el.open = S.teAbierto;
-    el.hidden = false;
-    el.innerHTML = `<summary><span>Cómo hace los tries</span><b class="num">${t.length}</b></summary>
-      <div class="te__fb" aria-hidden="true"><i class="te__f" style="flex:${fw}"></i><i class="te__b" style="flex:${bk}"></i></div>
-      <p class="te__ley"><span><i class="te__f"></i>Forwards <b>${fw}</b> (${pc(fw)})</span><span><i class="te__b"></i>Backs <b>${bk}</b> (${pc(bk)})</span></p>
-      <ul class="te__lineas">${lineas.map(([l, n]) => `<li><span>${l}</span><span class="te__barra"><i style="width:${(n / max) * 100}%"></i></span><b class="num">${n}</b></li>`).join("")}</ul>
-      <p class="te__dato">1er tiempo <b>${t1}</b> · 2do tiempo <b>${t2}</b> · últimos 10' <b>${ult}</b></p>
-      <p class="te__dato">Desde el banco <b>${banco}</b>${penal ? ` · try penal <b>${penal}</b>` : ""}</p>`;
-  }
-  $("#tries-eq").addEventListener("toggle", (e) => { S.teAbierto = e.target.open; });
 
   function cambiarFuente(k) {
     S.fuente = k;
@@ -1051,8 +1028,8 @@
       ["¿De dónde salen los datos?", `De las planillas oficiales que se cargan después de cada partido en la base de datos de la UAR (${of}).` +
         (di ? ` Los de ${di} salen de notas de El Eco de Tandil: no son oficiales y solo están los partidos que se publicaron.` : "") +
         " Se muestran sin documentos ni datos personales, y de los rivales no se muestran nombres."],
-      ["¿Qué son los récords?", `Los mejores números con datos oficiales, desde ${ANIO_INICIO}. El Club de los ${CIEN} son los que jugaron ${CIEN} partidos o más ` +
-        `en una categoría. "Primer partido registrado" es el primero desde ${ANIO_INICIO}: puede haber jugado antes.`],
+      ["¿Qué son los récords?", `Los mejores números con datos oficiales, desde ${ANIO_INICIO}. El Club de los ${CIEN} (y el de los 200, 300…) son los que llegaron a esa cantidad de partidos ` +
+        `en una categoría; en su ficha queda el partido en que lo cumplieron. "Primer partido registrado" es el primero desde ${ANIO_INICIO}: puede haber jugado antes.`],
       ["¿Qué categorías están?", `${enumerar(CATS)}. Las juveniles no se muestran porque son menores de edad.`],
       ["¿Cuánto vale cada cosa?", "Try 5 puntos, try penal 7, conversión 2, penal 3 y drop 3. Los puntos de cada jugador son los que figuran en la planilla."],
     ];

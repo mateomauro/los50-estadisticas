@@ -532,7 +532,10 @@ html:has(dialog[open]) { overflow: hidden; }
 .rec__v { font: 700 1.5625rem/1 var(--cond); }
 .rec__vacio { margin: 4px 2px 10px; color: var(--suave); font-size: 0.875rem; }
 .rec--cien { background: var(--negro); border-color: var(--negro); color: #fff; padding: 14px 14px 12px; }
-.rec--cien .rec__tit { color: #fff; font-size: var(--t-titulo); }
+.rec--cien .rec__tit { display: flex; align-items: center; justify-content: flex-start; gap: 8px; color: #fff; font-size: var(--t-titulo); }
+.rec--cien .rec__tit svg { width: 24px; height: 24px; flex: none; fill: none; stroke: var(--amarilla); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.cien li:only-child { grid-column: 1 / -1; } /* un solo jugador en el club: ocupa todo el ancho, sin hueco al lado */
+.cien__club + .cien__club { margin-top: 14px; padding-top: 12px; border-top: 1px solid rgb(255 255 255 / 12%); }
 .rec--cien .rec__intro { margin: 0 2px 10px; font-size: 0.875rem; color: var(--gris-1); }
 .cien { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 .cien__j { width: 100%; min-height: 48px; display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid rgb(255 255 255 / 12%);
@@ -728,27 +731,6 @@ html:has(dialog[open]) { overflow: hidden; }
   .vista-resultados .resultados { max-width: none; }
 }
 
-/* ---------- Resultados: cómo hace los tries el equipo ---------- */
-.te { margin: 0 0 12px; padding: 0 14px; background: var(--sup); border: 1px solid var(--borde); border-radius: var(--radio); }
-.te > summary { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 48px; cursor: pointer; list-style: none;
-  font: 700 var(--t-seccion)/1 var(--cond); text-transform: uppercase; letter-spacing: .02em; }
-.te > summary::-webkit-details-marker { display: none; }
-.te > summary::after { content: ""; width: 8px; height: 8px; margin-left: 6px; border: solid var(--suave); border-width: 0 2px 2px 0; transform: translateY(-2px) rotate(45deg); transition: transform var(--t); }
-.te[open] > summary::after { transform: translateY(2px) rotate(-135deg); }
-.te > summary b { margin-left: auto; color: var(--azul-900); }
-.te[open] { padding-bottom: 12px; }
-.te__fb { display: flex; height: 12px; border-radius: 6px; overflow: hidden; gap: 2px; }
-.te__f { background: var(--azul-900); }
-.te__b { background: var(--azul); }
-.te__ley { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 8px 0 10px; font-size: var(--t-dato); color: var(--suave); }
-.te__ley i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
-.te__ley b, .te__dato b { color: var(--texto); }
-.te__lineas { list-style: none; margin: 0 0 10px; padding: 0; display: grid; gap: 6px; }
-.te__lineas li { display: grid; grid-template-columns: 9.5em minmax(0, 1fr) 2.5em; align-items: center; gap: 8px; font-size: var(--t-dato); }
-.te__barra { height: 10px; border-radius: 5px; background: var(--fondo); overflow: hidden; }
-.te__barra i { display: block; height: 100%; background: var(--azul); border-radius: 5px; }
-.te__lineas b { text-align: right; }
-.te__dato { margin: 4px 0 0; font-size: var(--t-dato); color: var(--suave); }
 
 /* ---------- ficha: cuándo y cómo hizo sus tries ---------- */
 /* un renglón por pregunta y los números en tres columnas parejas, alineadas de renglón a renglón */
