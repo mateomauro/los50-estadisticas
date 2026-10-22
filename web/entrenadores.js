@@ -154,6 +154,7 @@
     S.puesto = pu;
     S.practica = pr ? pr.id : null;
     S.pgrupo = hayPr ? P_GRUPOS.find((x) => slug(x) === p.get("grupo")) || null : null;
+    S.fcat = [...new Set(D.prox.map((x) => x.cat))].find((x) => slug(x) === p.get("categoria")) || null;
     S.ver = c ? "cat" : g ? "guia" : ej ? "ejercicio" : pu ? "puesto" : pr ? "practica" : vistas.includes(p.get("ver")) ? p.get("ver") : "inicio";
     S.temp = /^\d{4}$/.test(p.get("temp") || "") ? +p.get("temp") : null;
     S.tab = p.get("tab");
@@ -168,6 +169,7 @@
     else if (S.ver === "puesto") p.set("puesto", S.puesto);
     else if (S.ver === "practica") p.set("practica", S.practica);
     else if (S.ver === "practicas") { p.set("ver", S.ver); if (S.pgrupo) p.set("grupo", slug(S.pgrupo)); }
+    else if (S.ver === "proximos") { p.set("ver", S.ver); if (S.fcat) p.set("categoria", slug(S.fcat)); }
     else if (S.ver === "ejercicios") { p.set("ver", S.ver); if (S.tab) p.set("tab", S.tab); if (S.rol) p.set("rol", S.rol); if (S.para) p.set("para", S.para); }
     else if (S.ver !== "inicio") { p.set("ver", S.ver); if (S.tab) p.set("tab", S.tab); }
     const qs = p.toString();
@@ -668,13 +670,19 @@
     return dias.map((f) => `<h3 class="grupo">${esc(mayus(cuandoP({ fecha: f })))}</h3>
       <ol class="resultados">${lista.filter((x) => x.fecha === f).map((x) => `<li class="res">
         <span class="res__fecha num">${esc(x.hora || "–")}</span>
-        <span class="res__cuerpo"><span class="chip chip--cat">${esc(x.cat)}</span><span class="res__rival">${vsHTML(x)}</span><span class="res__torneo">De ${condTxt(x.cond).toLowerCase()}${x.inst ? ` · ${esc(x.inst)}` : ""}</span></span></li>`).join("")}</ol>`).join("");
+        <span class="res__cuerpo">${S.fcat ? "" : `<span class="chip chip--cat">${esc(x.cat)}</span>`}<span class="res__rival">${vsHTML(x)}</span><span class="res__torneo">De ${condTxt(x.cond).toLowerCase()}${x.inst ? ` · ${esc(x.inst)}` : ""}</span></span></li>`).join("")}</ol>`).join("");
   }
 
+  // las categorías que tienen partidos por delante, en el orden de siempre (las que no están en la lista, al final)
+  const proxCats = () => [...new Set(proxTodos().map((x) => x.cat))].sort((a, b) => ((D.cats.indexOf(a) + 1) || 99) - ((D.cats.indexOf(b) + 1) || 99));
   function vProximos() {
-    const lista = proxTodos();
+    const cats = proxCats();
+    if (S.fcat && !cats.includes(S.fcat)) S.fcat = null;
+    const lista = proxTodos().filter((x) => !S.fcat || x.cat === S.fcat);
     $("#vista").innerHTML = `
       <div class="cab">${volver()}${cabTit("Próximos partidos", "proximos")}</div>
+      ${cats.length > 1 ? `<div class="chips-g" role="group" aria-label="Categoría">${[["", "Todas"], ...cats.map((c) => [c, c])].map(([v, l]) =>
+        `<button type="button" data-fcat="${esc(v)}" aria-pressed="${(S.fcat || "") === v}">${esc(l)}</button>`).join("")}</div>` : ""}
       <section class="sec sec--pegada">
         ${lista.length ? proxHTML(lista) : `<p class="vacio-g">Todavía no hay partidos cargados en la UAR para las próximas fechas.</p>`}
       </section>`;
@@ -1356,14 +1364,14 @@
   // ---------- eventos ----------
   document.addEventListener("click", (e) => {
     if (!S) return;
-    const t = e.target.closest("[data-play],[data-reclave],[data-ayuda],[data-cerrar-ayuda],[data-ir],[data-ir-cat],[data-ir-guia],[data-ir-ej],[data-ir-ej-para],[data-ir-ej-tab],[data-ir-line],[data-ir-puesto],[data-ir-practica],[data-ir-practicas],[data-pgrupo],[data-volver-pr],[data-compartir-pr],[data-volver-ej],[data-rol],[data-quitar-para],[data-tab],[data-anio],[data-ver],[data-ordj]");
+    const t = e.target.closest("[data-play],[data-reclave],[data-ayuda],[data-cerrar-ayuda],[data-ir],[data-ir-cat],[data-ir-guia],[data-ir-ej],[data-ir-ej-para],[data-ir-ej-tab],[data-ir-line],[data-ir-puesto],[data-ir-practica],[data-ir-practicas],[data-pgrupo],[data-fcat],[data-volver-pr],[data-compartir-pr],[data-volver-ej],[data-rol],[data-quitar-para],[data-tab],[data-anio],[data-ver],[data-ordj]");
     if (!t || t.disabled) return;
     const ds = t.dataset;
     if (ds.play) reproducir(ds.play);
     else if ("reclave" in ds) { olvidar(); location.reload(); } // vuelve a la misma pantalla después de la clave
     else if (ds.ayuda) abrirAyuda(ds.ayuda, t);
     else if ("cerrarAyuda" in ds) cerrarAyuda();
-    else if (ds.ir) irA({ ver: ds.ir, cat: null, temp: null, gcat: null, tab: null, rol: null, para: null, qe: "", pgrupo: null, qp: "" });
+    else if (ds.ir) irA({ ver: ds.ir, cat: null, temp: null, gcat: null, tab: null, rol: null, para: null, qe: "", pgrupo: null, qp: "", fcat: null });
     else if (ds.irEj) irA({ ver: "ejercicio", ej: ds.irEj });
     else if (ds.irEjPara) irA({ ver: "ejercicios", tab: "juegos", rol: null, para: ds.irEjPara, gcat: null, qe: "" });
     else if (ds.irEjTab) irA({ ver: "ejercicios", tab: ds.irEjTab, rol: null, para: null, gcat: null, qe: "" });
@@ -1372,6 +1380,7 @@
     else if (ds.irPractica) irA({ ver: "practica", practica: ds.irPractica });
     else if (ds.irPracticas) irA({ ver: "practicas", pgrupo: ds.irPracticas, qp: "", cat: null, gcat: null, temp: null });
     else if ("pgrupo" in ds) irA({ pgrupo: ds.pgrupo || null }, false);
+    else if ("fcat" in ds) irA({ fcat: ds.fcat || null }, false);
     else if ("volverPr" in ds) irA({ ver: "practicas", practica: null }); // vuelve a la lista con el mismo filtro
     else if ("compartirPr" in ds) compartirPractica();
     else if ("volverEj" in ds) irA({ ver: "ejercicios", ej: null }); // vuelve a la lista con los mismos filtros
