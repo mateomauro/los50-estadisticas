@@ -144,7 +144,7 @@
     const c = D.cats.find((x) => slug(x) === p.get("cat"));
     const g = D.guia ? gCats().find((x) => slug(x) === p.get("guia")) : null;
     const hayPuestos = !!(D.guia && D.guia.puestos), hayPr = !!(D.guia && D.guia.practicas && D.guia.practicas.length);
-    const vistas = ["club", "consejos"].concat(D.guia ? ["guia", "cantos", "scrum"] : [], D.guia && D.guia.ejercicios ? ["ejercicios"] : [], hayPuestos ? ["puestos"] : [], hayPr ? ["practicas"] : []);
+    const vistas = ["club", "consejos", "proximos"].concat(D.guia ? ["guia", "cantos", "scrum"] : [], D.guia && D.guia.ejercicios ? ["ejercicios"] : [], hayPuestos ? ["puestos"] : [], hayPr ? ["practicas"] : []);
     const ej = D.guia && D.guia.ejercicios ? D.guia.ejercicios.find((x) => x.id === p.get("ejercicio")) : null;
     const pu = hayPuestos && puestoDe(+p.get("puesto")) ? +p.get("puesto") : null;
     const pr = hayPr ? D.guia.practicas.find((x) => x.id === p.get("practica")) : null;
@@ -315,7 +315,7 @@
     $("#app").classList.toggle("app--ancha", S.ver === "inicio"); // el inicio usa dos columnas en la compu (y el pie se alinea con eso)
     GRAF.pend = [];
     soltarVideos();
-    ({ inicio: vInicio, cat: vCategoria, club: vClub, consejos: vConsejos, guia: vGuia, cantos: vCantos, scrum: vScrum, ejercicios: vEjercicios, ejercicio: vEjercicio, puestos: vPuestos, puesto: vPuesto, practicas: vPracticas, practica: vPractica })[S.ver]();
+    ({ inicio: vInicio, cat: vCategoria, club: vClub, consejos: vConsejos, guia: vGuia, cantos: vCantos, scrum: vScrum, ejercicios: vEjercicios, ejercicio: vEjercicio, puestos: vPuestos, puesto: vPuesto, practicas: vPracticas, practica: vPractica, proximos: vProximos })[S.ver]();
     dibujarGraficos();
     ponerFotos();
   }
@@ -447,10 +447,6 @@
           <ul class="filas-cat">${D.guia.infantiles.slice().reverse().map(filaInf).join("")}</ul></div>` : ""}
       </section>
       <div class="inicio__lado">
-        ${proxTodos().length ? `<section class="sec">
-          ${tit("Próximos partidos", "proximos")}
-          ${proxHTML(proxTodos())}
-        </section>` : ""}
         ${D.guia ? `<section class="sec">
           ${tit("Guía del club")}
           <ul class="menu">
@@ -469,6 +465,7 @@
         <section class="sec">
           ${tit("Todo el club")}
           <ul class="menu">
+            ${proxTodos().length ? opcion("proximos", IC.calendario, "Próximos partidos", `El próximo es el ${esc(cuandoP(proxTodos()[0]).replace(/ de \S+$/, ""))}`) : ""}
             ${opcion("club", IC.gente, "¿Los chicos siguen?", "Cuántos siguen y llegan a Primera")}
             ${opcion("consejos", IC.idea, "Consejos", "Qué trabajar y qué empezar a medir")}
           </ul>
@@ -670,6 +667,15 @@
         <span class="res__fecha num">${esc(x.hora || "–")}</span>
         <span class="res__cuerpo"><span class="chip chip--cat">${esc(x.cat)}</span><span class="res__rival">${esc(x.rival)}</span>${x.inst ? `<span class="res__torneo">${esc(x.inst)}</span>` : ""}</span>
         <span class="cond cond--${x.cond === "L" ? "l" : "v"}">${condTxt(x.cond)}</span></li>`).join("")}</ol>`).join("");
+  }
+
+  function vProximos() {
+    const lista = proxTodos();
+    $("#vista").innerHTML = `
+      <div class="cab">${volver()}${cabTit("Próximos partidos", "proximos")}</div>
+      <section class="sec sec--pegada">
+        ${lista.length ? proxHTML(lista) : `<p class="vacio-g">Todavía no hay partidos cargados en la UAR para las próximas fechas.</p>`}
+      </section>`;
   }
 
   const partidoHTML = (p, conCat) => `<li class="res">
