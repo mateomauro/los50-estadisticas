@@ -38,12 +38,21 @@ jobs:
           TZ: America/Argentina/Buenos_Aires
         run: python actualizar_semana.py
 
+      # copia de seguridad de la asistencia de Entrenadores, cifrada (respaldos/asistencia.cifrada; el historial de
+      # GitHub guarda la de cada semana). Si falla, la actualización sigue igual.
+      - name: Copia de seguridad de la asistencia
+        continue-on-error: true
+        env:
+          CLAVE_ENTRENADORES: ${{ secrets.CLAVE_ENTRENADORES }}
+          PYTHONIOENCODING: utf-8
+        run: python respaldo_asistencia.py
+
       - name: Guardar los cambios
         id: guardar
         run: |
           git config user.name "los50-actualizador"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A web datos_uar revision
+          git add -A web datos_uar revision respaldos
           git diff --cached --quiet -- web revision || echo "web=si" >> "$GITHUB_OUTPUT"
           if git diff --cached --quiet; then
             echo "Sin cambios"

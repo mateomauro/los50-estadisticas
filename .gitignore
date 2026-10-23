@@ -39,3 +39,7 @@ videos_hls/
 
 # las webs que se publican (las arma armar_sitios.py desde web/ y functions/)
 sitios/
+
+# la copia de la asistencia abierta (tiene nombres de chicos): solo en la compu; en GitHub va cifrada
+respaldos/asistencia.json
+respaldos/restaurar.sql
