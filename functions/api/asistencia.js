@@ -4,6 +4,7 @@
    De cada chico se guarda solo el número de jugador de la UAR; el nombre, solo de los que se suman a mano. Nada de documentos ni teléfonos.
    GET  /api/asistencia?cat=M16  -> { horarios, entrenamientos, listas, chicos } de esa categoría
    GET  /api/asistencia          -> { resumen: { M16: { listas, presentes, ultima } }, chicos: { M16: { alta, baja } } } para la lista de categorías
+   GET  /api/asistencia?respaldo=1  -> todas las tablas (la copia de seguridad de respaldo_asistencia.py)
    POST /api/asistencia  { cat, accion, ..., por? } -> guarda (accion: horarios | entrenamiento | lista | borrar_lista | chico)
      lista: { fecha, presentes, base? } — con "base" (lo que estaba guardado cuando empezó) se juntan las listas de dos entrenadores
    Todo pide la ficha de la clave de Entrenadores en el encabezado "x-ficha" (la misma de los videos: SHA-256 de la clave + ":los50-videos",
@@ -49,7 +50,13 @@ export async function onRequest({ request, env }) {
   const todo = (sql, ...v) => db.prepare(sql).bind(...v).all().then((r) => r.results);
 
   if (request.method === "GET") {
-    const cat = new URL(request.url).searchParams.get("cat");
+    const q = new URL(request.url).searchParams, cat = q.get("cat");
+    // la copia de seguridad (respaldo_asistencia.py, en la actualización automática): todas las tablas
+    if (q.get("respaldo")) {
+      const tablas = ["horarios", "entrenamientos", "listas", "chicos", "cambios"];
+      const filas = await Promise.all(tablas.map((x) => todo(`SELECT * FROM ${x}`)));
+      return json({ fecha: new Date().toISOString(), ...Object.fromEntries(tablas.map((x, i) => [x, filas[i]])) });
+    }
     if (!cat) {
       const resumen = {}, chicos = {};
       for (const r of await todo("SELECT cat, COUNT(*) AS listas, SUM(json_array_length(presentes)) AS presentes, MAX(fecha) AS ultima FROM listas GROUP BY cat")) {
@@ -114,7 +121,8 @@ export async function onRequest({ request, env }) {
     if (!FECHA.test(b.fecha || "")) return mal();
     ops = [db.prepare("DELETE FROM listas WHERE cat = ? AND fecha = ?").bind(cat, b.fecha), anotar({ fecha: b.fecha })];
   } else if (b.accion === "chico") {
-    // alta: un chico nuevo (se le da un id "m…"); baja: un fichado o un sumado que ya no viene; activo: deshace la baja
+    // alta: un chico nuevo (se le da un id "m…"); baja: un fichado o un sumado que ya no viene; activo: deshace la baja;
+    // sigue: no vino nunca pero el entrenador dice que sigue en el equipo (vuelve a contar en el porcentaje)
     const { estado } = b;
     if (estado === "alta") {
       const nombre = texto(b.nombre, 80);
@@ -122,12 +130,12 @@ export async function onRequest({ request, env }) {
       const id = `m${crypto.randomUUID().replace(/-/g, "").slice(0, 10)}`;
       ops = [db.prepare("INSERT INTO chicos (cat, id, nombre, estado, ts) VALUES (?, ?, ?, 'alta', ?)").bind(cat, id, nombre, ts), anotar({ id, nombre })];
       resp = { ok: true, id };
-    } else if (estado === "baja" || estado === "activo") {
+    } else if (estado === "baja" || estado === "activo" || estado === "sigue") {
       const id = String(b.id || "");
       if (!ID.test(id)) return mal();
       ops = id.startsWith("m")
-        ? [db.prepare("UPDATE chicos SET estado = ?, ts = ? WHERE cat = ? AND id = ?").bind(estado === "baja" ? "baja" : "alta", ts, cat, id)]
-        : [estado === "baja" ? db.prepare("INSERT OR REPLACE INTO chicos (cat, id, nombre, estado, ts) VALUES (?, ?, NULL, 'baja', ?)").bind(cat, id, ts)
+        ? [db.prepare("UPDATE chicos SET estado = ? WHERE cat = ? AND id = ?").bind(estado === "activo" ? "alta" : estado, cat, id)]
+        : [estado !== "activo" ? db.prepare("INSERT OR REPLACE INTO chicos (cat, id, nombre, estado, ts) VALUES (?, ?, NULL, ?, ?)").bind(cat, id, estado, ts)
           : db.prepare("DELETE FROM chicos WHERE cat = ? AND id = ?").bind(cat, id)];
       ops.push(anotar({ id, estado }));
     } else return mal();
