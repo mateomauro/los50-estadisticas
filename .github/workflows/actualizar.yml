@@ -32,7 +32,10 @@ jobs:
         env:
           UAR_USER: ${{ secrets.UAR_USER }}
           UAR_PASS: ${{ secrets.UAR_PASS }}
-          CLAVE_ENTRENADORES: ${{ secrets.CLAVE_ENTRENADORES }}
+          CLAVE_COORDINADOR: ${{ secrets.CLAVE_COORDINADOR }}
+          CLAVE_ENTRENADOR: ${{ secrets.CLAVE_ENTRENADOR }}
+          CLAVE_PF: ${{ secrets.CLAVE_PF }}
+          CLAVE_COMISION: ${{ secrets.CLAVE_COMISION }}
           CLAVE_REVISION: ${{ secrets.CLAVE_REVISION }}
           PYTHONIOENCODING: utf-8
           TZ: America/Argentina/Buenos_Aires
@@ -43,7 +46,7 @@ jobs:
       - name: Copia de seguridad de la asistencia
         continue-on-error: true
         env:
-          CLAVE_ENTRENADORES: ${{ secrets.CLAVE_ENTRENADORES }}
+          CLAVE_COORDINADOR: ${{ secrets.CLAVE_COORDINADOR }}
           PYTHONIOENCODING: utf-8
         run: python respaldo_asistencia.py
 

@@ -1,4 +1,4 @@
-"""Copia de seguridad de la asistencia de Entrenadores (la base D1 de Cloudflare), cifrada con la clave de Entrenadores.
+"""Copia de seguridad de la asistencia de Entrenadores (la base D1 de Cloudflare), cifrada con la clave del coordinador.
 
 La actualización automática la corre cada vez (lunes, martes y miércoles): baja todo por la API de la web publicada y lo
 guarda cifrado en respaldos/asistencia.cifrada (tiene nombres de chicos: nunca se guarda sin cifrar en GitHub). Como el
@@ -35,14 +35,14 @@ VUELTAS = 310_000
 
 def clave():
     """De la variable de entorno (GitHub Actions la toma de los 'secrets') o, en la compu, del archivo .env (igual que exportar_entrenadores.py)"""
-    if os.environ.get("CLAVE_ENTRENADORES"):
-        return os.environ["CLAVE_ENTRENADORES"].strip()
+    if os.environ.get("CLAVE_COORDINADOR"):
+        return os.environ["CLAVE_COORDINADOR"].strip()
     env = HERE / ".env"
     if env.exists():
         for linea in env.read_text(encoding="utf-8").splitlines():
-            if linea.startswith("CLAVE_ENTRENADORES="):
+            if linea.startswith("CLAVE_COORDINADOR="):
                 return linea.split("=", 1)[1].strip()
-    sys.exit("Falta CLAVE_ENTRENADORES (variable de entorno o .env)")
+    sys.exit("Falta CLAVE_COORDINADOR (variable de entorno o .env)")
 
 
 def llave(sal):

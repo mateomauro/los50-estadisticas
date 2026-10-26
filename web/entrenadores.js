@@ -8,7 +8,6 @@
   const deB64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
   const aB64 = (buf) => btoa(String.fromCharCode(...new Uint8Array(buf)));
   const SOBRE = window.ENTRENADORES;
-  let LLAVE_ACTUAL = null; // la llave abierta, para las fotos (que van cifradas aparte)
   const LLAVE = "los50-ent-llave";
   const FICHA = "los50-ent-ficha"; // para los videos: Cloudflare la pide para entregar cada pedacito (functions/videos)
 
@@ -18,10 +17,15 @@
     return crypto.subtle.deriveKey({ name: "PBKDF2", salt: deB64(SOBRE.sal), iterations: SOBRE.vueltas, hash: "SHA-256" },
       base, { name: "AES-GCM", length: 256 }, true, ["decrypt"]);
   }
+  /** cada rol tiene su copia cifrada: la clave abre solo la de su rol (con las otras no coincide) */
   async function descifrar(llave) {
-    const plano = await crypto.subtle.decrypt({ name: "AES-GCM", iv: deB64(SOBRE.iv) }, llave, deB64(SOBRE.datos));
-    const txt = await new Response(new Blob([plano]).stream().pipeThrough(new DecompressionStream("gzip"))).text();
-    return JSON.parse(txt);
+    for (const r of SOBRE.roles) {
+      let plano;
+      try { plano = await crypto.subtle.decrypt({ name: "AES-GCM", iv: deB64(r.iv) }, llave, deB64(r.datos)); } catch (e) { continue; }
+      const txt = await new Response(new Blob([plano]).stream().pipeThrough(new DecompressionStream("gzip"))).text();
+      return JSON.parse(txt);
+    }
+    throw new Error("clave");
   }
   const guardada = () => { try { return localStorage.getItem(LLAVE) || sessionStorage.getItem(LLAVE); } catch (e) { return null; } };
   const hexDe = (buf) => [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
@@ -45,7 +49,6 @@
     try {
       const llave = await crypto.subtle.importKey("raw", deB64(raw), "AES-GCM", true, ["decrypt"]);
       const datos = await descifrar(llave);
-      LLAVE_ACTUAL = llave;
       try { ponerFicha(localStorage.getItem(FICHA) || sessionStorage.getItem(FICHA), !!localStorage.getItem(LLAVE)); } catch (e) { /* nada */ }
       iniciar(datos);
       return true;
@@ -65,7 +68,6 @@
       if (!SOBRE) throw new Error("sin datos");
       const llave = await derivar($("#clave").value.trim());
       const datos = await descifrar(llave);
-      LLAVE_ACTUAL = llave;
       guardar(aB64(await crypto.subtle.exportKey("raw", llave)), $("#recordar").checked, await fichaDe($("#clave").value.trim()));
       iniciar(datos);
     } catch (e2) {
@@ -119,6 +121,9 @@
     trofeo: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>',
   };
 
+  // quién es cada rol (la clave de cada uno abre solo su copia de los datos: exportar_entrenadores.py → vista)
+  const ROLES = { coordinador: "Coordinación", entrenador: "Entrenador", pf: "Preparador físico o manager", comision: "Dirigente" };
+
   function iniciar(datos) {
     const t = (k) => obj(datos[k]);
     D = {
@@ -126,12 +131,14 @@
       res: t("resumen"), torneos: t("torneos"), rivales: t("rivales"), ret: t("retencion"),
       camino: t("camino"), era: t("edad_relativa"), fis: t("fisico"), partidos: t("partidos"), jug: t("jugadores"), noSig: t("no_siguieron"),
       diag: datos.diag_web, expertos: datos.expertos, medir: datos.a_medir, fuentes: datos.fuentes, glosario: datos.glosario,
+      rol: datos.rol || "coordinador", cek: datos.cek || null,
       guia: datos.guia || null, pase: datos.pase || null, alertas: datos.alertas || null, tries: datos.tries || null, prox: datos.proximos || [], fichados: datos.fichados || null,
     };
     const anios = D.res.map((r) => r["Año"]);
     D.desde = Math.min(...anios); D.hasta = Math.max(...anios);
     $("#sub").textContent = `Planillas oficiales UAR · ${D.desde}–${D.hasta}`;
     $("#actualizado").textContent = D.act;
+    $("#rol-actual").textContent = ROLES[D.rol] ? `Entraste como: ${ROLES[D.rol]}` : "";
     $("#candado").hidden = true;
     $("#app").hidden = false;
     S = { ver: "inicio", cat: null, temp: null, gcat: null, tab: null, q: "", ordenJ: "pj", verJ: false, verP: false, verN: false, verR: false, rol: null, para: null, ej: null, puesto: null, practica: null, pgrupo: null, qp: "", qe: "", abiertos: new Set(),
@@ -155,7 +162,7 @@
     const c = D.cats.find((x) => slug(x) === p.get("cat"));
     const g = D.guia ? gCats().find((x) => slug(x) === p.get("guia")) : null;
     const hayPuestos = !!(D.guia && D.guia.puestos), hayPr = !!(D.guia && D.guia.practicas && D.guia.practicas.length);
-    const vistas = ["club", "consejos", "guiaclub", "alertas"].concat(D.pase ? ["pase"] : [], D.guia ? ["guia", "cantos", "scrum"] : [], D.guia && D.guia.ejercicios ? ["ejercicios"] : [], hayPuestos ? ["puestos"] : [], hayPr ? ["practicas"] : []);
+    const vistas = ["club", "consejos"].concat(D.guia ? ["guiaclub"] : [], D.alertas ? ["alertas"] : [], D.pase ? ["pase"] : [], D.guia ? ["guia", "cantos", "scrum"] : [], D.guia && D.guia.ejercicios ? ["ejercicios"] : [], hayPuestos ? ["puestos"] : [], hayPr ? ["practicas"] : []);
     const ej = D.guia && D.guia.ejercicios ? D.guia.ejercicios.find((x) => x.id === p.get("ejercicio")) : null;
     const pu = hayPuestos && puestoDe(+p.get("puesto")) ? +p.get("puesto") : null;
     const pr = hayPr ? D.guia.practicas.find((x) => x.id === p.get("practica")) : null;
@@ -597,13 +604,13 @@
           <ul class="pase-g">${P.origen.slice().reverse().map(filaO).join("")}</ul>
         </section>
       </div>
-      <section class="sec">${tit("Quiénes son")}
+      ${!nm ? "" : `<section class="sec">${tit("Quiénes son")}
         ${desple("pase-act", `M19 de ${nm.actual.anio}`, `<h3 class="grupo">Ya jugaron en plantel superior (${nm.actual.ya.length})</h3>${lista(nm.actual.ya)}
           <h3 class="grupo">Todavía no (${nm.actual.todavia.length})</h3>${lista(nm.actual.todavia)}`, `${nm.actual.ya.length} de ${nm.actual.ya.length + nm.actual.todavia.length}`)}
         ${nm.anterior ? desple("pase-ant", `M19 de ${nm.anterior.anio}`, `<h3 class="grupo">Jugaron en plantel superior (${nm.anterior.subieron.length})</h3>${lista(nm.anterior.subieron)}
           <h3 class="grupo">Siguen en juveniles (${nm.anterior.juveniles.length})</h3>${lista(nm.anterior.juveniles)}
           <h3 class="grupo">No volvieron a jugar este año (${nm.anterior.no.length})</h3>${lista(nm.anterior.no)}`, `${nm.anterior.subieron.length} de ${nm.anterior.subieron.length + nm.anterior.juveniles.length + nm.anterior.no.length}`) : ""}
-      </section>`;
+      </section>`}`;
   }
 
   // ---------- para mirar: sanciones, conmociones, rojas y amarillas (se calcula con el día de hoy, no con el día en que se armó el archivo) ----------
@@ -892,7 +899,7 @@
             ${riv.length > 8 ? `<button type="button" class="btn btn--ancho" data-ver="R">${S.verR ? "Ver menos" : `Ver los ${riv.length} rivales`}</button>` : ""}` : ""}`,
           pl(parts.length, "partido", "partidos"))}
 
-        ${desple("jugadores", "Quiénes jugaron", `
+        ${!jug.length ? "" : desple("jugadores", "Quiénes jugaron", `
           <div class="tabla-e-wrap"><table class="tabla-e">
             <thead><tr><th scope="col" class="izq">Jugador</th>${[["pj", "Partidos"], ["tries", "Tries"], ["pts", "Puntos"]].map(([k, l]) =>
               `<th scope="col"${k === S.ordenJ ? ' aria-sort="descending"' : ""}><button type="button" data-ordj="${k}">${l}</button></th>`).join("")}</tr></thead>
@@ -925,6 +932,7 @@
   }
   /** los que estuvieron en planillas ese año y no volvieron a aparecer el año siguiente */
   function listaNoSiguieron(cat, anio, sig) {
+    if (!D.noSig.length && D.rol !== "coordinador" && D.rol !== "entrenador") return ""; // este rol no recibe esa lista (no es que todos hayan vuelto)
     const l = D.noSig.filter((x) => x.cat === cat && x.anio === anio);
     if (!l.length) return `<p class="frase">Todos volvieron a aparecer en ${sig}.</p>`;
     const ver = S.verN ? l : l.slice(0, 8);
@@ -1268,13 +1276,14 @@
   const VACIA = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
   // las fotos van cifradas en un archivo aparte: se bajan y se abren (con la misma llave) la primera vez que hacen falta
   let fotosProm = null;
-  const fotos = () => (fotosProm ??= fetch("entrenadores.fotos.json", { cache: "no-cache" })
+  const fotos = () => (fotosProm ??= (!D.cek ? Promise.resolve({}) : fetch("entrenadores.fotos.json", { cache: "no-cache" })
     .then((r) => r.json())
     .then(async (f) => {
-      const plano = await crypto.subtle.decrypt({ name: "AES-GCM", iv: deB64(f.iv) }, LLAVE_ACTUAL, deB64(f.datos));
+      const llave = await crypto.subtle.importKey("raw", deB64(D.cek), "AES-GCM", false, ["decrypt"]);
+      const plano = await crypto.subtle.decrypt({ name: "AES-GCM", iv: deB64(f.iv) }, llave, deB64(f.datos));
       return JSON.parse(await new Response(new Blob([plano]).stream().pipeThrough(new DecompressionStream("gzip"))).text());
     })
-    .catch(() => { fotosProm = null; return {}; }));
+    .catch(() => { fotosProm = null; return {}; })));
   function ponerFotos() {
     const imgs = document.querySelectorAll("img[data-foto]");
     if (!imgs.length) return;

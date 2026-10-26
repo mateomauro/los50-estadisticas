@@ -8,7 +8,7 @@
    POST /api/asistencia  { cat, accion, ..., por? } -> guarda (accion: horarios | entrenamiento | lista | borrar_lista | chico)
      lista: { fecha, presentes, base? } — con "base" (lo que estaba guardado cuando empezó) se juntan las listas de dos entrenadores
    Todo pide la ficha de la clave de Entrenadores en el encabezado "x-ficha" (la misma de los videos: SHA-256 de la clave + ":los50-videos",
-   comparada con el secreto CLAVE_ENTRENADORES de Cloudflare). Cada cambio queda anotado en la tabla "cambios" con la fecha y quién lo hizo. */
+   y buscada entre las claves de cada rol en functions/_roles.js; los dirigentes no entran acá y la copia de seguridad es solo del coordinador). Cada cambio queda anotado en la tabla "cambios" con la fecha y quién lo hizo. */
 const CATS = ["Plantel superior", "M19", "M17", "M16", "M15", "M14", "M13", "M12", "M11", "M10", "M9", "M8", "M7", "M6"];
 const ESQUEMA = [
   "CREATE TABLE IF NOT EXISTS horarios (cat TEXT NOT NULL, dia INTEGER NOT NULL, hora TEXT NOT NULL, PRIMARY KEY (cat, dia))",
@@ -24,27 +24,18 @@ const FECHA = /^\d{4}-\d{2}-\d{2}$/, HORA = /^([01]\d|2[0-3]):[0-5]\d$/, ID = /^
 const json = (datos, status = 200) => new Response(JSON.stringify(datos), {
   status, headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" },
 });
-const enc = new TextEncoder();
-const hex = (buf) => [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
-const ficha = async (clave) => hex(await crypto.subtle.digest("SHA-256", enc.encode(`${clave}:los50-videos`)));
+import { rolDe, configurado } from "../_roles.js";
 const texto = (v, max) => String(v == null ? "" : v).replace(/\s+/g, " ").trim().slice(0, max);
-
-// compara sin dar pistas por el tiempo que tarda
-function igual(a, b) {
-  if (a.length !== b.length) return false;
-  let d = 0;
-  for (let i = 0; i < a.length; i++) d |= a.charCodeAt(i) ^ b.charCodeAt(i);
-  return d === 0;
-}
 
 // las tablas se crean solas la primera vez
 let listo = null;
 const iniciar = (db) => (listo ??= db.batch(ESQUEMA.map((s) => db.prepare(s))).catch((e) => { listo = null; throw e; }));
 
 export async function onRequest({ request, env }) {
-  if (!env.ASISTENCIA || !env.CLAVE_ENTRENADORES) return json({ error: "sin configurar" }, 503);
-  const f = request.headers.get("x-ficha") || "";
-  if (!/^[0-9a-f]{64}$/.test(f) || !igual(f, await ficha(env.CLAVE_ENTRENADORES))) return json({ error: "clave" }, 401);
+  if (!env.ASISTENCIA || !configurado(env)) return json({ error: "sin configurar" }, 503);
+  const rol = await rolDe(request.headers.get("x-ficha"), env);
+  if (!rol) return json({ error: "clave" }, 401);
+  if (rol === "comision") return json({ error: "permiso" }, 403); // los dirigentes no usan la asistencia
   const db = env.ASISTENCIA;
   await iniciar(db);
   const todo = (sql, ...v) => db.prepare(sql).bind(...v).all().then((r) => r.results);
@@ -53,6 +44,7 @@ export async function onRequest({ request, env }) {
     const q = new URL(request.url).searchParams, cat = q.get("cat");
     // la copia de seguridad (respaldo_asistencia.py, en la actualización automática): todas las tablas
     if (q.get("respaldo")) {
+      if (rol !== "coordinador") return json({ error: "permiso" }, 403); // la copia de seguridad es solo de Coordinación
       const tablas = ["horarios", "entrenamientos", "listas", "chicos", "cambios"];
       const filas = await Promise.all(tablas.map((x) => todo(`SELECT * FROM ${x}`)));
       return json({ fecha: new Date().toISOString(), ...Object.fromEntries(tablas.map((x, i) => [x, filas[i]])) });

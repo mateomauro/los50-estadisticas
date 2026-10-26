@@ -57,7 +57,7 @@ id = "{KV_REVISION}"
         "paginas": {"index.html": "entrenadores.html"},
         "archivos": ["entrenadores.js", "entrenadores.css", "entrenadores.data.js", "entrenadores.fotos.json", "styles.css"],
         "carpetas": ["fonts", "img", "vendor"],
-        "functions": ["videos/[[path]].js", "api/asistencia.js"],
+        "functions": ["_roles.js", "videos/[[path]].js", "api/asistencia.js"],
         "otros": [],
         # no tiene links a la web de Jugadores: las dos están separadas del todo
         "links": [],

@@ -1,13 +1,15 @@
 """Datos de la sección Entrenadores de la web (web/entrenadores.data.js), cifrados con clave.
 
 Uso:  python exportar_entrenadores.py
-La clave sale de CLAVE_ENTRENADORES en .env. Tiene datos de juveniles (menores), por eso va cifrado:
+Cada rol tiene su clave (CLAVE_COORDINADOR, CLAVE_ENTRENADOR, CLAVE_PF y CLAVE_COMISION, en .env o en los secretos de GitHub) y su propia
+copia cifrada de los datos, con lo que ese rol puede ver: cada uno abre solo la suya. Tiene datos de juveniles (menores), por eso va cifrado:
 sin la clave no se puede leer ni mirando el código de la página.
 Cifrado: PBKDF2-SHA256 (310.000 vueltas) + AES-GCM 256, compatible con WebCrypto del navegador.
 """
 import base64
 import gzip
 import hashlib
+import hmac
 import json
 import math
 import os
@@ -36,16 +38,33 @@ HUELLA = HERE / "datos_uar" / "entrenadores.huella"  # para no volver a cifrar s
 VUELTAS = 310_000
 
 
+# rol -> variable con su clave. "coordinador" ve todo; "entrenador" y "pf" (preparador físico o manager) casi todo; "comision" (dirigentes) solo
+# partidos y estadísticas del equipo, sin nombres de chicos.
+ROLES = {"coordinador": "CLAVE_COORDINADOR", "entrenador": "CLAVE_ENTRENADOR", "pf": "CLAVE_PF", "comision": "CLAVE_COMISION"}
+
+
+def claves():
+    """{rol: clave}, de las variables de entorno (GitHub Actions las toma de los 'secrets') o, en la compu, del archivo .env."""
+    env, out = {}, {}
+    arch = HERE / ".env"
+    if arch.exists():
+        for linea in arch.read_text(encoding="utf-8").splitlines():
+            if "=" in linea and not linea.lstrip().startswith("#"):
+                k, v = linea.split("=", 1)
+                env[k.strip()] = v.strip()
+    for rol, var in ROLES.items():
+        v = (os.environ.get(var) or env.get(var) or "").strip().strip('"')
+        if not v:
+            sys.exit(f"Falta {var} (variable de entorno o .env)")
+        out[rol] = v
+    if len(set(out.values())) < len(out):
+        sys.exit("Dos roles tienen la misma clave: cada rol necesita la suya")
+    return out
+
+
 def clave():
-    """De la variable de entorno (GitHub Actions la toma de los 'secrets') o, en la compu, del archivo .env."""
-    if os.environ.get("CLAVE_ENTRENADORES"):
-        return os.environ["CLAVE_ENTRENADORES"].strip()
-    env = HERE / ".env"
-    if env.exists():
-        for linea in env.read_text(encoding="utf-8").splitlines():
-            if linea.startswith("CLAVE_ENTRENADORES="):
-                return linea.split("=", 1)[1].strip()
-    sys.exit("Falta CLAVE_ENTRENADORES (variable de entorno o .env)")
+    """La del coordinador (la que usa la copia de seguridad)."""
+    return claves()["coordinador"]
 
 
 def sal_anterior():
@@ -131,6 +150,33 @@ def fotos():
     return {f.stem: "data:image/webp;base64," + base64.b64encode(f.read_bytes()).decode("ascii") for f in sorted(G.FOTOS.glob("*.webp"))}
 
 
+VISTAS_VERSION = "2"  # se cambia cuando cambia qué ve cada rol (así se vuelve a cifrar)
+
+
+def vacia(tab):
+    return {"c": tab["c"], "f": []}
+
+
+def vista(datos, rol, cek_b64):
+    """Lo que ve cada rol (no es solo esconder: lo que no ve, ni siquiera viaja en su copia cifrada).
+    coordinador: todo. entrenador: todo menos los nombres de quiénes pasan de M19 a plantel superior.
+    pf (preparador físico o manager): además, sin la lista de chicos que no siguieron.
+    comision (dirigentes): solo partidos y estadísticas del equipo: sin nombres de chicos, sin asistencia ni guía."""
+    d = dict(datos, rol=rol)
+    if rol != "coordinador":
+        d["pase"] = {k: v for k, v in datos["pase"].items() if k != "nombres"}
+    if rol in ("pf", "comision"):
+        d["no_siguieron"] = vacia(datos["no_siguieron"])
+    if rol == "comision":
+        d["jugadores"] = vacia(datos["jugadores"])
+        d["fichados"] = None
+        d["guia"] = None
+        d["alertas"] = None
+    else:
+        d["cek"] = cek_b64
+    return d
+
+
 def main():
     d = A.cargar()
     p, i = A.preparar(d)
@@ -166,25 +212,33 @@ def main():
         "pase": PA.pase_plantel_superior(p, i, d),
         "alertas": PA.alertas(p, i, d),
     }
-    crudo = json.dumps(datos, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
     fotos_ = json.dumps(fotos(), separators=(",", ":")).encode("utf-8")
     destino_fotos = DESTINO.with_name("entrenadores.fotos.json")
     sin_fecha = dict(datos, actualizado="")
-    huella = hashlib.sha256(json.dumps(sin_fecha, ensure_ascii=False, sort_keys=True).encode("utf-8") + fotos_ + clave().encode("utf-8")).hexdigest()
+    huella = hashlib.sha256(json.dumps(sin_fecha, ensure_ascii=False, sort_keys=True).encode("utf-8") + fotos_ + json.dumps(claves(), sort_keys=True).encode("utf-8") + VISTAS_VERSION.encode("utf-8")).hexdigest()
     if DESTINO.exists() and destino_fotos.exists() and HUELLA.exists() and HUELLA.read_text().strip() == huella:
         print(f"Sin cambios en los datos de entrenadores: {DESTINO.name} queda igual")
         return
 
-    sal, iv = sal_anterior(), os.urandom(12)
-    k = PBKDF2HMAC(algorithm=hashes.SHA256(), length=32, salt=sal, iterations=VUELTAS).derive(clave().encode("utf-8"))
-    cifrado = AESGCM(k).encrypt(iv, gzip.compress(crudo, 9), None)
+    sal = sal_anterior()
+    cl = claves()
+    # la clave de las fotos (una sola, cifrada adentro de la copia de cada rol que ve ejercicios): así las fotos no se repiten 4 veces
+    cek = hmac.new(sal, ("fotos:" + cl["coordinador"]).encode("utf-8"), hashlib.sha256).digest()
     b64 = lambda b: base64.b64encode(b).decode("ascii")
-    sobre = {"v": 1, "vueltas": VUELTAS, "sal": b64(sal), "iv": b64(iv), "datos": b64(cifrado)}
-    DESTINO.write_text("/* Sección Entrenadores: datos cifrados (se abren con la clave). Generado por exportar_entrenadores.py */\n"
+    roles_ = []
+    for rol, c in cl.items():
+        k = PBKDF2HMAC(algorithm=hashes.SHA256(), length=32, salt=sal, iterations=VUELTAS).derive(c.encode("utf-8"))
+        v = vista(datos, rol, b64(cek))
+        iv = os.urandom(12)
+        roles_.append({"iv": b64(iv), "datos": b64(AESGCM(k).encrypt(iv, gzip.compress(json.dumps(v, ensure_ascii=False, separators=(",", ":")).encode("utf-8"), 9), None))})
+    # (el orden no dice nada: la página prueba la clave contra cada copia)
+    sobre = {"v": 2, "vueltas": VUELTAS, "sal": b64(sal), "roles": roles_}
+    DESTINO.write_text("/* Sección Entrenadores: datos cifrados (se abren con la clave de cada rol). Generado por exportar_entrenadores.py */\n"
                        f"window.ENTRENADORES={json.dumps(sobre)};\n", encoding="utf-8")
-    # las fotos, con la misma llave (misma sal) y otro iv
+    # las fotos, con la clave de las fotos y otro iv
     iv_f = os.urandom(12)
-    destino_fotos.write_text(json.dumps({"v": 1, "iv": b64(iv_f), "datos": b64(AESGCM(k).encrypt(iv_f, gzip.compress(fotos_, 9), None))}), encoding="utf-8")
+    destino_fotos.write_text(json.dumps({"v": 2, "iv": b64(iv_f), "datos": b64(AESGCM(cek).encrypt(iv_f, gzip.compress(fotos_, 9), None))}), encoding="utf-8")
+    crudo = json.dumps(datos, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
     HUELLA.write_text(huella)
     print(f"Listo: {DESTINO} ({DESTINO.stat().st_size // 1024} KB; sin cifrar {len(crudo) // 1024} KB) y {destino_fotos.name} ({destino_fotos.stat().st_size // 1024} KB)")
 
