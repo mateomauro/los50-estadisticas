@@ -2646,7 +2646,7 @@
         ${p.cierre ? `<p class="prac-agua prac-agua--fin">${IC.bien}<span>Charla final y elongación</span></p>` : ""}
         <button type="button" class="btn btn--ancho btn--wa" data-compartir-pr>${IC.compartir}Mandar por WhatsApp</button>
         ${p.propia ? `<button type="button" class="btn-sec btn-sec--ancho prac-cambiar" data-armar-id="${esc(p.id)}">Cambiar esta práctica</button>` : ""}
-      </section>`${avisoHTML()}`;
+      </section>${avisoHTML()}`;
   }
   // ---------- armar la práctica en la app (functions/api/asistencia.js, tabla "practicas" de D1) ----------
   // Como Sportplan o Rugby Coach Weekly: el entrenador elige el día, escribe qué se trabaja y suma partes (ejercicios de la app, con
@@ -2702,7 +2702,7 @@
         <div class="asis-form__fila"><label class="asis-form__campo">Día<input id="ar-fecha" class="asis-input" type="date" value="${a.fecha}" min="${masDias(hoyISO(), -DIAS_ATRAS)}" max="${masDias(hoyISO(), DIAS_ADELANTE)}"></label>
           <label class="asis-form__campo">¿Qué se trabaja?<input id="ar-foco" class="asis-input" maxlength="80" placeholder="Por ejemplo: tackle y ruck" autocomplete="off" value="${esc(a.foco)}"></label></div>
         <div class="asis-form__fila ar-fila"><label class="asis-form__campo">Objetivo (si querés)<input id="ar-obj" class="asis-input" maxlength="200" placeholder="Qué tienen que lograr" autocomplete="off" value="${esc(a.objetivo || "")}"></label>
-          ${enCel.get(claveNombreNota) ? "" : `<label class="asis-form__campo">Tu nombre<input id="ar-por" class="asis-input" maxlength="60" autocomplete="given-name"></label>`}</div>
+          ${enCel.get(claveNombreNota) ? "" : `<label class="asis-form__campo">Tu nombre<input id="ar-por" class="asis-input" maxlength="60" autocomplete="given-name" value="${esc(a.por || "")}"></label>`}</div>
         <h3 class="grupo grupo--fila"><span>Las partes</span>${tot ? `<span class="num">${tot} min</span>` : ""}</h3>
         ${a.partes.length ? `<ul class="ar-l">${a.partes.map(parte).join("")}</ul>` : `<p class="vacio-g">Sumá ejercicios de la app o actividades propias</p>`}
         ${avisos.map((t) => `<p class="asis-form__aviso ar-aviso">${t}</p>`).join("")}
@@ -3544,9 +3544,9 @@
     if (e.target.id === "buscar-canto") { S.q = e.target.value; filtrarCantos(); }
     if (e.target.id === "buscar-ej") { S.qe = e.target.value; filtrarEj(); }
     if (e.target.id === "buscar-pr") { S.qp = e.target.value; filtrarPr(); }
-    if (S.ver === "armar" && (e.target.id === "ar-foco" || e.target.id === "ar-obj")) {
+    if (S.ver === "armar" && ["ar-foco", "ar-obj", "ar-por"].includes(e.target.id)) {
       const a = arActual();
-      a[e.target.id === "ar-foco" ? "foco" : "objetivo"] = e.target.value;
+      a[{ "ar-foco": "foco", "ar-obj": "objetivo", "ar-por": "por" }[e.target.id]] = e.target.value;
       arAnotar(a);
     }
     if ("tv" in e.target.dataset) {
