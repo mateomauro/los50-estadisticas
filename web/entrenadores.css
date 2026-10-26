@@ -841,6 +841,18 @@
 .area--hoy .area__txt small { color: var(--azul); font-weight: 700; }
 @media (min-width: 900px) { .areas--6 { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; } .area { min-height: 160px; padding: 20px; } }
 .area-todas { margin-top: 22px; }
+/* la tarjeta de más (la séptima) ocupa todo el ancho en el celular y en la compu, para que no quede una sola al costado */
+.areas--6 > li:last-child:nth-child(odd) { grid-column: 1 / -1; }
+.areas--6 > li:last-child:nth-child(odd) .area { min-height: 0; grid-template-columns: 44px minmax(0, 1fr); align-items: center; gap: 16px; }
+/* notas entre entrenadores */
+.notas { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 10px; }
+.nota { display: grid; gap: 8px; padding: 14px 16px; background: var(--sup); border: 1px solid var(--linea); border-radius: var(--radio); }
+.nota__cab { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; }
+.nota__cab b { font: 700 18px/1.1 var(--cond); letter-spacing: .02em; text-transform: uppercase; }
+.nota__cab span { font-size: 14.5px; color: var(--suave); }
+.nota__txt { margin: 0; font-size: 16.5px; line-height: 1.45; white-space: pre-wrap; overflow-wrap: anywhere; }
+.nota__borrar { justify-self: start; }
+.asis-input--nota { min-height: 112px; resize: vertical; line-height: 1.4; }
 /* hoy entrena tu categoría: la tarjeta abre la lista y "Otra categoría" lleva a elegir */
 .area-li { position: relative; }
 .area__otra { position: absolute; top: 10px; right: 8px; min-height: 44px; padding: 0 8px; font-size: 13px; font-weight: 600; }

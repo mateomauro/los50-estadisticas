@@ -116,6 +116,7 @@
     barras: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16M18 17V9M13 17V5M8 17v-3"/></svg>',
     sube: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 7-7 7 7M12 19V5"/></svg>',
     baja: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>',
+    nota: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M7 8h10M7 12h6"/></svg>',
     trofeo: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>',
   };
 
@@ -135,7 +136,7 @@
     $("#candado").hidden = true;
     $("#app").hidden = false;
     S = { ver: "inicio", cat: null, temp: null, gcat: null, tab: null, q: "", ordenJ: "pj", verJ: false, verP: false, verN: false, verR: false, rol: null, para: null, ej: null, puesto: null, practica: null, pgrupo: null, qp: "", qe: "", abiertos: new Set(),
-      acat: null, afecha: null, aform: null, marcas: null, base: null, aviso: null, estadoLista: null, recien: new Set(), area: null, pcat: null, mcat: null, alcat: null, pedad: null };
+      acat: null, afecha: null, aform: null, marcas: null, base: null, aviso: null, estadoLista: null, recien: new Set(), area: null, pcat: null, mcat: null, alcat: null, pedad: null, ncat: null };
     // al abrir la sección (un link, la dirección escrita o que el navegador completó) arranca en el inicio;
     // al recargar o al volver con "atrás" sigue donde estaba (por ejemplo, en medio de una lista)
     const nav = performance.getEntriesByType ? performance.getEntriesByType("navigation")[0] : null;
@@ -169,7 +170,7 @@
     S.acat = ac || null;
     S.afecha = ac && fechaOk(p.get("fecha") || "") ? p.get("fecha") : null;
     S.aform = null; S.marcas = null;
-    if (D.fichados) vistas.push("asistencia");
+    if (D.fichados) vistas.push("asistencia", "notas");
     // las áreas: ?ver=area&area=asistencia · ?plan=m15 (Planificación de M15) · ?partidos=m15 (o todas)
     S.area = AREAS[p.get("area")] ? p.get("area") : null;
     S.pcat = D.guia ? ASIS_CATS.find((x) => slug(x) === p.get("plan")) || null : null;
@@ -217,7 +218,7 @@
     const ej = S.ver === "ejercicio" && D.guia.ejercicios.find((x) => x.id === S.ej), pu = S.ver === "puesto" && puestoDe(S.puesto);
     return ({ inicio: "Inicio", cat: S.cat, club: "Todo el club", consejos: "Consejos", guia: S.gcat || "Qué aprende cada categoría",
       cantos: "Cantos y zonas", scrum: "Scrum seguro", ejercicios: "Ejercicios", ejercicio: ej && ej.nombre, puestos: "Los puestos", puesto: pu && pu.nombre,
-      practicas: "Prácticas", practica: "Práctica", pase: "De M19 a plantel superior", alertas: "Para mirar", area: AREAS[S.area], plan: `Planificación ${S.pcat}`, partidos: S.mcat === "Todas" ? "Partidos" : `Partidos de ${S.mcat}`, guiaclub: "Guía del club",
+      practicas: "Prácticas", practica: "Práctica", pase: "De M19 a plantel superior", alertas: "Para mirar", area: AREAS[S.area], plan: `Planificación ${S.pcat}`, partidos: S.mcat === "Todas" ? "Partidos" : `Partidos de ${S.mcat}`, guiaclub: "Guía del club", notas: "Notas",
       asistencia: "Todas las categorías", asis: S.acat, lista: `Lista de ${S.acat}`, chicos: `Los chicos de ${S.acat}` })[S.ver] || "Volver";
   }
 
@@ -365,7 +366,7 @@
     soltarVideos();
     $("#vista").dataset.pantalla = S.ver; // ojo: no "data-ver", que es el de los botones "Ver todos"
     ({ inicio: vInicio, cat: vCategoria, club: vClub, consejos: vConsejos, guia: vGuia, cantos: vCantos, scrum: vScrum, ejercicios: vEjercicios, ejercicio: vEjercicio, puestos: vPuestos, puesto: vPuesto, practicas: vPracticas, practica: vPractica,
-      asistencia: vAsistencia, asis: vAsis, lista: vLista, chicos: vChicos, area: vArea, plan: vPlan, partidos: vPartidos, guiaclub: vGuiaClub, pase: vPase, alertas: vAlertas })[S.ver]();
+      asistencia: vAsistencia, asis: vAsis, lista: vLista, chicos: vChicos, area: vArea, plan: vPlan, partidos: vPartidos, guiaclub: vGuiaClub, pase: vPase, alertas: vAlertas, notas: vNotas })[S.ver]();
     dibujarGraficos();
     ponerFotos();
   }
@@ -377,7 +378,7 @@
   const tendencia = (dif, umbral, normal) => dif > umbral ? `<p class="tend tend--mejor">${IC.sube}Mejor que lo normal (${normal})</p>`
     : dif < -umbral ? `<p class="tend tend--peor">${IC.baja}Peor que lo normal (${normal})</p>` : `<p class="tend">Como lo normal (${normal})</p>`;
   /** ir a una de las pantallas principales: sin categoría, filtros ni formularios abiertos */
-  const LIMPIO = { alcat: null, cat: null, temp: null, gcat: null, tab: null, rol: null, para: null, qe: "", pgrupo: null, qp: "", aform: null, aviso: null };
+  const LIMPIO = { ncat: null, alcat: null, cat: null, temp: null, gcat: null, tab: null, rol: null, para: null, qe: "", pgrupo: null, qp: "", aform: null, aviso: null };
   /** "Volver": lleva a la pantalla de la que se vino y dice cuál es ("‹ M13"), igual que el botón atrás del celular.
       Si no hay de dónde (se recargó sin historial), va a la de arriba ("txt"; "a" es la pantalla o los cambios) sin sumar un paso */
   const hayAtras = () => !!(history.state && history.state.n > 0);
@@ -395,6 +396,8 @@
   const AYUDA = {
     categorias: () => ["Las categorías", ["Tocá una categoría para ver cómo le fue, sus jugadores y sus tries.",
       `Los números son de ${D.hasta}: los partidos oficiales que están cargados en la página de la UAR.`]],
+    notas: () => ["Notas", ["Para dejarles un mensaje corto a los otros entrenadores: lo que salió bien, lo que habría que cambiar, algo que viste en un entrenamiento o en un partido.",
+      "Las notas las puede leer cualquiera que entre con la clave. Quedan guardadas para siempre.", "Podés borrar solo las que escribiste vos, desde este mismo celular."]],
     asistencia: () => ["Asistencia", ["Para tomar lista en cada entrenamiento y ver cuánto viene cada chico.",
       "El porcentaje es sobre los entrenamientos de este año en los que se tomó lista. Los suspendidos no cuentan.",
       "La lista de chicos arranca con los fichados en la UAR para este año. Cada entrenador puede sumar o sacar chicos."]],
@@ -564,7 +567,81 @@
         ${tarjeta('data-area="partidos"', IC.trofeo, "Partidos", "Próximos y resultados")}
         ${tarjeta('data-area="estadisticas"', IC.barras, "Estadísticas", "Números y jugadores")}
         ${g ? tarjeta('data-ir="guiaclub"', IC.libro, "Guía del club", "Puestos, scrum y cantos") : ""}
+        ${D.fichados ? tarjeta('data-ir="notas"', IC.nota, "Notas", "Lo que viste en los entrenamientos") : ""}
       </ul></section>`;
+  }
+
+  // ---------- notas entre entrenadores (functions/api/asistencia.js, tabla "notas" de D1) ----------
+  // Cualquiera con la clave las lee. Cada nota guarda el nombre de quien la escribió (queda en el celular para no repetirlo)
+  // y un código del celular: con ese código, y solo con ese, se puede borrar la propia.
+  const NOTAS = { lista: null, error: null, cargando: false };
+  const claveNombreNota = "los50-ent-nombre", claveDueno = "los50-ent-dueno";
+  const duenoDeNotas = () => {
+    let d = enCel.get(claveDueno);
+    if (!d) { d = [...crypto.getRandomValues(new Uint8Array(12))].map((b) => b.toString(16).padStart(2, "0")).join(""); enCel.set(claveDueno, d); }
+    return d;
+  };
+  async function apiNotas(cuerpo) {
+    const r = await fetch(cuerpo ? "api/asistencia" : "api/asistencia?notas=1", {
+      method: cuerpo ? "POST" : "GET", cache: "no-store",
+      headers: { "x-ficha": fichaGuardada(), "x-dueno": duenoDeNotas(), ...(cuerpo ? { "content-type": "application/json" } : {}) },
+      body: cuerpo ? JSON.stringify(cuerpo) : undefined,
+    });
+    if (r.status === 401) throw new Error("clave");
+    if (!r.ok) throw new Error("servidor");
+    return r.json();
+  }
+  const errNotas = (e, que) => (e.message === "clave" ? `Para usar las notas hay que volver a poner la clave. <button type="button" class="link" data-reclave>Poner la clave</button>`
+    : `${que}${e.message === "servidor" ? "." : ": no hay señal."} Probá de nuevo en un rato.`);
+  function cargarNotas() {
+    if (NOTAS.cargando) return;
+    NOTAS.cargando = true; NOTAS.error = null;
+    apiNotas().then((d) => { NOTAS.lista = d.notas; })
+      .catch((e) => { NOTAS.error = errNotas(e, "No se pudieron cargar las notas"); })
+      .finally(() => { NOTAS.cargando = false; if (S.ver === "notas") render(); });
+  }
+  /** guarda o borra una nota; si falla no se vuelve a dibujar, así lo escrito no se pierde */
+  async function guardarNota(cuerpo, ok) {
+    if (NOTAS.guardando) return;
+    NOTAS.guardando = true;
+    avisoSuelto("Guardando…", "espera");
+    try {
+      await apiNotas({ dueno: duenoDeNotas(), ...cuerpo });
+      NOTAS.lista = (await apiNotas()).notas;
+      avisar("ok", ok);
+      if (cuerpo.accion === "nota") $("#nota-texto").value = "";
+      S.aform = null;
+      render();
+    } catch (e) { avisoSuelto(errNotas(e, "No se pudo guardar")); }
+    finally { NOTAS.guardando = false; }
+  }
+  const formNota = (b) => `<div class="asis-form">
+      <label class="asis-form__campo">¿De qué categoría?<select id="nota-cat" class="asis-input">${["General", ...ASIS_CATS].map((c) => `<option value="${esc(c)}"${(b.cat || S.ncat || enCel.get(ULTIMA) || "General") === c ? " selected" : ""}>${c === "General" ? "General (todo el club)" : esc(c)}</option>`).join("")}</select></label>
+      <label class="asis-form__campo">Tu nota<textarea id="nota-texto" class="asis-input asis-input--nota" maxlength="600" rows="4" placeholder="Por ejemplo: el ejercicio del cono quedó largo">${esc(b.texto || "")}</textarea></label>
+      <label class="asis-form__campo">Tu nombre<input id="nota-por" class="asis-input" maxlength="60" autocomplete="given-name" value="${esc(b.por || enCel.get(claveNombreNota) || "")}"></label>
+      <div class="asis-form__btns"><button type="button" class="btn btn--ok btn--alto" data-nota-ok>${IC.tilde}Guardar la nota</button>${cerrarBtn}</div></div>`;
+  function vNotas() {
+    const t0 = $("#nota-texto");
+    if (t0) NOTAS.borrador = { texto: t0.value, por: $("#nota-por").value, cat: $("#nota-cat").value };
+    if (!NOTAS.lista && !NOTAS.error) cargarNotas();
+    const todas = NOTAS.lista || [], cats = ["General", ...ASIS_CATS].filter((c) => todas.some((n) => n.cat === c));
+    if (S.ncat && !cats.includes(S.ncat)) S.ncat = null;
+    const ver = todas.filter((n) => !S.ncat || n.cat === S.ncat);
+    const fila = (n) => `<li class="nota"><div class="nota__cab"><b>${n.cat === "General" ? "Todo el club" : esc(n.cat)}</b><span>${esc(n.por || "")} · ${esc(cuandoP({ fecha: n.fecha }))}${n.fecha.slice(0, 4) === hoyISO().slice(0, 4) ? "" : ` de ${n.fecha.slice(0, 4)}`}</span></div>
+      <p class="nota__txt">${esc(n.texto)}</p>
+      ${!n.mia ? "" : S.aform === `borrar-nota:${n.id}` ? `<div class="asis-form"><span class="asis-form__l">¿Borrar esta nota?</span>
+        <div class="asis-form__btns"><button type="button" class="btn btn--peligro btn--alto" data-borrar-nota-ok="${n.id}">Borrarla</button>${cerrarBtn}</div></div>`
+        : `<button type="button" class="link nota__borrar" data-form="borrar-nota:${n.id}">Borrar mi nota</button>`}</li>`;
+    $("#vista").innerHTML = `
+      <div class="cab">${volver()}${cabTit("Notas", "notas")}</div>
+      <section class="sec sec--pegada">
+        ${S.aform === "nota" ? formNota(NOTAS.borrador || {}) : `<button type="button" class="btn-sec btn-sec--ancho asis-mas" data-form="nota">${IC.mas}Escribir una nota</button>`}
+        ${cats.length > 1 ? `<div class="chips-g" role="group" aria-label="Categoría">${[["", "Todas"], ...cats.map((c) => [c, c === "General" ? "Todo el club" : c])].map(([v, l]) =>
+          `<button type="button" data-ncat="${esc(v)}" aria-pressed="${(S.ncat || "") === v}">${esc(l)}</button>`).join("")}</div>` : ""}
+        ${NOTAS.error ? `<div class="hoy hoy--error"><p class="hoy__canc">${NOTAS.error}</p><button type="button" class="btn-sec" data-reintentar-notas>Probar de nuevo</button></div>`
+          : !NOTAS.lista ? `<p class="cargando">Cargando…</p>`
+          : ver.length ? `<ul class="notas">${ver.map(fila).join("")}</ul>` : `<p class="vacio-g">Todavía no hay notas</p>`}
+      </section>${avisoHTML()}`;
   }
 
   // ---------- de M19 a plantel superior (pase_y_alertas.py) ----------
@@ -2210,7 +2287,7 @@
   // ---------- eventos ----------
   document.addEventListener("click", (e) => {
     if (!S) return;
-    const t = e.target.closest("[data-atras],[data-subir],[data-alcat],[data-edad],[data-area],[data-area-cat],[data-play],[data-reclave],[data-ayuda],[data-cerrar-ayuda],[data-ir],[data-ir-cat],[data-ir-guia],[data-ir-ej],[data-ir-ej-para],[data-ir-ej-tab],[data-ir-line],[data-ir-puesto],[data-ir-practica],[data-ir-practicas],[data-pgrupo],[data-ir-asis],[data-ir-hoy],[data-ir-lista],[data-ir-chicos],[data-form],[data-reintentar],[data-motivo],[data-dia],[data-marca],[data-todos],[data-cancelar-ok],[data-deshacer],[data-hora-ok],[data-agregar-ok],[data-horarios-ok],[data-guardar-lista],[data-borrar-lista-ok],[data-sacar],[data-sigue],[data-volver-chico],[data-sumar-chico],[data-compartir-pr],[data-rol],[data-quitar-para],[data-tab],[data-anio],[data-ver],[data-ordj]");
+    const t = e.target.closest("[data-atras],[data-subir],[data-alcat],[data-ncat],[data-nota-ok],[data-borrar-nota-ok],[data-reintentar-notas],[data-edad],[data-area],[data-area-cat],[data-play],[data-reclave],[data-ayuda],[data-cerrar-ayuda],[data-ir],[data-ir-cat],[data-ir-guia],[data-ir-ej],[data-ir-ej-para],[data-ir-ej-tab],[data-ir-line],[data-ir-puesto],[data-ir-practica],[data-ir-practicas],[data-pgrupo],[data-ir-asis],[data-ir-hoy],[data-ir-lista],[data-ir-chicos],[data-form],[data-reintentar],[data-motivo],[data-dia],[data-marca],[data-todos],[data-cancelar-ok],[data-deshacer],[data-hora-ok],[data-agregar-ok],[data-horarios-ok],[data-guardar-lista],[data-borrar-lista-ok],[data-sacar],[data-sigue],[data-volver-chico],[data-sumar-chico],[data-compartir-pr],[data-rol],[data-quitar-para],[data-tab],[data-anio],[data-ver],[data-ordj]");
     if (!t || t.disabled) return;
     if (t.tagName === "A") e.preventDefault(); // el escudo de arriba: va al inicio sin recargar
     const ds = t.dataset, ir = "lado" in ds ? irSinPaso : irA; // Anterior / Siguiente no suman pasos
@@ -2218,6 +2295,15 @@
     else if ("subir" in ds) irSinPaso(SUBIR);
     else if (ds.edad) { S.pedad = ds.edad; render(); }
     else if ("alcat" in ds) { S.alcat = ds.alcat || null; render(); }
+    else if ("ncat" in ds) { S.ncat = ds.ncat || null; render(); }
+    else if ("reintentarNotas" in ds) { NOTAS.error = null; render(); }
+    else if ("notaOk" in ds) {
+      const texto = $("#nota-texto").value.trim(), por = $("#nota-por").value.trim(), cat = $("#nota-cat").value;
+      if (texto.length < 3) { avisoSuelto("Escribí la nota."); $("#nota-texto").focus(); return; }
+      if (por.length < 2) { avisoSuelto("Escribí tu nombre."); $("#nota-por").focus(); return; }
+      enCel.set(claveNombreNota, por);
+      guardarNota({ accion: "nota", cat, texto, por, fecha: hoyISO() }, "Nota guardada");
+    } else if (ds.borrarNotaOk) guardarNota({ accion: "borrar_nota", id: Number(ds.borrarNotaOk), por: enCel.get(claveNombreNota) || "" }, "Nota borrada");
     else if (ds.area) irA(AREA_IR(ds.area));
     else if (ds.areaCat) {
       // la categoría elegida en un área queda en el celular: la próxima vez aparece marcada
@@ -2243,7 +2329,7 @@
     else if (ds.irHoy) { const [acat, afecha] = ds.irHoy.split("|"); irA({ ver: "lista", acat, afecha, aform: null, marcas: null, aviso: null, estadoLista: null }); }
     else if (ds.irLista) irA({ ver: "lista", afecha: ds.irLista, aform: null, marcas: null, aviso: null, estadoLista: null });
     else if ("irChicos" in ds) irA({ ver: "chicos", aform: null, aviso: null, recien: new Set() });
-    else if ("form" in ds) { S.aform = S.aform === ds.form || !ds.form ? null : ds.form; S.aviso = null; S.amotivo = null; render(); }
+    else if ("form" in ds) { if (!ds.form && S.aform === "nota" && $("#nota-texto")) $("#nota-texto").value = ""; S.aform = S.aform === ds.form || !ds.form ? null : ds.form; S.aviso = null; S.amotivo = null; render(); }
     else if (ds.reintentar) { delete ASIS.error[ds.reintentar]; render(); }
     else if (ds.motivo) {
       // un solo motivo elegido; "Otro motivo" abre el campo para escribirlo

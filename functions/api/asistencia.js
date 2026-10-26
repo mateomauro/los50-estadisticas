@@ -5,7 +5,9 @@
    GET  /api/asistencia?cat=M16  -> { horarios, entrenamientos, listas, chicos } de esa categoría
    GET  /api/asistencia          -> { resumen: { M16: { listas, presentes, ultima } }, chicos: { M16: { alta, baja } } } para la lista de categorías
    GET  /api/asistencia?respaldo=1  -> todas las tablas (la copia de seguridad de respaldo_asistencia.py)
-   POST /api/asistencia  { cat, accion, ..., por? } -> guarda (accion: horarios | entrenamiento | lista | borrar_lista | chico)
+   GET  /api/asistencia?notas=1  -> las notas de feedback (más nuevas primero); "mia" dice si la escribió quien pregunta (encabezado x-dueno)
+   POST /api/asistencia  { cat, accion, ..., por? } -> guarda (accion: horarios | entrenamiento | lista | borrar_lista | chico | nota | borrar_nota)
+     nota: { cat (una categoría o "General"), texto, por, dueno } · borrar_nota: { id, dueno } — solo borra quien la escribió (dueno = un código que guarda su celular)
      lista: { fecha, presentes, base? } — con "base" (lo que estaba guardado cuando empezó) se juntan las listas de dos entrenadores
    Todo pide la ficha de la clave de Entrenadores en el encabezado "x-ficha" (la misma de los videos: SHA-256 de la clave + ":los50-videos",
    comparada con el secreto CLAVE_ENTRENADORES de Cloudflare). Cada cambio queda anotado en la tabla "cambios" con la fecha y quién lo hizo. */
@@ -18,7 +20,10 @@ const ESQUEMA = [
   // alta: un chico que se sumó a mano (con nombre); baja: un fichado que ya no viene
   "CREATE TABLE IF NOT EXISTS chicos (cat TEXT NOT NULL, id TEXT NOT NULL, nombre TEXT, estado TEXT NOT NULL, ts TEXT NOT NULL, PRIMARY KEY (cat, id))",
   "CREATE TABLE IF NOT EXISTS cambios (ts TEXT NOT NULL, cat TEXT NOT NULL, accion TEXT NOT NULL, detalle TEXT, por TEXT)",
+  // notas de feedback entre entrenadores: "dueno" es un código del celular de quien la escribió (nunca se devuelve), para que solo ella o él pueda borrarla
+  "CREATE TABLE IF NOT EXISTS notas (id INTEGER PRIMARY KEY AUTOINCREMENT, cat TEXT NOT NULL, fecha TEXT NOT NULL, texto TEXT NOT NULL, por TEXT, dueno TEXT, ts TEXT NOT NULL)",
 ];
+const NOTA_CATS = ["General", ...CATS], DUENO = /^[\w-]{8,64}$/;
 const FECHA = /^\d{4}-\d{2}-\d{2}$/, HORA = /^([01]\d|2[0-3]):[0-5]\d$/, ID = /^[\w-]{1,40}$/;
 
 const json = (datos, status = 200) => new Response(JSON.stringify(datos), {
@@ -53,9 +58,14 @@ export async function onRequest({ request, env }) {
     const q = new URL(request.url).searchParams, cat = q.get("cat");
     // la copia de seguridad (respaldo_asistencia.py, en la actualización automática): todas las tablas
     if (q.get("respaldo")) {
-      const tablas = ["horarios", "entrenamientos", "listas", "chicos", "cambios"];
+      const tablas = ["horarios", "entrenamientos", "listas", "chicos", "cambios", "notas"];
       const filas = await Promise.all(tablas.map((x) => todo(`SELECT * FROM ${x}`)));
       return json({ fecha: new Date().toISOString(), ...Object.fromEntries(tablas.map((x, i) => [x, filas[i]])) });
+    }
+    if (q.get("notas")) {
+      const dueno = request.headers.get("x-dueno") || "";
+      const filas = await todo("SELECT id, cat, fecha, texto, por, dueno FROM notas ORDER BY fecha DESC, ts DESC, id DESC LIMIT 300");
+      return json({ notas: filas.map(({ dueno: d, ...n }) => ({ ...n, mia: !!dueno && !!d && igual(d, dueno) })) });
     }
     if (!cat) {
       const resumen = {}, chicos = {};
@@ -79,8 +89,27 @@ export async function onRequest({ request, env }) {
   let b;
   try { b = await request.json(); } catch (e) { return json({ error: "datos" }, 400); }
   const cat = b && b.cat, ts = new Date().toISOString(), por = texto(b && b.por, 60) || null;
-  if (!CATS.includes(cat)) return json({ error: "datos" }, 400);
   const mal = () => json({ error: "datos" }, 400);
+  if (b && b.accion === "borrar_nota") {
+    // solo borra quien la escribió: el código de su celular tiene que ser el de la nota
+    const id = Number(b.id);
+    if (!Number.isInteger(id) || id < 1) return mal();
+    const n = await db.prepare("SELECT dueno FROM notas WHERE id = ?").bind(id).first();
+    if (!n) return json({ ok: true });
+    if (!n.dueno || typeof b.dueno !== "string" || !igual(n.dueno, b.dueno)) return json({ error: "dueno" }, 403);
+    await db.batch([db.prepare("DELETE FROM notas WHERE id = ?").bind(id),
+      db.prepare("INSERT INTO cambios (ts, cat, accion, detalle, por) VALUES (?, ?, 'borrar_nota', ?, ?)").bind(ts, "General", JSON.stringify({ id }), por)]);
+    return json({ ok: true });
+  }
+  if (b && b.accion === "nota") {
+    const t = String(b.texto == null ? "" : b.texto).split(/\r?\n/).map((x) => x.replace(/\s+/g, " ").trim()).join("\n").replace(/\n{3,}/g, "\n\n").trim().slice(0, 600);
+    if (!NOTA_CATS.includes(cat) || t.length < 3 || !por || !DUENO.test(b.dueno || "")) return mal();
+    const fecha = FECHA.test(b.fecha || "") ? b.fecha : ts.slice(0, 10);
+    await db.batch([db.prepare("INSERT INTO notas (cat, fecha, texto, por, dueno, ts) VALUES (?, ?, ?, ?, ?, ?)").bind(cat, fecha, t, por, b.dueno, ts),
+      db.prepare("INSERT INTO cambios (ts, cat, accion, detalle, por) VALUES (?, ?, 'nota', ?, ?)").bind(ts, cat, JSON.stringify({ largo: t.length }), por)]);
+    return json({ ok: true });
+  }
+  if (!CATS.includes(cat)) return json({ error: "datos" }, 400);
   const anotar = (detalle) => db.prepare("INSERT INTO cambios (ts, cat, accion, detalle, por) VALUES (?, ?, ?, ?, ?)").bind(ts, cat, b.accion, JSON.stringify(detalle), por);
   let ops, resp = { ok: true };
 
