@@ -126,7 +126,7 @@
       res: t("resumen"), torneos: t("torneos"), rivales: t("rivales"), ret: t("retencion"),
       camino: t("camino"), era: t("edad_relativa"), fis: t("fisico"), partidos: t("partidos"), jug: t("jugadores"), noSig: t("no_siguieron"),
       diag: datos.diag_web, expertos: datos.expertos, medir: datos.a_medir, fuentes: datos.fuentes, glosario: datos.glosario,
-      guia: datos.guia || null, tries: datos.tries || null, prox: datos.proximos || [], fichados: datos.fichados || null,
+      guia: datos.guia || null, pase: datos.pase || null, alertas: datos.alertas || null, tries: datos.tries || null, prox: datos.proximos || [], fichados: datos.fichados || null,
     };
     const anios = D.res.map((r) => r["Año"]);
     D.desde = Math.min(...anios); D.hasta = Math.max(...anios);
@@ -135,7 +135,7 @@
     $("#candado").hidden = true;
     $("#app").hidden = false;
     S = { ver: "inicio", cat: null, temp: null, gcat: null, tab: null, q: "", ordenJ: "pj", verJ: false, verP: false, verN: false, verR: false, rol: null, para: null, ej: null, puesto: null, practica: null, pgrupo: null, qp: "", qe: "", abiertos: new Set(),
-      acat: null, afecha: null, aform: null, marcas: null, base: null, aviso: null, estadoLista: null, recien: new Set(), area: null, pcat: null, mcat: null };
+      acat: null, afecha: null, aform: null, marcas: null, base: null, aviso: null, estadoLista: null, recien: new Set(), area: null, pcat: null, mcat: null, alcat: null, pedad: null };
     // al abrir la sección (un link, la dirección escrita o que el navegador completó) arranca en el inicio;
     // al recargar o al volver con "atrás" sigue donde estaba (por ejemplo, en medio de una lista)
     const nav = performance.getEntriesByType ? performance.getEntriesByType("navigation")[0] : null;
@@ -155,7 +155,7 @@
     const c = D.cats.find((x) => slug(x) === p.get("cat"));
     const g = D.guia ? gCats().find((x) => slug(x) === p.get("guia")) : null;
     const hayPuestos = !!(D.guia && D.guia.puestos), hayPr = !!(D.guia && D.guia.practicas && D.guia.practicas.length);
-    const vistas = ["club", "consejos", "guiaclub"].concat(D.guia ? ["guia", "cantos", "scrum"] : [], D.guia && D.guia.ejercicios ? ["ejercicios"] : [], hayPuestos ? ["puestos"] : [], hayPr ? ["practicas"] : []);
+    const vistas = ["club", "consejos", "guiaclub", "alertas"].concat(D.pase ? ["pase"] : [], D.guia ? ["guia", "cantos", "scrum"] : [], D.guia && D.guia.ejercicios ? ["ejercicios"] : [], hayPuestos ? ["puestos"] : [], hayPr ? ["practicas"] : []);
     const ej = D.guia && D.guia.ejercicios ? D.guia.ejercicios.find((x) => x.id === p.get("ejercicio")) : null;
     const pu = hayPuestos && puestoDe(+p.get("puesto")) ? +p.get("puesto") : null;
     const pr = hayPr ? D.guia.practicas.find((x) => x.id === p.get("practica")) : null;
@@ -217,7 +217,7 @@
     const ej = S.ver === "ejercicio" && D.guia.ejercicios.find((x) => x.id === S.ej), pu = S.ver === "puesto" && puestoDe(S.puesto);
     return ({ inicio: "Inicio", cat: S.cat, club: "Todo el club", consejos: "Consejos", guia: S.gcat || "Qué aprende cada categoría",
       cantos: "Cantos y zonas", scrum: "Scrum seguro", ejercicios: "Ejercicios", ejercicio: ej && ej.nombre, puestos: "Los puestos", puesto: pu && pu.nombre,
-      practicas: "Prácticas", practica: "Práctica", area: AREAS[S.area], plan: `Planificación ${S.pcat}`, partidos: S.mcat === "Todas" ? "Partidos" : `Partidos de ${S.mcat}`, guiaclub: "Guía del club",
+      practicas: "Prácticas", practica: "Práctica", pase: "De M19 a plantel superior", alertas: "Para mirar", area: AREAS[S.area], plan: `Planificación ${S.pcat}`, partidos: S.mcat === "Todas" ? "Partidos" : `Partidos de ${S.mcat}`, guiaclub: "Guía del club",
       asistencia: "Todas las categorías", asis: S.acat, lista: `Lista de ${S.acat}`, chicos: `Los chicos de ${S.acat}` })[S.ver] || "Volver";
   }
 
@@ -360,12 +360,12 @@
     }
     listaAbierta = S.ver === "lista" ? { cat: S.acat, fecha: S.afecha } : null;
     // todo el ancho en la compu (y el pie se alinea con eso); la tabla de estadísticas no, que queda muy estirada
-    $("#app").classList.toggle("app--ancha", S.ver === "inicio" || S.ver === "partidos" || (S.ver === "area" && S.area !== "estadisticas"));
+    $("#app").classList.toggle("app--ancha", S.ver === "inicio" || S.ver === "partidos" || S.ver === "plan" || S.ver === "pase" || (S.ver === "area" && S.area !== "estadisticas"));
     GRAF.pend = [];
     soltarVideos();
     $("#vista").dataset.pantalla = S.ver; // ojo: no "data-ver", que es el de los botones "Ver todos"
     ({ inicio: vInicio, cat: vCategoria, club: vClub, consejos: vConsejos, guia: vGuia, cantos: vCantos, scrum: vScrum, ejercicios: vEjercicios, ejercicio: vEjercicio, puestos: vPuestos, puesto: vPuesto, practicas: vPracticas, practica: vPractica,
-      asistencia: vAsistencia, asis: vAsis, lista: vLista, chicos: vChicos, area: vArea, plan: vPlan, partidos: vPartidos, guiaclub: vGuiaClub })[S.ver]();
+      asistencia: vAsistencia, asis: vAsis, lista: vLista, chicos: vChicos, area: vArea, plan: vPlan, partidos: vPartidos, guiaclub: vGuiaClub, pase: vPase, alertas: vAlertas })[S.ver]();
     dibujarGraficos();
     ponerFotos();
   }
@@ -377,7 +377,7 @@
   const tendencia = (dif, umbral, normal) => dif > umbral ? `<p class="tend tend--mejor">${IC.sube}Mejor que lo normal (${normal})</p>`
     : dif < -umbral ? `<p class="tend tend--peor">${IC.baja}Peor que lo normal (${normal})</p>` : `<p class="tend">Como lo normal (${normal})</p>`;
   /** ir a una de las pantallas principales: sin categoría, filtros ni formularios abiertos */
-  const LIMPIO = { cat: null, temp: null, gcat: null, tab: null, rol: null, para: null, qe: "", pgrupo: null, qp: "", aform: null, aviso: null };
+  const LIMPIO = { alcat: null, cat: null, temp: null, gcat: null, tab: null, rol: null, para: null, qe: "", pgrupo: null, qp: "", aform: null, aviso: null };
   /** "Volver": lleva a la pantalla de la que se vino y dice cuál es ("‹ M13"), igual que el botón atrás del celular.
       Si no hay de dónde (se recargó sin historial), va a la de arriba ("txt"; "a" es la pantalla o los cambios) sin sumar un paso */
   const hayAtras = () => !!(history.state && history.state.n > 0);
@@ -407,6 +407,24 @@
     nunca: () => ["Nunca vinieron", ["Son chicos de la lista que no vinieron a ninguno de los entrenamientos con lista. Muchas veces son fichados de la UAR que ya no juegan.",
       "Si ya no vienen, tocá “Ya no viene”. Si siguen en el equipo, tocá “Sigue”.",
       "Hasta que se conteste, no cuentan en el porcentaje de la categoría."]],
+    perfilCuerpo: () => ["Cómo es el cuerpo", ["Es el perfil corporal de los Pumas para cada puesto, del área de nutrición de la UAR.",
+      "Masa ósea y masa muscular, en kilos. El índice músculo-óseo es la masa muscular dividida por la ósea.",
+      "Son medidas de jugadores adultos: en juveniles sirven para ver hacia dónde va el cuerpo de cada puesto, no como meta."]],
+    perfilFisico: () => ["Tests físicos", ["Son los valores del Plan de Alto Rendimiento de la UAR para cada puesto y edad (M18, M20 y Senior).",
+      "Mínimo: el piso. Objetivo bajo y objetivo alto: los dos niveles que se buscan. En fuerza, el objetivo es un múltiplo del peso del jugador (1,1 × peso = 1,1 veces lo que pesa).",
+      "Salen de los tests de más de 2.000 jugadores entre 2013 y 2020: el rojo es por debajo del 27% de ese grupo y el verde, por encima del 73%.",
+      "En el Bronco, menos tiempo es mejor. Son valores de 18 años en adelante: para M13 a M16 no hay."]],
+    pase: () => ["De M19 a plantel superior", ["Cuenta los chicos que jugaron al menos un partido oficial en M19 en cada año y mira qué hicieron la temporada siguiente.",
+      "“Jugaron en plantel superior”: jugaron en Primera, Intermedia o Pre-Intermedia. “No volvieron a jugar”: no aparecen en ninguna planilla del club ese año (pueden seguir entrenando o haberse ido).",
+      "“Llegaron al club”: su primer fichaje en Los 50 fue ese año o el anterior. En 2020 no hubo partidos: de 2019 se pasa a 2021. La temporada en curso no terminó, así que el número todavía puede subir.",
+      "Los datos empiezan en 2017 y salen de las planillas oficiales de la UAR."]],
+    alertas: () => ["Para mirar", ["Sale de los listados y las planillas de la UAR, que se actualizan lunes, martes y miércoles.",
+      "Importante: sanción vigente, conmoción sin alta y roja de los últimos 21 días. Para tener en cuenta: 2 o más amarillas en los últimos 60 días.",
+      "Lo que ya se habilitó o ya pasó, no aparece."]],
+    dibujo: () => ["El dibujo", ["Se dibuja como en las fichas de World Rugby: la cancha vista desde arriba. El ataque va hacia arriba; en line y maul, el lateral es el borde de la izquierda.",
+      "Azul: ataque. Rojo: defensa. Flecha llena: carrera. Flecha punteada: pase (y si es curva, patada).",
+      "Si son varios cuadros, es el ejercicio paso a paso: 1, 2, 3.",
+      "“Para revisar”: es un primer dibujo hecho a partir de lo que está escrito; falta que Coordinación lo confirme."]],
     proximos: () => ["Próximos partidos", ["Los partidos que la UAR ya cargó para las próximas fechas, con el día y la hora.",
       "Se actualiza solo los lunes, martes y miércoles. Si un partido no aparece, es porque la UAR todavía no lo cargó.",
       "La UAR no dice en qué cancha se juega."]],
@@ -449,6 +467,9 @@
       "Sale del protocolo y del plan de scrum de la Coordinación de Rugby del club (Magali Fazzi), 2026."]],
     ejercicios: () => ["Ejercicios", ["Los ejercicios de line y maul de la Coordinación de Rugby (Magali Fazzi) y los juegos que más usan los entrenadores de infantiles en sus planificaciones.",
       "Los de line están en orden, de lo más fácil a lo más difícil para cada rol.", "Tocá uno para ver cómo se hace, en qué fijarse y qué material hace falta."]],
+    plan: () => ["Planificación", ["Esta semana: los días que entrena la categoría (los que se cargaron en Asistencia; si no hay, los que suele entrenar según sus prácticas), con la práctica de cada día. El de hoy, en azul.",
+      "“Sin cargar”: ese día todavía no tiene práctica en la planilla.",
+      "La temporada: todas las prácticas del año, mes por mes. Salen de las planillas de cada entrenador en el Drive de Coordinación."]],
     practicas: () => ["Prácticas", ["Las prácticas que armaron los entrenadores del club en 2026, día por día, de las planillas de Coordinación.",
       "Sirven para repetir una que salió bien o para ver cómo se arma una práctica en el club: entrada en calor, destrezas, juego integrado y cierre.",
       "Están como las escribieron los entrenadores. Adentro de cada una, con el botón de abajo se manda por WhatsApp."]],
@@ -533,6 +554,7 @@
     const g = D.guia;
     $("#vista").innerHTML = `
       <div class="cab">${cabTit("¿Qué querés hacer?")}</div>${avisoHTML()}
+      ${alertasInicio()}
       <section class="sec sec--pegada"><ul class="areas areas--6">
         ${!D.fichados ? "" : !hoy ? tarjeta('data-area="asistencia"', IC.lista, "Asistencia", "Tomar lista")
           : `<li class="area-li">${botonArea(`data-ir-hoy="${esc(ult)}|${hoyISO()}"`, IC.lista, "Asistencia", `Hoy entrena ${esc(ult)}${s.hora ? ` · ${esc(s.hora)}` : ""}`, " area--hoy")}
@@ -543,6 +565,87 @@
         ${tarjeta('data-area="estadisticas"', IC.barras, "Estadísticas", "Números y jugadores")}
         ${g ? tarjeta('data-ir="guiaclub"', IC.libro, "Guía del club", "Puestos, scrum y cantos") : ""}
       </ul></section>`;
+  }
+
+  // ---------- de M19 a plantel superior (pase_y_alertas.py) ----------
+  // Cuántos chicos que jugaron en M19 jugaron en plantel superior la temporada siguiente, de dónde vienen los del plantel superior y quiénes son.
+  const pct = (a, b) => (b ? Math.round((100 * a) / b) : 0);
+  /** una barra con partes (el número adentro, si entra) */
+  const barraPase = (partes, aria) => `<div class="pase-barra" role="img" aria-label="${esc(aria)}">${partes.map(([n, cls]) => (n ? `<i class="${cls}" style="flex-grow:${n}">${n}</i>` : "")).join("")}</div>`;
+  const leyPase = (items) => `<ul class="pase-ley">${items.map(([cls, t]) => `<li><i class="${cls}"></i>${t}</li>`).join("")}</ul>`;
+  function vPase() {
+    const P = D.pase, cerradas = P.cohortes.filter((c) => c.sig && !c.en_curso), ult = cerradas.at(-1), curso = P.cohortes.find((c) => c.en_curso);
+    const por = (c) => pct(c.subieron, c.m19), n3 = cerradas.slice(-3).map(por);
+    const tend = n3.length === 3 && n3[2] <= n3[0] - 10 ? `Viene bajando: ${n3.join("% → ")}%` : n3.length === 3 && n3[2] >= n3[0] + 10 ? `Viene subiendo: ${n3.join("% → ")}%` : "";
+    const filaC = (c) => `<li class="pase-f"><div class="pase-f__cab"><b>${c.anio} → ${c.sig}</b><span>${c.m19} en M19${c.en_curso ? " · sigue la temporada" : ""}</span><strong class="num">${por(c)}%</strong></div>
+      ${barraPase([[c.subieron, "s1"], [c.juveniles, "s2"], [c.no, "s3"]], `${c.subieron} jugaron en plantel superior, ${c.juveniles} siguen en juveniles, ${c.no} no volvieron a jugar`)}</li>`;
+    const o = P.origen.at(-1), filaO = (x) => `<li class="pase-f"><div class="pase-f__cab"><b>${x.anio}</b><span>${x.total} jugadores</span><strong class="num">${pct(x.juveniles, x.total)}%</strong></div>
+      ${barraPase([[x.juveniles, "s1"], [x.llegaron, "s4"], [x.ya, "s2"]], `${x.juveniles} salieron de las juveniles, ${x.llegaron} llegaron al club, ${x.ya} ya estaban`)}</li>`;
+    const nm = P.nombres, lista = (xs) => (xs.length ? `<ul class="nombres-p">${xs.map((n) => `<li>${nombreHTML(n)}</li>`).join("")}</ul>` : `<p class="vacio-g">Nadie</p>`);
+    $("#vista").innerHTML = `
+      <div class="cab">${volver(AREAS.estadisticas, AREA_IR("estadisticas"))}${cabTit("De M19 a plantel superior", "pase")}</div>
+      <div class="dos">
+        <section class="sec sec--pegada">${tit("Los de M19: ¿qué hicieron después?")}
+          ${ult ? `<p class="titular">De los <b>${ult.m19}</b> que jugaron en M19 en ${ult.anio}, <b>${ult.subieron}</b> (<b>${por(ult)}%</b>) jugaron en plantel superior en ${ult.sig}${tend ? `. <span class="junto">${tend}</span>` : ""}</p>` : ""}
+          ${curso ? `<p class="titular">Este año, hasta ahora: <b>${curso.subieron}</b> de los <b>${curso.m19}</b> de M19 de ${curso.anio} jugaron en plantel superior en ${curso.sig} (<b>${por(curso)}%</b>)</p>` : ""}
+          ${leyPase([["s1", "Jugaron en plantel superior"], ["s2", "Siguen en juveniles"], ["s3", "No volvieron a jugar"]])}
+          <ul class="pase-g">${P.cohortes.filter((c) => c.sig).slice().reverse().map(filaC).join("")}</ul>
+        </section>
+        <section class="sec sec--pegada">${tit("¿De dónde vienen los del plantel superior?")}
+          ${o ? `<p class="titular">En ${o.anio}, <b>${o.juveniles}</b> de los <b>${o.total}</b> jugadores (<b>${pct(o.juveniles, o.total)}%</b>) pasaron por las juveniles del club${o.llegaron ? `; <b>${o.llegaron}</b> llegaron de afuera` : ""}</p>` : ""}
+          ${leyPase([["s1", "Salieron de las juveniles"], ["s4", "Llegaron al club"], ["s2", "Ya estaban"]])}
+          <ul class="pase-g">${P.origen.slice().reverse().map(filaO).join("")}</ul>
+        </section>
+      </div>
+      <section class="sec">${tit("Quiénes son")}
+        ${desple("pase-act", `M19 de ${nm.actual.anio}`, `<h3 class="grupo">Ya jugaron en plantel superior (${nm.actual.ya.length})</h3>${lista(nm.actual.ya)}
+          <h3 class="grupo">Todavía no (${nm.actual.todavia.length})</h3>${lista(nm.actual.todavia)}`, `${nm.actual.ya.length} de ${nm.actual.ya.length + nm.actual.todavia.length}`)}
+        ${nm.anterior ? desple("pase-ant", `M19 de ${nm.anterior.anio}`, `<h3 class="grupo">Jugaron en plantel superior (${nm.anterior.subieron.length})</h3>${lista(nm.anterior.subieron)}
+          <h3 class="grupo">Siguen en juveniles (${nm.anterior.juveniles.length})</h3>${lista(nm.anterior.juveniles)}
+          <h3 class="grupo">No volvieron a jugar este año (${nm.anterior.no.length})</h3>${lista(nm.anterior.no)}`, `${nm.anterior.subieron.length} de ${nm.anterior.subieron.length + nm.anterior.juveniles.length + nm.anterior.no.length}`) : ""}
+      </section>`;
+  }
+
+  // ---------- para mirar: sanciones, conmociones, rojas y amarillas (se calcula con el día de hoy, no con el día en que se armó el archivo) ----------
+  const NIVEL = { 3: "Importante", 2: "Para tener en cuenta" };
+  function alertasHoy() {
+    const A_ = D.alertas;
+    if (!A_) return [];
+    const hoy = hoyISO(), out = [], sancionados = new Set();
+    A_.sanciones.filter((s) => s.hasta >= hoy && (!s.desde || s.desde <= hoy)).forEach((s) => {
+      sancionados.add(s.j);
+      out.push({ n: 3, j: s.j, c: s.c, t: `Sancionado hasta el ${corta(s.hasta)}${s.art ? ` (${s.art})` : ""}` });
+    });
+    A_.conmociones.filter((x) => x.alta && x.alta >= hoy && x.f <= hoy).forEach((x) =>
+      out.push({ n: 3, j: x.j, c: x.c, t: `En protocolo de conmoción. Alta prevista: ${corta(x.alta)}` }));
+    A_.tarjetas.filter((x) => x.t === "R" && x.f >= masDias(hoy, -21) && !sancionados.has(x.j)).forEach((x) =>
+      out.push({ n: 2, j: x.j, c: x.c, t: `Roja el ${corta(x.f)}: fijate si quedó suspendido` }));
+    const am = {};
+    A_.tarjetas.filter((x) => x.t === "A" && x.f >= masDias(hoy, -60)).forEach((x) => (am[x.j] ??= []).push(x));
+    Object.entries(am).filter(([, v]) => v.length >= 2).forEach(([j, v]) =>
+      out.push({ n: 2, j, c: v[0].c, t: `${v.length} amarillas en los últimos 60 días (la última, el ${corta(v[0].f)})` }));
+    return out.sort((a, b) => b.n - a.n || (a.c || "").localeCompare(b.c || "") || a.j.localeCompare(b.j, "es"));
+  }
+  const alertaFila = (a) => `<li class="alerta alerta--${a.n}"><span class="alerta__ic">${IC.alerta}</span><span class="alerta__txt">
+    <span class="alerta__j">${nombreHTML(a.j)}${a.c ? `<span class="chip chip--cat">${esc(a.c)}</span>` : ""}</span><small>${esc(a.t)}</small></span></li>`;
+  /** la tarjeta del inicio: las 3 más importantes; se toca y abre todas */
+  function alertasInicio() {
+    const al = alertasHoy();
+    if (!al.length) return "";
+    return `<section class="sec sec--pegada"><button type="button" class="alertas-c" data-ir="alertas" aria-label="Para mirar: ${al.length}. Ver todas">
+      <span class="alertas-c__cab"><b>Para mirar</b><span class="alertas-c__n num">${al.length}</span>${IC.adelante}</span>
+      <ul class="alertas-c__l">${al.slice(0, 3).map(alertaFila).join("")}</ul></button></section>`;
+  }
+  function vAlertas() {
+    const todas = alertasHoy(), cats = [...new Set(todas.map((a) => a.c).filter(Boolean))].sort((a, b) => ((D.cats.indexOf(a) + 1) || 99) - ((D.cats.indexOf(b) + 1) || 99));
+    if (S.alcat && !cats.includes(S.alcat)) S.alcat = null;
+    const al = todas.filter((a) => !S.alcat || a.c === S.alcat), grupo = (n) => (al.some((a) => a.n === n)
+      ? `<h3 class="grupo">${NIVEL[n]}</h3><ul class="alertas-g">${al.filter((a) => a.n === n).map(alertaFila).join("")}</ul>` : "");
+    $("#vista").innerHTML = `
+      <div class="cab">${volver()}${cabTit("Para mirar", "alertas")}</div>
+      ${cats.length > 1 ? `<div class="chips-g" role="group" aria-label="Categoría">${[["", "Todas"], ...cats.map((c) => [c, c])].map(([v, l]) =>
+        `<button type="button" data-alcat="${esc(v)}" aria-pressed="${(S.alcat || "") === v}">${esc(l)}</button>`).join("")}</div>` : ""}
+      <section class="sec sec--pegada">${al.length ? grupo(3) + grupo(2) : `<p class="vacio-g">Nada para mirar por ahora</p>`}</section>`;
   }
 
   // la categoría, adentro de un área: botones grandes, de a tres por fila (de a cuatro en infantiles); la última que elegiste, marcada
@@ -557,7 +660,7 @@
           ${tablaCats("Plantel superior", D.cats.filter((c) => PS.includes(c)))}
           ${tablaCats("Juveniles", D.cats.filter((c) => !PS.includes(c)))}
           <h3 class="grupo">Todo el club</h3>
-          <ul class="menu">${opcion("club", IC.gente, "¿Los chicos siguen?", "Cuántos siguen y llegan a Primera")}${opcion("consejos", IC.idea, "Consejos", "Qué trabajar y qué empezar a medir")}</ul>
+          <ul class="menu">${D.pase ? opcion("pase", IC.sube, "De M19 a plantel superior", "Cuántos suben cada año y de dónde vienen") : ""}${opcion("club", IC.gente, "¿Los chicos siguen?", "Cuántos siguen y llegan a Primera")}${opcion("consejos", IC.idea, "Consejos", "Qué trabajar y qué empezar a medir")}</ul>
         </section>`;
       return;
     }
@@ -585,10 +688,45 @@
       ${jg ? opcionDe(`data-ir-ej-para="${esc(cat)}"`, IC.cono, `Juegos para ${esc(cat)}`, `${pl(jg, "juego", "juegos")} que usan en ${esc(cat)}`) : ""}
     </ul>`;
   }
-  /** Planificación de una categoría: las prácticas de su grupo (M15 y M16…), con lo que tiene que aprender arriba */
+  /** los días que el grupo suele entrenar, según sus prácticas (los que tienen al menos una de cada siete) */
+  function diasHabituales(lista) {
+    const c = Array(7).fill(0), f = lista.filter((p) => p.fecha);
+    f.forEach((p) => c[dia(p.fecha).getDay()]++);
+    return new Set(c.flatMap((n, i) => (n >= Math.max(2, f.length / 7) ? [i] : [])));
+  }
+  // Planificación de una categoría: la semana (los días que entrena, con la práctica de cada uno; el de hoy, pintado),
+  // lo que tiene que aprender y la temporada (las prácticas de su grupo: M11 y M12…). En la compu, la semana queda fija a la izquierda.
   function vPlan() {
-    S.pgrupo = grupoDeCat(S.pcat === "Plantel superior" ? "Primera" : S.pcat);
-    vPracticas(S.pcat);
+    const cat = S.pcat, hoy = hoyISO();
+    S.pgrupo = grupoDeCat(cat === "Plantel superior" ? "Primera" : cat);
+    const todas = S.pgrupo ? prLista() : [], conFecha = todas.filter((p) => p.fecha);
+    // los días que entrena: los que cargó el entrenador en Asistencia (con su hora, suspendidos y agregados);
+    // si todavía no los cargó, los que suele entrenar según sus prácticas
+    const d = D.fichados && ASIS_CATS.includes(cat) ? ASIS.cats[cat] : null;
+    if (D.fichados && ASIS_CATS.includes(cat) && !d && !ASIS.error[cat]) cargarAsis(cat);
+    const lunes = masDias(hoy, -((dia(hoy).getDay() + 6) % 7)), domingo = masDias(lunes, 6);
+    const ses = d && d.horarios.length ? new Map(sesiones(d, lunes, domingo).map((s) => [s.fecha, s])) : null, habit = diasHabituales(todas);
+    const semana = Array.from({ length: 7 }, (_, i) => masDias(lunes, i)).flatMap((f) => {
+      const ps = conFecha.filter((p) => p.fecha === f), s = ses && ses.get(f), dd = dia(f), esHoy = f === hoy;
+      if (!ps.length && !(ses ? s : habit.has(dd.getDay()))) return [];
+      const cls = esHoy ? " ej--hoy" : "", canc = s && s.estado === "cancelado";
+      const badge = `<span class="prac__dia"><b class="num">${dd.getDate()}</b><small>${esHoy ? "hoy" : DIA_S[dd.getDay()].slice(0, 3)}</small></span>`;
+      const extra = [s && s.hora, canc ? `Suspendido${s.motivo ? `: ${s.motivo}` : ""}` : ""].filter(Boolean).map(esc).join(" · ");
+      if (ps.length) return ps.map((p) => `<li data-pr="${esc(p.id)}"><button type="button" class="ej prac${cls}" data-ir-practica="${esc(p.id)}">${badge}
+        <span class="ej__txt"><b>${esc(p.foco || "Práctica")}</b><small>${[extra, esc(p.quien), minDe(p) ? `${minDe(p)} min` : ""].filter(Boolean).join(" · ")}</small></span>${IC.adelante}</button></li>`);
+      return [`<li><div class="ej prac ej--vacio${cls}">${badge}<span class="ej__txt"><b>${canc ? "Suspendido" : "Sin cargar"}</b>${extra && !canc ? `<small>${extra}</small>` : canc && s.motivo ? `<small>${esc(s.motivo)}</small>` : ""}</span><span></span></div></li>`];
+    });
+    $("#vista").innerHTML = `
+      <div class="cab">${volver(AREAS.planificacion, AREA_IR("planificacion"))}${cabTit(`Planificación de ${esc(cat)}`, "plan")}</div>
+      <div class="plan">
+        <div class="plan__lado">
+          <section class="sec sec--pegada">${tit("Esta semana")}${semana.length ? `<ul class="filas-cat">${semana.join("")}</ul>` : `<p class="vacio-g">Sin entrenamientos esta semana</p>`}</section>
+          <section class="sec">${tit("Para armar la práctica")}${atajosPlan(cat)}</section>
+        </div>
+        <section class="sec sec--pegada">${tit(S.pgrupo ? `La temporada de ${esc(S.pgrupo)}` : "La temporada")}
+          ${todas.length ? `${buscadorPr()}${mesesPr(todas, true)}${sinPr}` : `<p class="vacio-g">Todavía no hay prácticas cargadas</p>`}</section>
+      </div>`;
+    filtrarPr();
   }
 
   // los partidos de una categoría (o de todas): los próximos que cargó la UAR y los últimos resultados; en la compu, uno al lado del otro
@@ -988,7 +1126,7 @@
     const fila = (e) => `<li data-q="${esc(textoEj(e))}">
       <button type="button" class="ej${e.paso ? "" : " ej--sin-paso"}" data-ir-ej="${esc(e.id)}">
         ${e.paso ? `<span class="ej__paso num">${e.paso}</span>` : ""}
-        <span class="ej__txt"><b>${esc(e.nombre)}</b>${e.foco[0] ? `<small>${conCantos(e.foco[0])}</small>` : ""}${e.material ? `<span class="ej__mat">${IC.cono}${esc(e.material)}</span>` : ""}${videosDe("ejercicios", e.id).length ? `<span class="ej__video">${IC.play}Con video</span>` : ""}</span>
+        <span class="ej__txt"><b>${esc(e.nombre)}</b>${e.foco[0] ? `<small>${conCantos(e.foco[0])}</small>` : ""}${e.material ? `<span class="ej__mat">${IC.cono}${esc(e.material)}</span>` : ""}${e.dibujo ? `<span class="ej__video">${IC.cono}Con dibujo</span>` : ""}${videosDe("ejercicios", e.id).length ? `<span class="ej__video">${IC.play}Con video</span>` : ""}</span>
         ${IC.adelante}</button></li>`;
     $("#vista").innerHTML = `
       <div class="cab">${volver()}${cabTit("Ejercicios", "ejercicios")}</div>
@@ -1018,6 +1156,78 @@
   }
 
   // un ejercicio en pantalla completa
+  // ---------- el dibujo de un ejercicio, como las fichas de World Rugby (T1 Rugby) y de la RFL ----------
+  // La cancha vista desde arriba (con sus medidas, si el ejercicio las dice), el ataque en azul y la defensa en rojo,
+  // carrera = flecha llena, pase = flecha punteada, patada = punteada y curva; el ejercicio en cuadros, paso a paso,
+  // y abajo la leyenda (solo con lo que se usa). Los dibujos salen de diagramas_entrenadores.py.
+  const DIB = { pasto: "#3d8b4f", raya: "#ffffff", ataque: "#1b5fd1", defensa: "#d9483b", entrenador: "#f5c518", cono: "#ff8a1f", escudo: "#23262d", tinta: "#0b0d12", suave: "#545d6e" };
+  let dibN = 0; // para que cada cuadro tenga sus propias puntas de flecha
+  /** un cuadro del ejercicio, en SVG. "medidas": los metros a los costados (solo en el primero) */
+  function cuadroSVG(dib, c, medidas) {
+    const [w, h] = dib.cancha, K = 10, W0 = w * K, H0 = h * K;
+    // el tamaño de jugadores y conos no depende del tamaño de la cancha: se ve parecido en una de 8 m y en una de 36 m
+    const u = 1 / Math.min(330 / (W0 + 40), 440 / (H0 + 40)), M = 20 * u, W = W0 + 2 * M, H = H0 + 2 * M;
+    const X = (x) => +(M + x * K).toFixed(1), Y = (y) => +(M + y * K).toFixed(1), n = ++dibN;
+    const linea = (pts, cls) => {
+      const p = pts.map(([x, y]) => [X(x), Y(y)]);
+      // carrera: llena y oscura; pase y patada: punteadas y blancas (como en las fichas de World Rugby y de la RFL)
+      const at = `stroke="${cls === "corre" ? DIB.tinta : DIB.raya}"${cls === "corre" ? "" : ` stroke-dasharray="${(5 * u).toFixed(1)} ${(4 * u).toFixed(1)}"`} marker-end="url(#d${n}-${cls})"`;
+      if (cls === "patea" && p.length === 2) { // la patada va en curva
+        const [[x1, y1], [x2, y2]] = p, mx = (x1 + x2) / 2, my = (y1 + y2) / 2, dx = x2 - x1, dy = y2 - y1;
+        return `<path d="M${x1} ${y1} Q${(mx - dy * 0.3).toFixed(1)} ${(my + dx * 0.3).toFixed(1)} ${x2} ${y2}" ${at}/>`;
+      }
+      const d = p.length === 3 ? `M${p[0]} Q${p[1]} ${p[2]}` : `M${p.map((q) => q.join(" ")).join(" L")}`;
+      return `<path d="${d}" ${at}/>`;
+    };
+    const jug = ([x, y, t], col) => `<g class="d-jug"><circle cx="${X(x)}" cy="${Y(y)}" r="${8 * u}" fill="${col}" stroke="#fff" stroke-width="${1.6 * u}"/>${t ? `<text x="${X(x)}" y="${Y(y)}" font-size="${(t.length > 1 ? 7.5 : 9) * u}">${esc(t)}</text>` : ""}</g>`;
+    const punta = (cls, col) => `<marker id="d${n}-${cls}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4.2" markerHeight="4.2" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="${col}"/></marker>`;
+    const s = (k) => c[k] || [];
+    return `<svg viewBox="0 0 ${W.toFixed(1)} ${H.toFixed(1)}" role="img" aria-label="${esc(c.txt || "Dibujo del ejercicio")}">
+      <defs>${punta("corre", DIB.tinta)}${punta("pasa", DIB.raya)}${punta("patea", DIB.raya)}
+        <pattern id="d${n}-ray" width="${6 * u}" height="${6 * u}" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="${6 * u}" height="${6 * u}" fill="none"/><line x1="0" y1="0" x2="0" y2="${6 * u}" stroke="#fff" stroke-opacity=".35" stroke-width="${2 * u}"/></pattern></defs>
+      <rect x="${M}" y="${M}" width="${W0}" height="${H0}" rx="${3 * u}" fill="${DIB.pasto}"/>
+      <rect x="${M}" y="${M}" width="${W0}" height="${H0}" rx="${3 * u}" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="${1.2 * u}"/>
+      ${medidas && dib.medidas ? `<g class="d-med" font-size="${9 * u}"><line x1="${M}" y1="${H - 8 * u}" x2="${M + W0}" y2="${H - 8 * u}"/><text x="${M + W0 / 2}" y="${H - 11 * u}">${w} m</text>
+        <line x1="${8 * u}" y1="${M}" x2="${8 * u}" y2="${M + H0}"/><text x="${11 * u}" y="${M + H0 / 2}" transform="rotate(-90 ${11 * u} ${M + H0 / 2})">${h} m</text></g>` : ""}
+      ${s("area").map(([x, y, aw, ah, t]) => `<rect class="d-area" x="${X(x)}" y="${Y(y)}" width="${aw * K}" height="${ah * K}" fill="url(#d${n}-ray)" stroke-width="${1.2 * u}"/>${t ? `<text class="d-txt" x="${X(x) + 4 * u}" y="${Y(y) + 10 * u}" font-size="${8 * u}" text-anchor="start">${esc(t)}</text>` : ""}`).join("")}
+      ${s("lin").map(([x1, y1, x2, y2, t]) => `<line class="d-lin" x1="${X(x1)}" y1="${Y(y1)}" x2="${X(x2)}" y2="${Y(y2)}" stroke-width="${1.6 * u}"/>${t ? `<text class="d-txt" x="${X(x1) + 4 * u}" y="${Y(y1) + (y1 === y2 ? -4 : 12) * u}" font-size="${9 * u}" text-anchor="start">${esc(t)}</text>` : ""}`).join("")}
+      ${s("escalera").map(([x, y, l]) => `<g class="d-esc"><rect x="${X(x) - 0.48 * K}" y="${Y(y)}" width="${0.96 * K}" height="${l * K}" fill="none" stroke-width="${1.4 * u}"/>${Array.from({ length: Math.floor(l / 0.6) }, (_, i) => `<line x1="${X(x) - 0.48 * K}" x2="${X(x) + 0.48 * K}" y1="${Y(y + 0.6 * (i + 1))}" y2="${Y(y + 0.6 * (i + 1))}" stroke-width="${1.2 * u}"/>`).join("")}</g>`).join("")}
+      ${s("conos").map(([x, y]) => `<path class="d-cono" d="M${X(x)} ${Y(y) - 5 * u}L${X(x) + 4.5 * u} ${Y(y) + 3.5 * u}L${X(x) - 4.5 * u} ${Y(y) + 3.5 * u}z" stroke-width="${0.8 * u}"/>`).join("")}
+      ${s("esc").map(([x, y]) => `<rect class="d-escudo" x="${X(x) - 8 * u}" y="${Y(y) - 3.5 * u}" width="${16 * u}" height="${7 * u}" rx="${2 * u}" stroke-width="${0.8 * u}"/>`).join("")}
+      <g stroke-width="${2 * u}" fill="none" stroke-linecap="round" stroke-linejoin="round">${s("corre").map((p) => linea(p, "corre")).join("")}${s("pasa").map((p) => linea(p, "pasa")).join("")}${s("patea").map((p) => linea(p, "patea")).join("")}</g>
+      ${s("a").map((j) => jug(j, DIB.ataque)).join("")}${s("d").map((j) => jug(j, DIB.defensa)).join("")}
+      ${s("e").map(([x, y]) => `<g class="d-jug"><rect x="${X(x) - 7 * u}" y="${Y(y) - 7 * u}" width="${14 * u}" height="${14 * u}" rx="${2 * u}" fill="${DIB.entrenador}" stroke="${DIB.tinta}" stroke-width="${1 * u}"/><text x="${X(x)}" y="${Y(y)}" font-size="${8.5 * u}" fill="${DIB.tinta}">E</text></g>`).join("")}
+      ${s("p").map(([x, y]) => `<ellipse class="d-pelota" cx="${X(x)}" cy="${Y(y)}" rx="${4.6 * u}" ry="${3.1 * u}" transform="rotate(-30 ${X(x)} ${Y(y)})" stroke-width="${1 * u}"/>`).join("")}
+      ${s("rot").map(([x, y, t]) => `<text class="d-txt" x="${X(x)}" y="${Y(y)}" font-size="${10 * u}">${esc(t)}</text>`).join("")}
+    </svg>`;
+  }
+  /** un ícono chico para la leyenda */
+  const iconoLey = (k) => `<svg viewBox="0 0 28 16" aria-hidden="true">${({
+    a: `<circle cx="14" cy="8" r="6" fill="${DIB.ataque}"/>`, d: `<circle cx="14" cy="8" r="6" fill="${DIB.defensa}"/>`,
+    e: `<rect x="8" y="2" width="12" height="12" rx="2" fill="${DIB.entrenador}" stroke="${DIB.tinta}"/>`,
+    p: `<ellipse cx="14" cy="8" rx="6" ry="4" transform="rotate(-30 14 8)" fill="#fff" stroke="${DIB.tinta}"/>`,
+    conos: `<path d="M14 2L20 13H8z" fill="${DIB.cono}" stroke="${DIB.tinta}" stroke-width=".8"/>`,
+    esc: `<rect x="5" y="4.5" width="18" height="7" rx="2" fill="${DIB.escudo}"/>`,
+    escalera: `<rect x="9" y="1" width="10" height="14" fill="none" stroke="${DIB.tinta}"/><path d="M9 5.5h10M9 10h10" stroke="${DIB.tinta}"/>`,
+    area: `<rect x="3" y="3" width="22" height="10" fill="#e8eef9" stroke="${DIB.suave}" stroke-dasharray="3 2"/>`,
+    corre: `<path d="M2 8h20" stroke="${DIB.tinta}" stroke-width="2"/><path d="M20 4l6 4-6 4z" fill="${DIB.tinta}"/>`,
+    pasa: `<path d="M2 8h18" stroke="${DIB.tinta}" stroke-width="2" stroke-dasharray="3 3"/><path d="M20 4l6 4-6 4z" fill="${DIB.tinta}"/>`,
+    patea: `<path d="M2 13Q12 0 21 9" fill="none" stroke="${DIB.tinta}" stroke-width="2" stroke-dasharray="3 3"/><path d="M19 5l6 6-7 1z" fill="${DIB.tinta}"/>`,
+  })[k]}</svg>`;
+  const LEY = [["a", "Ataque"], ["d", "Defensa"], ["e", "Entrenador"], ["p", "Pelota"], ["conos", "Cono"], ["esc", "Escudo o bolsa"],
+    ["escalera", "Escalera"], ["area", "Área"], ["corre", "Carrera"], ["pasa", "Pase"], ["patea", "Patada"]];
+  /** el dibujo entero: los cuadros paso a paso (numerados si son varios) y la leyenda */
+  function dibujoHTML(dib) {
+    const cs = dib.cuadros, usa = (k) => cs.some((c) => c[k] && c[k].length);
+    const letras = Object.entries(dib.letras || {}).filter(([l]) => cs.some((c) => [...(c.a || []), ...(c.d || [])].some((j) => j[2] === l)));
+    return `<div class="dib">
+      <div class="dib__cuadros dib__cuadros--${cs.length}">${cs.map((c, i) => `<figure>${cuadroSVG(dib, c, i === 0)}
+        ${c.txt ? `<figcaption>${cs.length > 1 ? `<b class="num">${i + 1}</b>` : ""}<span>${esc(c.txt)}</span></figcaption>` : ""}</figure>`).join("")}</div>
+      <ul class="dib__ley">${LEY.filter(([k]) => usa(k)).map(([k, t]) => `<li>${iconoLey(k)}${t}</li>`).join("")}
+        ${letras.map(([l, t]) => `<li><b class="dib__letra">${esc(l)}</b>${esc(t)}</li>`).join("")}</ul>
+    </div>`;
+  }
+
   function vEjercicio() {
     const todos = D.guia.ejercicios, e = todos.find((x) => x.id === S.ej);
     // se recorre la misma lista que se estaba mirando (si se entró con un link directo, todos)
@@ -1029,6 +1239,12 @@
       return `<button type="button"${ok ? ` data-lado data-ir-ej="${esc(orden[k].id)}" aria-label="${der ? "Siguiente" : "Anterior"}: ${esc(orden[k].nombre)}"` : " disabled"}>${der ? "" : IC.atras}<span>${der ? "Siguiente" : "Anterior"}</span>${der ? IC.adelante : ""}</button>`;
     };
     const bloque = (t, h) => `<h3 class="grupo">${t}</h3>${h}`, vids = videosDe("ejercicios", e.id);
+    // la ficha, en el orden de las de World Rugby: qué se aprende y cómo se organiza, el dibujo paso a paso,
+    // cómo se juega y los puntos clave. Sin dibujo (técnica del cuerpo), el video va primero
+    const juego = e.tipo === "Juegos", dib = e.dibujo;
+    const org = [juego && e.foco[0] ? ["Qué se aprende", e.foco[0]] : null, dib && dib.jugadores ? ["Jugadores", dib.jugadores] : null,
+      e.material ? ["Material", e.material] : null].filter(Boolean);
+    const vidHTML = vids.length ? bloque(vids.length === 1 ? "Video" : "Videos", `<div class="videos-ej">${vids.map(tarjetaVideo).join("")}</div>`) : "";
     $("#vista").innerHTML = `
       <div class="cab">
         <div class="cab__fila">${volver("Ejercicios", { ver: "ejercicios", ej: null })}
@@ -1037,13 +1253,14 @@
         <h2 class="ej-tit">${esc(e.nombre)}</h2>
       </div>
       <section class="sec sec--pegada ej-det">
-        ${vids.length ? bloque(vids.length === 1 ? "Video" : "Videos", `<div class="videos-ej">${vids.map(tarjetaVideo).join("")}</div>`) : ""}
-        ${e.como.length ? bloque("Cómo se hace", `<div class="txt-g">${e.como.map((p) => `<p>${conCantos(p)}</p>`).join("")}</div>`) : ""}
-        ${e.foco.length ? bloque(e.tipo === "Juegos" ? "Qué se trabaja" : "En qué fijarse", lista(e.foco, "check-g")) : ""}
-        ${e.material ? bloque("Material", `<p class="ej-mat">${IC.cono}<span>${esc(e.material)}</span></p>`) : ""}
-        ${e.cats.length ? bloque("Lo usan en", `<p class="claves-g">${e.cats.map((c) => `<span class="chip">${esc(c)}</span>`).join("")}</p>`) : ""}
+        ${org.length ? `<dl class="ficha-org">${org.map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>` : ""}
+        ${dib ? `<div class="dib-cab"><span class="dib-cab__t"><h3 class="grupo">El dibujo</h3>${ayudaBtn("dibujo")}</span>${dib.revisar ? `<span class="chip chip--revisar">Para revisar</span>` : ""}</div>${dibujoHTML(dib)}` : vidHTML}
+        ${e.como.length ? bloque(juego ? "Cómo se juega" : "Cómo se hace", `<div class="txt-g">${e.como.map((x) => `<p>${conCantos(x)}</p>`).join("")}</div>`) : ""}
+        ${!juego && e.foco.length ? bloque("Puntos clave", lista(e.foco, "check-g")) : ""}
+        ${dib ? vidHTML : ""}
         ${e.fotos.length ? bloque("Fotos", `<div class="fotos-ej">${e.fotos.map((f, n) =>
           `<figure><img src="${VACIA}" data-foto="${esc(f)}" alt="Foto ${n + 1} de la actividad «${esc(e.nombre)}»" width="560" height="340" decoding="async"></figure>`).join("")}</div>`) : ""}
+        ${e.cats.length ? bloque("Lo usan en", `<p class="claves-g">${e.cats.map((c) => `<span class="chip">${esc(c)}</span>`).join("")}</p>`) : ""}
       </section>`;
   }
 
@@ -1355,6 +1572,39 @@
   }
 
   // un puesto: qué tiene que saber hacer, lo ideal en un partido, lo mental y con qué entrenarlo
+  // ---------- los puestos: cómo es el cuerpo y los tests físicos (perfiles de los Pumas / UAR, perfiles_pumas.py) ----------
+  const FIS_EDADES = ["M18", "M20", "Senior"];
+  const FIS_FUERZA = [["banco", "Press de banco"], ["dominadas", "Dominadas"], ["sentadilla", "Sentadilla"]];
+  const FIS_POTENCIA = [["salto_h", "Salto horizontal", "m"], ["salto_v", "Salto vertical", "cm"]];
+  /** "Cómo es el cuerpo": peso, altura, masa ósea y muscular, IMO y la forma */
+  function cuerpoHTML(c) {
+    const caja = ([k, v]) => (v ? `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>` : "");
+    return `<div class="dib-cab"><span class="chip chip--gris">Pumas · jugadores adultos</span>${ayudaBtn("perfilCuerpo")}</div>
+      <dl class="ficha-org">${[["Peso", c.peso], ["Altura", c.altura], ["Masa ósea (kg)", c.mo], ["Masa muscular (kg)", c.mm], ["Índice músculo-óseo", c.imo]].map(caja).join("")}</dl>
+      <h3 class="grupo">Forma del cuerpo</h3>${lista(c.forma, "check-g")}`;
+  }
+  /** "Tests físicos": una tabla por edad (M18, M20, Senior); fuerza, potencia, velocidad y resistencia */
+  function fisicoHTML(f) {
+    const i = Math.max(0, FIS_EDADES.indexOf(S.pedad || "M18")), kg = (r) => `${r[0]} kg`, x = (r) => `${r} × peso`;
+    const fila = (nom, a, b, c) => `<tr><th scope="row" class="izq">${nom}</th><td>${a}</td><td>${b}</td><td>${c}</td></tr>`;
+    const un = (k, nom, u) => fila(nom, `${f[k][i][0]} ${u}`, `${f[k][i][1]} ${u}`, `${f[k][i][2]} ${u}`);
+    const v = f.velocidad;
+    return `<div class="dib-cab"><span class="chip chip--gris">Referencia de la UAR · desde M18</span>${ayudaBtn("perfilFisico")}</div>
+      <div class="chips-g" role="group" aria-label="Edad">${FIS_EDADES.map((e) => `<button type="button" data-edad="${e}" aria-pressed="${e === FIS_EDADES[i]}">${e === "Senior" ? "Senior" : e}</button>`).join("")}</div>
+      <div class="tabla-e-wrap"><table class="tabla-e fis"><thead><tr><th class="izq">Test</th><th scope="col">Mínimo</th><th scope="col">Objetivo bajo</th><th scope="col">Objetivo alto</th></tr></thead><tbody>
+        <tr class="fis-g"><th colspan="4">Fuerza</th></tr>
+        ${FIS_FUERZA.map(([k, nom]) => fila(nom, kg(f[k][i]), x(f[k][i][1]), x(f[k][i][2]))).join("")}
+        <tr class="fis-g"><th colspan="4">Potencia</th></tr>
+        ${FIS_POTENCIA.map(([k, nom, u]) => un(k, nom, u)).join("")}
+        ${v ? `<tr class="fis-g"><th colspan="4">Velocidad</th></tr>
+          <tr><th scope="row" class="izq">10 metros</th><td colspan="3">${v.m10[i]} s</td></tr>
+          <tr><th scope="row" class="izq">30 metros</th><td colspan="3">${v.m30[i]} s</td></tr>
+          <tr><th scope="row" class="izq">Velocidad máxima</th><td colspan="3">${v.vmax[i]} km/h</td></tr>` : ""}
+      </tbody></table></div>
+      <div class="tabla-e-wrap"><table class="tabla-e fis"><thead><tr><th class="izq">Resistencia</th><th scope="col">Objetivo bajo</th><th scope="col">Objetivo alto</th><th scope="col">Máximo</th></tr></thead><tbody>
+        ${fila("Bronco", `${f.bronco[i][0]} s`, `${f.bronco[i][1]} s`, `${f.bronco[i][2]} s`)}</tbody></table></div>`;
+  }
+
   function vPuesto() {
     const todos = D.guia.puestos, p = puestoDe(S.puesto), j = todos.indexOf(p), n = p.n[0];
     const salto = (k, der) => {
@@ -1378,7 +1628,8 @@
         <h3 class="grupo">Lo mental</h3>
         <p class="claves-g">${p.mental.map((m) => `<span class="chip">${esc(m)}</span>`).join("")}</p>
         ${atajos ? `<h3 class="grupo">Para entrenarlo</h3>${atajos}` : ""}
-      </section>`;
+      </section>
+      ${p.cuerpo ? `<section class="sec desplegables">${desple("p-cuerpo", "Cómo es el cuerpo", cuerpoHTML(p.cuerpo))}${desple("p-fisico", "Tests físicos", fisicoHTML(p.fisico), p.fisico.nombre)}</section>` : ""}`;
   }
 
   // ---------- prácticas de los entrenadores (planillas de PLANIFICACIONES, practicas_entrenadores.py) ----------
@@ -1406,7 +1657,7 @@
   /** el número de cada grupo; mientras se busca dice cuántos se ven ("6 de 15") */
   const cuenta = (n, [uno, varios]) => `<span class="num" data-n="${n}" data-txt="${pl(n, uno, varios)}">${pl(n, uno, varios)}</span>`;
   function contar(gr, q, vis) {
-    const c = gr.querySelector(".grupo-ej__cab .num");
+    const c = gr.querySelector(".grupo-ej__cab .num, summary .num");
     if (c && c.dataset.n) c.textContent = q ? `${vis} de ${c.dataset.n}` : c.dataset.txt;
   }
   /** los minutos de una práctica o sesión: solo si todas las actividades tienen sus minutos */
@@ -1414,40 +1665,39 @@
   let Q_PR = null; // lo que se busca de cada práctica (se arma la primera vez que se usa el buscador)
   const textoBusca = (p) => norm([p.foco, p.grupo, p.quien, ...p.objetivos, ...p.bloques.flatMap((b) => (b.items || []).map((it) => `${it.obj || ""} ${it.act || ""} ${it.det || ""}`))].join(" "));
 
-  function vPracticas(plan) {
+  /** una práctica en la lista: el día (número y día de la semana), el foco y quién la armó */
+  const filaPr = (p, cls = "") => {
+    const d = p.fecha ? dia(p.fecha) : null;
+    return `<li data-pr="${esc(p.id)}"><button type="button" class="ej prac${cls}" data-ir-practica="${esc(p.id)}">
+      <span class="prac__dia">${d ? `<b class="num">${d.getDate()}</b><small>${DIA_S[d.getDay()].slice(0, 3)}</small>` : `<small>${p.semana ? `Sem. ${p.semana}` : "Sin fecha"}</small>`}</span>
+      <span class="ej__txt"><b>${esc(p.foco || "Práctica")}</b><small>${S.pgrupo ? "" : `${esc(p.grupo)} · `}${esc(p.quien)}${minDe(p) ? ` · ${minDe(p)} min` : ""}</small></span>
+      ${IC.adelante}</button></li>`;
+  };
+  /** las prácticas por mes, la más nueva arriba; en Planificación cada mes se abre y se cierra (el último, abierto) */
+  function mesesPr(lista, plegar) {
     const meses = [];
-    prLista().forEach((p) => {
+    lista.forEach((p) => {
       const k = p.orden === "9" ? "sin" : p.orden.slice(0, 7);
       let m = meses.find((x) => x.k === k);
       if (!m) meses.push((m = { k, items: [] }));
       m.items.push(p);
     });
-    const fila = (p) => {
-      const d = p.fecha ? dia(p.fecha) : null;
-      return `<li data-pr="${esc(p.id)}"><button type="button" class="ej prac" data-ir-practica="${esc(p.id)}">
-        <span class="prac__dia">${d ? `<b class="num">${d.getDate()}</b><small>${DIA_S[d.getDay()].slice(0, 3)}</small>` : `<small>${p.semana ? `Sem. ${p.semana}` : "Sin fecha"}</small>`}</span>
-        <span class="ej__txt"><b>${esc(p.foco || "Práctica")}</b><small>${S.pgrupo ? "" : `${esc(p.grupo)} · `}${esc(p.quien)}${minDe(p) ? ` · ${minDe(p)} min` : ""}</small></span>
-        ${IC.adelante}</button></li>`;
-    };
+    const nom = (k) => (k === "sin" ? "Sin fecha" : mayus(MES_S[+k.slice(5, 7) - 1]));
+    const filas = (m) => `<ul class="filas-cat">${m.items.map((x) => filaPr(x)).join("")}</ul>`;
+    return meses.map((m, i) => (plegar
+      ? `<details class="grupo-ej mas mes"${i ? "" : " open"}><summary><span class="mas__tit">${nom(m.k)}</span><span class="mas__dato">${cuenta(m.items.length, ["práctica", "prácticas"])}</span></summary>${filas(m)}</details>`
+      : `<div class="grupo-ej"><div class="grupo-ej__cab"><h3 class="grupo-cat__tit">${nom(m.k)}</h3>${cuenta(m.items.length, ["práctica", "prácticas"])}</div>${filas(m)}</div>`)).join("");
+  }
+  const buscadorPr = () => `<label class="buscar-g"><span class="sr">Buscar una práctica</span>${IC.buscar}<input type="search" id="buscar-pr" value="${esc(S.qp)}" placeholder="Buscar: tackle, ruck, pase…" autocomplete="off" enterkeyhint="search"></label>`;
+  const sinPr = `<p class="vacio-g" id="sin-pr" hidden>No hay ninguna práctica con esa palabra.</p>`;
+
+  function vPracticas() {
     const grupos = P_GRUPOS.filter((g) => nPr(g));
-    if (plan && !S.pgrupo) meses.length = 0; // (todas las categorías tienen su grupo; por las dudas, no se muestran las de otros)
-    $("#vista").innerHTML = (plan ? `
-      <div class="cab">${volver(AREAS.planificacion, AREA_IR("planificacion"))}${cabTit(`Planificación de ${esc(plan)}`)}</div>
-      <section class="sec sec--pegada">${atajosPlan(plan)}</section>
-      <section class="sec">
-        ${tit(S.pgrupo ? `Prácticas de ${esc(S.pgrupo)}` : "Prácticas")}
-        ${meses.length ? "" : `<p class="vacio-g">Todavía no hay prácticas cargadas</p>`}
-      ` : `
+    $("#vista").innerHTML = `
       <div class="cab">${volver()}${cabTit("Prácticas", "practicas")}</div>
       <div class="chips-g" role="group" aria-label="Categoría">${[["", "Todas"], ...grupos.map((g) => [g, g])].map(([v, l]) =>
         `<button type="button" data-pgrupo="${esc(v)}" aria-pressed="${(S.pgrupo || "") === v}">${esc(l)}</button>`).join("")}</div>
-      <section class="sec sec--pegada">
-      `) + `
-        ${meses.length ? `<label class="buscar-g"><span class="sr">Buscar una práctica</span>${IC.buscar}<input type="search" id="buscar-pr" value="${esc(S.qp)}" placeholder="Buscar: tackle, ruck, pase…" autocomplete="off" enterkeyhint="search"></label>` : ""}
-        ${meses.map((m) => `<div class="grupo-ej"><div class="grupo-ej__cab"><h3 class="grupo-cat__tit">${m.k === "sin" ? "Sin fecha" : mayus(MES_S[+m.k.slice(5, 7) - 1])}</h3>${cuenta(m.items.length, ["práctica", "prácticas"])}</div>
-          <ul class="filas-cat">${m.items.map(fila).join("")}</ul></div>`).join("")}
-        <p class="vacio-g" id="sin-pr" hidden>No hay ninguna práctica con esa palabra.</p>
-      </section>`;
+      <section class="sec sec--pegada">${buscadorPr()}${mesesPr(prLista())}${sinPr}</section>`;
     filtrarPr();
   }
   function filtrarPr() {
@@ -1458,6 +1708,7 @@
       let vis = 0;
       gr.querySelectorAll("li[data-pr]").forEach((li) => { const ok = !q || Q_PR.get(li.dataset.pr).includes(q); li.hidden = !ok; vis += ok; });
       gr.hidden = !vis; n += vis;
+      if (q && vis && gr.tagName === "DETAILS") gr.open = true; // al buscar, se abren los meses que tienen algo
       contar(gr, q, vis);
     });
     const v = $("#sin-pr");
@@ -1554,7 +1805,7 @@
       .catch((e) => { ASIS.error[k] = e.message === "clave" ? avisoError(e) : e.message === "servidor" ? "No se pudo cargar. Probá de nuevo en un rato." : "No se pudo cargar: no hay señal."; })
       .finally(() => {
         ASIS.cargando.delete(k);
-        const aca = cat ? (S.acat === cat && ["asis", "lista", "chicos"].includes(S.ver)) || (S.ver === "inicio" && enCel.get(ULTIMA) === cat) || S.ver === "asistencia" : S.ver === "asistencia";
+        const aca = cat ? (S.acat === cat && ["asis", "lista", "chicos"].includes(S.ver)) || (S.ver === "inicio" && enCel.get(ULTIMA) === cat) || (S.ver === "plan" && S.pcat === cat) || S.ver === "asistencia" : S.ver === "asistencia";
         if (aca) render();
       });
   }
@@ -1959,12 +2210,14 @@
   // ---------- eventos ----------
   document.addEventListener("click", (e) => {
     if (!S) return;
-    const t = e.target.closest("[data-atras],[data-subir],[data-area],[data-area-cat],[data-play],[data-reclave],[data-ayuda],[data-cerrar-ayuda],[data-ir],[data-ir-cat],[data-ir-guia],[data-ir-ej],[data-ir-ej-para],[data-ir-ej-tab],[data-ir-line],[data-ir-puesto],[data-ir-practica],[data-ir-practicas],[data-pgrupo],[data-ir-asis],[data-ir-hoy],[data-ir-lista],[data-ir-chicos],[data-form],[data-reintentar],[data-motivo],[data-dia],[data-marca],[data-todos],[data-cancelar-ok],[data-deshacer],[data-hora-ok],[data-agregar-ok],[data-horarios-ok],[data-guardar-lista],[data-borrar-lista-ok],[data-sacar],[data-sigue],[data-volver-chico],[data-sumar-chico],[data-compartir-pr],[data-rol],[data-quitar-para],[data-tab],[data-anio],[data-ver],[data-ordj]");
+    const t = e.target.closest("[data-atras],[data-subir],[data-alcat],[data-edad],[data-area],[data-area-cat],[data-play],[data-reclave],[data-ayuda],[data-cerrar-ayuda],[data-ir],[data-ir-cat],[data-ir-guia],[data-ir-ej],[data-ir-ej-para],[data-ir-ej-tab],[data-ir-line],[data-ir-puesto],[data-ir-practica],[data-ir-practicas],[data-pgrupo],[data-ir-asis],[data-ir-hoy],[data-ir-lista],[data-ir-chicos],[data-form],[data-reintentar],[data-motivo],[data-dia],[data-marca],[data-todos],[data-cancelar-ok],[data-deshacer],[data-hora-ok],[data-agregar-ok],[data-horarios-ok],[data-guardar-lista],[data-borrar-lista-ok],[data-sacar],[data-sigue],[data-volver-chico],[data-sumar-chico],[data-compartir-pr],[data-rol],[data-quitar-para],[data-tab],[data-anio],[data-ver],[data-ordj]");
     if (!t || t.disabled) return;
     if (t.tagName === "A") e.preventDefault(); // el escudo de arriba: va al inicio sin recargar
     const ds = t.dataset, ir = "lado" in ds ? irSinPaso : irA; // Anterior / Siguiente no suman pasos
     if ("atras" in ds) history.back();
     else if ("subir" in ds) irSinPaso(SUBIR);
+    else if (ds.edad) { S.pedad = ds.edad; render(); }
+    else if ("alcat" in ds) { S.alcat = ds.alcat || null; render(); }
     else if (ds.area) irA(AREA_IR(ds.area));
     else if (ds.areaCat) {
       // la categoría elegida en un área queda en el celular: la próxima vez aparece marcada

@@ -12,6 +12,8 @@ import re
 import sys
 from pathlib import Path
 
+import perfiles_pumas as PP
+
 HERE = Path(__file__).parent
 PROGRESIONES = HERE / "guia" / "progresiones.json"
 PRACTICAS = HERE / "guia" / "practicas.json"
@@ -421,12 +423,20 @@ JUEGOS = [
 ]
 
 
+DIAGRAMAS = HERE / "guia" / "diagramas.json"  # los dibujos de los ejercicios (diagramas_entrenadores.py)
+
+
 def ejercicios():
     line = json.loads(LINE.read_text(encoding="utf-8")) if LINE.exists() else []
     juegos = [{"id": "juego-" + re.sub(r"[^a-z0-9]+", "-", n.lower().translate(str.maketrans("áéíóúñ", "aeioun"))).strip("-"),
                "tipo": "Juegos", "grupo": g, "paso": 0, "nombre": n, "como": como, "foco": [foco], "material": mat, "cats": cats, "fotos": []}
               for g, n, foco, como, mat, cats in JUEGOS]
-    return line + MAUL + juegos
+    todos = line + MAUL + juegos
+    dibujos = json.loads(DIAGRAMAS.read_text(encoding="utf-8")) if DIAGRAMAS.exists() else {}
+    for e in todos:
+        if e["id"] in dibujos:
+            e["dibujo"] = dibujos[e["id"]]
+    return todos
 
 
 # ---------- qué se espera de cada puesto (PERFIL JUGADOR CLUB LOS 50.pdf, son imágenes: pasado a mano) ----------
@@ -558,7 +568,7 @@ def guia():
         "lemas_juv": LEMAS_JUV,
         "cantos": CANTOS, "pilares": PILARES, "filosofia": FILOSOFIA, "oportunidad": OPORTUNIDAD, "decisiones": DECISIONES,
         "zonas": ZONAS, "canales": CANALES,
-        "puestos": PUESTOS,
+        "puestos": [dict(p, **PP.por_puesto(p["n"][0])) for p in PUESTOS],  # + perfil corporal y físico de los Pumas (perfiles_pumas.py)
         "ejercicios": ejercicios(),
         # los videos (título, duración y dónde va cada uno), que arma videos_entrenadores.py; los pedacitos están en Cloudflare R2
         "videos": json.loads((HERE / "guia" / "videos.json").read_text(encoding="utf-8")) if (HERE / "guia" / "videos.json").exists() else {},

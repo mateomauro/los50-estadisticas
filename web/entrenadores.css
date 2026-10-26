@@ -146,7 +146,7 @@
 .tit + .titular { margin-top: -2px; }
 .titular + .ley, .titular + .tabla-e-wrap, .titular + .era, .titular + .graf-wrap { margin-top: 12px; }
 /* el "?" va pegado al final del título o de la respuesta (si el título ocupa dos renglones, no se va al borde) */
-.h2 .ayuda-btn, .titular .ayuda-btn, .cab__cat .ayuda-btn, .hoy__dia .ayuda-btn { display: inline-grid; vertical-align: 3px; margin-left: 8px; text-transform: none; letter-spacing: 0; }
+.h2 .ayuda-btn, .titular .ayuda-btn, .cab__cat .ayuda-btn, .hoy__dia .ayuda-btn, .grupo .ayuda-btn { display: inline-grid; vertical-align: 3px; margin-left: 8px; text-transform: none; letter-spacing: 0; }
 .cab__cat .ayuda-btn { vertical-align: 8px; margin-left: 10px; }
 .titular--abre { margin-bottom: 12px; }
 .junto { white-space: nowrap; }
@@ -692,6 +692,53 @@
 .prac__dia { display: grid; justify-items: center; align-content: center; min-height: 40px; line-height: 1; text-align: center; }
 .prac__dia b { font: 700 26px/1 var(--cond); color: var(--azul-900); }
 .prac__dia small { margin-top: 2px; font-size: 12px; font-weight: 600; color: var(--suave); }
+/* planificación: la semana (el día de hoy, pintado de azul para que se note) y la temporada mes por mes */
+.ej--hoy, .ej--hoy:hover, .ej--hoy:active { background: var(--azul); color: #fff; }
+.ej.ej--hoy .prac__dia b, .ej.ej--hoy .prac__dia small, .ej.ej--hoy .ej__txt b, .ej.ej--hoy .ej__txt small, .ej.ej--hoy > svg { color: #fff; }
+.ej--vacio { cursor: default; }
+.ej--vacio .ej__txt b { font-weight: 500; color: var(--suave); }
+.ej--vacio:not(.ej--hoy):hover { background: none; }
+.mes { margin-top: 10px; }
+/* los puestos: tests físicos por edad */
+.fis th, .fis td { padding: 9px 8px; }
+.fis td { text-align: center; font-weight: 600; white-space: nowrap; }
+.fis th { font-size: 14px; }
+.fis .fis-g th { padding: 12px 8px 6px; font-size: 12.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; text-align: left; color: var(--suave); background: none; }
+.fis + .tabla-e-wrap, .tabla-e-wrap + .tabla-e-wrap { margin-top: 12px; }
+/* la ficha del ejercicio (como las de World Rugby): organización, el dibujo paso a paso y la leyenda */
+.ficha-org { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 0 0 6px; }
+.ficha-org > div { padding: 10px 12px; background: var(--sup); border: 1px solid var(--linea); border-radius: 12px; }
+.ficha-org > div:last-child:nth-child(odd) { grid-column: 1 / -1; }
+.ficha-org dt { font-size: 12.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--suave); }
+.ficha-org dd { margin: 4px 0 0; font-size: 15.5px; line-height: 1.35; font-weight: 600; }
+.dib-cab { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 18px 0 8px; }
+.dib-cab .grupo { margin: 0; white-space: nowrap; }
+.dib-cab__t { display: flex; align-items: center; gap: 8px; }
+.chip--revisar { background: #fff4d6; color: #5c3d00; }
+.dib { display: grid; gap: 10px; }
+.dib__cuadros { display: grid; gap: 12px; }
+.dib figure { margin: 0; display: grid; gap: 8px; align-content: start; }
+/* sin el trazo que styles.css les pone a todos los íconos (las letras de los jugadores quedarían negras) */
+.dib svg { stroke: none; }
+.dib svg { display: block; width: 100%; height: auto; max-height: 440px; background: var(--sup); border: 1px solid var(--linea); border-radius: var(--radio); }
+.dib figcaption { display: flex; gap: 8px; align-items: baseline; font-size: 15.5px; line-height: 1.4; }
+.dib figcaption .num { flex: none; display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--azul); color: #fff; font: 700 14px/1 var(--cond); }
+.dib__ley { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 0; padding: 10px 12px; list-style: none; background: var(--sup); border: 1px solid var(--linea); border-radius: 12px; font-size: 13.5px; color: var(--suave); }
+.dib__ley li { display: flex; align-items: center; gap: 6px; }
+.dib__ley svg { width: 28px; height: 16px; border: 0; border-radius: 0; background: none; }
+.dib__letra { display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 4px; border-radius: 10px; background: var(--azul); color: #fff; font: 700 12px/1 var(--base); }
+.dib .d-jug text { fill: #fff; font-weight: 800; text-anchor: middle; dominant-baseline: central; font-family: var(--base); }
+.dib .d-jug rect + text { fill: var(--texto); }
+.dib .d-txt { fill: #fff; font-weight: 700; text-anchor: middle; font-family: var(--base); paint-order: stroke; stroke: rgb(0 0 0 / 35%); stroke-width: 2px; }
+.dib .d-area { stroke: #fff; stroke-dasharray: 4 3; }
+.dib .d-lin { stroke: #fff; stroke-opacity: .9; }
+.dib .d-cono { fill: #ff8a1f; stroke: #0b0d12; }
+.dib .d-escudo { fill: #23262d; stroke: #fff; }
+.dib .d-esc rect, .dib .d-esc line { stroke: #fff; }
+.dib .d-pelota { fill: #fff; stroke: #0b0d12; }
+.dib .d-med line { stroke: var(--suave); }
+.dib .d-med text { fill: var(--suave); text-anchor: middle; font-family: var(--base); }
+@media (min-width: 700px) { .dib__cuadros--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } .dib__cuadros--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .prac-cuando { display: flex; align-items: center; gap: 8px; margin: 8px 0 0; font-size: 15.5px; color: var(--suave); }
 .prac-cuando svg { flex: none; width: 18px; height: 18px; color: var(--azul); }
 .grupo--fila { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
@@ -741,6 +788,39 @@
   .formacion { padding: 16px 24px 24px; }
   .partido-g { grid-template-columns: repeat(6, minmax(0, 1fr)); }
 }
+/* de M19 a plantel superior: barras apiladas con el número adentro */
+.pase-g { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 14px; }
+.pase-f__cab { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; }
+.pase-f__cab b { font: 700 20px/1 var(--cond); letter-spacing: .02em; }
+.pase-f__cab span { flex: 1; min-width: 0; font-size: 14px; color: var(--suave); }
+.pase-f__cab strong { font: 700 24px/1 var(--cond); color: var(--azul-900); }
+.pase-barra { display: flex; gap: 2px; height: 32px; border-radius: 8px; overflow: hidden; background: #eef1f6; }
+.pase-barra i, .pase-ley i { font-style: normal; }
+.pase-barra i { display: grid; place-items: center; min-width: 0; font: 700 15px/1 var(--cond); }
+.s1 { background: var(--azul); color: #fff; } .s2 { background: #dbe3f1; color: var(--azul-900); }
+.s3 { background: var(--rojo-fondo); color: var(--rojo); } .s4 { background: var(--verde); color: #fff; }
+.pase-ley { display: flex; flex-wrap: wrap; gap: 4px 14px; list-style: none; margin: 10px 0 0; padding: 0; font-size: 13.5px; color: var(--suave); }
+.pase-ley li { display: flex; align-items: center; gap: 6px; }
+.pase-ley i { display: inline-block; width: 14px; height: 14px; border-radius: 4px; }
+.nombres-p { list-style: none; margin: 0; padding: 0; columns: 2 170px; column-gap: 18px; font-size: 15.5px; line-height: 1.9; }
+.nombres-p li { break-inside: avoid; }
+/* para mirar: las alertas (en el inicio, las 3 primeras; la pantalla las muestra todas) */
+.alertas-c { display: block; width: 100%; padding: 14px 16px; border: 1px solid #f0c75e; border-radius: var(--radio); background: #fffaf0; color: var(--texto); text-align: left; cursor: pointer; }
+.alertas-c:hover { background: #fff4d6; }
+.alertas-c__cab { display: flex; align-items: center; gap: 10px; }
+.alertas-c__cab b { flex: 1; font: 700 20px/1 var(--cond); letter-spacing: .02em; text-transform: uppercase; }
+.alertas-c__n { min-width: 26px; padding: 3px 8px; border-radius: 999px; background: var(--ambar); color: #fff; font: 700 15px/1.2 var(--cond); text-align: center; }
+.alertas-c__cab > svg { width: 18px; height: 18px; color: var(--azul); }
+.alertas-c__l, .alertas-g { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 8px; }
+.alertas-g { margin-top: 0; }
+.alerta { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 10px; align-items: start; padding: 2px 0; }
+.alertas-g .alerta { padding: 12px 14px; background: var(--sup); border: 1px solid var(--linea); border-radius: 12px; }
+.alerta__ic svg { width: 22px; height: 22px; }
+.alerta--3 .alerta__ic { color: var(--rojo); } .alerta--2 .alerta__ic { color: var(--ambar); }
+.alerta__txt { display: grid; gap: 2px; min-width: 0; }
+.alerta__j { font-size: 16.5px; line-height: 1.3; }
+.alerta__j .chip { margin-left: 8px; vertical-align: 1px; }
+.alerta__txt small { font-size: 14.5px; line-height: 1.35; color: var(--suave); }
 /* el inicio: las áreas, tarjetas grandes de a dos (en la compu, de a tres) */
 .areas { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 .areas > li { display: flex; }
@@ -787,6 +867,9 @@
 /* en la compu: el inicio y partidos usan todo el ancho */
 @media (min-width: 1024px) {
   .app--ancha .vista { max-width: 1200px; } /* mismo ancho que el encabezado: los bordes quedan alineados */
+  /* planificación: dos columnas iguales; hoy y la semana quedan fijos mientras se recorre la temporada */
+  .plan { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 32px; align-items: start; }
+  .plan__lado { position: sticky; top: 16px; }
   /* partidos: los próximos y los últimos resultados, uno al lado del otro */
   .dos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 32px; align-items: start; }
 }

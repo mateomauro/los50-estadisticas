@@ -28,6 +28,7 @@ import recomendaciones_expertos as R  # noqa: E402
 import tries_analisis as T  # noqa: E402
 import proximos_partidos as PP  # noqa: E402
 import asistencia_entrenadores as AS  # noqa: E402
+import pase_y_alertas as PA  # noqa: E402
 
 HERE = Path(__file__).parent
 DESTINO = HERE / "web" / "entrenadores.data.js"
@@ -161,6 +162,9 @@ def main():
         "guia": G.guia(),  # material de Coordinación: qué aprende cada categoría, cantos, zonas y scrum
         # quién hace los tries y cuándo, por categoría y año (tries_analisis.py; en juveniles solo cuándo)
         "tries": {c: v for c, v in T.tries_por_categoria().items() if c in A.ORDEN},
+        # de M19 a plantel superior (cuántos suben cada año, de dónde vienen y quiénes) y lo que hay que mirar (sanciones, conmociones, tarjetas)
+        "pase": PA.pase_plantel_superior(p, i, d),
+        "alertas": PA.alertas(p, i, d),
     }
     crudo = json.dumps(datos, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
     fotos_ = json.dumps(fotos(), separators=(",", ":")).encode("utf-8")
