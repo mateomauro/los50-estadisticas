@@ -9,6 +9,7 @@ PROTOCOLO DE SCRUM.docx y setup_los50.pptx.
 """
 import json
 import re
+import unicodedata
 import sys
 from pathlib import Path
 
@@ -551,6 +552,27 @@ PUESTOS = [
 
 
 # ---------- todo junto, para exportar_entrenadores.py ----------
+def _sin_tildes(t):
+    t = unicodedata.normalize("NFD", t.lower().replace("+", " y "))
+    t = "".join(c for c in t if unicodedata.category(c) != "Mn")
+    return " ".join(w for w in re.sub(r"[^a-z0-9]+", " ", t).split() if w not in ("el", "la", "los", "las"))
+
+
+def con_juegos(practicas):
+    """si una actividad empieza con el nombre de un juego de la app ("SUICIDA. 5 líneas…", "Cuadrado de maga"), lleva el id de su ficha"""
+    juegos = sorted(((_sin_tildes(n), "juego-" + re.sub(r"[^a-z0-9]+", "-", n.lower().translate(str.maketrans("áéíóúñ", "aeioun"))).strip("-"))
+                     for _, n, *_ in JUEGOS), key=lambda x: -len(x[0]))
+    for p in practicas:
+        for b in p["bloques"]:
+            for it in b.get("items", []):
+                a = _sin_tildes(it.get("act") or "")
+                for n, i in juegos:
+                    if a == n or a.startswith(n + " "):
+                        it["ej"] = i
+                        break
+    return practicas
+
+
 def guia():
     prog = json.loads(PROGRESIONES.read_text(encoding="utf-8"))
     return {
@@ -573,7 +595,9 @@ def guia():
         # los videos (título, duración y dónde va cada uno), que arma videos_entrenadores.py; los pedacitos están en Cloudflare R2
         "videos": json.loads((HERE / "guia" / "videos.json").read_text(encoding="utf-8")) if (HERE / "guia" / "videos.json").exists() else {},
         # las prácticas de los entrenadores, día por día, que arma practicas_entrenadores.py (sin el archivo de donde salió cada una)
-        "practicas": [{k: v for k, v in p.items() if k != "origen"} for p in json.loads(PRACTICAS.read_text(encoding="utf-8"))] if PRACTICAS.exists() else [],
+        "practicas": con_juegos([{k: v for k, v in p.items() if k != "origen"} for p in json.loads(PRACTICAS.read_text(encoding="utf-8"))]) if PRACTICAS.exists() else [],
+        # el día en que se bajaron las planillas del Drive (para avisar si las prácticas no están al día)
+        "practicas_al": (HERE / "guia" / "practicas_al.txt").read_text(encoding="utf-8").strip() if (HERE / "guia" / "practicas_al.txt").exists() else None,
         "scrum": {"edades": SCRUM_EDADES, "metodo": SCRUM_METODO, "principios": SCRUM_PRINCIPIOS, "setup": SCRUM_SETUP,
                   "entrada": SCRUM_ENTRADA, "empuje": SCRUM_EMPUJE, "empuje_notas": SCRUM_EMPUJE_NOTAS,
                   "regla": SCRUM_REGLA, "regla_txt": SCRUM_REGLA_TXT,

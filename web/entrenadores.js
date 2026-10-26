@@ -142,7 +142,7 @@
     $("#candado").hidden = true;
     $("#app").hidden = false;
     S = { ver: "inicio", cat: null, temp: null, gcat: null, tab: null, q: "", ordenJ: "pj", verJ: false, verP: false, verN: false, verR: false, rol: null, para: null, ej: null, puesto: null, practica: null, pgrupo: null, qp: "", qe: "", abiertos: new Set(),
-      acat: null, afecha: null, aform: null, marcas: null, base: null, aviso: null, estadoLista: null, recien: new Set(), area: null, pcat: null, mcat: null, alcat: null, pedad: null, ncat: null, eqcat: null, eqfecha: null, eqn: null, eqmas: 0, eqfoco: null, tcat: null, ttest: null, tfecha: null, tver: null, tdia: null, dcat: null, ddoc: null, dmarcas: new Set(), chico: null, chcat: null, eqcontar: false, cacc: "tackles", cres: false, arcat: null, arfecha: null, arid: null, arelegir: false, artipo: null };
+      acat: null, afecha: null, aform: null, marcas: null, base: null, aviso: null, estadoLista: null, recien: new Set(), area: null, pcat: null, mcat: null, alcat: null, pedad: null, ncat: null, eqcat: null, eqfecha: null, eqn: null, eqmas: 0, eqfoco: null, tcat: null, ttest: null, tfecha: null, tver: null, tdia: null, dcat: null, ddoc: null, dmarcas: new Set(), chico: null, chcat: null, eqcontar: false, cacc: "tackles", cres: false };
     // al abrir la sección (un link, la dirección escrita o que el navegador completó) arranca en el inicio;
     // al recargar o al volver con "atrás" sigue donde estaba (por ejemplo, en medio de una lista)
     const nav = performance.getEntriesByType ? performance.getEntriesByType("navigation")[0] : null;
@@ -152,7 +152,7 @@
     addEventListener("popstate", () => {
       if (ayudaAbierta()) { cerrarAyuda(false); return; } // el "atrás" del celular cierra la ayuda y deja la pantalla como estaba
       if (saltarPop) { saltarPop = false; return; }        // la ayuda se cerró con "Entendido": no hay que redibujar
-      leerURL(); render();
+      leerURL(); render(); volverAFila();
     });
   }
 
@@ -170,9 +170,9 @@
     S.gcat = g || null;
     S.ej = ej ? ej.id : null;
     S.puesto = pu;
-    // una práctica armada en la app puede todavía no estar cargada: se busca al dibujarla
-    S.practica = pr ? pr.id : D.fichados && ID_PR.test(p.get("practica") || "") ? p.get("practica") : null;
+    S.practica = pr ? pr.id : null;
     S.pgrupo = hayPr ? P_GRUPOS.find((x) => slug(x) === p.get("grupo")) || null : null;
+    if (p.has("q")) S.qp = p.get("q").slice(0, 60);
     const ac = D.fichados ? ASIS_CATS.find((x) => slug(x) === p.get("asistencia")) : null;
     S.acat = ac || null;
     S.afecha = ac && fechaOk(p.get("fecha") || "") ? p.get("fecha") : null;
@@ -183,11 +183,6 @@
     S.pcat = D.guia ? ASIS_CATS.find((x) => slug(x) === p.get("plan")) || null : null;
     S.mcat = ["Todas", "Plantel superior", ...D.cats.filter((x) => !PS.includes(x))].find((x) => slug(x) === p.get("partidos")) || null;
     if (S.area) vistas.push("area");
-    // armar la práctica: ?armar=m16&fecha=2026-10-27 (&id=u-… si se cambia una guardada; &elegir=1 mientras se elige un ejercicio)
-    S.arcat = D.fichados ? ASIS_CATS.find((x) => slug(x) === p.get("armar")) || null : null;
-    S.arfecha = S.arcat && fechaOk(p.get("fecha") || "") ? p.get("fecha") : null;
-    S.arid = S.arcat && ID_PR.test(p.get("id") || "") ? p.get("id") : null;
-    S.arelegir = !!S.arcat && p.get("elegir") === "1";
     // la ficha de un chico: ?chico=245421&de=m16
     S.chico = D.fichados && /^[\w-]{1,40}$/.test(p.get("chico") || "") ? p.get("chico") : null;
     S.chcat = S.chico ? ASIS_CATS.find((x) => slug(x) === p.get("de")) || (eqTodos().get(S.chico) || {}).cat || null : null;
@@ -205,7 +200,7 @@
     S.eqn = S.eqfecha && +p.get("n") >= 1 && +p.get("n") <= EQ_MAX ? +p.get("n") : null;
     S.eqcontar = !!S.eqfecha && !S.eqn && p.get("contar") === "1";
     S.ver = c ? "cat" : g ? "guia" : ej ? "ejercicio" : pu ? "puesto" : S.practica ? "practica" : ac ? (S.afecha ? "lista" : p.get("chicos") ? "chicos" : "asis")
-      : S.arcat ? "armar" : S.chico ? "chico" : S.dcat ? (S.ddoc ? "doclista" : "docs") : S.tcat ? (S.tfecha ? "toma" : "tests") : S.eqfecha ? "equipo" : S.pcat ? "plan" : S.mcat ? "partidos" : vistas.includes(p.get("ver")) ? p.get("ver") : "inicio";
+      : S.chico ? "chico" : S.dcat ? (S.ddoc ? "doclista" : "docs") : S.tcat ? (S.tfecha ? "toma" : "tests") : S.eqfecha ? "equipo" : S.pcat ? "plan" : S.mcat ? "partidos" : vistas.includes(p.get("ver")) ? p.get("ver") : "inicio";
     S.temp = /^\d{4}$/.test(p.get("temp") || "") ? +p.get("temp") : null;
     S.tab = p.get("tab");
     S.rol = p.get("rol");
@@ -217,19 +212,24 @@
     else if (S.ver === "guia" && S.gcat) p.set("guia", slug(S.gcat));
     else if (S.ver === "ejercicio") p.set("ejercicio", S.ej);
     else if (S.ver === "puesto") p.set("puesto", S.puesto);
-    else if (S.ver === "practica") p.set("practica", S.practica);
+    else if (S.ver === "practica") {
+      p.set("practica", S.practica);
+      const pr = todasPr().find((x) => x.id === S.practica);
+      if (S.pgrupo) p.set("grupo", slug(S.pgrupo));
+      if (S.pcat && pr && grupoPlan(S.pcat) === pr.grupo) p.set("plan", slug(S.pcat));
+      if (S.qp) p.set("q", S.qp);
+    }
     else if (S.ver === "practicas") { p.set("ver", S.ver); if (S.pgrupo) p.set("grupo", slug(S.pgrupo)); }
     else if (S.ver === "area") { p.set("ver", "area"); p.set("area", S.area); }
     else if (S.ver === "plan") p.set("plan", slug(S.pcat));
     else if (S.ver === "partidos") p.set("partidos", slug(S.mcat));
-    else if (S.ver === "armar") { p.set("armar", slug(S.arcat)); if (S.arfecha) p.set("fecha", S.arfecha); if (S.arid) p.set("id", S.arid); if (S.arelegir) p.set("elegir", "1"); }
     else if (S.ver === "chico") { p.set("chico", S.chico); if (S.chcat) p.set("de", slug(S.chcat)); }
     else if (S.ver === "docs" || S.ver === "doclista") { p.set("docs", slug(S.dcat)); if (S.ver === "doclista") p.set("doc", S.ddoc); }
     else if (S.ver === "tests" || S.ver === "toma") { p.set("tests", slug(S.tcat)); if (S.ver === "toma") { p.set("test", S.ttest); p.set("fecha", S.tfecha); } }
     else if (S.ver === "equipo") { p.set("equipo", slug(S.eqcat)); p.set("fecha", S.eqfecha); if (S.eqn) p.set("n", S.eqn); if (S.eqcontar) p.set("contar", "1"); }
     else if (["asis", "lista", "chicos"].includes(S.ver)) { p.set("asistencia", slug(S.acat)); if (S.ver === "lista") p.set("fecha", S.afecha); if (S.ver === "chicos") p.set("chicos", "1"); }
     else if (S.ver === "ejercicios") { p.set("ver", S.ver); if (S.tab) p.set("tab", S.tab); if (S.rol) p.set("rol", S.rol); if (S.para) p.set("para", S.para); }
-    else if (S.ver !== "inicio") { p.set("ver", S.ver); if (S.tab) p.set("tab", S.tab); }
+    else if (S.ver !== "inicio") { p.set("ver", S.ver); if (S.tab) p.set("tab", S.tab); if (S.ver === "scrum" && S.para) p.set("para", S.para); }
     const qs = p.toString();
     return location.pathname + (qs ? "?" + qs : "");
   }
@@ -250,8 +250,8 @@
   function tituloDe() {
     const ej = S.ver === "ejercicio" && D.guia.ejercicios.find((x) => x.id === S.ej), pu = S.ver === "puesto" && puestoDe(S.puesto);
     return ({ inicio: "Inicio", cat: S.cat, club: "Todo el club", consejos: "Consejos", guia: S.gcat || "Qué aprende cada categoría",
-      cantos: "Cantos y zonas", scrum: "Scrum seguro", ejercicios: "Ejercicios", ejercicio: ej && ej.nombre, puestos: "Los puestos", puesto: pu && pu.nombre,
-      practicas: "Prácticas", practica: "Práctica", armar: S.arelegir ? "Sumar un ejercicio" : "Armar la práctica", pase: "De M19 a plantel superior", alertas: "Para mirar", area: AREAS[S.area], plan: `Planificación ${S.pcat}`, partidos: S.mcat === "Todas" ? "Partidos" : `Partidos de ${S.mcat}`, guiaclub: "Guía del club", notas: "Notas", equipo: S.eqn ? `El ${S.eqn}` : S.eqcontar ? "Contar el partido" : `Equipo de ${S.eqcat}`, chico: ((S.chico && chicoDe(S.chico, S.chcat)) || { nombre: "Ficha" }).nombre.split(",")[0], tests: `Tests de ${S.tcat}`, docs: `Documentos de ${S.dcat}`, doclista: S.ddoc && docDe(S.ddoc).nom, toma: S.ttest && testDe(S.ttest).nom,
+      cantos: "Cantos y zonas", scrum: "Scrum seguro", ejercicios: S.para ? `Juegos de ${S.para}` : "Ejercicios", ejercicio: ej && ej.nombre, puestos: "Los puestos", puesto: pu && pu.nombre,
+      practicas: "Prácticas", practica: (todasPr().find((x) => x.id === S.practica) || {}).foco || "Práctica", pase: "De M19 a plantel superior", alertas: "Para mirar", area: AREAS[S.area], plan: `Planificación de ${S.pcat}`, partidos: S.mcat === "Todas" ? "Partidos" : `Partidos de ${S.mcat}`, guiaclub: "Guía del club", notas: "Notas", equipo: S.eqn ? `El ${S.eqn}` : S.eqcontar ? "Contar el partido" : `Equipo de ${S.eqcat}`, chico: ((S.chico && chicoDe(S.chico, S.chcat)) || { nombre: "Ficha" }).nombre.split(",")[0], tests: `Tests de ${S.tcat}`, docs: `Documentos de ${S.dcat}`, doclista: S.ddoc && docDe(S.ddoc).nom, toma: S.ttest && testDe(S.ttest).nom,
       asistencia: "Todas las categorías", asis: S.acat, lista: `Lista de ${S.acat}`, chicos: `Los chicos de ${S.acat}` })[S.ver] || "Volver";
   }
 
@@ -393,16 +393,22 @@
       if (sinGuardar(cat, s)) avisar("ojo", `La lista de ${cat} del ${diaMes(fecha)} quedó sin guardar`);
     }
     listaAbierta = S.ver === "lista" ? { cat: S.acat, fecha: S.afecha } : null;
+    // la misma pantalla que se vuelve a dibujar (llegaron datos): el campo en el que se estaba escribiendo sigue con el foco
+    const f = document.activeElement, sigue = f && f.id && /^(INPUT|TEXTAREA)$/.test(f.tagName) && $("#vista").contains(f) && $("#vista").dataset.pantalla === S.ver
+      ? { id: f.id, a: f.selectionStart, b: f.selectionEnd } : null;
     // todo el ancho en la compu (y el pie se alinea con eso); la tabla de estadísticas no, que queda muy estirada
     $("#app").classList.toggle("app--ancha", S.ver === "inicio" || S.ver === "partidos" || S.ver === "plan" || S.ver === "pase" || (S.ver === "equipo" && !S.eqn) || S.ver === "tests" || S.ver === "docs" || S.ver === "chico" || (S.ver === "area" && S.area !== "estadisticas"));
     GRAF.pend = [];
     soltarVideos();
     $("#vista").dataset.pantalla = S.ver; // ojo: no "data-ver", que es el de los botones "Ver todos"
+    document.title = S.ver === "inicio" ? "Los 50 · Entrenadores" : `${tituloDe()} · Los 50 Entrenadores`;
     ({ inicio: vInicio, cat: vCategoria, club: vClub, consejos: vConsejos, guia: vGuia, cantos: vCantos, scrum: vScrum, ejercicios: vEjercicios, ejercicio: vEjercicio, puestos: vPuestos, puesto: vPuesto, practicas: vPracticas, practica: vPractica,
-      asistencia: vAsistencia, asis: vAsis, lista: vLista, chicos: vChicos, area: vArea, plan: vPlan, partidos: vPartidos, guiaclub: vGuiaClub, pase: vPase, alertas: vAlertas, notas: vNotas, equipo: vEquipo, tests: vTests, toma: vToma, docs: vDocs, doclista: vDocLista, chico: vChico, armar: vArmar })[S.ver]();
+      asistencia: vAsistencia, asis: vAsis, lista: vLista, chicos: vChicos, area: vArea, plan: vPlan, partidos: vPartidos, guiaclub: vGuiaClub, pase: vPase, alertas: vAlertas, notas: vNotas, equipo: vEquipo, tests: vTests, toma: vToma, docs: vDocs, doclista: vDocLista, chico: vChico })[S.ver]();
     dibujarGraficos();
     ponerFotos();
     document.querySelectorAll("#vista [data-form]").forEach((b) => { if (b.dataset.form) b.setAttribute("aria-expanded", S.aform === b.dataset.form); });
+    const g = sigue && document.getElementById(sigue.id);
+    if (g) { g.focus({ preventScroll: true }); try { g.setSelectionRange(sigue.a, sigue.b); } catch (e) { /* campos sin cursor */ } }
   }
   /** sección desplegable: arranca cerrada y recuerda si la abriste (al ordenar o "ver todos" no se cierra).
       Con "dato" se muestra a la derecha del título el número principal de adentro ("18 partidos", "78% volvió"). */
@@ -418,9 +424,10 @@
   const hayAtras = () => !!(history.state && history.state.n > 0);
   let SUBIR = null;
   const volver = (txt = "Inicio", a = "inicio") => {
-    if (hayAtras()) return `<button type="button" class="volver" data-atras>${IC.atras}<span class="volver__txt">${esc(history.state.desde || "Volver")}</span></button>`;
+    const a11y = '<span class="sr">Volver a </span>';
+    if (hayAtras()) return `<button type="button" class="volver" data-atras>${IC.atras}<span class="volver__txt">${history.state.desde ? a11y + esc(history.state.desde) : "Volver"}</span></button>`;
     SUBIR = typeof a === "string" ? { ver: a, ...LIMPIO } : a;
-    return `<button type="button" class="volver" data-subir>${IC.atras}<span class="volver__txt">${txt}</span></button>`;
+    return `<button type="button" class="volver" data-subir>${IC.atras}<span class="volver__txt">${a11y}${txt}</span></button>`;
   };
   /** después de guardar o borrar, vuelve a la pantalla de antes (si no hay, a "alt") */
   const volverAtras = (alt) => (hayAtras() ? history.back() : irSinPaso(alt));
@@ -434,9 +441,6 @@
       "Para cada puesto aparecen primero los que jugaron de ese número esta temporada (Primera, Intermedia y M19, de las planillas de la UAR) o lo tienen en su ficha de la UAR. Al lado, cuánto vienen a entrenar.",
       "Si un chico está sancionado o tiene tarjetas, se avisa en amarillo o en rojo.",
       "Lo que elegís queda en este celular hasta que tocás “Guardar”. Ahí lo ven los otros entrenadores. Con “Mandar por WhatsApp” se lo pasás al grupo."]],
-    armar: () => ["Armar la práctica", ["Elegí el día, escribí qué se trabaja y sumá las partes: ejercicios de la app (con su dibujo) o actividades propias, cada una con sus minutos. Con las flechas cambiás el orden.",
-      "Lo que armás queda en el celular hasta que tocás “Guardar”. Guardada, se ve en la semana de Planificación de la categoría, la ven todos los entrenadores y se puede mandar por WhatsApp.",
-      "En infantiles avisa si pasa de una hora o si una parte dura más de 15 minutos: así lo recomienda la unión de Nueva Zelanda para que los chicos no pierdan la atención."]],
     chico: () => ["La ficha", ["Todo lo que hay de este chico en un lugar: cuánto viene a entrenar, sus partidos oficiales, sus tests, sus papeles, en qué equipos está y lo que se contó en los partidos.",
       "Los partidos y las tarjetas salen de las planillas de la UAR; lo demás, de lo que cargan los entrenadores en esta app."]],
     contar: () => ["Contar el partido", ["Elegí arriba qué vas a contar (por ejemplo, tackles) y tocá la camiseta del jugador cada vez que lo hace. Si te equivocás, “Deshacer el último”.",
@@ -536,12 +540,20 @@
       "Sale del protocolo y del plan de scrum de la Coordinación de Rugby del club (Magali Fazzi), 2026."]],
     ejercicios: () => ["Ejercicios", ["Los ejercicios de line y maul de la Coordinación de Rugby (Magali Fazzi) y los juegos que más usan los entrenadores de infantiles en sus planificaciones.",
       "Los de line están en orden, de lo más fácil a lo más difícil para cada rol.", "Tocá uno para ver cómo se hace, en qué fijarse y qué material hace falta."]],
-    plan: () => ["Planificación", ["Esta semana: los días que entrena la categoría (los que se cargaron en Asistencia; si no hay, los que suele entrenar según sus prácticas), con la práctica de cada día. El de hoy, en azul.",
-      "“Sin cargar”: ese día todavía no tiene práctica en la planilla.",
-      "La temporada: todas las prácticas del año, mes por mes. Salen de las planillas de cada entrenador en el Drive de Coordinación."]],
-    practicas: () => ["Prácticas", ["Las prácticas que armaron los entrenadores del club en 2026, día por día, de las planillas de Coordinación.",
+    plan: () => ["Planificación", ["Las prácticas las escriben los coordinadores en sus planillas del Drive de Coordinación y la app las toma de ahí. Si falta una, pedísela al que escribe las de tu categoría (el nombre está en cada práctica).",
+      "Esta semana: los días que entrena la categoría (los de Asistencia; si no hay, los que suele entrenar), con la práctica de cada día. Hoy, marcado en azul.",
+      "“Sin práctica”: ese día todavía no hay práctica en la planilla. Debajo de la semana queda la última que se escribió, para repetirla o seguir desde ahí.",
+      "“Cómo salió” y “La semana pasada”: lo que anotaron en Asistencia ese día o el mismo día de la semana anterior.",
+      "La temporada: todas las prácticas del año, mes por mes."]],
+    planCats: () => ["¿Qué categoría?", ["Debajo de cada categoría, el día de su última práctica escrita. Con el signo de atención, las que no tienen ninguna en las últimas dos semanas.",
+      "Las prácticas las escriben los coordinadores en las planillas del Drive de Coordinación."]],
+    practica: () => ["La práctica", ["Está como la escribió el coordinador en su planilla.",
+      "A la izquierda, los minutos de cada actividad. Arriba, en azul, para qué es; abajo, qué se hace y cómo. Si es un juego de la app, “Ver cómo se juega” lleva a su ficha.",
+      "G1, G2…: los grupos en que se divide el plantel. FW: forwards. BK: backs.",
+      "Arriba, las flechas llevan a la práctica del día anterior y a la del día siguiente."]],
+    practicas: () => ["Prácticas", ["Las prácticas que escribieron los coordinadores del club en 2026, día por día, en las planillas de Coordinación.",
       "Sirven para repetir una que salió bien o para ver cómo se arma una práctica en el club: entrada en calor, destrezas, juego integrado y cierre.",
-      "Están como las escribieron los entrenadores. Adentro de cada una, con el botón de abajo se manda por WhatsApp."]],
+      "Están como las escribieron. Adentro de cada una, con el botón de abajo se manda por WhatsApp."]],
     puestos: () => ["Los puestos", ["Lo que el club espera de cada puesto, del 1 al 15: qué tiene que saber hacer, lo mental y lo ideal en un partido.",
       "Sale del perfil del jugador de la Coordinación de Rugby del club (Magali Fazzi)."]],
     partidoPuesto: () => ["En un partido", ["Lo ideal para este puesto en un partido entero: por ejemplo, cuántos tackles tiene que hacer.",
@@ -1408,9 +1420,13 @@
   function cargarNotas() {
     if (NOTAS.cargando) return;
     NOTAS.cargando = true; NOTAS.error = null;
-    apiD1().then((d) => { NOTAS.lista = d.notas; })
-      .catch((e) => { NOTAS.error = errNotas(e, "No se pudieron cargar las notas"); })
-      .finally(() => { NOTAS.cargando = false; if (S.ver === "notas" || S.ver === "plan" || (S.ver === "lista" && S.aform !== "como-salio")) render(); });
+    apiD1().then((d) => { NOTAS.lista = d.notas; enCel.set("los50-notas", JSON.stringify(d.notas)); })
+      .catch((e) => {
+        let c = null;
+        try { c = JSON.parse(enCel.get("los50-notas") || "null"); } catch (x) { /* nada guardado */ }
+        if (c && S.ver !== "notas") NOTAS.lista = c; else NOTAS.error = errNotas(e, "No se pudieron cargar las notas");
+      })
+      .finally(() => { NOTAS.cargando = false; if (["notas", "plan", "practica"].includes(S.ver) || (S.ver === "lista" && S.aform !== "como-salio")) render(); });
   }
   /** guarda o borra una nota; si falla no se vuelve a dibujar, así lo escrito no se pierde */
   async function guardarNota(cuerpo, ok) {
@@ -1444,8 +1460,8 @@
   /** en la semana de Planificación: cómo salió ese día o, si todavía no hay nada, el mismo día de la semana pasada */
   function notaDia(cat, f) {
     if (!NOTAS.lista) return "";
-    const corto = (t) => (t.length > 80 ? `${t.slice(0, 78)}…` : t), h = f <= hoyISO() && notasDe(cat, f)[0], p = !h && notasDe(cat, masDias(f, -7))[0];
-    return h ? `<small class="prac__nota">Cómo salió: ${esc(corto(h.texto))}</small>` : p ? `<small class="prac__nota">La semana pasada: ${esc(corto(p.texto))}</small>` : "";
+    const h = f <= hoyISO() ? notasDe(cat, f) : [], p = h.length ? [] : notasDe(cat, masDias(f, -7)), ns = h.length ? h : p;
+    return ns.length ? `<small class="prac__nota">${IC.nota}<span>${h.length ? "Cómo salió" : "La semana pasada"}: ${ns.map((n) => esc(n.texto)).join(" · ")}</span></small>` : "";
   }
   const formNota = (b) => `<div class="asis-form">
       <label class="asis-form__campo">¿De qué categoría?<select id="nota-cat" class="asis-input">${["General", ...ASIS_CATS].map((c) => `<option value="${esc(c)}"${(b.cat || S.ncat || enCel.get(ULTIMA) || "General") === c ? " selected" : ""}>${c === "General" ? "General (todo el club)" : esc(c)}</option>`).join("")}</select></label>
@@ -1517,6 +1533,34 @@
 
   // ---------- para mirar: sanciones, conmociones, rojas y amarillas (se calcula con el día de hoy, no con el día en que se armó el archivo) ----------
   const NIVEL = { 3: "Importante", 2: "Para tener en cuenta" };
+  /** "falta la práctica": un grupo que hoy entrena (en sus días de las últimas seis semanas) y no tiene la práctica de hoy.
+      Solo si las planillas del Drive se leyeron hoy: con planillas de antes, la de hoy puede estar escrita y no haber llegado.
+      Un grupo sin prácticas en el último mes no se avisa todos los días (eso se ve en Planificación) */
+  function faltanPracticas() {
+    const g = D.guia, hoy = hoyISO();
+    if (!g || !g.practicas || g.practicas_al !== hoy) return [];
+    const out = [];
+    [...new Set(g.practicas.map((p) => p.grupo))].forEach((gr) => {
+      const ps = g.practicas.filter((p) => p.grupo === gr && p.fecha && p.fecha >= masDias(hoy, -42));
+      if (!ps.some((p) => p.fecha >= masDias(hoy, -30)) || ps.some((p) => p.fecha === hoy)) return;
+      if (diasHabituales(ps).has(dia(hoy).getDay())) out.push({ n: 2, j: gr, c: null, t: "Entrena hoy y todavía no tiene la práctica en la planilla" });
+    });
+    return out;
+  }
+  /** al elegir la categoría en Planificación: de cuándo son las planillas del Drive (si no se leyeron hace poco, lo nuevo no aparece) */
+  const avisoPracticas = () => {
+    const al = D.guia && D.guia.practicas_al;
+    return al && al < masDias(hoyISO(), -2) ? `<p class="lista-info">${IC.alerta}<span>La app leyó las planillas del Drive el ${esc(corta(al))}: lo que se escribió después todavía no se ve acá.</span></p>` : "";
+  };
+  /** arriba de la planificación de una categoría: hasta cuándo hay prácticas y a quién pedirle las que faltan */
+  const avisoPlan = (u) => {
+    const al = D.guia.practicas_al, hoy = hoyISO(), tarde = !!al && al < masDias(hoy, -2);
+    if (!u) return "";
+    // atrasado: la última es de bastante antes de que se leyeran las planillas (o, si se leyeron hace poco, de hace más de una semana)
+    if (u.fecha < masDias(tarde ? al : hoy, tarde ? -10 : -7))
+      return `<p class="lista-info lista-info--ojo">${IC.alerta}<span>La última práctica en la planilla es del ${esc(corta(u.fecha))}. Si hay nuevas, pedíselas a ${esc(u.quien)}.</span></p>`;
+    return tarde ? `<p class="lista-info">${IC.alerta}<span>La app leyó las planillas el ${esc(corta(al))}: si ${esc(u.quien)} escribió prácticas después, todavía no se ven acá.</span></p>` : "";
+  };
   function alertasHoy() {
     const A_ = D.alertas;
     if (!A_) return [];
@@ -1533,6 +1577,7 @@
     A_.tarjetas.filter((x) => x.t === "A" && x.f >= masDias(hoy, -60)).forEach((x) => (am[x.j] ??= []).push(x));
     Object.entries(am).filter(([, v]) => v.length >= 2).forEach(([j, v]) =>
       out.push({ n: 2, j, c: v[0].c, t: `${v.length} amarillas en los últimos 60 días (la última, el ${corta(v[0].f)})` }));
+    out.push(...faltanPracticas());
     // los que dejaron de venir: de las categorías abiertas, con todo; de las demás, lo que dice el resumen
     const vistas = new Set();
     Object.entries(ASIS.cats).forEach(([cat, d]) => { if (d) { vistas.add(cat); dejaronDe(cat, d).forEach((c) => out.push({ n: 2, j: c.nombre, c: cat, t: "Faltó a los últimos 3 entrenamientos: llamalo" })); } });
@@ -1581,16 +1626,25 @@
         </section>`;
       return;
     }
-    const boton = ([v, txt = v]) => `<button type="button" class="elegir__cat" data-area-cat="${esc(v)}" aria-pressed="${ult === v}">${esc(txt)}</button>`;
+    // en Planificación, debajo de cada categoría, el día de su última práctica (en amarillo si no hay ninguna en dos semanas)
+    const ultDe = (c) => (a === "planificacion" ? ultimaPr(grupoPlan(c)) : null);
+    const boton = ([v, txt = v]) => {
+      const u = ultDe(v), d = u && dia(u.fecha);
+      const viejo = u && u.fecha < masDias(hoyISO(), -14);
+      return `<button type="button" class="elegir__cat" data-area-cat="${esc(v)}"${ult === v ? ' aria-current="true"' : ""}${u ? ` aria-label="${esc(txt)}: última práctica el ${esc(cuandoP(u))}${viejo ? ", hace más de dos semanas" : ""}"` : ""}>${esc(txt)}${u
+        ? `<small${viejo ? ' class="viejo"' : ""}>${viejo ? IC.alerta : ""}${d.getDate()}/${d.getMonth() + 1}</small>` : ""}</button>`;
+    };
     const grupo = (t, items, cls = "") => (items.length ? `<h3 class="grupo">${t}</h3><div class="elegir${cls}">${items.map(boton).join("")}</div>` : "");
     const juv = a === "partidos" ? D.cats.filter((c) => !PS.includes(c)) : ASIS_CATS.slice(1, 7);
-    $("#vista").innerHTML = `${cab(`${AREAS[a]}: ¿qué categoría?`)}
+    $("#vista").innerHTML = `${cab(`${AREAS[a]}: ¿qué categoría?`, a === "planificacion" ? "planCats" : undefined)}
+      ${a === "planificacion" ? avisoPracticas() : ""}
       <section class="sec sec--pegada">
         ${a === "partidos" ? grupo("Todo el club", [["Todas", "Todas las categorías"]]) : ""}
         ${grupo("Plantel superior", [["Plantel superior"]])}
         ${grupo("Juveniles", juv.map((c) => [c]))}
         ${a === "partidos" || a === "tests" ? "" : grupo("Infantiles", ASIS_CATS.slice(7).map((c) => [c]), " elegir--4")}
         ${a === "asistencia" ? `<button type="button" class="btn-sec btn-sec--ancho area-todas" data-ir="asistencia">Ver todas, con su porcentaje</button>` : ""}
+        ${a === "planificacion" && todasPr().length ? `<button type="button" class="btn-sec btn-sec--ancho area-todas" data-ir="practicas">Ver las prácticas de todas</button>` : ""}
       </section>`;
   }
 
@@ -1599,12 +1653,11 @@
     const g = D.guia, gc = gDe(cat), sc = scrumDe(cat === "Plantel superior" ? "M19" : cat);
     const jg = g.ejercicios ? g.ejercicios.filter((e) => e.cats.includes(cat)).length : 0;
     const lema = !gc ? "" : esInf(cat) ? (gc.semillas.ataque[0] ? `“${esc(gc.semillas.ataque[0])}”` : "") : esc(g.lemas_juv[cat] || "");
-    return `<ul class="menu">
-      ${D.fichados ? opcionDe('data-armar=""', IC.mas, "Armar una práctica", "Con los ejercicios de la app y sus minutos") : ""}
-      ${gc ? opcionDe(`data-ir-guia="${esc(cat)}"`, IC.libro, `Qué tiene que aprender ${esc(cat)}`, lema || "Frase guía, prioridades y qué evitar") : ""}
-      ${opcion("scrum", IC.escudo, "Scrum seguro", sc ? `En ${esc(cat)}: ${esc(sc[1])}` : "Qué se hace en cada edad y el set up")}
-      ${jg ? opcionDe(`data-ir-ej-para="${esc(cat)}"`, IC.cono, `Juegos para ${esc(cat)}`, `${pl(jg, "juego", "juegos")} que usan en ${esc(cat)}`) : ""}
-    </ul>`;
+    // el scrum solo desde M8 (antes no hay); lleva a la fila de su edad
+    const items = [gc ? opcionDe(`data-ir-guia="${esc(cat)}"`, IC.libro, `Qué tiene que aprender ${esc(cat)}`, lema || "Frase guía, prioridades y qué evitar") : "",
+      sc ? opcionDe(`data-ir-scrum="${esc(cat)}"`, IC.escudo, "Scrum seguro", `En ${esc(cat)}: ${esc(minus(sc[1]))}`) : "",
+      jg ? opcionDe(`data-ir-ej-para="${esc(cat)}"`, IC.cono, `Juegos de ${esc(cat)}`, jg === 1 ? "1 juego, con cómo se juega" : `${jg} juegos, cada uno con cómo se juega`) : ""].join("");
+    return items ? `<ul class="menu">${items}</ul>` : "";
   }
   /** los días que el grupo suele entrenar, según sus prácticas (los que tienen al menos una de cada siete) */
   function diasHabituales(lista) {
@@ -1616,9 +1669,8 @@
   // lo que tiene que aprender y la temporada (las prácticas de su grupo: M11 y M12…). En la compu, la semana queda fija a la izquierda.
   function vPlan() {
     const cat = S.pcat, hoy = hoyISO();
-    S.pgrupo = grupoDeCat(cat === "Plantel superior" ? "Primera" : cat);
-    if (D.fichados && !PR.lista && !PR.error) cargarPr();
-    const todas = [...(S.pgrupo ? prLista() : []), ...propiasDe(cat)].sort(ordenPr), conFecha = todas.filter((p) => p.fecha);
+    S.pgrupo = grupoPlan(cat);
+    const todas = S.pgrupo ? prLista() : [], conFecha = todas.filter((p) => p.fecha), u = S.pgrupo ? ultimaPr(S.pgrupo) : null;
     // los días que entrena: los que cargó el entrenador en Asistencia (con su hora, suspendidos y agregados);
     // si todavía no los cargó, los que suele entrenar según sus prácticas
     const d = D.fichados && ASIS_CATS.includes(cat) ? ASIS.cats[cat] : null;
@@ -1629,23 +1681,29 @@
     const semana = Array.from({ length: 7 }, (_, i) => masDias(lunes, i)).flatMap((f) => {
       const ps = conFecha.filter((p) => p.fecha === f), s = ses && ses.get(f), dd = dia(f), esHoy = f === hoy;
       if (!ps.length && !(ses ? s : habit.has(dd.getDay()))) return [];
-      const cls = esHoy ? " ej--hoy" : "", canc = s && s.estado === "cancelado";
-      const badge = `<span class="prac__dia"><b class="num">${dd.getDate()}</b><small>${esHoy ? "hoy" : DIA_S[dd.getDay()].slice(0, 3)}</small></span>`;
-      const extra = [s && s.hora, canc ? `Suspendido${s.motivo ? `: ${s.motivo}` : ""}` : ""].filter(Boolean).map(esc).join(" · ");
+      const canc = !!s && s.estado === "cancelado", susp = canc ? `Suspendido${s.motivo ? `: ${esc(s.motivo)}` : ""}` : "";
+      const hora = !s || !s.hora || canc ? "" : s.estado === "movido" && s.antes && s.antes !== s.hora ? `${esc(s.hora)} (cambió: era ${esc(s.antes)})` : esc(s.hora);
+      // hoy va pintado de azul solo si se puede tocar (tiene práctica y no se suspendió); si no, con un borde. Los días que ya pasaron, en gris
+      const cls = `${esHoy ? (ps.length && !canc ? " ej--hoy" : " ej--hoy-vacio") : f < hoy ? " ej--pasado" : ""}${canc ? " ej--canc" : ""}`;
+      const badge = `<span class="prac__dia" aria-hidden="true"><b class="num">${dd.getDate()}</b><small>${esHoy ? "hoy" : DIA_S[dd.getDay()].slice(0, 3)}</small></span><span class="sr">${esHoy ? "Hoy, " : ""}${esc(cuandoP({ fecha: f }))}: </span>`;
       if (ps.length) return ps.map((p) => `<li data-pr="${esc(p.id)}"><button type="button" class="ej prac${cls}" data-ir-practica="${esc(p.id)}">${badge}
-        <span class="ej__txt"><b>${esc(p.foco || "Práctica")}</b><small>${[extra, esc(p.quien), minDe(p) ? `${minDe(p)} min` : ""].filter(Boolean).join(" · ")}</small>${notaDia(cat, f)}</span>${IC.adelante}</button></li>`);
-      if (!canc && D.fichados) return [`<li><button type="button" class="ej prac ej--vacio ej--armar${cls}" data-armar="${f}">${badge}<span class="ej__txt"><b>Sin cargar</b><small>${extra ? `${extra} · ` : ""}<span class="prac__armar">Tocá para armarla</span></small>${notaDia(cat, f)}</span>${IC.mas}</button></li>`];
-      return [`<li><div class="ej prac ej--vacio${cls}">${badge}<span class="ej__txt"><b>${canc ? "Suspendido" : "Sin cargar"}</b>${extra && !canc ? `<small>${extra}</small>` : canc && s.motivo ? `<small>${esc(s.motivo)}</small>` : ""}${canc ? "" : notaDia(cat, f)}</span><span></span></div></li>`];
+        <span class="ej__txt"><b>${canc ? susp : esc(p.foco || "Práctica")}</b><small>${[hora, canc ? esc(p.foco || "Práctica") : "", esc(p.quien), minDe(p) ? `${minDe(p)} min` : ""].filter(Boolean).join(" · ")}</small>${canc ? "" : notaDia(cat, f)}</span>${IC.adelante}</button></li>`);
+      return [`<li><div class="ej prac ej--vacio${cls}">${badge}<span class="ej__txt"><b>${canc ? susp : f < hoy ? "Sin práctica" : "Sin práctica todavía"}</b>${hora ? `<small>${hora}</small>` : ""}${canc ? "" : notaDia(cat, f)}</span><span></span></div></li>`];
     });
+    // si esta semana no hay ninguna, la última que se escribió (para repetirla o seguir desde ahí)
+    const ultima = u && !conFecha.some((p) => p.fecha >= lunes && p.fecha <= domingo)
+      ? `<h3 class="grupo">La última que se escribió</h3><ul class="filas-cat">${filaPr(u, "", true)}</ul>` : "";
+    const at = atajosPlan(cat);
     $("#vista").innerHTML = `
       <div class="cab">${volver(AREAS.planificacion, AREA_IR("planificacion"))}${cabTit(`Planificación de ${esc(cat)}`, "plan")}</div>
+      ${avisoPlan(u)}
       <div class="plan">
         <div class="plan__lado">
-          <section class="sec sec--pegada">${tit("Esta semana")}${semana.length ? `<ul class="filas-cat">${semana.join("")}</ul>` : `<p class="vacio-g">Sin entrenamientos esta semana</p>`}</section>
-          <section class="sec">${tit("Para armar la práctica")}${atajosPlan(cat)}</section>
+          <section class="sec sec--pegada">${tit("Esta semana")}${semana.length ? `<ul class="filas-cat">${semana.join("")}</ul>` : `<p class="vacio-g">Sin entrenamientos esta semana</p>`}${ultima}</section>
+          ${at ? `<section class="sec">${tit("Antes de entrenar")}${at}</section>` : ""}
         </div>
         <section class="sec sec--pegada">${tit(S.pgrupo ? `La temporada de ${esc(S.pgrupo)}` : "La temporada")}
-          ${todas.length ? `${buscadorPr()}${mesesPr(todas, true)}${sinPr}` : `<p class="vacio-g">Todavía no hay prácticas cargadas</p>`}</section>
+          ${todas.length ? `${todas.length >= 8 ? buscadorPr(cat) : ""}${mesesPr(todas, true)}${sinPr()}` : `<p class="vacio-g">Todavía no hay prácticas en la planilla</p>`}</section>
       </div>${avisoHTML()}`;
     filtrarPr();
   }
@@ -2054,8 +2112,8 @@
         <span class="ej__txt"><b>${esc(e.nombre)}</b>${e.foco[0] ? `<small>${conCantos(e.foco[0])}</small>` : ""}${e.material ? `<span class="ej__mat">${IC.cono}${esc(e.material)}</span>` : ""}${e.dibujo ? `<span class="ej__video">${IC.cono}Con dibujo</span>` : ""}${videosDe("ejercicios", e.id).length ? `<span class="ej__video">${IC.play}Con video</span>` : ""}</span>
         ${IC.adelante}</button></li>`;
     $("#vista").innerHTML = `
-      <div class="cab">${volver()}${cabTit("Ejercicios", "ejercicios")}</div>
-      ${pestanas(TIPOS_EJ, tab)}
+      <div class="cab">${volver()}${cabTit(S.para ? `Juegos de ${esc(S.para)}` : "Ejercicios", "ejercicios")}</div>
+      ${S.para ? "" : pestanas(TIPOS_EJ, tab)}
       ${tab === "line" ? `<div class="chips-g" role="group" aria-label="Rol en el line">${[["", "Todos"], ...ROLES_LINE.map((r) => [r, r])].map(([v, l]) =>
         `<button type="button" data-rol="${v}" aria-pressed="${(S.rol || "") === v}">${l}</button>`).join("")}</div>` : ""}
       ${S.para ? `<p class="filtro-g"><span>Solo los juegos que usan en <b>${esc(S.para)}</b></span><button type="button" class="link" data-quitar-para>Ver todos</button></p>` : ""}
@@ -2421,12 +2479,13 @@
   function vScrum() {
     const s = D.guia.scrum, haySes = !!(s.sesiones && s.sesiones.length);
     const tab = ["edad", "setup", "entrada"].concat(haySes ? ["sesiones"] : []).includes(S.tab) ? S.tab : "edad";
+    const mia = S.para ? scrumDe(S.para === "Plantel superior" ? "M19" : S.para) : null;
     const pasos = (items) => `<ol class="pasos">${items.map(([t, d], i) => `<li><span class="pasos__n">${i + 1}</span><span class="pasos__t">${esc(t)}</span>${d ? `<div class="pasos__d">${d}</div>` : ""}</li>`).join("")}</ol>`;
     let cuerpo;
     if (tab === "edad") {
       cuerpo = `<section class="sec sec--pegada">
         <h2 class="h2">Qué se hace en cada edad</h2>
-        <ul class="edades-g">${s.edades.map(([c, q, nota]) => `<li><b class="edades-g__cat">${esc(c)}</b><span>${esc(q)}${nota ? `<small>${esc(nota)}</small>` : ""}</span></li>`).join("")}</ul>
+        <ul class="edades-g">${s.edades.map(([c, q, nota]) => `<li${mia && mia[0] === c ? ' class="edades-g__mia"' : ""}><b class="edades-g__cat">${esc(c)}</b><span>${esc(q)}${nota ? `<small>${esc(nota)}</small>` : ""}</span></li>`).join("")}</ul>
       </section>
       <section class="sec">
         <h2 class="h2">Cómo se enseña</h2>
@@ -2465,6 +2524,7 @@
     }
     $("#vista").innerHTML = `
       <div class="cab">${volver()}${cabTit("Scrum seguro", "scrum")}</div>
+      ${mia ? `<p class="lista-info">${IC.escudo}<span><b>En ${esc(S.para)}:</b> ${esc(minus(mia[1]))}${mia[2] ? ` ${esc(mia[2])}` : ""}</span></p>` : ""}
       <section class="sec sec--pegada">
         <h2 class="h2">Regla de oro</h2>
         ${pasos(s.regla.map((x, i) => [x, s.regla_txt[i] ? esc(s.regla_txt[i]) : ""]))}
@@ -2569,17 +2629,24 @@
   const cuandoP = (p) => p.fecha ? `${DIA_S[dia(p.fecha).getDay()]} ${dia(p.fecha).getDate()} de ${MES_S[dia(p.fecha).getMonth()]}`
     : p.semana ? `semana ${p.semana} de la temporada` : "sin fecha";
   const mayus = (t) => t.charAt(0).toUpperCase() + t.slice(1);
+  const minus = (t) => t.charAt(0).toLowerCase() + t.slice(1);
   const grupoDeCat = (cat) => { const p = (D.guia && D.guia.practicas || []).find((x) => x.cats.includes(cat)); return p ? p.grupo : null; };
+  /** el grupo de prácticas de una categoría de Planificación (el plantel superior escribe las suyas como "Primera") */
+  const grupoPlan = (cat) => grupoDeCat(cat === "Plantel superior" ? "Primera" : cat);
+  /** la última práctica escrita de un grupo, hasta hoy */
+  const ultimaPr = (gr) => todasPr().reduce((a, p) => (p.grupo === gr && p.fecha && p.fecha <= hoyISO() && (!a || p.fecha > a.fecha) ? p : a), null);
   const nPr = (g) => D.guia.practicas.filter((p) => p.grupo === g).length;
   const atajoPr = (cat) => { const g = grupoDeCat(cat); return g ? `<button type="button" class="atajo" data-ir-practicas="${esc(g)}">${IC.calendario}<span>Prácticas de ${esc(g)} (${nPr(g)})</span>${IC.adelante}</button>` : ""; };
   // las sin fecha van al final
   const ordenPr = (a, b) => (b.orden === "9" ? "0" : b.orden).localeCompare(a.orden === "9" ? "0" : a.orden);
   const prLista = () => D.guia.practicas.filter((p) => !S.pgrupo || p.grupo === S.pgrupo).sort(ordenPr);
   /** una actividad de una práctica (o de una sesión de scrum): los minutos a la izquierda; el objetivo, qué se hace y cómo */
-  const itemPr = (it) => `<li class="prac-it"><span class="prac-it__min num">${it.min ? `${it.min}'` : ""}</span><div class="prac-it__txt">
+  // un texto largo de "qué se hace" va en letra normal (un párrafo entero en negrita no se lee); si es un juego de la app, el link a su ficha
+  const itemPr = (it) => `<li class="prac-it"><span class="prac-it__min">${it.min ? `<b class="num">${it.min}</b><small>min</small>` : ""}</span><div class="prac-it__txt">
       ${it.obj ? `<span class="prac-it__obj">${conCantos(it.obj)}</span>` : ""}
-      ${it.act ? `<p class="prac-it__act">${it.ej ? `<button type="button" class="link-chico" data-ir-ej="${esc(it.ej)}">${esc(it.act)}</button>` : conCantos(it.act)}</p>` : ""}
+      ${it.act ? `<p class="prac-it__act${it.act.length > 90 ? " prac-it__act--largo" : ""}">${conCantos(it.act)}</p>` : ""}
       ${it.det ? `<p class="prac-it__det">${conCantos(it.det)}</p>` : ""}
+      ${it.ej && D.guia.ejercicios && D.guia.ejercicios.some((e) => e.id === it.ej) ? `<button type="button" class="link prac-it__ej" data-ir-ej="${esc(it.ej)}">${IC.cono}Ver cómo se juega</button>` : ""}
       ${it.grupo ? `<span class="chip chip--gris">${esc(it.grupo)}</span>` : ""}</div></li>`;
   /** el número de cada grupo; mientras se busca dice cuántos se ven ("6 de 15") */
   const cuenta = (n, [uno, varios]) => `<span class="num" data-n="${n}" data-txt="${pl(n, uno, varios)}">${pl(n, uno, varios)}</span>`;
@@ -2590,14 +2657,20 @@
   /** los minutos de una práctica o sesión: solo si todas las actividades tienen sus minutos */
   const minDe = (p) => (p.min && !p.bloques.some((b) => !b.agua && b.items.some((it) => !it.min)) ? p.min : null);
   let Q_PR = null; // lo que se busca de cada práctica (se arma la primera vez que se usa el buscador)
+  /** cada palabra con sus formas en singular: "pases" → "pase"; "decisiones" → "decisione" o "decision" (el "es" solo después de l, n, r, d, z o j) */
+  const formas = (w) => (w.length > 4 && /[lnrdzj]es$/.test(w) ? [w.slice(0, -1), w.slice(0, -2)] : w.length > 3 && w.endsWith("s") ? [w.slice(0, -1)] : [w]);
+  const palabrasPr = () => norm((S.qp || "").trim()).split(/\s+/).filter(Boolean).map(formas);
+  const coincidePr = (t, ws) => ws.every((fs) => fs.some((w) => t.includes(w)));
   const textoBusca = (p) => norm([p.foco, p.grupo, p.quien, ...p.objetivos, ...p.bloques.flatMap((b) => (b.items || []).map((it) => `${it.obj || ""} ${it.act || ""} ${it.det || ""}`))].join(" "));
 
   /** una práctica en la lista: el día (número y día de la semana), el foco y quién la armó */
-  const filaPr = (p, cls = "") => {
+  // con "largo", la fecha entera abajo (para "La última que se escribió", que puede ser de otro mes). El lector de pantalla oye "martes 20 de octubre", no "20 mar"
+  const filaPr = (p, cls = "", largo = false) => {
     const d = p.fecha ? dia(p.fecha) : null;
+    const dato = [largo && d ? mayus(cuandoP(p)) : "", S.pgrupo ? "" : p.grupo, p.quien, minDe(p) ? `${minDe(p)} min` : ""].filter(Boolean).map(esc).join(" · ");
     return `<li data-pr="${esc(p.id)}"><button type="button" class="ej prac${cls}" data-ir-practica="${esc(p.id)}">
-      <span class="prac__dia">${d ? `<b class="num">${d.getDate()}</b><small>${DIA_S[d.getDay()].slice(0, 3)}</small>` : `<small>${p.semana ? `Sem. ${p.semana}` : "Sin fecha"}</small>`}</span>
-      <span class="ej__txt"><b>${esc(p.foco || "Práctica")}</b><small>${S.pgrupo ? "" : `${esc(p.grupo)} · `}${esc(p.quien)}${minDe(p) ? ` · ${minDe(p)} min` : ""}</small></span>
+      <span class="prac__dia"${d ? ' aria-hidden="true"' : ""}>${d ? `<b class="num">${d.getDate()}</b><small>${DIA_S[d.getDay()].slice(0, 3)}</small>` : `<small>${p.semana ? `Sem. ${p.semana}` : "Sin fecha"}</small>`}</span>${d && !largo ? `<span class="sr">${esc(cuandoP(p))}: </span>` : ""}
+      <span class="ej__txt"><b>${esc(p.foco || "Práctica")}</b><small>${dato}</small></span>
       ${IC.adelante}</button></li>`;
   };
   /** las prácticas por mes, la más nueva arriba; en Planificación cada mes se abre y se cierra (el último, abierto) */
@@ -2611,12 +2684,17 @@
     });
     const nom = (k) => (k === "sin" ? "Sin fecha" : mayus(MES_S[+k.slice(5, 7) - 1]));
     const filas = (m) => `<ul class="filas-cat">${m.items.map((x) => filaPr(x)).join("")}</ul>`;
-    return meses.map((m, i) => (plegar
-      ? `<details class="grupo-ej mas mes"${i ? "" : " open"}><summary><span class="mas__tit">${nom(m.k)}</span><span class="mas__dato">${cuenta(m.items.length, ["práctica", "prácticas"])}</span></summary>${filas(m)}</details>`
+    // la primera vez, el mes más nuevo abierto; después quedan como los dejaste (y, al volver de una práctica, abierto el mes de esa práctica)
+    const pref = `mes-${slug(S.pgrupo || "todas")}`, k = (m) => `${pref}-${m.k}`;
+    if (plegar && !S.abiertos.has(`${pref}-ini`)) { S.abiertos.add(`${pref}-ini`); if (meses[0]) S.abiertos.add(k(meses[0])); }
+    if (plegar && S.abrirMes) { meses.filter((m) => m.items.some((x) => x.id === S.ultPr)).forEach((m) => S.abiertos.add(k(m))); S.abrirMes = false; }
+    return meses.map((m) => (plegar
+      ? `<details class="grupo-ej mas mes" data-sec="${k(m)}"${S.abiertos.has(k(m)) ? " open" : ""}><summary><span class="mas__tit">${nom(m.k)}</span><span class="mas__dato">${cuenta(m.items.length, ["práctica", "prácticas"])}</span></summary>${filas(m)}</details>`
       : `<div class="grupo-ej"><div class="grupo-ej__cab"><h3 class="grupo-cat__tit">${nom(m.k)}</h3>${cuenta(m.items.length, ["práctica", "prácticas"])}</div>${filas(m)}</div>`)).join("");
   }
-  const buscadorPr = () => `<label class="buscar-g"><span class="sr">Buscar una práctica</span>${IC.buscar}<input type="search" id="buscar-pr" value="${esc(S.qp)}" placeholder="Buscar: tackle, ruck, pase…" autocomplete="off" enterkeyhint="search"></label>`;
-  const sinPr = `<p class="vacio-g" id="sin-pr" hidden>No hay ninguna práctica con esa palabra.</p>`;
+  const buscadorPr = (cat) => `<label class="buscar-g"><span class="sr">Buscar una práctica</span>${IC.buscar}<input type="search" id="buscar-pr" value="${esc(S.qp)}" placeholder="${cat && esInf(cat) ? "Buscar: manchas, pase, tackle…" : "Buscar: tackle, ruck, pase…"}" autocomplete="off" enterkeyhint="search"></label>`;
+  // sin resultados: cómo salir; y cuántas hay, para el lector de pantalla
+  const sinPr = () => `<div class="vacio-g" id="sin-pr" hidden><p>No hay ninguna práctica con esas palabras.</p><button type="button" class="btn-sec" data-borrar-qp>Borrar la búsqueda</button></div><p class="sr" role="status" id="cuenta-pr"></p>`;
 
   function vPracticas() {
     const grupos = P_GRUPOS.filter((g) => nPr(g));
@@ -2624,181 +2702,82 @@
       <div class="cab">${volver()}${cabTit("Prácticas", "practicas")}</div>
       <div class="chips-g" role="group" aria-label="Categoría">${[["", "Todas"], ...grupos.map((g) => [g, g])].map(([v, l]) =>
         `<button type="button" data-pgrupo="${esc(v)}" aria-pressed="${(S.pgrupo || "") === v}">${esc(l)}</button>`).join("")}</div>
-      <section class="sec sec--pegada">${buscadorPr()}${mesesPr(prLista())}${sinPr}</section>`;
+      <section class="sec sec--pegada">${buscadorPr()}${mesesPr(prLista(), true)}${sinPr()}</section>`;
     filtrarPr();
   }
+  let MESES_ANTES = null; // los meses abiertos antes de buscar: al borrar la búsqueda quedan como estaban
   function filtrarPr() {
-    const q = norm((S.qp || "").trim());
+    const ws = palabrasPr(), q = ws.length > 0;
     if (q && !Q_PR) Q_PR = new Map(todasPr().map((p) => [p.id, textoBusca(p)]));
+    if (q && !MESES_ANTES) MESES_ANTES = [...S.abiertos].filter((k) => k.startsWith("mes-"));
+    if (!q && MESES_ANTES) { [...S.abiertos].filter((k) => k.startsWith("mes-")).forEach((k) => S.abiertos.delete(k)); MESES_ANTES.forEach((k) => S.abiertos.add(k)); MESES_ANTES = null; }
     let n = 0;
     document.querySelectorAll(".grupo-ej").forEach((gr) => {
       let vis = 0;
-      gr.querySelectorAll("li[data-pr]").forEach((li) => { const ok = !q || Q_PR.get(li.dataset.pr).includes(q); li.hidden = !ok; vis += ok; });
+      gr.querySelectorAll("li[data-pr]").forEach((li) => { const ok = !q || coincidePr(Q_PR.get(li.dataset.pr), ws); li.hidden = !ok; vis += ok; });
       gr.hidden = !vis; n += vis;
-      if (q && vis && gr.tagName === "DETAILS") gr.open = true; // al buscar, se abren los meses que tienen algo
+      // al buscar, se abren los meses que tienen algo; al borrar, vuelven como estaban
+      if (gr.tagName === "DETAILS" && gr.dataset.sec) { if (q && vis) gr.open = true; else if (!q) gr.open = S.abiertos.has(gr.dataset.sec); }
       contar(gr, q, vis);
     });
-    const v = $("#sin-pr");
+    const v = $("#sin-pr"), c = $("#cuenta-pr");
     if (v) v.hidden = n > 0;
+    if (c) c.textContent = q ? (n ? `${pl(n, "práctica", "prácticas")}` : "Ninguna práctica") : "";
+  }
+  /** al volver de una práctica, el foco (y la vista, si quedó lejos) en la fila que se había abierto */
+  function volverAFila() {
+    const sel = S.ultPr && ["plan", "practicas"].includes(S.ver) ? `[data-ir-practica="${CSS.escape(S.ultPr)}"]`
+      : S.ver === "practica" && S.ultEj ? `[data-ir-ej="${CSS.escape(S.ultEj)}"]` : S.ver === "area" && S.area === "planificacion" && S.pcat ? `[data-area-cat="${CSS.escape(S.pcat)}"]` : null;
+    if (!sel) return;
+    const b = [...document.querySelectorAll(`#vista ${sel}`)].find((x) => !x.closest("[hidden]"));
+    if (!b) return;
+    requestAnimationFrame(() => { const r = b.getBoundingClientRect(); if (r.top < 0 || r.bottom > innerHeight) b.scrollIntoView({ block: "center" }); b.focus({ preventScroll: true }); });
   }
 
   // una práctica entera, como la escribió el entrenador
   function vPractica() {
     const p = todasPr().find((x) => x.id === S.practica);
-    if (!p) {
-      if (!PR.lista && !PR.error) cargarPr();
-      $("#vista").innerHTML = `<div class="cab">${volver()}</div><section class="sec sec--pegada">${!PR.lista && !PR.error ? `<p class="cargando">Cargando…</p>` : `<p class="vacio-g">No se encontró la práctica</p>`}</section>`;
-      return;
-    }
-    // "Anterior / Siguiente" por fecha, dentro de la misma lista que se estaba mirando
-    const q = norm((S.qp || "").trim()), vistos = prLista().filter((x) => !q || textoBusca(x).includes(q));
-    const cron = p.propia ? [p] : vistos.some((x) => x.id === p.id) ? vistos : D.guia.practicas.slice().sort(ordenPr), j = cron.indexOf(p);
+    S.ultPr = p.id; S.abrirMes = true; // al volver a la lista: abierto su mes y el foco en su fila
+    if (D.fichados && !NOTAS.lista && !NOTAS.error) cargarNotas();
+    // Anterior = el día de antes, Siguiente = el día de después (la lista va de la más nueva a la más vieja), dentro de la lista que se estaba mirando
+    const ws = palabrasPr(), vistos = prLista().filter((x) => !ws.length || coincidePr(textoBusca(x), ws));
+    const cron = vistos.some((x) => x.id === p.id) ? vistos : todasPr().filter((x) => x.grupo === p.grupo).sort(ordenPr), j = cron.indexOf(p);
     const salto = (k, der) => {
-      const q = cron[k];
-      return `<button type="button"${q ? ` data-lado data-ir-practica="${esc(q.id)}" aria-label="${der ? "Siguiente" : "Anterior"}: ${esc(q.foco)}"` : " disabled"}>${der ? "" : IC.atras}<span>${der ? "Siguiente" : "Anterior"}</span>${der ? IC.adelante : ""}</button>`;
+      const o = cron[k], lado = der ? "Siguiente" : "Anterior", txt = o && (o.fecha ? corta(o.fecha) : o.semana ? `Sem. ${o.semana}` : lado);
+      return `<button type="button"${o ? ` data-lado="${der ? "sig" : "ant"}" data-ir-practica="${esc(o.id)}" aria-label="${lado}: ${esc(o.fecha ? cuandoP(o) : txt)}, ${esc(o.foco || "Práctica")}"` : " disabled"}>${der ? "" : IC.atras}<span>${esc(txt || lado)}</span>${der ? IC.adelante : ""}</button>`;
     };
     const minB = (b) => b.items.reduce((s, it) => s + (it.min || 0), 0);
-    const cuerpo = p.bloques.map((b) => b.agua ? `<p class="prac-agua">${IC.gota}<span>Agua${b.min ? ` · ${b.min} min` : ""}</span></p>`
-      : `${b.b ? `<h3 class="grupo grupo--fila"><span>${esc(b.b)}</span>${minB(b) ? `<span class="num">${minB(b)} min</span>` : ""}</h3>` : ""}
-        <ul class="prac-g">${b.items.map(itemPr).join("")}</ul>`).join("");
+    // las actividades sin nada escrito no se muestran (sus minutos quedan en el total del bloque)
+    // dos "Agua" seguidas van juntas; un bloque con minutos y nada escrito lo dice; sin minutos en todo el bloque, no queda la columna vacía
+    const bloques = p.bloques.reduce((a, b) => { const u = a[a.length - 1]; if (b.agua && u && u.agua) a[a.length - 1] = { ...u, min: (u.min || 0) + (b.min || 0) || null }; else a.push(b); return a; }, []);
+    const cuerpo = bloques.map((b) => {
+      if (b.agua) return `<p class="prac-agua">${IC.gota}<span>Agua${b.min ? ` · ${b.min} min` : ""}</span></p>`;
+      const its = b.items.filter((it) => it.obj || it.act || it.det), sinMin = !its.some((it) => it.min);
+      return `${b.b ? `<h3 class="grupo grupo--fila"><span>${esc(b.b)}</span>${minB(b) ? `<span class="num"><span class="sr">: </span>${minB(b)} min</span>` : ""}</h3>` : ""}
+        ${its.length ? `<ul class="prac-g${sinMin ? " prac-g--sin-min" : ""}">${its.map(itemPr).join("")}</ul>` : b.b ? `<p class="prac-sin">Sin detalle en la planilla</p>` : ""}`;
+    }).join("");
+    // lo que anotaron en Asistencia ese día ("¿Cómo salió?"), de las categorías de esta práctica
+    const cats = new Set(p.cats.map(asisDe).filter(Boolean));
+    const ns = p.fecha && NOTAS.lista ? NOTAS.lista.filter((n) => n.fecha === p.fecha && cats.has(n.cat)) : [];
+    const notas = ns.length ? `<h3 class="grupo">Cómo salió</h3><ul class="cs-l">${ns.map((n) => `<li><p>${esc(n.texto)}</p><small>${[cats.size > 1 ? n.cat : "", n.por].filter(Boolean).map(esc).join(" · ")}</small></li>`).join("")}</ul>` : "";
+    const vuelve = S.pcat && grupoPlan(S.pcat) === p.grupo ? volver(`Planificación de ${esc(S.pcat)}`, { ver: "plan", practica: null }) : volver("Prácticas", { ver: "practicas", practica: null });
     $("#vista").innerHTML = `
       <div class="cab">
-        <div class="cab__fila">${volver("Prácticas", { ver: "practicas", practica: null })}
-          ${p.propia ? "" : `<div class="saltos saltos--ej" role="group" aria-label="Otras prácticas">${salto(j - 1)}${salto(j + 1, true)}</div>`}</div>
+        ${vuelve}
         <p class="ej-tag">${esc(p.grupo)} · ${esc(p.quien)}</p>
-        <h2 class="ej-tit">${esc(p.foco || "Práctica")}</h2>
-        <p class="prac-cuando">${IC.calendario}<span>${mayus(cuandoP(p))}${minDe(p) ? ` · ${minDe(p)} minutos` : ""}</span></p>
+        <h2 class="ej-tit">${conAyuda(esc(p.foco || "Práctica"), "practica")}</h2>
+        <p class="prac-cuando">${IC.calendario}<span>${mayus(cuandoP(p))}${minDe(p) ? ` · ${minDe(p)} min` : ""}</span></p>
+        <div class="saltos saltos--pr" role="group" aria-label="Otras prácticas">${salto(j + 1)}${salto(j - 1, true)}</div>
       </div>
       <section class="sec sec--pegada ej-det">
-        ${p.objetivos.length ? `<h3 class="grupo">Objetivos</h3>${lista(p.objetivos, "check-g")}` : ""}
+        ${p.objetivos.length ? `<h3 class="grupo">Objetivos</h3><ol class="obj-g">${p.objetivos.map((o) => `<li>${conCantos(o)}</li>`).join("")}</ol>` : ""}
         ${cuerpo}
         ${p.cierre ? `<p class="prac-agua prac-agua--fin">${IC.bien}<span>Charla final y elongación</span></p>` : ""}
-        <button type="button" class="btn btn--ancho btn--wa" data-compartir-pr>${IC.compartir}Mandar por WhatsApp</button>
-        ${p.propia ? `<button type="button" class="btn-sec btn-sec--ancho prac-cambiar" data-armar-id="${esc(p.id)}">Cambiar esta práctica</button>` : ""}
+        ${notas}
+        <div class="pie-wa"><button type="button" class="btn btn--ancho btn--wa" data-compartir-pr>${IC.compartir}Mandar por WhatsApp</button></div>
       </section>${avisoHTML()}`;
   }
-  // ---------- armar la práctica en la app (functions/api/asistencia.js, tabla "practicas" de D1) ----------
-  // Como Sportplan o Rugby Coach Weekly: el entrenador elige el día, escribe qué se trabaja y suma partes (ejercicios de la app, con
-  // su dibujo, o actividades propias), cada una con sus minutos. Guardada, se ve en la semana de su categoría junto a las de Magali,
-  // igual que esas (con la misma forma de datos) y se manda por WhatsApp. En infantiles avisa si pasa de una hora o si una parte
-  // dura más de 15 minutos (lo que recomienda la unión de Nueva Zelanda). Lo armado queda en el celular hasta guardarlo.
-  const PR = { lista: null, error: null, cargando: false, guardando: false };
-  const ID_PR = /^u-[a-z0-9]{6,24}$/;
-  /** una práctica armada en la app, con la misma forma que las de Magali (así se ve, se busca y se comparte igual) */
-  const prDeD1 = (r) => ({ id: r.id, propia: true, cat: r.cat, quien: r.por || "Armada en la app", grupo: r.cat, cats: [r.cat], fecha: r.fecha, foco: r.foco,
-    objetivos: r.objetivo ? [r.objetivo] : [], bloques: [{ b: "", items: r.partes.map((x) => ({ min: x.min || null, act: x.act, det: x.det || "", ej: x.ej || "" })) }],
-    cierre: false, min: r.partes.reduce((s, x) => s + (x.min || 0), 0) || null, orden: r.fecha });
-  const todasPr = () => [...((D.guia && D.guia.practicas) || []), ...(PR.lista || []).map(prDeD1)];
-  const propiasDe = (cat) => (PR.lista || []).filter((r) => r.cat === cat).map(prDeD1);
-  function cargarPr() {
-    if (PR.cargando) return;
-    PR.cargando = true; PR.error = null;
-    apiD1(null, "practicas=1").then((d) => { PR.lista = d.practicas; Q_PR = null; })
-      .catch((e) => { PR.error = errNotas(e, "No se pudieron cargar las prácticas armadas", "ver las prácticas"); })
-      .finally(() => { PR.cargando = false; if (["plan", "practica", "armar"].includes(S.ver)) render(); });
-  }
-  const arClave = (cat, id) => `los50-armar:${cat}|${id || "nueva"}`;
-  /** lo que se está armando: lo del celular o, si se está cambiando una ya guardada, esa */
-  function arActual() {
-    let b = null;
-    try { b = JSON.parse(enCel.get(arClave(S.arcat, S.arid)) || "null"); } catch (e) { b = null; }
-    if (b) return b;
-    const g = S.arid && (PR.lista || []).find((r) => r.id === S.arid);
-    return g ? { fecha: g.fecha, foco: g.foco, objetivo: g.objetivo || "", partes: g.partes.map((x) => ({ ...x })) } : { fecha: S.arfecha || hoyISO(), foco: "", objetivo: "", partes: [] };
-  }
-  const arAnotar = (a) => enCel.set(arClave(S.arcat, S.arid), JSON.stringify(a));
-  const AR_MIN = [5, 10, 15, 20, 25, 30, 40, 45, 60];
-  function vArmar() {
-    const cat = S.arcat;
-    if (!PR.lista && !PR.error) cargarPr();
-    if (S.arelegir) return vArmarElegir();
-    const cab = `<div class="cab">${volver(`Planificación de ${esc(cat)}`, { ver: "plan", pcat: cat })}${cabTit(S.arid ? "Cambiar la práctica" : "Armar la práctica", "armar")}</div>`;
-    if (S.arid && !PR.lista) { $("#vista").innerHTML = `${cab}<section class="sec sec--pegada">${PR.error ? `<p class="vacio-g">${PR.error}</p>` : `<p class="cargando">Cargando…</p>`}</section>`; return; }
-    const a = arActual(), tot = a.partes.reduce((s, x) => s + (x.min || 0), 0), inf = ASIS_CATS.indexOf(cat) >= 7;
-    // los avisos por edad: en infantiles, menos de una hora y partes de 10 a 15 minutos
-    const avisos = [inf && tot > 60 && "En infantiles conviene que la práctica dure menos de una hora.",
-      inf && a.partes.some((x) => x.min > 15) && "En infantiles, las partes de 10 a 15 minutos mantienen la atención.",
-      !inf && tot > 120 && "La práctica pasa de dos horas."].filter(Boolean);
-    const parte = (x, i) => `<li class="ar-f"><select class="asis-input ar-min" data-ar-min="${i}" aria-label="Minutos de ${esc(x.act)}">${["", ...AR_MIN].map((m) =>
-        `<option value="${m}"${(x.min || "") === m ? " selected" : ""}>${m ? `${m} min` : "–"}</option>`).join("")}</select>
-      <span class="ar-f__txt"><b>${esc(x.act)}</b>${x.ej ? `<button type="button" class="link" data-ir-ej="${esc(x.ej)}">Ver el ejercicio</button>` : ""}</span>
-      <span class="ar-f__btns"><button type="button" class="ar-b" data-ar-mover="${i}|-1" aria-label="Subir"${i ? "" : " disabled"}>${IC.sube}</button><button type="button" class="ar-b" data-ar-mover="${i}|1" aria-label="Bajar"${i < a.partes.length - 1 ? "" : " disabled"}>${IC.baja}</button><button type="button" class="ar-b" data-ar-sacar="${i}" aria-label="Sacar">${IC.cruz}</button></span></li>`;
-    const borrar = !S.arid ? "" : S.aform === "ar-borrar" ? `<div class="asis-form"><span class="asis-form__l">¿Borrar esta práctica?</span>
-        <div class="asis-form__btns"><button type="button" class="btn btn--peligro btn--alto" data-ar-borrar>Borrarla</button>${cerrarBtn}</div></div>`
-      : `<button type="button" class="link" data-form="ar-borrar">Borrar esta práctica</button>`;
-    $("#vista").innerHTML = `${cab}
-      <section class="sec sec--pegada armar">
-        <div class="asis-form__fila"><label class="asis-form__campo">Día<input id="ar-fecha" class="asis-input" type="date" value="${a.fecha}" min="${masDias(hoyISO(), -DIAS_ATRAS)}" max="${masDias(hoyISO(), DIAS_ADELANTE)}"></label>
-          <label class="asis-form__campo">¿Qué se trabaja?<input id="ar-foco" class="asis-input" maxlength="80" placeholder="Por ejemplo: tackle y ruck" autocomplete="off" value="${esc(a.foco)}"></label></div>
-        <div class="asis-form__fila ar-fila"><label class="asis-form__campo">Objetivo (si querés)<input id="ar-obj" class="asis-input" maxlength="200" placeholder="Qué tienen que lograr" autocomplete="off" value="${esc(a.objetivo || "")}"></label>
-          ${enCel.get(claveNombreNota) ? "" : `<label class="asis-form__campo">Tu nombre<input id="ar-por" class="asis-input" maxlength="60" autocomplete="given-name" value="${esc(a.por || "")}"></label>`}</div>
-        <h3 class="grupo grupo--fila"><span>Las partes</span>${tot ? `<span class="num">${tot} min</span>` : ""}</h3>
-        ${a.partes.length ? `<ul class="ar-l">${a.partes.map(parte).join("")}</ul>` : `<p class="vacio-g">Sumá ejercicios de la app o actividades propias</p>`}
-        ${avisos.map((t) => `<p class="asis-form__aviso ar-aviso">${t}</p>`).join("")}
-        <div class="eq-acc">
-          <button type="button" class="btn-sec btn-sec--ancho" data-ar-elegir>${IC.cono}Sumar un ejercicio de la app</button>
-          ${S.aform === "ar-libre" ? `<div class="asis-form"><label class="asis-form__campo">Otra actividad<input id="ar-libre" class="asis-input" maxlength="120" placeholder="Por ejemplo: entrada en calor con pelota" autocomplete="off"></label>
-            <div class="asis-form__btns"><button type="button" class="btn btn--ok btn--alto" data-ar-libre-ok>${IC.mas}Sumar</button>${cerrarBtn}</div></div>`
-            : `<button type="button" class="btn-sec btn-sec--ancho" data-form="ar-libre">${IC.mas}Sumar otra actividad</button>`}
-          ${borrar}
-        </div>
-      </section>
-      <div class="lista-pie" role="status"><span><b class="num">${tot}</b> minutos</span>
-        <button type="button" class="btn btn--ok btn--grande" data-ar-guardar>${IC.tilde}Guardar</button></div>
-      ${avisoHTML()}`;
-  }
-  // elegir un ejercicio de la app: primero los que usa la categoría
-  function vArmarElegir() {
-    const cat = S.arcat, ejs = (D.guia && D.guia.ejercicios) || [], tipos = [...new Set(ejs.map((e) => e.tipo))], t = S.artipo || "";
-    const deCat = (e) => (e.cats || []).includes(cat);
-    const lista = ejs.filter((e) => !t || e.tipo === t).sort((x, y) => deCat(y) - deCat(x) || x.nombre.localeCompare(y.nombre, "es"));
-    $("#vista").innerHTML = `
-      <div class="cab">${volver("Armar la práctica", { ver: "armar", arelegir: false })}${cabTit("Sumar un ejercicio")}</div>
-      <div class="chips-g" role="group" aria-label="Tipo">${[["", "Todos"], ...tipos.map((x) => [x, x])].map(([v, l]) => `<button type="button" data-artipo="${esc(v)}" aria-pressed="${t === v}">${esc(l)}</button>`).join("")}</div>
-      <section class="sec sec--pegada">
-        <label class="buscar-g eq-buscar"><span class="sr">Buscar un ejercicio</span>${IC.buscar}<input type="search" id="buscar-chico" placeholder="Buscar: pase, tackle, line…" autocomplete="off" enterkeyhint="search"></label>
-        <ul class="eq-l" data-filtro>${lista.map((e) => `<li data-q="${esc(norm(`${e.nombre} ${e.tipo} ${e.grupo || ""}`))}"><button type="button" class="eq-it eq-it--elegir" data-ar-ej="${esc(e.id)}">
-          <span class="eq-it__txt"><span class="eq-it__nom">${esc(e.nombre)}</span><small>${[e.tipo, e.grupo, e.paso && `paso ${e.paso}`, deCat(e) && `lo usa ${cat}`].filter(Boolean).map(esc).join(" · ")}</small></span>${IC.mas}</button></li>`).join("")}</ul>
-        <p class="vacio-g" id="sin-chicos" hidden>No hay ejercicios con eso</p>
-      </section>`;
-  }
-  async function guardarPractica() {
-    if (PR.guardando) return;
-    const cat = S.arcat, a = arActual();
-    a.fecha = $("#ar-fecha").value; a.foco = $("#ar-foco").value.trim(); a.objetivo = $("#ar-obj").value.trim();
-    const por = ($("#ar-por") ? $("#ar-por").value : enCel.get(claveNombreNota) || "").trim();
-    arAnotar(a);
-    if (!fechaOk(a.fecha)) { avisoSuelto("Elegí el día de la práctica."); $("#ar-fecha").focus(); return; }
-    if (a.foco.length < 2) { avisoSuelto("Escribí qué se trabaja."); $("#ar-foco").focus(); return; }
-    if (!a.partes.length) { avisoSuelto("Sumá por lo menos un ejercicio o una actividad."); return; }
-    if ($("#ar-por") && por.length < 2) { avisoSuelto("Escribí tu nombre."); $("#ar-por").focus(); return; }
-    if (por) enCel.set(claveNombreNota, por);
-    PR.guardando = true;
-    avisoSuelto("Guardando…", "espera");
-    try {
-      await apiD1({ accion: "practica", cat, ...(S.arid ? { id: S.arid } : {}), fecha: a.fecha, foco: a.foco, objetivo: a.objetivo, partes: a.partes, por });
-      enCel.set(arClave(cat, S.arid), null);
-      PR.lista = (await apiD1(null, "practicas=1")).practicas; Q_PR = null;
-      avisar("ok", `Práctica guardada para el ${diaMes(a.fecha)}`);
-      volverAtras({ ver: "plan", pcat: cat });
-    } catch (e) { avisoSuelto(`${errNotas(e, "No se pudo guardar", "guardar la práctica")} Lo armado queda en el celular.`); }
-    finally { PR.guardando = false; }
-  }
-  async function borrarPractica() {
-    if (PR.guardando) return;
-    const cat = S.arcat, id = S.arid;
-    PR.guardando = true;
-    avisoSuelto("Borrando…", "espera");
-    try {
-      await apiD1({ accion: "borrar_practica", cat, id });
-      enCel.set(arClave(cat, id), null);
-      PR.lista = (PR.lista || []).filter((r) => r.id !== id); Q_PR = null;
-      avisar("ok", "Práctica borrada");
-      irA({ ver: "plan", pcat: cat, practica: null, arid: null, aform: null });
-    } catch (e) { avisoSuelto(errNotas(e, "No se pudo borrar", "borrar la práctica")); }
-    finally { PR.guardando = false; }
-  }
-
+  const todasPr = () => (D.guia && D.guia.practicas) || [];
   // ---------- asistencia a los entrenamientos (functions/api/asistencia.js, guarda en Cloudflare D1) ----------
   // Pensada para la cancha: con una mano, al sol y con poca señal. Lo marcado queda guardado en el celular hasta que se envía,
   // cómo va el guardado se ve en la barra de abajo y, si dos entrenadores toman la lista del mismo día, se juntan.
@@ -3342,65 +3321,45 @@
 
   /** la práctica en texto, para WhatsApp */
   function textoPractica(p) {
-    const l = [`*${p.foco || "Práctica"}*`, `${p.grupo} · ${cuandoP(p)}${minDe(p) ? ` · ${minDe(p)} min` : ""}`];
-    if (p.objetivos.length) l.push("", "Objetivos:", ...p.objetivos.map((o) => `• ${o}`));
-    p.bloques.forEach((b) => {
-      if (b.agua) { l.push(`(Agua${b.min ? ` ${b.min}'` : ""})`); return; }
-      if (b.b) l.push("", `*${b.b}*`);
-      b.items.forEach((it) => l.push(`${it.min ? `${it.min}' ` : "• "}${[it.obj, it.act, it.det].filter(Boolean).map((x) => x.replace(/\.+$/, "")).join(". ") || b.b || "—"}${it.grupo ? ` (${it.grupo})` : ""}`));
+    const l = [`*${p.foco || "Práctica"}*`, `${p.grupo} · ${mayus(cuandoP(p))}${minDe(p) ? ` · ${minDe(p)} min` : ""}`];
+    if (p.objetivos.length) l.push("", "*Objetivos*", ...p.objetivos.map((o) => `• ${o}`));
+    p.bloques.forEach((b, i) => {
+      if (b.agua) { if (!(p.bloques[i - 1] || {}).agua) l.push("", `Agua${b.min ? ` (${b.min} min)` : ""}`); return; }
+      const m = b.items.reduce((s, it) => s + (it.min || 0), 0);
+      if (b.b) l.push("", `*${b.b}*${m ? ` (${m} min)` : ""}`);
+      b.items.filter((it) => it.obj || it.act || it.det).forEach((it) => {
+        const [uno, ...resto] = [it.obj, it.act, it.det].filter(Boolean).map((x) => x.trim().replace(/\.+$/, ""));
+        l.push(`• ${it.min ? `${it.min}' ` : ""}${uno}${it.grupo && it.grupo !== "Todos" ? ` (${it.grupo})` : ""}`, ...resto.map((x) => `   ${x}`));
+      });
     });
     if (p.cierre) l.push("", "Charla final y elongación");
     l.push("", `Práctica de ${p.quien} · Club Los 50`);
     return l.join("\n");
   }
   const compartirPractica = () => { const p = todasPr().find((x) => x.id === S.practica); return compartir(p.foco, textoPractica(p)); };
+  let compartiendo = false;
   async function compartir(titulo, txt) {
-    // en el celular abre el menú de compartir (WhatsApp, mail…); en la compu, WhatsApp Web
-    if (navigator.share) {
-      try { await navigator.share({ title: titulo, text: txt }); return; } catch (e) { if (e.name === "AbortError") return; }
-    }
-    window.open(`https://wa.me/?text=${encodeURIComponent(txt)}`, "_blank", "noopener");
+    // en el celular abre el menú de compartir (WhatsApp, mail…); en la compu, WhatsApp Web. Dos toques seguidos abren uno solo
+    if (compartiendo) return;
+    compartiendo = true;
+    try {
+      if (navigator.share) {
+        try { await navigator.share({ title: titulo, text: txt }); return; } catch (e) { if (e.name === "AbortError" || e.name === "InvalidStateError") return; }
+      }
+      window.open(`https://wa.me/?text=${encodeURIComponent(txt)}`, "_blank", "noopener");
+    } finally { compartiendo = false; }
   }
 
   // ---------- eventos ----------
   document.addEventListener("click", (e) => {
     if (!S) return;
-    const t = e.target.closest("[data-atras],[data-subir],[data-alcat],[data-ncat],[data-nota-ok],[data-borrar-nota-ok],[data-reintentar-notas],[data-armar],[data-armar-id],[data-ar-elegir],[data-artipo],[data-ar-ej],[data-ar-libre-ok],[data-ar-mover],[data-ar-sacar],[data-ar-guardar],[data-ar-borrar],[data-cs-ok],[data-ir-chico],[data-eq-imagen],[data-eq-contar],[data-cacc],[data-cuenta],[data-cdeshacer],[data-cres],[data-cres-compartir],[data-cguardar],[data-reintentar-cnt],[data-ir-doc],[data-dmarca],[data-docs-guardar],[data-reintentar-docs],[data-tomar],[data-tver],[data-tdia],[data-toma-guardar],[data-reintentar-tests],[data-ir-equipo],[data-eq-n],[data-eq-id],[data-eq-vaciar],[data-eq-mas],[data-eq-guardar],[data-eq-borrar],[data-eq-descartar],[data-eq-compartir],[data-reintentar-eq],[data-amistoso-ok],[data-edad],[data-area],[data-area-cat],[data-play],[data-reclave],[data-ayuda],[data-cerrar-ayuda],[data-ir],[data-ir-cat],[data-ir-guia],[data-ir-ej],[data-ir-ej-para],[data-ir-ej-tab],[data-ir-line],[data-ir-puesto],[data-ir-practica],[data-ir-practicas],[data-pgrupo],[data-ir-asis],[data-ir-hoy],[data-ir-lista],[data-ir-chicos],[data-form],[data-reintentar],[data-motivo],[data-dia],[data-marca],[data-amodo],[data-junta],[data-todos],[data-guardar-vacia],[data-seguir-lista],[data-cerrar-aviso],[data-cancelar-ok],[data-deshacer],[data-hora-ok],[data-agregar-ok],[data-horarios-ok],[data-guardar-lista],[data-borrar-lista-ok],[data-sacar],[data-sigue],[data-volver-chico],[data-sumar-chico],[data-compartir-pr],[data-rol],[data-quitar-para],[data-tab],[data-anio],[data-ver],[data-ordj]");
+    const t = e.target.closest("[data-atras],[data-subir],[data-alcat],[data-ncat],[data-nota-ok],[data-borrar-nota-ok],[data-reintentar-notas],[data-cs-ok],[data-ir-chico],[data-eq-imagen],[data-eq-contar],[data-cacc],[data-cuenta],[data-cdeshacer],[data-cres],[data-cres-compartir],[data-cguardar],[data-reintentar-cnt],[data-ir-doc],[data-dmarca],[data-docs-guardar],[data-reintentar-docs],[data-tomar],[data-tver],[data-tdia],[data-toma-guardar],[data-reintentar-tests],[data-ir-equipo],[data-eq-n],[data-eq-id],[data-eq-vaciar],[data-eq-mas],[data-eq-guardar],[data-eq-borrar],[data-eq-descartar],[data-eq-compartir],[data-reintentar-eq],[data-amistoso-ok],[data-edad],[data-area],[data-area-cat],[data-play],[data-reclave],[data-ayuda],[data-cerrar-ayuda],[data-ir],[data-ir-cat],[data-ir-guia],[data-ir-scrum],[data-borrar-qp],[data-ir-ej],[data-ir-ej-para],[data-ir-ej-tab],[data-ir-line],[data-ir-puesto],[data-ir-practica],[data-ir-practicas],[data-pgrupo],[data-ir-asis],[data-ir-hoy],[data-ir-lista],[data-ir-chicos],[data-form],[data-reintentar],[data-motivo],[data-dia],[data-marca],[data-amodo],[data-junta],[data-todos],[data-guardar-vacia],[data-seguir-lista],[data-cerrar-aviso],[data-cancelar-ok],[data-deshacer],[data-hora-ok],[data-agregar-ok],[data-horarios-ok],[data-guardar-lista],[data-borrar-lista-ok],[data-sacar],[data-sigue],[data-volver-chico],[data-sumar-chico],[data-compartir-pr],[data-rol],[data-quitar-para],[data-tab],[data-anio],[data-ver],[data-ordj]");
     if (!t || t.disabled) return;
     if (t.tagName === "A") e.preventDefault(); // el escudo de arriba: va al inicio sin recargar
     const ds = t.dataset, ir = "lado" in ds ? irSinPaso : irA; // Anterior / Siguiente no suman pasos
     if ("atras" in ds) history.back();
     else if ("subir" in ds) irSinPaso(SUBIR);
     else if (ds.edad) { S.pedad = ds.edad; render(); }
-    else if ("armar" in ds) {
-      // armar una práctica nueva (de un día de la semana o la que se estaba armando)
-      S.arcat = S.pcat || S.arcat; S.arid = null;
-      const a = arActual();
-      if (ds.armar) a.fecha = ds.armar;
-      arAnotar(a);
-      irA({ ver: "armar", arcat: S.arcat, arfecha: a.fecha, arid: null, arelegir: false, aform: null, aviso: null });
-    } else if (ds.armarId) { const r = (PR.lista || []).find((x) => x.id === ds.armarId); if (r) irA({ ver: "armar", arcat: r.cat, arfecha: r.fecha, arid: r.id, arelegir: false, aform: null, aviso: null }); }
-    else if ("arElegir" in ds) irA({ arelegir: true, artipo: null, aviso: null });
-    else if ("artipo" in ds) { S.artipo = ds.artipo || null; render(); }
-    else if (ds.arEj) {
-      const e = D.guia.ejercicios.find((x) => x.id === ds.arEj), a = arActual();
-      a.partes.push({ min: 10, act: e.nombre, ej: e.id });
-      arAnotar(a);
-      avisar("ok", `Sumado: ${esc(e.nombre)}`);
-      volverAtras({ ver: "armar", arelegir: false });
-    } else if ("arLibreOk" in ds) {
-      const txt = $("#ar-libre").value.trim();
-      if (txt.length < 2) { avisoSuelto("Escribí la actividad."); $("#ar-libre").focus(); return; }
-      const a = arActual();
-      a.partes.push({ min: 10, act: txt });
-      arAnotar(a); S.aform = null; render();
-    } else if (ds.arMover) {
-      const [i, d] = ds.arMover.split("|").map(Number), a = arActual(), j = i + d;
-      if (j >= 0 && j < a.partes.length) { [a.partes[i], a.partes[j]] = [a.partes[j], a.partes[i]]; arAnotar(a); render(); }
-    } else if (ds.arSacar) { const a = arActual(); a.partes.splice(+ds.arSacar, 1); arAnotar(a); render(); }
-    else if ("arGuardar" in ds) guardarPractica();
-    else if ("arBorrar" in ds) borrarPractica();
-    else if (ds.irChico) { const [chico, chcat] = ds.irChico.split("|"); irA({ ver: "chico", chico, chcat: chcat || ((D.fichados && eqTodos().get(chico)) || {}).cat || null, aviso: null }); }
     else if ("csOk" in ds) {
       const texto = $("#cs-texto").value.trim(), por = ($("#cs-por") ? $("#cs-por").value : enCel.get(claveNombreNota) || "").trim();
       if (texto.length < 3) { avisoSuelto("Escribí cómo salió."); $("#cs-texto").focus(); return; }
@@ -3514,12 +3473,19 @@
     else if (ds.ayuda) abrirAyuda(ds.ayuda, t);
     else if ("cerrarAyuda" in ds) cerrarAyuda();
     else if (ds.ir) { if (ds.ir === S.ver && S.ver === "inicio") scrollTo({ top: 0 }); else irA({ ver: ds.ir, ...LIMPIO }); }
-    else if (ds.irEj) ir({ ver: "ejercicio", ej: ds.irEj });
+    else if (ds.irEj) { if (S.ver === "practica") S.ultEj = ds.irEj; ir({ ver: "ejercicio", ej: ds.irEj }); }
     else if (ds.irEjPara) irA({ ver: "ejercicios", tab: "juegos", rol: null, para: ds.irEjPara, gcat: null, qe: "" });
     else if (ds.irEjTab) irA({ ver: "ejercicios", tab: ds.irEjTab, rol: null, para: null, gcat: null, qe: "" });
     else if (ds.irLine) irA({ ver: "ejercicios", tab: "line", rol: ds.irLine, para: null, gcat: null, qe: "" });
     else if (ds.irPuesto) ir({ ver: "puesto", puesto: +ds.irPuesto });
-    else if (ds.irPractica) ir({ ver: "practica", practica: ds.irPractica });
+    else if (ds.irPractica) {
+      ir({ ver: "practica", practica: ds.irPractica });
+      // con Anterior / Siguiente, el foco queda en el mismo botón (para seguir pasando)
+      const b = ds.lado && $(`[data-lado="${ds.lado}"]`);
+      if (b && !b.disabled) b.focus({ preventScroll: true });
+    }
+    else if (ds.irScrum) irA({ ver: "scrum", ...LIMPIO, tab: "edad", para: ds.irScrum });
+    else if ("borrarQp" in ds) { S.qp = ""; const i = $("#buscar-pr"); if (i) { i.value = ""; filtrarPr(); i.focus(); } }
     else if (ds.irPracticas) irA({ ver: "practicas", pgrupo: ds.irPracticas, qp: "", cat: null, gcat: null, temp: null });
     else if (ds.irAsis) irA({ ver: "asis", acat: ds.irAsis, afecha: null, aform: null, marcas: null, aviso: null, estadoLista: null, cat: null, gcat: null, temp: null });
     else if (ds.irHoy) { const [acat, afecha] = ds.irHoy.split("|"); irA({ ver: "lista", acat, afecha, aform: null, marcas: null, aviso: null, estadoLista: null }); }
@@ -3661,7 +3627,7 @@
     else if ("quitarPara" in ds) irA({ para: null }, false);
     else if (ds.irCat) irA({ ver: "cat", cat: ds.irCat, temp: null, verJ: false, verP: false, verN: false, verR: false });
     else if (ds.irGuia) ir({ ver: "guia", gcat: ds.irGuia, cat: null, temp: null });
-    else if (ds.tab) { irA({ tab: ds.tab, rol: null, para: null }, false); $(`[data-tab="${ds.tab}"]`).focus(); }
+    else if (ds.tab) { irA({ tab: ds.tab, rol: null, para: S.ver === "scrum" ? S.para : null }, false); $(`[data-tab="${ds.tab}"]`).focus(); }
     else if (ds.anio) irA({ temp: +ds.anio, verJ: false, verP: false, verN: false, verR: false }, false);
     else if (ds.ver) { S["ver" + ds.ver] = !S["ver" + ds.ver]; render(); }
     else if (ds.ordj) { S.ordenJ = ds.ordj; render(); }
@@ -3684,13 +3650,6 @@
 
   // buscador de cantos: filtra sin volver a dibujar la pantalla (así no se pierde el teclado)
   // el suplente: por quién entra y el minuto se guardan en el celular apenas se eligen (sin volver a dibujar la pantalla)
-  // armar la práctica: lo escrito queda en el celular al momento; los minutos vuelven a sumar el total
-  document.addEventListener("change", (e) => {
-    if (!S || S.ver !== "armar") return;
-    const t = e.target;
-    if (t.id === "ar-fecha" && fechaOk(t.value)) { const a = arActual(); a.fecha = t.value; arAnotar(a); S.arfecha = t.value; }
-    else if ("arMin" in t.dataset) { const a = arActual(); a.partes[+t.dataset.arMin].min = t.value ? +t.value : null; arAnotar(a); render(); }
-  });
   // tests: al cambiar el día de la toma, lo cargado (sin guardar) pasa al día nuevo
   document.addEventListener("change", (e) => {
     if (!S || S.ver !== "toma" || e.target.id !== "toma-fecha") return;
@@ -3717,11 +3676,6 @@
     if (e.target.id === "buscar-ej") { S.qe = e.target.value; filtrarEj(); }
     if (e.target.id === "buscar-pr") { S.qp = e.target.value; filtrarPr(); }
     if (e.target.id === "cs-texto") { S.csTexto = e.target.value; enCel.set(`los50-cs:${S.acat}|${S.afecha}`, e.target.value || null); }
-    if (S.ver === "armar" && ["ar-foco", "ar-obj", "ar-por"].includes(e.target.id)) {
-      const a = arActual();
-      a[{ "ar-foco": "foco", "ar-obj": "objetivo", "ar-por": "por" }[e.target.id]] = e.target.value;
-      arAnotar(a);
-    }
     if ("tv" in e.target.dataset) {
       // lo cargado queda en el celular al momento; en rojo lo que no tiene sentido para ese test
       const t = testDe(S.ttest), b = {};

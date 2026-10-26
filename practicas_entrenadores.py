@@ -266,6 +266,8 @@ if __name__ == "__main__":
         sys.exit(__doc__)
     ps = leer(sys.argv[1])
     SALIDA.write_text(json.dumps(ps, ensure_ascii=False, indent=1), encoding="utf-8")
+    # el día en que se leyeron las planillas: la página avisa si las prácticas no están al día
+    (HERE / "guia" / "practicas_al.txt").write_text(dt.date.today().isoformat(), encoding="utf-8")
     sc = leer_scrum(sys.argv[1])
     SALIDA_SCRUM.write_text(json.dumps(sc, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"Listo: {SALIDA_SCRUM} ({len(sc)} sesiones de scrum)")

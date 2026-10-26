@@ -1,6 +1,7 @@
 /* Los 50 · Entrenadores — usa los colores y tipografías de styles.css. Mobile first.
    Pensado para entrenadores que no usan estadísticas: preguntas simples, números grandes y una línea que explica cada cosa. */
 .ent {
+  --wa: #18773f; --wa-hover: #11592e; /* el verde de WhatsApp, oscurecido para que el texto blanco se lea (5,6:1) */
   --verde: #1e7a3c; --verde-fondo: #e3f4e8;
   --ambar: #8a5a00; --ambar-fondo: #fff1cc;
   --rojo: #b42318; --rojo-fondo: #fde6e4; --rojo-graf: #d9483b;
@@ -146,8 +147,9 @@
 .tit + .titular { margin-top: -2px; }
 .titular + .ley, .titular + .tabla-e-wrap, .titular + .era, .titular + .graf-wrap { margin-top: 12px; }
 /* el "?" va pegado al final del título o de la respuesta (si el título ocupa dos renglones, no se va al borde) */
-.h2 .ayuda-btn, .titular .ayuda-btn, .cab__cat .ayuda-btn, .hoy__dia .ayuda-btn, .grupo .ayuda-btn { display: inline-grid; vertical-align: 3px; margin-left: 8px; text-transform: none; letter-spacing: 0; }
+.h2 .ayuda-btn, .titular .ayuda-btn, .cab__cat .ayuda-btn, .ej-tit .ayuda-btn, .hoy__dia .ayuda-btn, .grupo .ayuda-btn { display: inline-grid; vertical-align: 3px; margin-left: 8px; text-transform: none; letter-spacing: 0; }
 .cab__cat .ayuda-btn { vertical-align: 8px; margin-left: 10px; }
+.ej-tit .ayuda-btn { vertical-align: 5px; margin-left: 10px; }
 .titular--abre { margin-bottom: 12px; }
 .junto { white-space: nowrap; }
 /* los dos colores del gráfico de puntos van en la misma frase: así no hace falta otra leyenda */
@@ -362,6 +364,7 @@
 .ej:hover { background: #f6f8fb; }
 .ej:active { background: var(--azul-claro); }
 .ej:focus-visible { outline-offset: -3px; }
+.ej.ej--hoy:focus-visible { outline-color: #fff; outline-offset: -6px; }
 .ej > svg { justify-self: end; width: 18px; height: 18px; color: var(--azul); }
 .ej__paso { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; background: var(--negro); color: #fff; font: 700 16px/1 var(--cond); }
 .ej__txt { display: grid; gap: 4px; min-width: 0; }
@@ -457,9 +460,9 @@
 /* cantos */
 .buscar-g { position: relative; display: block; margin-bottom: 4px; }
 .buscar-g > svg { position: absolute; left: 14px; top: 50%; translate: 0 -50%; color: var(--suave); pointer-events: none; }
-.buscar-g input { width: 100%; min-height: 50px; padding: 10px 14px 10px 44px; background: var(--sup); border: 1px solid var(--linea); border-radius: 12px; font-size: 17px; caret-color: var(--azul); }
+.buscar-g input { width: 100%; min-height: 50px; padding: 10px 14px 10px 44px; background: var(--sup); border: 1px solid var(--borde-campo); border-radius: 12px; font-size: 17px; caret-color: var(--azul); }
 .buscar-g input::placeholder { color: #6b7385; }
-.buscar-g input:focus { outline: none; border-color: var(--azul); box-shadow: 0 0 0 3px rgb(27 95 209 / 18%); }
+.buscar-g input:focus { outline: 3px solid var(--azul); outline-offset: 1px; border-color: var(--azul); }
 .cantos { list-style: none; margin: 0; padding: 0 16px; background: var(--sup); border: 1px solid var(--linea); border-radius: var(--radio); }
 .cantos li { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; padding: 13px 0; border-bottom: 1px solid var(--linea); }
 .cantos li:last-child { border-bottom: 0; }
@@ -520,6 +523,9 @@
 .edades-g { list-style: none; margin: 0; padding: 4px 16px; background: var(--sup); border: 1px solid var(--linea); border-radius: var(--radio); }
 .edades-g li { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 12px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--linea); font-size: 16.5px; line-height: 1.45; }
 .edades-g li:last-child { border-bottom: 0; }
+/* la edad de la categoría desde la que se vino */
+.edades-g li.edades-g__mia { margin: 0 -16px; padding-inline: 16px; background: var(--azul-claro); }
+.edades-g__mia .edades-g__cat { color: var(--azul); }
 .edades-g__cat { font: 700 22px/1 var(--cond); letter-spacing: .02em; }
 .edades-g small { display: block; margin-top: 2px; font-size: 13.5px; color: var(--suave); }
 
@@ -676,6 +682,7 @@ details.nunca[open] .nunca__abrir { visibility: hidden; }
 .asis-chicos__fuera .asis-chicos__nom { color: var(--suave); }
 /* tomar lista: cada chico es un botón grande; el que vino queda verde, con borde y tilde (se distingue al sol) */
 .lista-info.lista-info--ojo { background: var(--ambar-fondo); color: var(--ambar); }
+.cab + .lista-info { margin-top: 14px; }
 /* entrenan juntas: una línea chica, no un botón grande arriba de los chicos */
 .lista-con { display: flex; flex-wrap: wrap; align-items: center; gap: 0 10px; margin: 0 0 4px; font-size: 15px; color: var(--suave); }
 .lista-con__b { display: inline-flex; align-items: center; min-height: 44px; padding: 0; font-size: 15px; font-weight: 600; }
@@ -732,7 +739,17 @@ details.nunca[open] .nunca__abrir { visibility: hidden; }
 .ej--vacio { cursor: default; }
 .ej--vacio .ej__txt b { font-weight: 500; color: var(--suave); }
 .ej--vacio:not(.ej--hoy):hover { background: none; }
+/* hoy sin práctica (o suspendido): marcado con un borde; el azul lleno queda para lo que se puede tocar */
+.ej--hoy-vacio, .ej.ej--hoy-vacio:hover { background: var(--azul-claro); box-shadow: inset 0 0 0 2px var(--azul); }
+.ej.ej--hoy-vacio .prac__dia b, .ej.ej--hoy-vacio .prac__dia small { color: var(--azul); }
+/* los días que ya pasaron, con el número en gris; los suspendidos, en rojo */
+.ej--pasado .prac__dia b { color: var(--suave); }
+.ej.ej--canc .ej__txt b { color: var(--rojo); font-weight: 600; }
+/* cada mes: el título y sus prácticas en una sola tarjeta */
 .mes { margin-top: 10px; }
+.mes[open] > summary { margin-bottom: 0; border-bottom-left-radius: 0; border-bottom-right-radius: 0; position: sticky; top: 0; z-index: 2; } /* el mes queda arriba mientras se recorre */
+.mes > .filas-cat { border-top: 0; border-radius: 0 0 12px 12px; }
+#sin-pr p { margin: 0 0 10px; }
 /* los puestos: tests físicos por edad */
 .fis th, .fis td { padding: 9px 8px; }
 .fis td { text-align: center; font-weight: 600; white-space: nowrap; }
@@ -775,16 +792,32 @@ details.nunca[open] .nunca__abrir { visibility: hidden; }
 @media (min-width: 700px) { .dib__cuadros--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } .dib__cuadros--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .prac-cuando { display: flex; align-items: center; gap: 8px; margin: 8px 0 0; font-size: 15.5px; color: var(--suave); }
 .prac-cuando svg { flex: none; width: 18px; height: 18px; color: var(--azul); }
+/* la del día anterior a la izquierda y la del día siguiente a la derecha (si falta una, la otra no se mueve) */
+.saltos--pr { justify-content: space-between; margin-top: 12px; }
+.saltos--pr button { padding: 0 12px; font: 600 15px/1 var(--base); letter-spacing: 0; }
+/* los objetivos, numerados (un tilde verde parecía "hecho") */
+.obj-g { list-style: none; margin: 0; padding: 4px 16px; background: var(--sup); border: 1px solid var(--linea); border-radius: var(--radio); counter-reset: obj; }
+.obj-g li { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 10px; padding: 11px 0; border-bottom: 1px solid var(--linea); font-size: 16.5px; line-height: 1.45; overflow-wrap: anywhere; counter-increment: obj; }
+.obj-g li:last-child { border-bottom: 0; }
+.obj-g li::before { content: counter(obj); display: grid; place-items: center; width: 24px; height: 24px; margin-top: 1px; border-radius: 50%; background: var(--azul-claro); color: var(--azul-900); font: 700 14px/1 var(--cond); }
 .grupo--fila { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
 .grupo--fila .num { letter-spacing: 0; text-transform: none; font-weight: 500; }
 /* cada actividad: los minutos a la izquierda; arriba en azul el objetivo, después qué se hace y cómo */
 .prac-g { list-style: none; margin: 0; padding: 0 16px; background: var(--sup); border: 1px solid var(--linea); border-radius: var(--radio); }
 .prac-it { display: grid; grid-template-columns: 38px minmax(0, 1fr); gap: 10px; padding: 12px 0; border-bottom: 1px solid var(--linea); }
 .prac-it:last-child { border-bottom: 0; }
-.prac-it__min { font: 700 22px/1.15 var(--cond); color: var(--azul-900); }
+.prac-g--sin-min .prac-it { grid-template-columns: minmax(0, 1fr); }
+.prac-g--sin-min .prac-it__min { display: none; }
+.prac-sin { margin: 0; padding: 12px 16px; border: 1px dashed var(--linea); border-radius: var(--radio); font-size: 15px; color: var(--suave); }
+.prac-it__min { display: grid; justify-items: center; align-content: start; }
+.prac-it__min b { font: 700 22px/1.1 var(--cond); color: var(--azul-900); }
+.prac-it__min small { font-size: 12px; font-weight: 600; color: var(--suave); }
 .prac-it__txt { display: grid; gap: 4px; justify-items: start; min-width: 0; }
-.prac-it__obj { font-size: 12.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--azul); }
+.prac-it__obj { font-size: 14.5px; font-weight: 700; line-height: 1.35; color: var(--azul); overflow-wrap: anywhere; }
 .prac-it__act { margin: 0; font-size: 16.5px; line-height: 1.4; font-weight: 600; overflow-wrap: anywhere; }
+.prac-it__act--largo { font-weight: 400; }
+.prac-it__ej { gap: 6px; margin: -6px 0; font-size: 15px; font-weight: 600; }
+.prac-it__ej svg { flex: none; width: 18px; height: 18px; }
 .prac-it__det { margin: 0; font-size: 15.5px; line-height: 1.45; color: var(--suave); overflow-wrap: anywhere; }
 .prac-it .chip { margin-top: 2px; }
 .prac-agua { display: flex; align-items: center; gap: 8px; margin: 12px 0 0; font-size: 14px; color: var(--suave); }
@@ -792,8 +825,14 @@ details.nunca[open] .nunca__abrir { visibility: hidden; }
 .prac-agua--fin { margin-top: 18px; font-size: 15.5px; color: var(--texto); }
 .prac-agua--fin svg { width: 20px; height: 20px; color: var(--verde); }
 .btn--wa { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 20px; min-height: 52px;
-  background: #1f8f4e; border-color: #1f8f4e; color: #fff; font-size: 16px; }
-.btn--wa:hover { background: #18773f; border-color: #18773f; color: #fff; }
+  background: var(--wa); border-color: var(--wa); color: #fff; font-size: 16px; }
+.btn--wa:hover { background: var(--wa-hover); border-color: var(--wa-hover); color: #fff; }
+/* mientras se lee la práctica, "Mandar por WhatsApp" queda abajo de la pantalla, a mano */
+.pie-wa { position: sticky; bottom: 0; z-index: 5; margin: 20px -16px 0; padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+  background: var(--fondo); box-shadow: 0 -6px 12px -10px rgb(11 13 18 / 30%); }
+.pie-wa .btn--wa { margin-top: 0; }
+[data-pantalla="practica"] .aviso { bottom: calc(max(16px, env(safe-area-inset-bottom)) + 76px); }
+@media (min-width: 1024px) { .pie-wa { margin-inline: -24px; padding-inline: 24px; } }
 .btn--wa svg { width: 20px; height: 20px; }
 
 /* lo ideal en un partido: un número grande por acción */
@@ -868,6 +907,7 @@ details.nunca[open] .nunca__abrir { visibility: hidden; }
 .area__ic svg { width: 24px; height: 24px; }
 .area__txt { display: grid; gap: 4px; }
 .area__txt b { font: 700 22px/1.05 var(--cond); letter-spacing: .02em; text-transform: uppercase; }
+@media (max-width: 340px) { .area__txt b { font-size: 19px; } } /* "PLANIFICACIÓN" entra en la columna de un celular chico */
 .area__txt small { font-size: 14px; line-height: 1.3; color: var(--suave); }
 /* hoy entrena tu categoría: la tarjeta de Asistencia se marca */
 .area--hoy { border-color: var(--azul); box-shadow: inset 0 0 0 1px var(--azul); }
@@ -1028,29 +1068,9 @@ details.nunca[open] .nunca__abrir { visibility: hidden; }
 .cs-l li { padding: 10px 12px; background: var(--sup); border: 1px solid var(--linea); border-radius: 12px; }
 .cs-l p { margin: 0; font-size: 16px; line-height: 1.4; white-space: pre-wrap; overflow-wrap: anywhere; }
 .cs-l small { display: block; margin-top: 4px; font-size: 13.5px; color: var(--suave); }
-/* armar la práctica: cada parte con sus minutos, qué se hace y las flechas para ordenar */
-.ar-fila { margin-top: 10px; }
-/* los campos se achican con la pantalla (la fecha, si no, empuja todo para el costado) */
-.armar .asis-form__campo { min-width: 0; }
-.armar .asis-input { width: 100%; min-width: 0; }
-.ar-l { list-style: none; margin: 0; padding: 0; overflow: hidden; background: var(--sup); border: 1px solid var(--linea); border-radius: var(--radio); }
-.ar-f { display: grid; grid-template-columns: 84px minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 8px 10px; }
-.ar-f + .ar-f { border-top: 1px solid var(--linea); }
-.ar-min { width: 100%; min-height: 44px; padding: 4px 6px; font-size: 15.5px; }
-.ar-f__txt { display: grid; gap: 2px; min-width: 0; font-size: 15.5px; line-height: 1.3; }
-.ar-f__txt b { font-weight: 600; overflow-wrap: anywhere; }
-.ar-f__txt .link { justify-self: start; padding: 2px 0; font-size: 13.5px; }
-.ar-f__btns { display: flex; }
-.ar-b { width: 34px; height: 44px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 8px; background: none; color: var(--azul); cursor: pointer; }
-.ar-b:hover { background: var(--azul-claro); }
-.ar-b:disabled { background: none; color: #c3cad6; cursor: default; }
-.ar-b svg { width: 18px; height: 18px; }
-.ar-aviso { margin-top: 10px; }
-.ej--armar { cursor: pointer; }
-.ej--armar > svg { width: 18px; height: 18px; color: var(--azul); }
-.prac__armar { color: var(--azul); font-weight: 600; }
-.prac-cambiar { margin-top: 8px; }
-.prac__nota { display: block; margin-top: 3px; font-size: 13.5px; font-weight: 500; line-height: 1.3; color: var(--azul); }
+.ej__txt .prac__nota { margin-top: 2px; font-size: 14px; font-weight: 500; color: var(--texto); -webkit-line-clamp: 3; }
+.prac__nota svg { width: 14px; height: 14px; margin-right: 5px; vertical-align: -2px; color: var(--suave); }
+.ej--vacio .ej__txt .prac__nota { display: block; -webkit-line-clamp: unset; overflow: visible; }
 @media (prefers-reduced-motion: reduce) { .cnt-b--suma { animation: none; } }
 /* con 8 áreas, en la compu van de a cuatro (dos filas parejas) */
 @media (min-width: 900px) { .areas--6:has(> li:nth-child(8):last-child) { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
@@ -1100,7 +1120,13 @@ details.nunca[open] .nunca__abrir { visibility: hidden; }
 .elegir--4 .elegir__cat { flex-basis: calc(25% - 7px); }
 .elegir__cat:hover { border-color: var(--azul); }
 .elegir__cat:active { background: var(--azul-claro); }
-.elegir__cat[aria-pressed="true"] { background: var(--azul); border-color: var(--azul); color: #fff; }
+.elegir__cat[aria-current="true"] { background: var(--azul); border-color: var(--azul); color: #fff; }
+/* en Planificación, el día de la última práctica de cada categoría */
+.elegir__cat small { display: block; margin-top: 5px; font: 600 13px/1 var(--base); letter-spacing: 0; text-transform: none; color: var(--suave); }
+.elegir__cat[aria-current="true"] small { color: #fff; }
+/* sin prácticas en dos semanas: una marca amarilla con el signo de atención (se ve igual en la elegida) */
+.elegir__cat small.viejo, .elegir__cat[aria-current="true"] small.viejo { display: flex; align-items: center; gap: 3px; width: fit-content; margin-inline: auto; padding: 3px 7px 3px 5px; border-radius: 999px; background: var(--ambar-fondo); color: var(--ambar); }
+.elegir__cat small.viejo svg { width: 12px; height: 12px; }
 @media (min-width: 700px) { .elegir { flex-wrap: nowrap; } .elegir__cat, .elegir--4 .elegir__cat { flex: 1 1 0; } }
 /* en la compu: el inicio y partidos usan todo el ancho */
 @media (min-width: 1024px) {
@@ -1111,6 +1137,7 @@ details.nunca[open] .nunca__abrir { visibility: hidden; }
   /* partidos: los próximos y los últimos resultados, uno al lado del otro */
   .dos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 32px; align-items: start; }
 }
+@media (min-width: 1024px) and (max-height: 699px) { .plan__lado { position: static; } }
 @media (prefers-reduced-motion: reduce) {
   .atajo, .puesto, .lista-it, .btn-sec, .fila-cat, .fila-cat > svg, .ej, .chips-g button, .video-ej__play, .menu__it, .menu__it > svg, .area, .ayuda-btn, .setup-g summary::after, .mas summary::after, .acordeon summary::after { transition: none; }
   .ayuda__fondo, .ayuda__caja, .aviso { animation: none; }
