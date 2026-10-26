@@ -117,6 +117,7 @@
     sube: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 7-7 7 7M12 19V5"/></svg>',
     baja: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>',
     nota: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M7 8h10M7 12h6"/></svg>',
+    doc: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4M9 15l2 2 4-4"/></svg>',
     trofeo: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>',
   };
 
@@ -136,7 +137,7 @@
     $("#candado").hidden = true;
     $("#app").hidden = false;
     S = { ver: "inicio", cat: null, temp: null, gcat: null, tab: null, q: "", ordenJ: "pj", verJ: false, verP: false, verN: false, verR: false, rol: null, para: null, ej: null, puesto: null, practica: null, pgrupo: null, qp: "", qe: "", abiertos: new Set(),
-      acat: null, afecha: null, aform: null, marcas: null, base: null, aviso: null, estadoLista: null, recien: new Set(), area: null, pcat: null, mcat: null, alcat: null, pedad: null, ncat: null, eqcat: null, eqfecha: null, eqn: null, eqmas: 0, eqfoco: null, tcat: null, ttest: null, tfecha: null, tver: null, tdia: null };
+      acat: null, afecha: null, aform: null, marcas: null, base: null, aviso: null, estadoLista: null, recien: new Set(), area: null, pcat: null, mcat: null, alcat: null, pedad: null, ncat: null, eqcat: null, eqfecha: null, eqn: null, eqmas: 0, eqfoco: null, tcat: null, ttest: null, tfecha: null, tver: null, tdia: null, dcat: null, ddoc: null, dmarcas: new Set() };
     // al abrir la sección (un link, la dirección escrita o que el navegador completó) arranca en el inicio;
     // al recargar o al volver con "atrás" sigue donde estaba (por ejemplo, en medio de una lista)
     const nav = performance.getEntriesByType ? performance.getEntriesByType("navigation")[0] : null;
@@ -176,6 +177,9 @@
     S.pcat = D.guia ? ASIS_CATS.find((x) => slug(x) === p.get("plan")) || null : null;
     S.mcat = ["Todas", "Plantel superior", ...D.cats.filter((x) => !PS.includes(x))].find((x) => slug(x) === p.get("partidos")) || null;
     if (S.area) vistas.push("area");
+    // documentos y cursos: ?docs=m16 (y &doc=medica mientras se marca uno)
+    S.dcat = D.fichados ? ASIS_CATS.find((x) => slug(x) === p.get("docs")) || null : null;
+    S.ddoc = S.dcat && docsDe(S.dcat).some((d) => d.k === p.get("doc")) ? p.get("doc") : null;
     // los tests físicos: ?tests=m16 (y &test=m10&fecha=2026-10-26 mientras se carga uno)
     S.tcat = D.fichados ? testCats().find((x) => slug(x) === p.get("tests")) || null : null;
     S.ttest = S.tcat && testDe(p.get("test")) ? p.get("test") : null;
@@ -186,7 +190,7 @@
     S.eqfecha = eqc && fechaOk(p.get("fecha") || "") ? p.get("fecha") : null;
     S.eqn = S.eqfecha && +p.get("n") >= 1 && +p.get("n") <= EQ_MAX ? +p.get("n") : null;
     S.ver = c ? "cat" : g ? "guia" : ej ? "ejercicio" : pu ? "puesto" : pr ? "practica" : ac ? (S.afecha ? "lista" : p.get("chicos") ? "chicos" : "asis")
-      : S.tcat ? (S.tfecha ? "toma" : "tests") : S.eqfecha ? "equipo" : S.pcat ? "plan" : S.mcat ? "partidos" : vistas.includes(p.get("ver")) ? p.get("ver") : "inicio";
+      : S.dcat ? (S.ddoc ? "doclista" : "docs") : S.tcat ? (S.tfecha ? "toma" : "tests") : S.eqfecha ? "equipo" : S.pcat ? "plan" : S.mcat ? "partidos" : vistas.includes(p.get("ver")) ? p.get("ver") : "inicio";
     S.temp = /^\d{4}$/.test(p.get("temp") || "") ? +p.get("temp") : null;
     S.tab = p.get("tab");
     S.rol = p.get("rol");
@@ -203,6 +207,7 @@
     else if (S.ver === "area") { p.set("ver", "area"); p.set("area", S.area); }
     else if (S.ver === "plan") p.set("plan", slug(S.pcat));
     else if (S.ver === "partidos") p.set("partidos", slug(S.mcat));
+    else if (S.ver === "docs" || S.ver === "doclista") { p.set("docs", slug(S.dcat)); if (S.ver === "doclista") p.set("doc", S.ddoc); }
     else if (S.ver === "tests" || S.ver === "toma") { p.set("tests", slug(S.tcat)); if (S.ver === "toma") { p.set("test", S.ttest); p.set("fecha", S.tfecha); } }
     else if (S.ver === "equipo") { p.set("equipo", slug(S.eqcat)); p.set("fecha", S.eqfecha); if (S.eqn) p.set("n", S.eqn); }
     else if (["asis", "lista", "chicos"].includes(S.ver)) { p.set("asistencia", slug(S.acat)); if (S.ver === "lista") p.set("fecha", S.afecha); if (S.ver === "chicos") p.set("chicos", "1"); }
@@ -229,7 +234,7 @@
     const ej = S.ver === "ejercicio" && D.guia.ejercicios.find((x) => x.id === S.ej), pu = S.ver === "puesto" && puestoDe(S.puesto);
     return ({ inicio: "Inicio", cat: S.cat, club: "Todo el club", consejos: "Consejos", guia: S.gcat || "Qué aprende cada categoría",
       cantos: "Cantos y zonas", scrum: "Scrum seguro", ejercicios: "Ejercicios", ejercicio: ej && ej.nombre, puestos: "Los puestos", puesto: pu && pu.nombre,
-      practicas: "Prácticas", practica: "Práctica", pase: "De M19 a plantel superior", alertas: "Para mirar", area: AREAS[S.area], plan: `Planificación ${S.pcat}`, partidos: S.mcat === "Todas" ? "Partidos" : `Partidos de ${S.mcat}`, guiaclub: "Guía del club", notas: "Notas", equipo: S.eqn ? `El ${S.eqn}` : `Equipo de ${S.eqcat}`, tests: `Tests de ${S.tcat}`, toma: S.ttest && testDe(S.ttest).nom,
+      practicas: "Prácticas", practica: "Práctica", pase: "De M19 a plantel superior", alertas: "Para mirar", area: AREAS[S.area], plan: `Planificación ${S.pcat}`, partidos: S.mcat === "Todas" ? "Partidos" : `Partidos de ${S.mcat}`, guiaclub: "Guía del club", notas: "Notas", equipo: S.eqn ? `El ${S.eqn}` : `Equipo de ${S.eqcat}`, tests: `Tests de ${S.tcat}`, docs: `Documentos de ${S.dcat}`, doclista: S.ddoc && docDe(S.ddoc).nom, toma: S.ttest && testDe(S.ttest).nom,
       asistencia: "Todas las categorías", asis: S.acat, lista: `Lista de ${S.acat}`, chicos: `Los chicos de ${S.acat}` })[S.ver] || "Volver";
   }
 
@@ -372,12 +377,12 @@
     }
     listaAbierta = S.ver === "lista" ? { cat: S.acat, fecha: S.afecha } : null;
     // todo el ancho en la compu (y el pie se alinea con eso); la tabla de estadísticas no, que queda muy estirada
-    $("#app").classList.toggle("app--ancha", S.ver === "inicio" || S.ver === "partidos" || S.ver === "plan" || S.ver === "pase" || (S.ver === "equipo" && !S.eqn) || S.ver === "tests" || (S.ver === "area" && S.area !== "estadisticas"));
+    $("#app").classList.toggle("app--ancha", S.ver === "inicio" || S.ver === "partidos" || S.ver === "plan" || S.ver === "pase" || (S.ver === "equipo" && !S.eqn) || S.ver === "tests" || S.ver === "docs" || (S.ver === "area" && S.area !== "estadisticas"));
     GRAF.pend = [];
     soltarVideos();
     $("#vista").dataset.pantalla = S.ver; // ojo: no "data-ver", que es el de los botones "Ver todos"
     ({ inicio: vInicio, cat: vCategoria, club: vClub, consejos: vConsejos, guia: vGuia, cantos: vCantos, scrum: vScrum, ejercicios: vEjercicios, ejercicio: vEjercicio, puestos: vPuestos, puesto: vPuesto, practicas: vPracticas, practica: vPractica,
-      asistencia: vAsistencia, asis: vAsis, lista: vLista, chicos: vChicos, area: vArea, plan: vPlan, partidos: vPartidos, guiaclub: vGuiaClub, pase: vPase, alertas: vAlertas, notas: vNotas, equipo: vEquipo, tests: vTests, toma: vToma })[S.ver]();
+      asistencia: vAsistencia, asis: vAsis, lista: vLista, chicos: vChicos, area: vArea, plan: vPlan, partidos: vPartidos, guiaclub: vGuiaClub, pase: vPase, alertas: vAlertas, notas: vNotas, equipo: vEquipo, tests: vTests, toma: vToma, docs: vDocs, doclista: vDocLista })[S.ver]();
     dibujarGraficos();
     ponerFotos();
   }
@@ -411,6 +416,14 @@
       "Para cada puesto aparecen primero los que jugaron de ese número esta temporada (Primera, Intermedia y M19, de las planillas de la UAR) o lo tienen en su ficha de la UAR. Al lado, cuánto vienen a entrenar.",
       "Si un chico está sancionado o tiene tarjetas, se avisa en amarillo o en rojo.",
       "Lo que elegís queda en este celular hasta que tocás “Guardar”. Ahí lo ven los otros entrenadores. Con “Mandar por WhatsApp” se lo pasás al grupo."]],
+    docs: () => ["Documentos y cursos", ["Para saber quién tiene al día los papeles que pide la UAR y quién hizo los cursos.",
+      "La ficha médica y la autorización son de cada año: el año que viene arrancan vacías. El DNI y los cursos quedan marcados.",
+      "La autorización de los padres no se pide en el plantel superior; los cursos y la acreditación de primera línea, no en infantiles."]],
+    docsFaltan: () => ["A quién le falta", ["Cada chico con lo que le falta entregar.",
+      "Solo cuenta lo que ya se empezó a marcar en la categoría: si nadie tiene marcado el DNI, no aparece como que falta.",
+      "La acreditación de primera línea solo se pide a pilares y hookers (los que jugaron de 1, 2 o 3 o lo dice su ficha de la UAR)."]],
+    docLista: () => ["Cómo marcar", ["Tocá a cada chico que ya lo tiene: queda en verde. Si te equivocás, tocalo de nuevo.",
+      "Lo que marcás queda en el celular hasta que tocás “Guardar”. Si dos marcan a la vez, no se pisan: se guarda lo que cambió cada uno."]],
     tests: () => ["Tests físicos", ["Se toman dos veces al año, en marzo y en septiembre, como en las academias de la UAR: 10 metros, 30 metros (forwards), 40 metros (backs), salto horizontal y Bronco. El salto vertical, si hay una app para medirlo.",
       "Para cargar, tocá un test y anotá el resultado de cada chico. Lo que cargás queda en el celular hasta que tocás “Guardar”: no se pierde si en la cancha no hay señal."]],
     testsColor: () => ["Los colores", ["Cada chico se compara con los de su categoría ese mismo día: el tercio mejor en verde, el del medio en amarillo y el de abajo en rojo. Con menos de 6 chicos no hay color.",
@@ -561,7 +574,7 @@
   // Seis áreas, una por cosa que hace un entrenador. Asistencia, Planificación y Partidos piden la categoría
   // (con botones grandes; queda marcada la última que elegiste); Estadísticas muestra la tabla de categorías;
   // Ejercicios y la Guía del club son iguales para todos.
-  const AREAS = { asistencia: "Asistencia", planificacion: "Planificación", partidos: "Partidos", estadisticas: "Estadísticas", tests: "Tests físicos" };
+  const AREAS = { asistencia: "Asistencia", planificacion: "Planificación", partidos: "Partidos", estadisticas: "Estadísticas", tests: "Tests físicos", docs: "Documentos" };
   const AREA_IR = (a) => ({ ver: "area", area: a, ...LIMPIO });
   /** la última categoría que se eligió en cada área (queda en el celular) */
   const claveArea = (a) => `los50-ent-cat:${a}`;
@@ -591,8 +604,114 @@
         ${tarjeta('data-area="estadisticas"', IC.barras, "Estadísticas", "Números y jugadores")}
         ${g ? tarjeta('data-ir="guiaclub"', IC.libro, "Guía del club", "Puestos, scrum y cantos") : ""}
         ${D.fichados ? tarjeta('data-area="tests"', IC.reloj, "Tests físicos", "10 m, salto y Bronco") : ""}
+        ${D.fichados ? tarjeta('data-area="docs"', IC.doc, "Documentos", "Ficha médica y cursos") : ""}
         ${D.fichados ? tarjeta('data-ir="notas"', IC.nota, "Notas", "Lo que viste en los entrenamientos") : ""}
       </ul></section>`;
+  }
+
+  // ---------- documentos y cursos (functions/api/asistencia.js, tabla "docs" de D1) ----------
+  // Quién tiene al día la ficha médica, la autorización y el DNI, y quién hizo los cursos de la UAR. Se marca como la lista
+  // de asistencia: un papel o un curso y todos los chicos de la categoría. La ficha médica y la autorización son del año (el año
+  // que viene arrancan vacías); el DNI y los cursos quedan. Lo marcado queda en el celular hasta tocar "Guardar".
+  const DOCS = [
+    { k: "medica", nom: "Ficha médica", que: "Con el apto del médico, de este año", anual: true },
+    { k: "autoriza", nom: "Autorización", que: "Firmada por los padres, de este año", anual: true, menores: true },
+    { k: "dni", nom: "DNI", que: "La fotocopia" },
+    { k: "conmocion", nom: "Curso de conmoción", que: "El de la UAR", juv: true },
+    { k: "antidoping", nom: "Curso de antidopaje", que: "El de la UAR", juv: true },
+    { k: "primera", nom: "Primera línea", que: "Acreditación para pilares y hookers", juv: true, primera: true },
+  ];
+  const DOC = { lista: null, error: null, cargando: false, guardando: false };
+  const docDe = (k) => DOCS.find((d) => d.k === k);
+  /** los papeles de cada categoría: la autorización no es para el plantel superior; los cursos, no para infantiles */
+  const docsDe = (cat) => DOCS.filter((d) => !(d.menores && cat === "Plantel superior") && !(d.juv && ASIS_CATS.indexOf(cat) >= 7));
+  /** quiénes lo tienen: id → el día en que se marcó (la ficha médica y la autorización, solo las de este año) */
+  const docTienen = (k) => {
+    const a = docDe(k).anual ? hoyISO().slice(0, 4) : "siempre", m = new Map();
+    (DOC.lista || []).forEach((r) => { if (r.doc === k && r.anio === a) m.set(r.id, r.fecha); });
+    return m;
+  };
+  /** pilar o hooker: jugó de 1, 2 o 3 o lo dice su ficha de la UAR */
+  const esPrimera = (id) => { const c = D.cam[id] || {}; return (c.j || []).some((n) => n <= 3) || (!!c.f && c.f <= 3); };
+  const docChicos = (d, pl) => (d.primera ? pl.filter((c) => esPrimera(c.id)) : pl);
+  const docClave = (cat, k) => `los50-docs:${cat}|${k}`;
+  const docBorr = (cat, k) => { try { return JSON.parse(enCel.get(docClave(cat, k)) || "null"); } catch (e) { return null; } };
+  function cargarDocs() {
+    if (DOC.cargando) return;
+    DOC.cargando = true; DOC.error = null;
+    apiD1(null, "docs=1").then((d) => { DOC.lista = d.docs; })
+      .catch((e) => { DOC.error = errNotas(e, "No se pudieron cargar los documentos", "ver los documentos"); })
+      .finally(() => { DOC.cargando = false; if (["docs", "doclista", "equipo"].includes(S.ver)) render(); });
+  }
+  const esperaDocs = (cat) => {
+    if (!DOC.lista && !DOC.error) cargarDocs();
+    if (!ASIS.cats[cat] && !ASIS.error[cat]) cargarAsis(cat);
+    if (DOC.error) return `<div class="hoy hoy--error"><p class="hoy__canc">${DOC.error}</p><button type="button" class="btn-sec" data-reintentar-docs>Probar de nuevo</button></div>`;
+    return !DOC.lista || (!ASIS.cats[cat] && !ASIS.error[cat]) ? `<p class="cargando">Cargando…</p>` : "";
+  };
+
+  // una categoría: cuántos tienen cada papel y, chico por chico, lo que le falta
+  function vDocs() {
+    const cat = S.dcat, espera = esperaDocs(cat);
+    const cab = `<div class="cab">${volver(AREAS.docs, AREA_IR("docs"))}${cabTit(`Documentos de ${esc(cat)}`, "docs")}</div>`;
+    if (espera) { $("#vista").innerHTML = `${cab}<section class="sec sec--pegada">${espera}</section>`; return; }
+    const pl = testPlantel(cat), ds = docsDe(cat), T = Object.fromEntries(ds.map((d) => [d.k, docTienen(d.k)]));
+    const tarjeta = (d) => {
+      const quienes = docChicos(d, pl), n = quienes.filter((c) => T[d.k].has(c.id)).length, tot = quienes.length, p = tot ? Math.round((100 * n) / tot) : null;
+      return `<li><button type="button" class="doc-t" data-ir-doc="${d.k}"><span class="doc-t__txt"><b>${d.nom}</b><small>${d.que}</small></span>
+        <span class="doc-t__n">${tot ? `<b class="num">${n}</b> de ${tot}` : "Sin pilares ni hookers"}</span>
+        <span class="doc-t__barra" aria-hidden="true"><i class="doc-t__barra--${colorPct(p)}" style="width:${p || 0}%"></i></span>${docBorr(cat, d.k) ? `<small class="doc-t__ojo">Sin guardar</small>` : ""}</button></li>`;
+    };
+    // solo cuenta lo que ya se empezó a marcar en la categoría (si el club no pide el DNI, no aparece como que falta)
+    const enUso = ds.filter((d) => pl.some((c) => T[d.k].has(c.id)));
+    const faltan = pl.map((c) => [c, enUso.filter((d) => (!d.primera || esPrimera(c.id)) && !T[d.k].has(c.id))]).filter(([, f]) => f.length);
+    const falta = !enUso.length ? `<p class="vacio-g">Cuando marques un papel o un curso, acá aparece a quién le falta</p>`
+      : !faltan.length ? `<p class="vacio-g">Nadie debe nada</p>`
+      : `<p class="titular test-tit"><b>${faltan.length}</b> de ${pl.length} ${faltan.length === 1 ? "chico debe" : "chicos deben"} algo</p>
+        <ul class="eq-l">${faltan.map(([c, f]) => `<li class="falta-f"><span class="falta-f__nom">${nombreHTML(c.nombre)}</span><small>Falta: ${f.map((d) => d.nom).join(" · ")}</small></li>`).join("")}</ul>`;
+    $("#vista").innerHTML = `${cab}
+      <div class="dos">
+        <section class="sec sec--pegada">${tit("Papeles y cursos")}<ul class="docs-t">${ds.map(tarjeta).join("")}</ul></section>
+        <section class="sec sec--pegada">${tit("A quién le falta", "docsFaltan")}${falta}</section>
+      </div>${avisoHTML()}`;
+  }
+  // un papel o un curso: la lista de chicos para marcar a los que lo tienen
+  function vDocLista() {
+    const cat = S.dcat, d = docDe(S.ddoc), espera = esperaDocs(cat);
+    const cab = `<div class="cab">${volver(`Documentos de ${esc(cat)}`, { ver: "docs", ddoc: null })}${cabTit(`${d.nom} · ${esc(cat)}`, "docLista")}</div>`;
+    if (espera) { $("#vista").innerHTML = `${cab}<section class="sec sec--pegada">${espera}</section>`; return; }
+    const pl = testPlantel(cat), t = docTienen(d.k), b = docBorr(cat, d.k);
+    S.dmarcas = new Set(b || pl.filter((c) => t.has(c.id)).map((c) => c.id));
+    const quienes = docChicos(d, pl), n = quienes.filter((c) => S.dmarcas.has(c.id)).length;
+    const item = (c) => `<li data-q="${esc(norm(c.nombre))}"><button type="button" class="lista-it" data-dmarca="${esc(c.id)}" aria-pressed="${S.dmarcas.has(c.id)}">
+      <span class="lista-it__ic">${IC.tilde}</span><span class="lista-it__nom">${nombreHTML(c.nombre)}${t.has(c.id) ? `<small class="doc-desde">Desde el ${corta(t.get(c.id))}</small>` : ""}</span></button></li>`;
+    const grupos = d.primera ? [["Pilares y hookers", quienes], ["Los demás", pl.filter((c) => !esPrimera(c.id))]] : [["", pl]];
+    $("#vista").innerHTML = `${cab}
+      <section class="sec sec--pegada asis-v">
+        <p class="asis-nota">${d.anual ? "Tocá a los que ya lo entregaron este año." : "Tocá a los que ya lo tienen."}</p>
+        ${pl.length > 30 ? `<label class="buscar-g asis-buscar"><span class="sr">Buscar un chico</span>${IC.buscar}<input type="search" id="buscar-chico" placeholder="Buscar por apellido" autocomplete="off" enterkeyhint="search"></label>` : ""}
+        ${grupos.filter(([, l]) => l.length).map(([g, l]) => `${g ? `<h3 class="grupo">${g}</h3>` : ""}<ul class="lista-g" data-filtro>${l.map(item).join("")}</ul>`).join("")}
+        <p class="vacio-g" id="sin-chicos" hidden>Nadie con ese apellido</p>
+        <div class="lista-pie" role="status"><span><b class="num" id="dcont">${n}</b> de ${quienes.length} lo tienen<small class="lista-pie__ojo" id="dsin"${b ? "" : " hidden"}>Sin guardar</small></span>
+          <button type="button" class="btn btn--ok btn--grande" data-docs-guardar>${IC.tilde}Guardar</button></div>
+      </section>${avisoHTML()}`;
+  }
+  async function guardarDocs() {
+    if (DOC.guardando) return;
+    const cat = S.dcat, d = docDe(S.ddoc), t = docTienen(d.k), ids = new Set(testPlantel(cat).map((c) => c.id));
+    const sumar = [...S.dmarcas].filter((id) => !t.has(id)), sacar = [...t.keys()].filter((id) => ids.has(id) && !S.dmarcas.has(id));
+    const volverA = () => volverAtras({ ver: "docs", ddoc: null });
+    if (!sumar.length && !sacar.length) { enCel.set(docClave(cat, d.k), null); avisar("ok", "No había cambios"); volverA(); return; }
+    DOC.guardando = true;
+    avisoSuelto("Guardando…", "espera");
+    try {
+      await apiD1({ accion: "docs", cat, doc: d.k, fecha: hoyISO(), sumar, sacar, por: enCel.get(claveNombreNota) || "" });
+      enCel.set(docClave(cat, d.k), null);
+      DOC.lista = (await apiD1(null, "docs=1")).docs;
+      avisar("ok", `${d.nom}: guardado`);
+      volverA();
+    } catch (e) { avisoSuelto(`${errNotas(e, "No se pudo guardar", "guardar los documentos")} Lo marcado queda en el celular.`); }
+    finally { DOC.guardando = false; }
   }
 
   // ---------- tests de campo (functions/api/asistencia.js, tabla "tests" de D1) ----------
@@ -832,6 +951,7 @@
   function vEquipo() {
     const cat = S.eqcat, f = S.eqfecha;
     if (!EQ.lista && !EQ.error) cargarEquipos();
+    if (!DOC.lista && !DOC.error) cargarDocs();
     if (S.eqn) return vElegir();
     const e = eqActual(cat, f), g = eqGuardado(cat, f), px = eqPartido(cat, f), pl = eqPlantel(cat), al = eqAlertas();
     const rival = px ? px.rival : e.rival || (g && g.rival) || "", hasta = eqHasta(e), n = Object.keys(e.jugadores).length, sin = eqSinGuardar(cat, f);
@@ -891,12 +1011,14 @@
   /** lo que se necesita para dibujar cada chico en la lista para elegir */
   function eqCtx() {
     const e = eqActual(S.eqcat, S.eqfecha);
-    return { num: S.eqn, pl: eqPlantel(S.eqcat), al: eqAlertas(), en: new Map(Object.entries(e.jugadores).map(([n, id]) => [id, +n])) };
+    const pl = eqPlantel(S.eqcat), med = DOC.lista ? docTienen("medica") : new Map();
+    return { num: S.eqn, pl, al: eqAlertas(), en: new Map(Object.entries(e.jugadores).map(([n, id]) => [id, +n])), med, usaMed: pl.some((c) => med.has(c.id)) };
   }
   function eqFila(c, otra, x) {
     const a = x.al.get(claveNombre(c.nombre)), ya = x.en.get(c.id);
     const det = [ya ? (ya === x.num ? "Está en este número" : `Ya está de ${ya}`) : "", eqJuegaTxt(c.id)].filter(Boolean).map(esc);
     if (a) det.push(`<span class="eq-al eq-al--${a.n}">${esc(a.t)}</span>`);
+    if (x.usaMed && !x.med.has(c.id)) det.push(`<span class="eq-al">Sin ficha médica</span>`);
     return `<li data-q="${esc(norm(c.nombre))}"><button type="button" class="eq-it eq-it--elegir${ya === x.num ? " eq-it--este" : ""}" data-eq-id="${esc(c.id)}">
       <span class="eq-it__txt"><span class="eq-it__nom">${nombreHTML(c.nombre)}${otra ? ` <span class="chip chip--cat">${esc(otra)}</span>` : ""}</span>${det.length ? `<small>${det.join(" · ")}</small>` : ""}</span>
       ${c.pct !== undefined ? porcHTML(c.pct, c.de >= 3) : ""}</button></li>`;
@@ -2269,7 +2391,7 @@
       .catch((e) => { ASIS.error[k] = e.message === "clave" ? avisoError(e) : e.message === "servidor" ? "No se pudo cargar. Probá de nuevo en un rato." : "No se pudo cargar: no hay señal."; })
       .finally(() => {
         ASIS.cargando.delete(k);
-        const aca = cat ? (S.acat === cat && ["asis", "lista", "chicos"].includes(S.ver)) || (S.ver === "inicio" && enCel.get(ULTIMA) === cat) || (S.ver === "plan" && S.pcat === cat) || (S.ver === "equipo" && eqAsis(S.eqcat) === cat) || (["tests", "toma"].includes(S.ver) && S.tcat === cat) || S.ver === "asistencia" : S.ver === "asistencia";
+        const aca = cat ? (S.acat === cat && ["asis", "lista", "chicos"].includes(S.ver)) || (S.ver === "inicio" && enCel.get(ULTIMA) === cat) || (S.ver === "plan" && S.pcat === cat) || (S.ver === "equipo" && eqAsis(S.eqcat) === cat) || (["tests", "toma"].includes(S.ver) && S.tcat === cat) || (["docs", "doclista"].includes(S.ver) && S.dcat === cat) || S.ver === "asistencia" : S.ver === "asistencia";
         if (aca) render();
       });
   }
@@ -2674,13 +2796,26 @@
   // ---------- eventos ----------
   document.addEventListener("click", (e) => {
     if (!S) return;
-    const t = e.target.closest("[data-atras],[data-subir],[data-alcat],[data-ncat],[data-nota-ok],[data-borrar-nota-ok],[data-reintentar-notas],[data-tomar],[data-tver],[data-tdia],[data-toma-guardar],[data-reintentar-tests],[data-ir-equipo],[data-eq-n],[data-eq-id],[data-eq-vaciar],[data-eq-mas],[data-eq-guardar],[data-eq-borrar],[data-eq-descartar],[data-eq-compartir],[data-reintentar-eq],[data-amistoso-ok],[data-edad],[data-area],[data-area-cat],[data-play],[data-reclave],[data-ayuda],[data-cerrar-ayuda],[data-ir],[data-ir-cat],[data-ir-guia],[data-ir-ej],[data-ir-ej-para],[data-ir-ej-tab],[data-ir-line],[data-ir-puesto],[data-ir-practica],[data-ir-practicas],[data-pgrupo],[data-ir-asis],[data-ir-hoy],[data-ir-lista],[data-ir-chicos],[data-form],[data-reintentar],[data-motivo],[data-dia],[data-marca],[data-todos],[data-cancelar-ok],[data-deshacer],[data-hora-ok],[data-agregar-ok],[data-horarios-ok],[data-guardar-lista],[data-borrar-lista-ok],[data-sacar],[data-sigue],[data-volver-chico],[data-sumar-chico],[data-compartir-pr],[data-rol],[data-quitar-para],[data-tab],[data-anio],[data-ver],[data-ordj]");
+    const t = e.target.closest("[data-atras],[data-subir],[data-alcat],[data-ncat],[data-nota-ok],[data-borrar-nota-ok],[data-reintentar-notas],[data-ir-doc],[data-dmarca],[data-docs-guardar],[data-reintentar-docs],[data-tomar],[data-tver],[data-tdia],[data-toma-guardar],[data-reintentar-tests],[data-ir-equipo],[data-eq-n],[data-eq-id],[data-eq-vaciar],[data-eq-mas],[data-eq-guardar],[data-eq-borrar],[data-eq-descartar],[data-eq-compartir],[data-reintentar-eq],[data-amistoso-ok],[data-edad],[data-area],[data-area-cat],[data-play],[data-reclave],[data-ayuda],[data-cerrar-ayuda],[data-ir],[data-ir-cat],[data-ir-guia],[data-ir-ej],[data-ir-ej-para],[data-ir-ej-tab],[data-ir-line],[data-ir-puesto],[data-ir-practica],[data-ir-practicas],[data-pgrupo],[data-ir-asis],[data-ir-hoy],[data-ir-lista],[data-ir-chicos],[data-form],[data-reintentar],[data-motivo],[data-dia],[data-marca],[data-todos],[data-cancelar-ok],[data-deshacer],[data-hora-ok],[data-agregar-ok],[data-horarios-ok],[data-guardar-lista],[data-borrar-lista-ok],[data-sacar],[data-sigue],[data-volver-chico],[data-sumar-chico],[data-compartir-pr],[data-rol],[data-quitar-para],[data-tab],[data-anio],[data-ver],[data-ordj]");
     if (!t || t.disabled) return;
     if (t.tagName === "A") e.preventDefault(); // el escudo de arriba: va al inicio sin recargar
     const ds = t.dataset, ir = "lado" in ds ? irSinPaso : irA; // Anterior / Siguiente no suman pasos
     if ("atras" in ds) history.back();
     else if ("subir" in ds) irSinPaso(SUBIR);
     else if (ds.edad) { S.pedad = ds.edad; render(); }
+    else if (ds.irDoc) irA({ ver: "doclista", ddoc: ds.irDoc, aviso: null });
+    else if (ds.dmarca) {
+      // como tomar lista: sin volver a dibujar; lo marcado queda en el celular
+      const id = ds.dmarca, on = !S.dmarcas.has(id), d = docDe(S.ddoc), pl = testPlantel(S.dcat), t = docTienen(d.k);
+      if (on) S.dmarcas.add(id); else S.dmarcas.delete(id);
+      document.querySelectorAll(`[data-dmarca="${CSS.escape(id)}"]`).forEach((x) => x.setAttribute("aria-pressed", on));
+      const guardados = pl.filter((c) => t.has(c.id)).map((c) => c.id), igual = mismos([...S.dmarcas], guardados);
+      enCel.set(docClave(S.dcat, d.k), igual ? null : JSON.stringify([...S.dmarcas]));
+      $("#dcont").textContent = docChicos(d, pl).filter((c) => S.dmarcas.has(c.id)).length;
+      $("#dsin").hidden = igual;
+    }
+    else if ("docsGuardar" in ds) guardarDocs();
+    else if ("reintentarDocs" in ds) { DOC.error = null; delete ASIS.error[S.dcat]; render(); }
     else if (ds.tomar) { const [ttest, tfecha] = ds.tomar.split("|"); irA({ ver: "toma", ttest, tfecha: tfecha || hoyISO(), aviso: null }); }
     else if (ds.tver) { S.tver = ds.tver; S.tdia = null; render(); }
     else if (ds.tdia) { S.tdia = ds.tdia; render(); }
@@ -2734,6 +2869,7 @@
       enCel.set(claveArea(S.area), v);
       if (S.area === "asistencia") irA({ ver: "asis", acat: v, afecha: null, aform: null, marcas: null, aviso: null, estadoLista: null });
       else if (S.area === "planificacion") irA({ ver: "plan", pcat: v, qp: "" });
+      else if (S.area === "docs") irA({ ver: "docs", dcat: v, ddoc: null });
       else if (S.area === "tests") irA({ ver: "tests", tcat: v, tver: null, tdia: null });
       else irA({ ver: "partidos", mcat: v });
     }
