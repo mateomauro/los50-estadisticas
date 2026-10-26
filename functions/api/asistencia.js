@@ -113,7 +113,22 @@ export async function onRequest({ request, env }) {
         resumen[r.cat] = { listas: r.listas, presentes: r.presentes || 0, ultima: r.ultima };
       }
       for (const r of await todo("SELECT cat, estado, COUNT(*) AS n FROM chicos GROUP BY cat, estado")) (chicos[r.cat] ??= { alta: 0, baja: 0 })[r.estado] = r.n;
-      return json({ resumen, chicos });
+      // los que dejaron de venir, para "Para mirar" del inicio aunque no se haya abierto esa categoría: venían este año y faltaron
+      // a los últimos 3 entrenamientos con lista (los suspendidos no cuentan; un lesionado no faltó)
+      const hoy = new Date().toISOString().slice(0, 10);
+      const ls = await todo("SELECT cat, fecha, presentes FROM listas WHERE fecha >= ? AND fecha <= ? ORDER BY fecha", `${hoy.slice(0, 4)}-01-01`, hoy);
+      const canc = new Set((await todo("SELECT cat, fecha FROM entrenamientos WHERE estado = 'cancelado'")).map((r) => `${r.cat}|${r.fecha}`));
+      const fuera = new Set((await todo("SELECT cat, id FROM chicos WHERE estado = 'baja'")).map((r) => `${r.cat}|${r.id}`));
+      const porCat = {}, dejaron = {};
+      ls.filter((l) => !canc.has(`${l.cat}|${l.fecha}`)).forEach((l) => (porCat[l.cat] ??= []).push(JSON.parse(l.presentes)));
+      for (const [c, xs] of Object.entries(porCat)) {
+        if (xs.length < 4) continue;
+        const antes = new Set(xs.slice(0, -3).flat().filter((x) => !x.startsWith("les-"))), ult = new Set(xs.slice(-3).flat().map((x) => x.replace(/^les-/, "")));
+        const ids = [...antes].filter((id) => !ult.has(id) && !fuera.has(`${c}|${id}`));
+        if (ids.length) dejaron[c] = ids;
+      }
+      const nombres = Object.fromEntries((await todo("SELECT id, nombre FROM chicos WHERE nombre IS NOT NULL")).map((r) => [r.id, r.nombre]));
+      return json({ resumen, chicos, dejaron, nombres });
     }
     if (!CATS.includes(cat)) return json({ error: "datos" }, 400);
     const [horarios, entrenamientos, listas, chicos] = await Promise.all([

@@ -585,7 +585,30 @@
 .aviso--error .link { color: #fff; font-size: 16px; font-weight: 700; }
 .aviso--espera { background: var(--negro); color: #fff; }
 .aviso--ojo { background: #fff4d6; color: #5c3d00; border: 1px solid #f0c75e; font-weight: 600; }
-[data-pantalla="lista"] .aviso { bottom: calc(max(16px, env(safe-area-inset-bottom)) + 88px); }
+[data-pantalla="lista"] .aviso { bottom: calc(max(16px, env(safe-area-inset-bottom)) + var(--pie-alto, 88px)); }
+.aviso__x { flex: none; width: 44px; height: 44px; margin: -10px -10px -10px auto; display: grid; place-items: center; padding: 0; border: 0; background: none; color: inherit; cursor: pointer; }
+.aviso__x svg { width: 20px; height: 20px; }
+/* tomando lista: el foco del teclado no queda tapado por la barra, y tirar para abajo no recarga (sin señal no volvería) */
+html:has(#vista[data-pantalla="lista"]) { scroll-padding-bottom: 150px; overscroll-behavior-y: contain; }
+.lista-pie__btns { display: flex; gap: 8px; flex: none; }
+/* celulares muy chicos: menos aire arriba de los chicos, así el primero se ve entero */
+@media (max-width: 360px) {
+  .asis-v .lista-info { margin-bottom: 8px; padding: 8px 12px; font-size: 15px; }
+  .lista-con, .lista-con__b { font-size: 14px; }
+  .lista-cab { min-height: 36px; margin-bottom: 4px; font-size: 15px; }
+  .chips-g.lista-modo { margin: 0 0 8px; }
+  .lista-pie { gap: 8px; font-size: 14px; }
+  .lista-pie .btn--grande { padding: 0 14px; }
+}
+.lista-pie__btns .btn, .lista-pie__btns .btn-sec { min-height: 48px; padding: 0 14px; }
+/* los que nunca vinieron: cerrado, con cuántos son */
+.nunca__cab { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 44px; cursor: pointer; list-style: none; }
+.nunca__cab::-webkit-details-marker { display: none; }
+.nunca__abrir { flex: none; font-size: 15px; font-weight: 700; color: var(--azul); }
+details.nunca[open] .nunca__abrir { visibility: hidden; }
+.nunca .asis-nota { margin: 6px 0 8px; }
+/* el nombre en "Los chicos" se toca fácil (más alto, sin mover el renglón) */
+.asis-chicos__nom > .link-chico { display: inline-block; padding: 11px 0; margin: -11px 0; }
 @keyframes aviso-entra { from { transform: translateY(14px); opacity: 0; } }
 .cargando { margin: 0; padding: 24px 0; text-align: center; font-size: 16px; color: var(--suave); }
 /* hoy (o el próximo entrenamiento): lo primero de la pantalla, con un solo botón grande */
@@ -634,7 +657,7 @@
 .asis-form__fila > .asis-input, .asis-form__fila > .asis-form__campo { flex: 1; min-width: 140px; }
 .asis-form__aviso { margin: 0; padding: 10px 12px; border-radius: 10px; background: var(--ambar-fondo); color: var(--ambar); font-size: 15.5px; line-height: 1.4; }
 .asis-form__btns { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
-.asis-input { min-height: 48px; padding: 8px 12px; background: var(--sup); border: 1.5px solid #b9c6dc; border-radius: 12px; font: 400 16.5px var(--base); color: var(--texto); }
+.asis-input { min-height: 48px; padding: 8px 12px; background: var(--sup); border: 1.5px solid var(--borde-campo); border-radius: 12px; font: 400 16.5px var(--base); color: var(--texto); }
 .asis-input:focus { outline: none; border-color: var(--azul); box-shadow: 0 0 0 3px rgb(27 95 209 / 18%); }
 .asis-input--hora { max-width: 160px; }
 .chips-g--asis { margin: 0; gap: 8px; }
@@ -652,13 +675,15 @@
 .asis-chicos__fuera { margin: 0 -14px; padding: 8px 14px !important; background: #f7f8fa; }
 .asis-chicos__fuera .asis-chicos__nom { color: var(--suave); }
 /* tomar lista: cada chico es un botón grande; el que vino queda verde, con borde y tilde (se distingue al sol) */
-.lista-info--ojo { background: var(--ambar-fondo); color: var(--ambar); }
-.lista-junta { margin: 0 0 10px; }
-.lista-junta[aria-pressed="true"] { border-color: var(--azul); background: var(--azul-claro); color: var(--azul); }
-.lista-modo { margin: 0 0 10px; }
+.lista-info.lista-info--ojo { background: var(--ambar-fondo); color: var(--ambar); }
+/* entrenan juntas: una línea chica, no un botón grande arriba de los chicos */
+.lista-con { display: flex; flex-wrap: wrap; align-items: center; gap: 0 10px; margin: 0 0 4px; font-size: 15px; color: var(--suave); }
+.lista-con__b { display: inline-flex; align-items: center; min-height: 44px; padding: 0; font-size: 15px; font-weight: 600; }
+.chips-g.lista-modo { margin: 4px 0 12px; }
+.chips-g.lista-modo button { min-height: 44px; }
 /* lesionado: vino pero no entrena (naranja; no cuenta en su porcentaje) */
-.lista-it--les { background: var(--ambar-fondo); border-color: #e7b24a; }
-.lista-it--les .lista-it__ic { background: #c98f00; border-color: #c98f00; color: #fff; }
+.lista-it.lista-it--les { background: var(--ambar-fondo); border-color: #e7b24a; }
+.lista-it.lista-it--les .lista-it__ic { background: var(--ambar); border-color: var(--ambar); color: #fff; }
 .lista-it__les { display: block; font-size: 13px; font-weight: 700; color: var(--ambar); }
 .ficha-les { margin: 8px 0 0; font-size: 14.5px; font-weight: 600; color: var(--ambar); }
 .lista-info svg { flex: none; width: 18px; height: 18px; margin-top: 2px; }

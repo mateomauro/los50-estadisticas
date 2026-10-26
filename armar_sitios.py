@@ -55,7 +55,7 @@ id = "{KV_REVISION}"
     "entrenadores": {
         "proyecto": "los50-entrenadores",
         "paginas": {"index.html": "entrenadores.html"},
-        "archivos": ["entrenadores.js", "entrenadores.css", "entrenadores.data.js", "entrenadores.fotos.json", "styles.css"],
+        "archivos": ["entrenadores.js", "entrenadores.css", "entrenadores.data.js", "entrenadores.fotos.json", "styles.css", "sw-entrenadores.js"],
         "carpetas": ["fonts", "img", "vendor"],
         "functions": ["videos/[[path]].js", "api/asistencia.js"],
         "otros": [],

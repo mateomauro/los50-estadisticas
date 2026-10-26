@@ -30,8 +30,9 @@
   function ponerFicha(ficha, siempre) {
     if (ficha) document.cookie = `los50v=${ficha}; Path=/videos; SameSite=Strict${location.protocol === "https:" ? "; Secure" : ""}${siempre ? "; Max-Age=31536000" : ""}`;
   }
+  try { if (localStorage.getItem("los50-ent-recordar") === "1") $("#recordar").checked = true; } catch (e) { /* nada */ }
   function guardar(raw, siempre, ficha) {
-    try { const s = siempre ? localStorage : sessionStorage; s.setItem(LLAVE, raw); s.setItem(FICHA, ficha); } catch (e) { /* sin almacenamiento: pide la clave cada vez */ }
+    try { const s = siempre ? localStorage : sessionStorage; s.setItem(LLAVE, raw); s.setItem(FICHA, ficha); localStorage.setItem("los50-ent-recordar", siempre ? "1" : "0"); } catch (e) { /* sin almacenamiento: pide la clave cada vez */ }
     ponerFicha(ficha, siempre);
   }
   function olvidar() {
@@ -121,6 +122,10 @@
     trofeo: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>',
   };
 
+  // la copia de la página para abrirla sin señal (sw-entrenadores.js)
+  if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "127.0.0.1" || location.hostname === "localhost")) {
+    addEventListener("load", () => navigator.serviceWorker.register("sw-entrenadores.js").catch(() => { /* sin copia: anda igual con señal */ }));
+  }
   function iniciar(datos) {
     const t = (k) => obj(datos[k]);
     D = {
@@ -385,7 +390,7 @@
   function render() {
     if (listaAbierta && S.ver !== "lista") {
       const { cat, fecha } = listaAbierta, d = ASIS.cats[cat], s = (d && sesiones(d, fecha, fecha)[0]) || { fecha, lista: null };
-      if (sinGuardar(cat, s)) avisar("ojo", `La lista del ${diaMes(fecha)} quedó sin guardar`);
+      if (sinGuardar(cat, s)) avisar("ojo", `La lista de ${cat} del ${diaMes(fecha)} quedó sin guardar`);
     }
     listaAbierta = S.ver === "lista" ? { cat: S.acat, fecha: S.afecha } : null;
     // todo el ancho en la compu (y el pie se alinea con eso); la tabla de estadísticas no, que queda muy estirada
@@ -397,6 +402,7 @@
       asistencia: vAsistencia, asis: vAsis, lista: vLista, chicos: vChicos, area: vArea, plan: vPlan, partidos: vPartidos, guiaclub: vGuiaClub, pase: vPase, alertas: vAlertas, notas: vNotas, equipo: vEquipo, tests: vTests, toma: vToma, docs: vDocs, doclista: vDocLista, chico: vChico, armar: vArmar })[S.ver]();
     dibujarGraficos();
     ponerFotos();
+    document.querySelectorAll("#vista [data-form]").forEach((b) => { if (b.dataset.form) b.setAttribute("aria-expanded", S.aform === b.dataset.form); });
   }
   /** sección desplegable: arranca cerrada y recuerda si la abriste (al ordenar o "ver todos" no se cierra).
       Con "dato" se muestra a la derecha del título el número principal de adentro ("18 partidos", "78% volvió"). */
@@ -613,6 +619,8 @@
     // si la última categoría en la que tomaste lista entrena hoy, la tarjeta de Asistencia lo dice
     const ult = D.fichados && enCel.get(ULTIMA), d = ult && ASIS_CATS.includes(ult) ? ASIS.cats[ult] : null;
     if (ult && ASIS_CATS.includes(ult) && !d && !ASIS.error[ult]) cargarAsis(ult);
+    // el resumen de todas: trae a los que dejaron de venir de cada categoría (para "Para mirar")
+    if (D.fichados && !ASIS.resumen && !ASIS.error["*"] && Date.now() - (ASIS.ts["*"] || 0) > 60000) cargarAsis();
     const s = d && sesiones(d, hoyISO(), hoyISO())[0], hoy = s && s.estado !== "cancelado";
     const g = D.guia;
     $("#vista").innerHTML = `
@@ -620,7 +628,7 @@
       ${alertasInicio()}
       <section class="sec sec--pegada"><ul class="areas areas--6">
         ${!D.fichados ? "" : !hoy ? tarjeta('data-area="asistencia"', IC.lista, "Asistencia", "Tomar lista")
-          : `<li class="area-li">${botonArea(`data-ir-hoy="${esc(ult)}|${hoyISO()}"`, IC.lista, "Asistencia", `Hoy entrena ${esc(ult)}${s.hora ? ` · ${esc(s.hora)}` : ""}`, " area--hoy")}
+          : `<li class="area-li">${botonArea(`data-ir-hoy="${esc(ult)}|${hoyISO()}"`, IC.lista, "Asistencia", `Hoy entrena ${esc(ult)}${s.hora ? ` · ${esc(s.hora)}` : ""}${sinGuardar(ult, s) ? " · lista sin guardar" : ""}`, " area--hoy")}
             <button type="button" class="link area__otra" data-area="asistencia">Otra categoría</button></li>`}
         ${g ? tarjeta('data-area="planificacion"', IC.calendario, "Planificación", "Prácticas y objetivos") : ""}
         ${g && g.ejercicios ? tarjeta('data-ir="ejercicios"', IC.cono, "Ejercicios", "Line, maul y juegos") : ""}
@@ -973,7 +981,7 @@
     const pl = testPlantel(cat), t = docTienen(d.k), b = docBorr(cat, d.k);
     S.dmarcas = new Set(b || pl.filter((c) => t.has(c.id)).map((c) => c.id));
     const quienes = docChicos(d, pl), n = quienes.filter((c) => S.dmarcas.has(c.id)).length;
-    const item = (c) => `<li data-q="${esc(norm(c.nombre))}"><button type="button" class="lista-it" data-dmarca="${esc(c.id)}" aria-pressed="${S.dmarcas.has(c.id)}">
+    const item = (c) => `<li data-q="${esc(qNom(c.nombre))}"><button type="button" class="lista-it" data-dmarca="${esc(c.id)}" aria-pressed="${S.dmarcas.has(c.id)}">
       <span class="lista-it__ic">${IC.tilde}</span><span class="lista-it__nom">${nombreHTML(c.nombre)}${t.has(c.id) ? `<small class="doc-desde">Desde el ${corta(t.get(c.id))}</small>` : ""}</span></button></li>`;
     const grupos = d.primera ? [["Pilares y hookers", quienes], ["Los demás", pl.filter((c) => !esPrimera(c.id))]] : [["", pl]];
     $("#vista").innerHTML = `${cab}
@@ -1318,7 +1326,7 @@
     if (x.semana && x.semana.length) det.push(esc(`Esta semana: ${x.semana.filter((l) => l.presentes.includes(c.id)).length} de ${x.semana.length}`));
     const ul = x.recientes && [...x.recientes].reverse().find((l) => l.presentes.includes(c.id) || l.presentes.includes(LES(c.id)));
     if (ul && ul.presentes.includes(LES(c.id))) det.push(`<span class="eq-al">Lesionado (${corta(ul.fecha)})</span>`);
-    return `<li data-q="${esc(norm(c.nombre))}"><button type="button" class="eq-it eq-it--elegir${ya === x.num ? " eq-it--este" : ""}" data-eq-id="${esc(c.id)}">
+    return `<li data-q="${esc(qNom(c.nombre))}"><button type="button" class="eq-it eq-it--elegir${ya === x.num ? " eq-it--este" : ""}" data-eq-id="${esc(c.id)}">
       <span class="eq-it__txt"><span class="eq-it__nom">${nombreHTML(c.nombre)}${otra ? ` <span class="chip chip--cat">${esc(otra)}</span>` : ""}</span>${det.length ? `<small>${det.join(" · ")}</small>` : ""}</span>
       ${c.pct !== undefined ? porcHTML(c.pct, c.de >= 3) : ""}</button></li>`;
   }
@@ -1423,7 +1431,7 @@
   /** las notas de una categoría de ese día (las de "¿Cómo salió?" y las que se escribieron ese día en Notas) */
   const notasDe = (cat, f) => (NOTAS.lista || []).filter((n) => n.cat === cat && n.fecha === f);
   const formComoSalio = () => `<div class="asis-form">
-      <label class="asis-form__campo">Lo que anduvo bien y lo que hay que volver a trabajar<textarea id="cs-texto" class="asis-input asis-input--nota" maxlength="600" rows="3" placeholder="Por ejemplo: el ruck salió lento; repetir el juego de pases"></textarea></label>
+      <label class="asis-form__campo">Lo que anduvo bien y lo que hay que volver a trabajar<textarea id="cs-texto" class="asis-input asis-input--nota" maxlength="600" rows="3" placeholder="Por ejemplo: el ruck salió lento; repetir el juego de pases">${esc(S.csTexto || "")}</textarea></label>
       ${enCel.get(claveNombreNota) ? "" : `<label class="asis-form__campo">Tu nombre<input id="cs-por" class="asis-input" maxlength="60" autocomplete="given-name"></label>`}
       <div class="asis-form__btns"><button type="button" class="btn btn--ok btn--alto" data-cs-ok>${IC.tilde}Guardar</button>${cerrarBtn}</div></div>`;
   /** en la lista de un día: lo que se anotó de cómo salió y para anotar */
@@ -1525,7 +1533,14 @@
     A_.tarjetas.filter((x) => x.t === "A" && x.f >= masDias(hoy, -60)).forEach((x) => (am[x.j] ??= []).push(x));
     Object.entries(am).filter(([, v]) => v.length >= 2).forEach(([j, v]) =>
       out.push({ n: 2, j, c: v[0].c, t: `${v.length} amarillas en los últimos 60 días (la última, el ${corta(v[0].f)})` }));
-    Object.entries(ASIS.cats).forEach(([cat, d]) => { if (d) dejaronDe(cat, d).forEach((c) => out.push({ n: 2, j: c.nombre, c: cat, t: "Faltó a los últimos 3 entrenamientos: llamalo" })); });
+    // los que dejaron de venir: de las categorías abiertas, con todo; de las demás, lo que dice el resumen
+    const vistas = new Set();
+    Object.entries(ASIS.cats).forEach(([cat, d]) => { if (d) { vistas.add(cat); dejaronDe(cat, d).forEach((c) => out.push({ n: 2, j: c.nombre, c: cat, t: "Faltó a los últimos 3 entrenamientos: llamalo" })); } });
+    const r = ASIS.resumen;
+    if (r && r.dejaron && D.fichados) Object.entries(r.dejaron).forEach(([cat, ids]) => { if (!vistas.has(cat)) ids.forEach((id) => {
+      const n = (eqTodos().get(id) || {}).nombre || (r.nombres || {})[id];
+      if (n) out.push({ n: 2, j: n, c: cat, t: "Faltó a los últimos 3 entrenamientos: llamalo" });
+    }); });
     return out.sort((a, b) => b.n - a.n || (a.c || "").localeCompare(b.c || "") || a.j.localeCompare(b.j, "es"));
   }
   const alertaFila = (a) => `<li class="alerta alerta--${a.n}"><span class="alerta__ic">${IC.alerta}</span><span class="alerta__txt">
@@ -2197,6 +2212,8 @@
   const gDe = (cat) => D.guia.infantiles.find((c) => c.cat === cat) || D.guia.juveniles.find((c) => c.cat === cat);
   const esInf = (cat) => D.guia.infantiles.some((c) => c.cat === cat);
   const norm = (s) => String(s).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  /** para buscar un nombre: sin tildes, sin la coma y con un solo espacio ("Núñez, Agustín" → "nunez agustin") */
+  const qNom = (s) => norm(s).replace(/[^a-z0-9ñ]+/g, " ").trim();
   /** los cantos del club que aparecen en un texto se resaltan (MALÓN, CONTROL…) */
   let reCantos;
   const conCantos = (txt) => {
@@ -2795,7 +2812,7 @@
   const asisDe = (cat) => (PS.includes(cat) ? "Plantel superior" : ASIS_CATS.includes(cat) ? cat : null);
   const asisTxt = (a) => (a === "Plantel superior" ? "del plantel superior" : `de ${a}`);
   const atajoAsis = (cat) => { const a = D.fichados && asisDe(cat); return a ? `<button type="button" class="atajo" data-ir-asis="${esc(a)}">${IC.lista}<span>Asistencia ${esc(asisTxt(a))}</span>${IC.adelante}</button>` : ""; };
-  const ASIS = { resumen: null, cats: {}, error: {}, cargando: new Set() };
+  const ASIS = { resumen: null, cats: {}, error: {}, cargando: new Set(), delCel: {}, ts: {} };
   const isoDe = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
   const masDias = (iso, n) => { const d = dia(iso); d.setDate(d.getDate() + n); return isoDe(d); };
   /** los días que se pueden usar en la asistencia: que existan (no un 30 de febrero), del último año y hasta 4 meses para adelante */
@@ -2835,18 +2852,32 @@
     ? `Para usar la asistencia hay que volver a poner la clave. <button type="button" class="link" data-reclave>Poner la clave</button>`
     : e.message === "servidor" ? "No se pudo guardar. Probá de nuevo en un rato." : "No se pudo guardar: no hay señal. Probá de nuevo en un rato.");
   /** trae los datos de una categoría (o el resumen de todas) y vuelve a dibujar si se sigue en esa pantalla */
+  /** lo último que se cargó de cada categoría queda en el celular: sin señal, la lista se abre igual con eso */
+  const asisClave = (cat) => `los50-asis:${cat}`;
+  const ponerAsis = (cat, d) => { ASIS.cats[cat] = d; delete ASIS.delCel[cat]; enCel.set(asisClave(cat), JSON.stringify(d)); };
+  const asisDelCel = (cat) => { try { return JSON.parse(enCel.get(asisClave(cat)) || "null"); } catch (e) { return null; } };
   function cargarAsis(cat) {
     const k = cat || "*";
     if (ASIS.cargando.has(k)) return;
     ASIS.cargando.add(k);
-    api(null, cat).then((d) => { if (cat) ASIS.cats[cat] = d; else ASIS.resumen = d; })
-      .catch((e) => { ASIS.error[k] = e.message === "clave" ? avisoError(e) : e.message === "servidor" ? "No se pudo cargar. Probá de nuevo en un rato." : "No se pudo cargar: no hay señal."; })
+    ASIS.ts[k] = Date.now();
+    api(null, cat).then((d) => { if (cat) ponerAsis(cat, d); else ASIS.resumen = d; })
+      .catch((e) => {
+        const c = cat && e.message !== "clave" && asisDelCel(cat);
+        if (c) { ASIS.cats[cat] = c; ASIS.delCel[cat] = true; return; }
+        ASIS.error[k] = e.message === "clave" ? avisoError(e) : e.message === "servidor" ? "No se pudo cargar. Probá de nuevo en un rato." : "No se pudo cargar: no hay señal.";
+      })
       .finally(() => {
         ASIS.cargando.delete(k);
-        const aca = cat ? (S.acat === cat && ["asis", "lista", "chicos"].includes(S.ver)) || (S.ver === "inicio" && enCel.get(ULTIMA) === cat) || (S.ver === "plan" && S.pcat === cat) || (S.ver === "equipo" && eqAsis(S.eqcat) === cat) || (["tests", "toma"].includes(S.ver) && S.tcat === cat) || (["docs", "doclista"].includes(S.ver) && S.dcat === cat) || (S.ver === "chico" && S.chcat === cat) || (S.ver === "lista" && S.ajunta && compa(S.acat) === cat) || S.ver === "asistencia" : S.ver === "asistencia";
-        if (aca) render();
+        const aca = cat ? (S.acat === cat && ["asis", "lista", "chicos"].includes(S.ver)) || (S.ver === "inicio" && enCel.get(ULTIMA) === cat) || (S.ver === "plan" && S.pcat === cat) || (S.ver === "equipo" && eqAsis(S.eqcat) === cat) || (["tests", "toma"].includes(S.ver) && S.tcat === cat) || (["docs", "doclista"].includes(S.ver) && S.dcat === cat) || (S.ver === "chico" && S.chcat === cat) || (S.ver === "lista" && S.ajunta && compa(S.acat) === cat) || S.ver === "asistencia" : S.ver === "asistencia" || S.ver === "inicio";
+        if (aca) renderPronto();
       });
   }
+  /** varias categorías que llegan juntas se dibujan una sola vez (la pantalla no salta mientras cargan) */
+  let PRONTO = 0;
+  const renderPronto = () => { if (!PRONTO) PRONTO = requestAnimationFrame(() => { PRONTO = 0; render(); }); };
+  /** sin señal: lo que se ve es lo último que se cargó en este celular */
+  const avisoDelCel = (cat) => (ASIS.delCel[cat] ? `<p class="lista-info lista-info--ojo">${IC.alerta}<span>Sin señal: estás viendo lo último que se cargó en este celular. Tomá lista igual: queda guardada acá y la mandás cuando vuelva la señal.</span></p>` : "");
   /** avisa abajo de la pantalla (se ve aunque estés más abajo); el de "listo" se va solo */
   function avisar(tipo, txt) {
     const a = (S.aviso = { tipo, txt });
@@ -2861,7 +2892,7 @@
     avisoSuelto("Guardando…", "espera");
     try {
       await api({ cat, ...cuerpo });
-      ASIS.cats[cat] = await api(null, cat);
+      ponerAsis(cat, await api(null, cat));
       ASIS.resumen = null;
       avisar("ok", ok);
       S.aform = null; S.amotivo = null;
@@ -2876,7 +2907,7 @@
     if (viejo) viejo.remove();
     $("#vista").insertAdjacentHTML("beforeend", avisoHTML());
   }
-  const avisoHTML = () => (S.aviso ? `<p class="aviso aviso--${S.aviso.tipo}" role="status">${S.aviso.tipo === "ok" ? IC.tilde : ""}<span>${S.aviso.txt}</span></p>` : "");
+  const avisoHTML = () => (S.aviso ? `<p class="aviso aviso--${S.aviso.tipo}" role="${S.aviso.tipo === "error" ? "alert" : "status"}">${S.aviso.tipo === "ok" ? IC.tilde : ""}<span>${S.aviso.txt}</span>${S.aviso.tipo === "error" ? `<button type="button" class="aviso__x" data-cerrar-aviso aria-label="Cerrar el aviso">${IC.cruz}</button>` : ""}</p>` : "");
   const cargandoHTML = (k) => (ASIS.error[k] ? `<div class="hoy hoy--error"><p class="hoy__canc">${ASIS.error[k]}</p>
       <button type="button" class="btn-sec" data-reintentar="${esc(k)}">Probar de nuevo</button></div>` : `<p class="cargando">Cargando…</p>`);
 
@@ -2884,7 +2915,7 @@
   function chicosDe(cat, d) {
     const bajas = new Set(d.chicos.filter((c) => c.estado === "baja").map((c) => c.id));
     const todos = [...(D.fichados[cat] || []).map(([id, nombre]) => ({ id, nombre, desde: "" })),
-      ...d.chicos.filter((c) => c.id.startsWith("m")).map((c) => ({ id: c.id, nombre: c.nombre, desde: c.ts.slice(0, 10), mano: true }))];
+      ...d.chicos.filter((c) => c.id.startsWith("m")).map((c) => ({ id: c.id, nombre: c.nombre, desde: isoDe(new Date(c.ts)), mano: true }))];
     return { activos: todos.filter((c) => !bajas.has(c.id)).sort(porNombre), fuera: todos.filter((c) => bajas.has(c.id)).sort(porNombre) };
   }
   /** los entrenamientos entre dos fechas: los de siempre (por los días cargados) con sus cambios, los agregados y los días con lista */
@@ -2913,7 +2944,8 @@
   function porcentajes(d, chicos) {
     const ls = listasValidas(d);
     return chicos.map((c) => {
-      const base = ls.filter((l) => l.fecha >= c.desde && !l.presentes.includes(LES(c.id))), vino = base.filter((l) => l.presentes.includes(c.id)).length;
+      const base = ls.filter((l) => (l.fecha > c.desde || (l.fecha === c.desde && (!c.mano || l.presentes.includes(c.id)))) && !l.presentes.includes(LES(c.id)));
+      const vino = base.filter((l) => l.presentes.includes(c.id)).length;
       return { ...c, vino, de: base.length, pct: base.length ? Math.round((vino / base.length) * 100) : null };
     });
   }
@@ -2958,7 +2990,12 @@
   /** si dos listas de chicos son la misma (en cualquier orden) */
   const mismos = (a, b) => a.length === b.length && a.every((x) => b.includes(x));
   /** hay cambios marcados en el celular que todavía no se guardaron (si quedó igual a lo guardado, no cuenta) */
-  const sinGuardar = (cat, s) => { const b = borrador(cat, s.fecha); return !!b && !mismos(b.marcas, s.lista ? s.lista.presentes : []); };
+  const sinGuardar = (cat, s) => {
+    const b = borrador(cat, s.fecha), o = compa(cat);
+    if (!b) return false;
+    if (!mismos(soloDe(cat, b.marcas), soloDe(cat, s.lista ? s.lista.presentes : []))) return true;
+    return !!(o && b.base2 && ASIS.cats[o] && !mismos(soloDe(o, b.marcas), soloDe(o, b.base2)));
+  };
   /** cómo está un entrenamiento, en pocas palabras */
   function estadoTxt(s, activos, cat) {
     // el motivo largo se corta: si no, en el celular tapa la fecha del renglón
@@ -3010,7 +3047,7 @@
   function tarjetaHoy(cat, s, activos) {
     const hoy = hoyISO(), b = sinGuardar(cat, s) && borrador(cat, s.fecha);
     const estado = s.estado === "cancelado" ? `<p class="hoy__canc">Suspendido${s.motivo ? `: ${esc(s.motivo)}` : ""}</p>`
-      : b ? `<p class="hoy__estado hoy__estado--ojo">${IC.alerta}<span>Tenés la lista sin guardar (${b.marcas.length} marcados)</span></p>`
+      : b ? `<p class="hoy__estado hoy__estado--ojo">${IC.alerta}<span>Tenés la lista sin guardar (${soloDe(cat, b.marcas).filter((x) => !x.startsWith("les-")).length} marcados${soloDe(cat, b.marcas).some((x) => x.startsWith("les-")) ? ` y ${soloDe(cat, b.marcas).filter((x) => x.startsWith("les-")).length} ${soloDe(cat, b.marcas).filter((x) => x.startsWith("les-")).length === 1 ? "lesionado" : "lesionados"}` : ""})</span></p>`
       : s.lista ? `<p class="hoy__estado">${IC.tilde}<span>Vinieron <b>${vinieron(s.lista, chicosEn(activos, s.fecha))} de ${chicosEn(activos, s.fecha).length}</b> · ${tomoTxt(s.lista)}</span></p>`
       : s.estado === "movido" ? `<p class="hoy__nota">Cambió la hora (antes ${esc(s.antes)})</p>` : "";
     const principal = s.estado === "cancelado" ? `<button type="button" class="btn-sec btn-sec--ancho" data-deshacer="${s.fecha}">Deshacer: vuelve a haber entrenamiento</button>`
@@ -3061,13 +3098,13 @@
   // una categoría: hoy, cómo viene la asistencia, los chicos, los entrenamientos y los días
   function vAsis() {
     const cat = S.acat, d = ASIS.cats[cat];
+    if (d && Date.now() - (ASIS.ts[cat] || 0) > 60000) cargarAsis(cat);
     const cab = `<div class="cab">${volver(AREAS.asistencia, AREA_IR("asistencia"))}${cabTit(esc(cat), "asisCat")}</div>`;
     if (!d) {
       if (!ASIS.error[cat]) cargarAsis(cat);
       $("#vista").innerHTML = `${cab}<section class="sec sec--pegada asis-v">${cargandoHTML(cat)}</section>`;
       return;
     }
-    enCel.set(ULTIMA, cat);
     const hoy = hoyISO(), { activos } = chicosDe(cat, d), total = activos.length;
     // los de antes se muestran desde que se empezó a usar (la primera lista o el primer cambio), hasta 6 semanas para atrás
     const primero = [...d.listas, ...d.entrenamientos].map((x) => x.fecha).filter((f) => f < hoy).sort()[0] || hoy;
@@ -3078,25 +3115,29 @@
     const pc = porcentajes(d, activos), ult = validas.at(-1), alUltimo = ult ? chicosEn(activos, ult.fecha) : [];
     // los que nunca vinieron: una tarjeta para decir si siguen (y no aparecen en "Los que menos vienen")
     const nunca = conColor ? nuncaVinieron(cat, d) : [], sinNunca = new Set(nunca.map((c) => c.id));
-    const tarjNunca = !nunca.length ? "" : `<div class="hoy hoy--ojo nunca">
-        <h3 class="hoy__dia">${cabNunca(nunca.length)}</h3>
+    // los que menos vienen: solo los que vienen menos del 80% (en verde no hay nada que mirar)
+    const menos = pc.filter((c) => c.de && !sinNunca.has(c.id) && c.pct < 80).sort((a, b) => a.pct - b.pct || porNombre(a, b)).slice(0, 5);
+    // los que nunca vinieron: cerrado, con cuántos son (abierto, se contesta de a uno)
+    const tarjNunca = !nunca.length ? "" : `<details class="hoy hoy--ojo nunca" data-sec="nunca-${esc(cat)}"${S.abiertos.has(`nunca-${cat}`) ? " open" : ""}>
+        <summary class="nunca__cab"><span class="hoy__dia">${nunca.length === 1 ? "1 nunca vino" : `${nunca.length} nunca vinieron`}: ¿siguen?</span><span class="nunca__abrir">Revisar</span></summary>
+        <p class="asis-nota">Muchas veces son fichados de la UAR que ya no juegan. Hasta que se conteste, no cuentan en el porcentaje.</p>
         <ul class="asis-chicos asis-chicos--nunca">${nunca.map((c) => `<li><span class="asis-chicos__nom">${nombreHTML(c.nombre)}<small>Vino 0 de ${c.de}</small></span>
-          <span class="nunca__btns"><button type="button" class="btn-sec btn-sec--chico" data-sacar="${esc(c.id)}" data-nombre="${esc(c.nombre)}">Ya no viene</button>
-          <button type="button" class="btn-sec btn-sec--chico" data-sigue="${esc(c.id)}" data-nombre="${esc(c.nombre)}">Sigue</button></span></li>`).join("")}</ul></div>`;
+          <span class="nunca__btns"><button type="button" class="btn-sec btn-sec--chico" data-sacar="${esc(c.id)}" data-nombre="${esc(c.nombre)}" aria-label="${esc(c.nombre)}: ya no viene">Ya no viene</button>
+          <button type="button" class="btn-sec btn-sec--chico" data-sigue="${esc(c.id)}" data-nombre="${esc(c.nombre)}" aria-label="${esc(c.nombre)}: sigue en el equipo">Sigue</button></span></li>`).join("")}</ul></details>`;
     const resumen = !nListas ? ""
       : !conColor ? `<p class="titular">${nListas === 1 ? "Primera lista" : "Última lista"}: vinieron <b>${vinieron(ult, alUltimo)} de ${alUltimo.length}</b></p>`
       : `<p class="titular">Viene el <b>${promedioCat(cat, d).p}%</b> de las veces</p>
           <p class="asis-nota">En ${pl(nListas, "entrenamiento", "entrenamientos")} con lista este año</p>
           ${tarjNunca}
-          <h3 class="grupo">Los que menos vienen</h3>
-          <ul class="asis-chicos">${pc.filter((c) => c.de && !sinNunca.has(c.id)).sort((a, b) => a.pct - b.pct || porNombre(a, b)).slice(0, 5).map((c) =>
-            `<li><span class="asis-chicos__nom">${nombreHTML(c.nombre)}<small>Vino ${c.vino} de ${c.de}</small></span>${porcHTML(c.pct, true)}</li>`).join("")}</ul>`;
+          ${menos.length ? `<h3 class="grupo">Los que menos vienen</h3>
+          <ul class="asis-chicos">${menos.map((c) => `<li><span class="asis-chicos__nom">${linkChico(c.id, c.nombre, cat)}<small>Vino ${c.vino} de ${c.de}</small></span>${porcHTML(c.pct, true)}</li>`).join("")}</ul>` : ""}`;
     const proximos = ses.filter((s) => s.fecha >= hoy), pasados = ses.filter((s) => s.fecha < hoy).reverse();
     const filaSes = (s) => `<li><button type="button" class="fila-cat fila-cat--ses${s.fecha === hoy ? " fila-cat--hoy" : ""}${s.estado === "cancelado" ? " fila-cat--canc" : ""}" data-ir-lista="${s.fecha}">
         <span class="fila-cat__nom">${s.fecha === hoy ? "Hoy" : esc(mayus(corta(s.fecha)))}<small>${s.hora ? esc(s.hora) : "Sin hora"}${s.estado === "extra" ? " · agregado" : s.estado === "movido" ? " · cambió la hora" : ""}</small></span>
         <span class="ses-estado${s.estado !== "cancelado" && sinGuardar(cat, s) ? " ses-estado--ojo" : ""}">${estadoTxt(s, activos, cat)}</span>${IC.adelante}</button></li>`;
     $("#vista").innerHTML = `${cab}
       <section class="sec sec--pegada asis-v">
+        ${avisoDelCel(cat)}
         ${actual ? tarjetaHoy(cat, actual, activos) : ""}
         ${!d.horarios.length ? `<div class="hoy"><h3 class="hoy__dia">¿Qué días entrena ${esc(cat)}?</h3>${formDias(d)}
             ${actual ? "" : `<button type="button" class="btn-sec btn-sec--ancho" data-ir-lista="${hoy}">O tomar lista hoy igual</button>`}</div>` : ""}
@@ -3139,11 +3180,11 @@
     // los que se acaban de sacar quedan en su lugar, con "Deshacer"
     const filas = [...activos, ...fuera.filter((c) => S.recien.has(c.id))].sort(porNombre);
     const fila = (c) => S.recien.has(c.id) && !pc.has(c.id)
-      ? `<li class="asis-chicos__fuera" data-q="${esc(norm(c.nombre))}"><span class="asis-chicos__nom">${nombreHTML(c.nombre)}<small>Ya no está en la lista</small></span>
+      ? `<li class="asis-chicos__fuera" data-q="${esc(qNom(c.nombre))}"><span class="asis-chicos__nom">${nombreHTML(c.nombre)}<small>Ya no está en la lista</small></span>
           <button type="button" class="btn-sec btn-sec--chico" data-volver-chico="${esc(c.id)}">Deshacer</button></li>`
-      : `<li data-q="${esc(norm(c.nombre))}"><span class="asis-chicos__nom">${linkChico(c.id, c.nombre, S.acat)}<small>${c.mano ? "Sumado a mano · " : ""}${pc.get(c.id).de ? `Vino ${pc.get(c.id).vino} de ${pc.get(c.id).de}` : "Todavía sin listas"}</small></span>
+      : `<li data-q="${esc(qNom(c.nombre))}"><span class="asis-chicos__nom">${linkChico(c.id, c.nombre, S.acat)}<small>${c.mano ? "Sumado a mano · " : ""}${pc.get(c.id).de ? `Vino ${pc.get(c.id).vino} de ${pc.get(c.id).de}` : "Todavía sin listas"}</small></span>
           ${conColor && pc.get(c.id).de ? porcHTML(pc.get(c.id).pct, true) : ""}
-          <button type="button" class="btn-sec btn-sec--chico" data-sacar="${esc(c.id)}" data-nombre="${esc(c.nombre)}">Ya no viene</button></li>`;
+          <button type="button" class="btn-sec btn-sec--chico" data-sacar="${esc(c.id)}" data-nombre="${esc(c.nombre)}" aria-label="${esc(c.nombre)}: ya no viene">Ya no viene</button></li>`;
     const otrosFuera = fuera.filter((c) => !S.recien.has(c.id));
     $("#vista").innerHTML = `${cab}
       <section class="sec sec--pegada asis-v">
@@ -3154,7 +3195,7 @@
         <h3 class="grupo">En la lista (${activos.length})</h3>
         <ul class="asis-chicos asis-chicos--editar" data-filtro>${filas.map(fila).join("")}</ul>
         ${otrosFuera.length ? `<h3 class="grupo">Ya no vienen (${otrosFuera.length})</h3>
-          <ul class="asis-chicos asis-chicos--editar" data-filtro>${otrosFuera.map((c) => `<li data-q="${esc(norm(c.nombre))}"><span class="asis-chicos__nom">${nombreHTML(c.nombre)}</span>
+          <ul class="asis-chicos asis-chicos--editar" data-filtro>${otrosFuera.map((c) => `<li data-q="${esc(qNom(c.nombre))}"><span class="asis-chicos__nom">${nombreHTML(c.nombre)}</span>
             <button type="button" class="btn-sec btn-sec--chico" data-volver-chico="${esc(c.id)}">Volver a sumar</button></li>`).join("")}</ul>` : ""}
         ${sinChicos}
       </section>
@@ -3166,13 +3207,13 @@
     const cat = S.acat, f = S.afecha, d = ASIS.cats[cat];
     const titLista = f > hoyISO() || (ASIS.cats[cat] && (sesiones(ASIS.cats[cat], f, f)[0] || {}).estado === "cancelado") ? "Entrenamiento" : "Lista";
     const cab = (hora) => `<div class="cab">${volver(esc(cat), VOLVER_ASIS)}
-      <h2 class="ej-tit">${titLista} de ${esc(cat)}</h2><p class="prac-cuando">${IC.calendario}<span>${esc(mayus(cuandoP({ fecha: f })))}${hora ? ` · ${esc(hora)}` : ""}</span></p></div>`;
+      <h2 class="ej-tit">${titLista} de ${esc(cat)}${S.ajunta && compa(cat) && f <= hoyISO() ? ` y ${esc(compa(cat))}` : ""}</h2><p class="prac-cuando">${IC.calendario}<span>${esc(mayus(cuandoP({ fecha: f })))}${hora ? ` · ${esc(hora)}` : ""}</span></p></div>`;
     if (!d) {
       if (!ASIS.error[cat]) cargarAsis(cat);
       $("#vista").innerHTML = `${cab()}<section class="sec sec--pegada asis-v">${cargandoHTML(cat)}</section>`;
       return;
     }
-    enCel.set(ULTIMA, cat);
+    if (!S.marcas && Date.now() - (ASIS.ts[cat] || 0) > 60000) cargarAsis(cat);
     const s = sesiones(d, f, f)[0] || { fecha: f, hora: "", estado: "nuevo", lista: null };
     const activos = chicosEn(chicosDe(cat, d).activos, f), total = activos.length, futuro = f > hoyISO(), canc = s.estado === "cancelado";
     if (!S.marcas) {
@@ -3183,21 +3224,24 @@
       S.base2 = b && b.base2 ? b.base2 : null;
       S.amodo = "vino";
       S.ajunta = !!compa(cat) && enCel.get(`los50-junta:${cat}`) === "1";
+      S.csTexto = enCel.get(`los50-cs:${cat}|${f}`) || "";
     }
     S.guardados = s.lista ? s.lista.presentes : [];
     // con la otra categoría que entrena junta: sus chicos en la misma lista (al guardar, cada una por su lado)
     const otra = compa(cat), junta = !!otra && S.ajunta && !futuro && !canc, d2 = junta ? ASIS.cats[otra] : null;
     if (junta && !d2 && !ASIS.error[otra]) cargarAsis(otra);
-    let activos2 = [];
+    let activos2 = [], info2 = "";
     if (d2) {
       const s2 = sesiones(d2, f, f)[0], g2 = s2 && s2.lista ? s2.lista.presentes : [];
-      if (S.base2 == null) { const b2 = borrador(otra, f); (b2 ? b2.marcas : g2).forEach((x) => S.marcas.add(x)); S.base2 = b2 ? b2.base : g2; guardarBorrador(cat, f, borrLista()); }
+      if (S.base2 == null) { const b2 = borrador(otra, f); (b2 ? b2.marcas : g2).forEach((x) => S.marcas.add(x)); S.base2 = b2 ? b2.base : g2; }
+      if (s2 && s2.lista) info2 = `<p class="lista-info">${IC.tilde}<span>${esc(otra)}: vinieron ${vinieron(s2.lista, chicosEn(chicosDe(otra, d2).activos, f))} de ${chicosEn(chicosDe(otra, d2).activos, f).length} · ${tomoTxt(s2.lista)}</span></p>`;
       S.guardados = [...S.guardados, ...g2];
       const ya = new Set(activos.map((c) => c.id));
       activos2 = chicosEn(chicosDe(otra, d2).activos, f).filter((c) => !ya.has(c.id));
     }
     const n = [...activos, ...activos2].filter((c) => S.marcas.has(c.id)).length;
-    const dej = [...dejaronDe(cat, d), ...(d2 ? dejaronDe(otra, d2) : [])];
+    // los que dejaron de venir: solo en la lista de hoy (es cuando sirve preguntar por ellos)
+    const dej = f === hoyISO() ? [...dejaronDe(cat, d), ...(d2 ? dejaronDe(otra, d2) : [])] : [];
     const acciones = s.estado === "nuevo" ? "" : S.aform === `suspender:${f}` ? (s.estado === "extra" ? formBorrarExtra(s) : formSuspender(s, activos))
       : S.aform === `hora:${f}` ? formHora(s)
       : `<div class="acc-2">${botonQuitar(s, "Borrar este entrenamiento")}
@@ -3212,29 +3256,36 @@
       const borrarForm = S.aform === "borrar-lista" ? `<div class="asis-form"><span class="asis-form__l">¿Borrar la lista de este día? Se pierden los ${s.lista ? vinieron(s.lista, activos) : 0} que vinieron.</span>
           <div class="asis-form__btns"><button type="button" class="btn btn--peligro btn--alto" data-borrar-lista-ok>Borrar la lista</button>${cerrarBtn}</div></div>` : "";
       const item = (c) => { const les = S.marcas.has(LES(c.id));
-        return `<li data-q="${esc(norm(c.nombre))}"><button type="button" class="lista-it${les ? " lista-it--les" : ""}" data-marca="${esc(c.id)}" aria-pressed="${S.marcas.has(c.id)}">
+        return `<li data-q="${esc(qNom(c.nombre))}"><button type="button" class="lista-it${les ? " lista-it--les" : ""}" data-marca="${esc(c.id)}" aria-pressed="${S.marcas.has(c.id)}">
           <span class="lista-it__ic">${les ? IC.alerta : IC.tilde}</span><span class="lista-it__nom">${nombreHTML(c.nombre)}${les ? `<small class="lista-it__les">Lesionado</small>` : ""}</span></button></li>`; };
-      const todos = total + activos2.length, les = S.amodo === "les";
+      const todos = total + activos2.length, les = S.amodo === "les", nTodos = n === todos && todos > 0;
       cuerpo = `
-        ${s.lista ? `<p class="lista-info">${IC.tilde}<span>Vinieron ${vinieron(s.lista, activos)} de ${total} · ${tomoTxt(s.lista)}</span></p>` : ""}
-        ${dej.length ? `<p class="lista-info lista-info--ojo">${IC.alerta}<span>Faltaron a los últimos 3: ${dej.map((c) => `<b>${esc(c.nombre.split(",")[0])}</b>`).join(", ")}. Llamalos.</span></p>` : ""}
-        ${otra ? `<button type="button" class="btn-sec btn-sec--ancho lista-junta" data-junta aria-pressed="${junta}">${junta ? `Tomando ${esc(cat)} y ${esc(otra)} juntas · Separar` : `¿Entrenan con ${esc(otra)}? Tomar las dos listas juntas`}</button>` : ""}
+        ${avisoDelCel(cat)}
+        ${s.lista ? `<p class="lista-info">${IC.tilde}<span>${junta ? `${esc(cat)}: v` : "V"}inieron ${vinieron(s.lista, activos)} de ${total} · ${tomoTxt(s.lista)}</span></p>` : ""}${info2}
+        ${dej.length ? `<p class="lista-info lista-info--ojo">${IC.alerta}<span>Faltaron a los últimos 3: ${dej.map((c) => nombreHTML(c.nombre)).join("; ")}. ${dej.length === 1 ? "Llamalo" : "Llamalos"}.</span></p>` : ""}
+        ${otra ? `<p class="lista-con">${junta ? `Entrenan juntas con ${esc(otra)}` : `¿Entrena con ${esc(otra)}?`}<button type="button" class="link lista-con__b" data-junta aria-pressed="${junta}">${junta ? "Separar" : "Tomar las dos juntas"}</button></p>` : ""}
+        <div class="lista-cab"><span>${les ? "Tocá al que está lesionado: vino pero no entrena" : nTodos ? "Tocá a los que faltaron" : s.lista ? "Tocá a los que llegaron tarde" : "Tocá a los que vinieron"}</span>
+          <button type="button" class="btn-sec btn-sec--chico" data-todos${(n && !nTodos) || les ? " hidden" : ""}>${nTodos ? "Desmarcar a todos" : "Marcar a todos"}</button></div>
         <div class="chips-g lista-modo" role="group" aria-label="Qué marcás"><button type="button" data-amodo="vino" aria-pressed="${!les}">Vino</button><button type="button" data-amodo="les" aria-pressed="${les}">Lesionado</button></div>
-        <div class="lista-cab"><span>${les ? "Tocá a los lesionados: vienen pero no entrenan" : s.lista ? "Tocá a los que llegaron tarde" : "Tocá a los que vinieron"}</span><button type="button" class="btn-sec btn-sec--chico" data-todos${n || les ? " hidden" : ""}>Marcar a todos</button></div>
         ${todos > 30 ? `<label class="buscar-g asis-buscar"><span class="sr">Buscar un chico</span>${IC.buscar}<input type="search" id="buscar-chico" placeholder="Buscar por apellido" autocomplete="off" enterkeyhint="search"></label>` : ""}
         ${junta && !d2 ? `<p class="cargando">Cargando a los de ${esc(otra)}…</p>` : ""}
         ${activos2.length ? `<h3 class="grupo">${esc(cat)}</h3>` : ""}<ul class="lista-g" data-filtro>${activos.map(item).join("")}</ul>
         ${activos2.length ? `<h3 class="grupo">${esc(otra)}</h3><ul class="lista-g" data-filtro>${activos2.map(item).join("")}</ul>` : ""}
         ${sinChicos}
         <div class="lista-mas"><h3 class="grupo">¿Cómo salió?</h3>${comoSalioHTML(cat, f)}</div>
-        <div class="lista-mas"><h3 class="grupo">Este entrenamiento</h3>${acciones}
+        <div class="lista-mas"><h3 class="grupo">Este entrenamiento${junta ? ` de ${esc(cat)}` : ""}</h3>${acciones}
           ${s.lista && S.aform !== "borrar-lista" ? `<button type="button" class="btn-sec btn-sec--ancho" data-form="borrar-lista">Borrar la lista de este día</button>` : ""}${borrarForm}</div>
-        <div class="lista-pie" id="pie-lista" role="status">${pieHTML(n, todos)}</div>`;
+        <div class="lista-pie" id="pie-lista">${pieHTML(n, todos)}</div>`;
     }
     $("#vista").innerHTML = `${cab(s.hora)}<section class="sec sec--pegada asis-v">${cuerpo}</section>${avisoHTML()}`;
+    altoPie();
   }
+  /** el aviso de abajo va arriba de la barra (que es más alta en los celulares chicos) */
+  const altoPie = () => { const p = $("#pie-lista"); if (p) document.documentElement.style.setProperty("--pie-alto", `${Math.round(p.offsetHeight)}px`); };
   /** la barra fija de abajo: cuántos vinieron y guardar; mientras guarda, si falla o si hay que volver a poner la clave */
   function pieHTML(n, total) {
+    if (S.estadoLista === "vacia") return `<span class="lista-pie__error">¿No vino nadie? Se guarda así, con 0.</span>
+      <span class="lista-pie__btns"><button type="button" class="btn-sec" data-seguir-lista>Seguir marcando</button><button type="button" class="btn btn--peligro" data-guardar-vacia>Guardar igual</button></span>`;
     if (S.estadoLista === "guardando") return `<span><b class="num">${n}</b> de ${total} vinieron</span>
       <button type="button" class="btn btn--ok btn--grande" disabled><span class="girando" aria-hidden="true"></span>Guardando…</button>`;
     if (S.estadoLista === "error" || S.estadoLista === "servidor") return `<span class="lista-pie__error">No se guardó${S.estadoLista === "error" ? ": no hay señal" : ""}. Lo marcado queda en el celular.</span>
@@ -3242,7 +3293,7 @@
     if (S.estadoLista === "clave") return `<span class="lista-pie__error">Hay que volver a poner la clave. Lo marcado queda en el celular.</span>
       <button type="button" class="btn btn--peligro btn--grande" data-reclave>Poner la clave</button>`;
     const cambios = !mismos([...(S.marcas || [])], S.guardados || []), nl = [...(S.marcas || [])].filter((x) => x.startsWith("les-")).length;
-    return `<span><b class="num" id="cont">${n}</b> de ${total} vinieron${nl ? ` · ${nl} ${nl === 1 ? "lesionado" : "lesionados"}` : ""}<small class="lista-pie__ojo" id="sin-guardar"${cambios ? "" : " hidden"}>Sin guardar</small></span>
+    return `<span><span role="status"><b class="num" id="cont">${n}</b> de ${total} vinieron${nl ? ` · ${nl} ${nl === 1 ? "lesionado" : "lesionados"}` : ""}</span>${S.amodo === "les" ? `<small class="lista-pie__ojo">Marcando lesionados</small>` : ""}<small class="lista-pie__ojo" id="sin-guardar"${cambios ? "" : " hidden"}>Sin guardar</small></span>
       <button type="button" class="btn btn--ok btn--grande" data-guardar-lista>${IC.tilde}Guardar la lista</button>`;
   }
   function pintarPie() {
@@ -3250,11 +3301,17 @@
     if (!pie) return;
     pie.classList.toggle("lista-pie--error", ["error", "servidor", "clave"].includes(S.estadoLista));
     pie.innerHTML = pieHTML(document.querySelectorAll(".lista-it[aria-pressed='true']").length, document.querySelectorAll(".lista-it").length);
+    altoPie();
   }
   /** guarda la lista: manda solo lo que cambió (así si otro entrenador también tomó lista, se juntan) y, si no hay señal, no se pierde nada */
-  async function guardarLista() {
-    const cat = S.acat, f = S.afecha, otra = S.ajunta && compa(cat) && ASIS.cats[compa(cat)] ? compa(cat) : null;
+  async function guardarLista(vacia) {
+    const cat = S.acat, f = S.afecha;
     const b = borrador(cat, f) || borrLista();
+    // la otra categoría (si se tomaron juntas) se guarda solo si se marcó a alguno de ellos o ya tenía lista ese día
+    const otra = S.ajunta && compa(cat) && ASIS.cats[compa(cat)] && (soloDe(compa(cat), b.marcas).length || (b.base2 || []).length) ? compa(cat) : null;
+    // una lista nueva sin nadie marcado cuenta como que no vino ninguno: se pregunta antes
+    const s0 = sesiones(ASIS.cats[cat], f, f)[0];
+    if (!vacia && !soloDe(cat, b.marcas).length && !(s0 && s0.lista) && !otra) { S.estadoLista = "vacia"; pintarPie(); return; }
     S.estadoLista = "guardando"; pintarPie();
     try {
       // cada categoría guarda solo a sus chicos (si se tomaron juntas, la otra con su propia base)
@@ -3262,11 +3319,12 @@
       if (otra) await api({ cat: otra, accion: "lista", fecha: f, presentes: soloDe(otra, b.marcas), base: soloDe(otra, b.base2 || []) });
       guardarBorrador(cat, f, null);
       if (otra) guardarBorrador(otra, f, null);
-      ASIS.cats[cat] = await api(null, cat);
-      if (otra) ASIS.cats[otra] = await api(null, otra);
+      ponerAsis(cat, await api(null, cat));
+      if (otra) ponerAsis(otra, await api(null, otra));
       ASIS.resumen = null;
       S.estadoLista = null;
-      const cuenta = (c) => { const { activos } = chicosDe(c, ASIS.cats[c]), l = ASIS.cats[c].listas.find((x) => x.fecha === f); return `${otra ? `${c}: ` : ""}vinieron ${l ? vinieron(l, activos) : 0} de ${activos.length}`; };
+      const cuenta = (c) => { const ese = chicosEn(chicosDe(c, ASIS.cats[c]).activos, f), l = ASIS.cats[c].listas.find((x) => x.fecha === f); return `${otra ? `${c}: ` : ""}vinieron ${l ? vinieron(l, ese) : 0} de ${ese.length}`; };
+      enCel.set(ULTIMA, cat);
       avisar("ok", `${otra ? "Listas guardadas" : "Lista guardada"}: ${[cat, otra].filter(Boolean).map(cuenta).join(" · ")}`);
       volverAtras({ ver: "asis", afecha: null, aform: null, marcas: null });
     } catch (e) {
@@ -3275,7 +3333,12 @@
     }
   }
   // si se cortó la señal mientras guardaba, apenas vuelve lo intenta solo
-  addEventListener("online", () => { if (S && S.ver === "lista" && S.estadoLista === "error") guardarLista(); });
+  setInterval(() => { if (S && S.ver === "lista" && S.estadoLista === "error" && navigator.onLine !== false) guardarLista(); }, 20000);
+  addEventListener("online", () => {
+    if (!S) return;
+    Object.keys(ASIS.delCel).forEach((c) => cargarAsis(c));
+    if (S.ver === "lista" && S.estadoLista === "error") guardarLista();
+  });
 
   /** la práctica en texto, para WhatsApp */
   function textoPractica(p) {
@@ -3302,7 +3365,7 @@
   // ---------- eventos ----------
   document.addEventListener("click", (e) => {
     if (!S) return;
-    const t = e.target.closest("[data-atras],[data-subir],[data-alcat],[data-ncat],[data-nota-ok],[data-borrar-nota-ok],[data-reintentar-notas],[data-armar],[data-armar-id],[data-ar-elegir],[data-artipo],[data-ar-ej],[data-ar-libre-ok],[data-ar-mover],[data-ar-sacar],[data-ar-guardar],[data-ar-borrar],[data-cs-ok],[data-ir-chico],[data-eq-imagen],[data-eq-contar],[data-cacc],[data-cuenta],[data-cdeshacer],[data-cres],[data-cres-compartir],[data-cguardar],[data-reintentar-cnt],[data-ir-doc],[data-dmarca],[data-docs-guardar],[data-reintentar-docs],[data-tomar],[data-tver],[data-tdia],[data-toma-guardar],[data-reintentar-tests],[data-ir-equipo],[data-eq-n],[data-eq-id],[data-eq-vaciar],[data-eq-mas],[data-eq-guardar],[data-eq-borrar],[data-eq-descartar],[data-eq-compartir],[data-reintentar-eq],[data-amistoso-ok],[data-edad],[data-area],[data-area-cat],[data-play],[data-reclave],[data-ayuda],[data-cerrar-ayuda],[data-ir],[data-ir-cat],[data-ir-guia],[data-ir-ej],[data-ir-ej-para],[data-ir-ej-tab],[data-ir-line],[data-ir-puesto],[data-ir-practica],[data-ir-practicas],[data-pgrupo],[data-ir-asis],[data-ir-hoy],[data-ir-lista],[data-ir-chicos],[data-form],[data-reintentar],[data-motivo],[data-dia],[data-marca],[data-amodo],[data-junta],[data-todos],[data-cancelar-ok],[data-deshacer],[data-hora-ok],[data-agregar-ok],[data-horarios-ok],[data-guardar-lista],[data-borrar-lista-ok],[data-sacar],[data-sigue],[data-volver-chico],[data-sumar-chico],[data-compartir-pr],[data-rol],[data-quitar-para],[data-tab],[data-anio],[data-ver],[data-ordj]");
+    const t = e.target.closest("[data-atras],[data-subir],[data-alcat],[data-ncat],[data-nota-ok],[data-borrar-nota-ok],[data-reintentar-notas],[data-armar],[data-armar-id],[data-ar-elegir],[data-artipo],[data-ar-ej],[data-ar-libre-ok],[data-ar-mover],[data-ar-sacar],[data-ar-guardar],[data-ar-borrar],[data-cs-ok],[data-ir-chico],[data-eq-imagen],[data-eq-contar],[data-cacc],[data-cuenta],[data-cdeshacer],[data-cres],[data-cres-compartir],[data-cguardar],[data-reintentar-cnt],[data-ir-doc],[data-dmarca],[data-docs-guardar],[data-reintentar-docs],[data-tomar],[data-tver],[data-tdia],[data-toma-guardar],[data-reintentar-tests],[data-ir-equipo],[data-eq-n],[data-eq-id],[data-eq-vaciar],[data-eq-mas],[data-eq-guardar],[data-eq-borrar],[data-eq-descartar],[data-eq-compartir],[data-reintentar-eq],[data-amistoso-ok],[data-edad],[data-area],[data-area-cat],[data-play],[data-reclave],[data-ayuda],[data-cerrar-ayuda],[data-ir],[data-ir-cat],[data-ir-guia],[data-ir-ej],[data-ir-ej-para],[data-ir-ej-tab],[data-ir-line],[data-ir-puesto],[data-ir-practica],[data-ir-practicas],[data-pgrupo],[data-ir-asis],[data-ir-hoy],[data-ir-lista],[data-ir-chicos],[data-form],[data-reintentar],[data-motivo],[data-dia],[data-marca],[data-amodo],[data-junta],[data-todos],[data-guardar-vacia],[data-seguir-lista],[data-cerrar-aviso],[data-cancelar-ok],[data-deshacer],[data-hora-ok],[data-agregar-ok],[data-horarios-ok],[data-guardar-lista],[data-borrar-lista-ok],[data-sacar],[data-sigue],[data-volver-chico],[data-sumar-chico],[data-compartir-pr],[data-rol],[data-quitar-para],[data-tab],[data-anio],[data-ver],[data-ordj]");
     if (!t || t.disabled) return;
     if (t.tagName === "A") e.preventDefault(); // el escudo de arriba: va al inicio sin recargar
     const ds = t.dataset, ir = "lado" in ds ? irSinPaso : irA; // Anterior / Siguiente no suman pasos
@@ -3343,6 +3406,7 @@
       if (texto.length < 3) { avisoSuelto("Escribí cómo salió."); $("#cs-texto").focus(); return; }
       if (por.length < 2) { avisoSuelto("Escribí tu nombre."); $("#cs-por").focus(); return; }
       enCel.set(claveNombreNota, por);
+      S.csTexto = ""; enCel.set(`los50-cs:${S.acat}|${S.afecha}`, null);
       guardarNota({ accion: "nota", cat: S.acat, texto, por, fecha: S.afecha }, "Guardado: se ve en Planificación");
     }
     else if ("eqImagen" in ds) compartirEquipo();
@@ -3461,7 +3525,14 @@
     else if (ds.irHoy) { const [acat, afecha] = ds.irHoy.split("|"); irA({ ver: "lista", acat, afecha, aform: null, marcas: null, aviso: null, estadoLista: null }); }
     else if (ds.irLista) irA({ ver: "lista", afecha: ds.irLista, aform: null, marcas: null, aviso: null, estadoLista: null });
     else if ("irChicos" in ds) irA({ ver: "chicos", aform: null, aviso: null, recien: new Set() });
-    else if ("form" in ds) { if (!ds.form && S.aform === "nota" && $("#nota-texto")) $("#nota-texto").value = ""; S.aform = S.aform === ds.form || !ds.form ? null : ds.form; S.aviso = null; S.amotivo = null; render(); }
+    else if ("form" in ds) {
+      if (!ds.form && S.aform === "nota" && $("#nota-texto")) $("#nota-texto").value = "";
+      const abre = !(S.aform === ds.form || !ds.form);
+      S.aform = abre ? ds.form : null; S.aviso = null; S.amotivo = null;
+      render();
+      const fm = abre && $(".asis-form");
+      if (fm) { fm.scrollIntoView({ block: "nearest" }); const c = fm.querySelector("input:not([type=hidden]), select, textarea, button"); if (c) c.focus({ preventScroll: true }); }
+    }
     else if (ds.reintentar) { delete ASIS.error[ds.reintentar]; render(); }
     else if (ds.motivo) {
       // un solo motivo elegido; "Otro motivo" abre el campo para escribirlo
@@ -3480,38 +3551,63 @@
         if (on && !("guardada" in fila.dataset) && antes) fila.querySelector("select").value = antes.querySelector("select").value;
       }
     }
-    else if (ds.amodo) { S.amodo = ds.amodo; render(); }
+    else if (ds.amodo) { S.amodo = ds.amodo; render(); const b = $(`[data-amodo="${ds.amodo}"]`); if (b) b.focus({ preventScroll: true }); }
     else if ("junta" in ds) {
       // juntar o separar las dos categorías; al separar, lo marcado de la otra no se guarda con esta
       S.ajunta = !S.ajunta;
       enCel.set(`los50-junta:${S.acat}`, S.ajunta ? "1" : null);
-      if (!S.ajunta) S.marcas = new Set(soloDe(S.acat, [...S.marcas]));
+      if (!S.ajunta) {
+        // lo marcado de la otra categoría no se pierde: queda como su lista sin guardar
+        const otra = compa(S.acat), deOtra = soloDe(otra, [...S.marcas]);
+        if (deOtra.length && !mismos(deOtra, soloDe(otra, S.base2 || []))) guardarBorrador(otra, S.afecha, { marcas: deOtra, base: soloDe(otra, S.base2 || []) });
+        S.marcas = new Set(soloDe(S.acat, [...S.marcas]));
+      }
       S.base2 = null;
       guardarBorrador(S.acat, S.afecha, borrLista());
       render();
+      const bj = $("[data-junta]");
+      if (bj) bj.focus({ preventScroll: true });
     }
     else if (ds.marca) {
       // tomar lista sin volver a dibujar la pantalla (no salta el scroll); lo marcado queda guardado en el celular
-      const id = ds.marca, x = S.amodo === "les" ? LES(id) : id, y = S.amodo === "les" ? id : LES(id);
+      if (S.estadoLista === "guardando") return; // mientras guarda no se cambia nada (si no, se perdería)
+      enCel.set(ULTIMA, S.acat); // la última categoría en la que se tomó lista: la del inicio
+      const id = ds.marca, les = S.amodo === "les", x = les ? LES(id) : id, y = les ? id : LES(id);
       if (S.marcas.has(x)) S.marcas.delete(x); else { S.marcas.add(x); S.marcas.delete(y); }
       document.querySelectorAll(`[data-marca="${CSS.escape(id)}"]`).forEach((b) => pintarItem(b, id));
       guardarBorrador(S.acat, S.afecha, borrLista());
-      const todos = $("[data-todos]");
-      if (todos) todos.hidden = S.amodo === "les" || !!document.querySelector(".lista-it[aria-pressed='true']");
+      if (S.estadoLista === "vacia") S.estadoLista = null;
+      // "Lesionado" es de a uno: después de marcarlo, se vuelve a marcar a los que vinieron
+      if (les) { S.amodo = "vino"; document.querySelectorAll("[data-amodo]").forEach((b) => b.setAttribute("aria-pressed", b.dataset.amodo === "vino")); avisoSuelto("Marcado como lesionado. Seguís marcando a los que vinieron", "ok"); }
+      const nt = document.querySelectorAll(".lista-it").length, nm = document.querySelectorAll(".lista-it[aria-pressed='true']").length, todos = $("[data-todos]");
+      if (todos) { todos.hidden = !!nm && nm < nt; todos.textContent = nm === nt && nt ? "Desmarcar a todos" : "Marcar a todos"; }
+      const cabTxt = $(".lista-cab > span");
+      if (cabTxt) cabTxt.textContent = nm === nt && nt ? "Tocá a los que faltaron" : S.guardados && S.guardados.length ? "Tocá a los que llegaron tarde" : "Tocá a los que vinieron";
       pintarPie();
+      // buscando: si se encontró a uno solo y se marcó, el buscador queda listo para el próximo
+      const bq = $("#buscar-chico");
+      if (bq && bq.value.trim() && document.querySelectorAll("[data-filtro] li[data-q]:not([hidden])").length === 1) {
+        bq.value = ""; bq.dispatchEvent(new Event("input", { bubbles: true })); bq.focus();
+      }
     } else if ("todos" in ds) {
-      // todos los de la lista, menos los lesionados (que quedan como estaban)
-      [...document.querySelectorAll(".lista-it")].map((x) => x.dataset.marca).filter((id) => !S.marcas.has(LES(id))).forEach((id) => S.marcas.add(id));
+      // todos los de la lista, menos los lesionados (que quedan como estaban); si ya estaban todos, "Desmarcar a todos"
+      const ids = [...document.querySelectorAll("[data-filtro] li:not([hidden]) .lista-it")].map((x) => x.dataset.marca).filter((id) => !S.marcas.has(LES(id)));
+      if (ids.every((id) => S.marcas.has(id))) ids.forEach((id) => S.marcas.delete(id)); else ids.forEach((id) => S.marcas.add(id));
+      if (S.estadoLista === "vacia") S.estadoLista = null;
       guardarBorrador(S.acat, S.afecha, borrLista());
       render();
     } else if (ds.cancelarOk) {
       const elegido = $("[data-motivo][aria-pressed='true']");
       const motivo = !elegido ? "" : elegido.dataset.motivo === "Otro" ? $("#motivo").value.trim() : elegido.dataset.motivo;
       S.amotivo = elegido ? { m: elegido.dataset.motivo, txt: $("#motivo").value } : null;
-      guardarAsis({ accion: "entrenamiento", fecha: ds.cancelarOk, estado: "cancelado", motivo }, "Entrenamiento suspendido");
+      const s0 = sesiones(ASIS.cats[S.acat], ds.cancelarOk, ds.cancelarOk)[0];
+      guardarAsis({ accion: "entrenamiento", fecha: ds.cancelarOk, estado: "cancelado", motivo, hora: s0 && s0.estado === "movido" ? s0.hora : null }, "Entrenamiento suspendido");
     } else if (ds.deshacer) {
-      const fecha = ds.deshacer, s = sesiones(ASIS.cats[S.acat], fecha, fecha)[0], extra = s && s.estado === "extra";
-      guardarAsis({ accion: "entrenamiento", fecha, estado: "normal" }, extra ? "Entrenamiento borrado" : "Listo: vuelve a haber entrenamiento",
+      const fecha = ds.deshacer, d0 = ASIS.cats[S.acat], s = sesiones(d0, fecha, fecha)[0], extra = s && s.estado === "extra";
+      // si antes de suspenderlo se le había cambiado la hora, vuelve con esa hora
+      const fila = d0.entrenamientos.find((x) => x.fecha === fecha), deSiempre = d0.horarios.find((h) => h.dia === dia(fecha).getDay());
+      const movido = !extra && fila && fila.estado === "cancelado" && fila.hora && (!deSiempre || deSiempre.hora !== fila.hora);
+      guardarAsis(movido ? { accion: "entrenamiento", fecha, estado: "movido", hora: fila.hora } : { accion: "entrenamiento", fecha, estado: "normal" }, extra ? "Entrenamiento borrado" : "Listo: vuelve a haber entrenamiento",
         extra && S.ver === "lista" ? () => volverAtras(VOLVER_ASIS) : null);
     } else if (ds.horaOk) {
       const d = ASIS.cats[S.acat], hora = $("#hora-nueva").value, s = sesiones(d, ds.horaOk, ds.horaOk)[0];
@@ -3534,6 +3630,9 @@
       if (!dias.length && !ASIS.cats[S.acat].horarios.length) { avisoSuelto("Tocá al menos un día de entrenamiento."); return; }
       guardarAsis({ accion: "horarios", horarios: dias.map((dia) => ({ dia, hora: $(`#hora-dia-${dia}`).value })) }, dias.length ? "Días guardados" : "Se sacaron los días");
     } else if ("guardarLista" in ds) guardarLista();
+    else if ("guardarVacia" in ds) guardarLista(true);
+    else if ("seguirLista" in ds) { S.estadoLista = null; pintarPie(); }
+    else if ("cerrarAviso" in ds) { S.aviso = null; const v = $(".aviso"); if (v) v.remove(); }
     else if ("borrarListaOk" in ds) {
       guardarAsis({ accion: "borrar_lista", fecha: S.afecha }, "Lista borrada", () => {
         guardarBorrador(S.acat, S.afecha, null);
@@ -3617,6 +3716,7 @@
     if (e.target.id === "buscar-canto") { S.q = e.target.value; filtrarCantos(); }
     if (e.target.id === "buscar-ej") { S.qe = e.target.value; filtrarEj(); }
     if (e.target.id === "buscar-pr") { S.qp = e.target.value; filtrarPr(); }
+    if (e.target.id === "cs-texto") { S.csTexto = e.target.value; enCel.set(`los50-cs:${S.acat}|${S.afecha}`, e.target.value || null); }
     if (S.ver === "armar" && ["ar-foco", "ar-obj", "ar-por"].includes(e.target.id)) {
       const a = arActual();
       a[{ "ar-foco": "foco", "ar-obj": "objetivo", "ar-por": "por" }[e.target.id]] = e.target.value;
@@ -3632,7 +3732,7 @@
       $("#toma-sin").hidden = false;
     }
     if (e.target.id === "buscar-eq") {
-      const q = norm(e.target.value.trim());
+      const q = qNom(e.target.value);
       let total = 0;
       document.querySelectorAll("[data-filtro-eq]").forEach((ul) => {
         let vis = 0;
@@ -3642,13 +3742,14 @@
       $("#eq-nadie").hidden = total > 0;
       // de otras categorías, solo al buscar
       const x = eqCtx(), ids = new Set(x.pl.map((c) => c.id));
-      const otros = q.length < 2 ? [] : [...eqTodos().values()].filter((c) => !ids.has(c.id) && norm(c.nombre).includes(q)).sort(porNombre).slice(0, 20);
+      const otros = q.length < 2 ? [] : [...eqTodos().values()].filter((c) => !ids.has(c.id) && qNom(c.nombre).includes(q)).sort(porNombre).slice(0, 20);
       $("#eq-otros").innerHTML = otros.length ? `<h3 class="grupo">De otras categorías</h3><ul class="eq-l">${otros.map((c) => eqFila(c, c.cat, x)).join("")}</ul>` : "";
     }
     if (e.target.id === "buscar-chico") {
-      const q = norm(e.target.value.trim());
+      const q = qNom(e.target.value);
       let vis = 0;
       document.querySelectorAll("[data-filtro] li[data-q]").forEach((li) => { li.hidden = !!q && !li.dataset.q.includes(q); vis += !li.hidden; });
+      document.querySelectorAll("[data-filtro]").forEach((ul) => { const h = ul.previousElementSibling; if (h && h.classList.contains("grupo")) h.hidden = !ul.querySelector("li[data-q]:not([hidden])"); });
       const sin = $("#sin-chicos");
       if (sin) sin.hidden = !q || vis > 0;
     }
