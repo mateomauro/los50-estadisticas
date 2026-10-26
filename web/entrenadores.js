@@ -407,7 +407,7 @@
   const AYUDA = {
     categorias: () => ["Las categorías", ["Tocá una categoría para ver cómo le fue, sus jugadores y sus tries.",
       `Los números son de ${D.hasta}: los partidos oficiales que están cargados en la página de la UAR.`]],
-    equipo: () => ["El equipo del partido", ["Tocá cada número para elegir quién juega. Del 1 al 15 son los titulares; del 16 en adelante, los suplentes. Para cada suplente podés poner por quién entra y en qué minuto.",
+    equipo: () => ["El equipo del partido", ["Tocá cada camiseta para elegir quién juega. Los titulares están en la cancha: los forwards arriba (el scrum) y los backs abajo. Del 16 en adelante, los suplentes. Para cada suplente podés poner por quién entra y en qué minuto.",
       "Para cada puesto aparecen primero los que jugaron de ese número esta temporada (Primera, Intermedia y M19, de las planillas de la UAR) o lo tienen en su ficha de la UAR. Al lado, cuánto vienen a entrenar.",
       "Si un chico está sancionado o tiene tarjetas, se avisa en amarillo o en rojo.",
       "Lo que elegís queda en este celular hasta que tocás “Guardar”. Ahí lo ven los otros entrenadores. Con “Mandar por WhatsApp” se lo pasás al grupo."]],
@@ -842,6 +842,15 @@
         <span class="eq-it__n num">${num}</span><span class="eq-it__txt">${c ? `<span class="eq-it__nom">${nombreHTML(c.nombre)}</span>` : `<span class="eq-it__vacio">Elegir</span>`}${sub ? `<small>${sub}</small>` : ""}</span>${IC.adelante}</button>
         ${num > 15 && id ? eqCambioHTML(num, e, pl) : ""}</li>`;
     };
+    // los titulares en la cancha, como en Los puestos: forwards arriba y backs abajo; cada camiseta con el apellido
+    const jug = (num) => {
+      const id = e.jugadores[num], c = id && eqQuien(id, pl), a = c && al.get(claveNombre(c.nombre));
+      return `<button type="button" class="eq-jug${id ? "" : " eq-jug--vacio"}${a ? ` eq-jug--al${a.n}` : ""}" data-eq-n="${num}"
+        aria-label="${num}, ${esc(eqPuesto(num))}: ${c ? esc(c.nombre) : "sin elegir"}${a ? `. ${esc(a.t)}` : ""}"><span class="eq-jug__n num">${num}</span><span class="eq-jug__nom">${c ? esc(c.nombre.split(",")[0]) : "Elegir"}</span></button>`;
+    };
+    const filaC = (ns) => `<div class="eq-cancha__fila${ns.length === 4 ? " eq-cancha__fila--linea" : ""}">${ns.map(jug).join("")}</div>`;
+    const avisos = Array.from({ length: 15 }, (_, i) => i + 1).filter((num) => e.jugadores[num]).map((num) => [num, eqQuien(e.jugadores[num], pl)])
+      .map(([num, c]) => [num, c, al.get(claveNombre(c.nombre))]).filter(([, , a]) => a);
     const cab = `<div class="cab">${volver(AREAS.partidos, AREA_IR("partidos"))}${cabTit(`Equipo de ${esc(cat)}`, "equipo")}</div>
       <p class="titular eq-partido">${rival ? `vs <b>${esc(rival)}</b> · ` : ""}${esc(mayus(cuandoP({ fecha: f })))}${px && px.hora ? ` · ${esc(px.hora)}` : ""} · ${px ? condTxt(px.cond) : "Amistoso"}</p>`;
     if (EQ.error || !EQ.lista) {
@@ -855,7 +864,11 @@
     $("#vista").innerHTML = `${cab}
       ${g && !sin ? `<p class="asis-nota eq-guardado">${IC.tilde}Guardado${g.por ? ` por ${esc(g.por)}` : ""} el ${esc(diaMes(isoDe(new Date(g.ts))))} a las ${horaDe(g.ts)}</p>` : ""}
       <div class="dos">
-        <section class="sec sec--pegada">${tit("Titulares")}<ul class="eq-l">${Array.from({ length: 15 }, (_, i) => fila(i + 1)).join("")}</ul></section>
+        <section class="sec sec--pegada">${tit("Titulares")}
+          <div class="eq-cancha"><span class="eq-cancha__tit">Forwards</span>${FORMACION.slice(0, 3).map(filaC).join("")}
+            <span class="eq-cancha__tit eq-cancha__tit--backs">Backs</span>${FORMACION.slice(3).map(filaC).join("")}</div>
+          ${avisos.length ? `<ul class="eq-avisos">${avisos.map(([num, c, a]) => `<li class="eq-avisos--${a.n}"><b>${num}. ${esc(c.nombre)}</b>: ${esc(a.t)}</li>`).join("")}</ul>` : ""}
+        </section>
         <section class="sec sec--pegada">${tit("Suplentes")}<ul class="eq-l">${Array.from({ length: hasta - 15 }, (_, i) => fila(i + 16)).join("")}</ul>
           ${hasta < EQ_MAX ? `<button type="button" class="btn-sec btn-sec--ancho asis-mas" data-eq-mas>${IC.mas}Sumar un suplente</button>` : ""}
           <div class="eq-acc">
