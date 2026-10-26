@@ -43,3 +43,8 @@ sitios/
 # la copia de la asistencia abierta (tiene nombres de chicos): solo en la compu; en GitHub va cifrada
 respaldos/asistencia.json
 respaldos/restaurar.sql
+
+# material que llega de afuera (Magali, UAR): consulta, no se sube
+material_externo/
+# registros de los programas
+logs/

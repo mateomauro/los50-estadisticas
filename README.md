@@ -15,6 +15,20 @@ Estadísticas del Club Los 50 de Tandil sacadas de las planillas oficiales de la
   para revisar con el club, abre un aviso en la pestaña *Issues* (llega por mail).
 - Para correrla a mano: pestaña **Actions** → *Actualizar datos de Los 50* → **Run workflow**.
 
+## Carpetas
+
+| Carpeta | Qué hay |
+|---|---|
+| `web/`, `functions/` | las dos webs y la parte de Cloudflare |
+| `datos_uar/` | lo bajado de la BD UAR (en bruto) y la base `los50.db` |
+| `guia/` | el material de Coordinación ya pasado a datos (prácticas, ejercicios, dibujos, videos) |
+| `revision/`, `respaldos/`, `diarios/` | revisión de datos con el club, copia de seguridad de la asistencia y diarios viejos |
+| `docs/` | notas: `CONTEXTO_DATOS.md` (de dónde salen los datos y qué estadísticas hay) e `IDEAS_ALTO_RENDIMIENTO.md` |
+| `material_externo/` | lo que llega de afuera (Magali, UAR); no se sube. Ver su `LEEME.md` |
+| `logs/` | registros de los programas (no se suben) |
+| `sitios/`, `videos_hls/`, `cache/` | se generan solos o son pesados; no se suben |
+| raíz | los programas `.py` y los Excel que generan |
+
 ## Cómo se comprueba cada dato
 
 - En la ficha de cada jugador, cada partido ("Sus partidos": titular / entró / en el banco) y cada try o patada tiene el
@@ -63,6 +77,8 @@ o `sitios/entrenadores`.
 | `analisis_metricas.py` | Excel para entrenadores |
 | `exportar_entrenadores.py` | datos cifrados de la sección Entrenadores |
 | `guia_entrenadores.py` | guía del club para Entrenadores (qué aprende cada categoría, qué se espera de cada puesto, cantos, zonas, scrum y ejercicios de line, maul y juegos), del material de Coordinación. Los puestos (`PUESTOS`) están pasados a mano del PDF del perfil del jugador, que es solo imágenes. Si cambian los Excel (progresiones, line habitos o maul): `python guia_entrenadores.py "<carpeta de Drive>"`. Las fotos de los ejercicios quedan en `guia/fotos` y se publican cifradas en `web/entrenadores.fotos.json` |
+| `perfiles_pumas.py` | el perfil corporal (peso, altura, masa ósea y muscular, forma) y el perfil físico (tests por edad: fuerza, potencia, velocidad, Bronco) de cada puesto, de los Pumas y del Plan de Alto Rendimiento de la UAR; sale en Guía del club → Los puestos. Los valores están pasados a mano de los PDF que mandó Magali (están en `material_externo/magali/perfiles_pumas`, que no se sube). `guia_entrenadores.py` los suma a cada puesto |
+| `pase_y_alertas.py` | dos cosas para Entrenadores con datos de la UAR: **de M19 a plantel superior** (cuántos chicos de M19 jugaron en plantel superior la temporada siguiente, de dónde vienen los del plantel superior y quiénes son; Estadísticas → De M19 a plantel superior) y **Para mirar** (sanciones, conmociones sin alta, rojas y amarillas; sale arriba del inicio). Las alertas se mandan en bruto con fechas y la página decide qué está vigente según el día en que se abre |
 | `proximos_partidos.py` | los próximos partidos (los "Pendiente" que ya cargó la UAR) para Entrenadores: en el inicio y arriba de cada categoría. La página muestra solo los de hoy en adelante |
 | `asistencia_entrenadores.py` | la lista inicial de chicos para la asistencia de Entrenadores: los fichados en Los 50 del año en curso, por categoría (el plantel superior junto y M18 con M19). Va cifrada con el resto de los datos |
 | `practicas_entrenadores.py` | las prácticas que armaron los entrenadores (carpeta PLANIFICACIONES del Drive de Coordinación), día por día, para Entrenadores → Prácticas. Si suben planillas nuevas: `python practicas_entrenadores.py "<carpeta de Drive>"` (arma `guia/practicas.json`). Las columnas se buscan por su título, así que sirve para las tres formas de planilla que usan |
