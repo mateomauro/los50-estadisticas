@@ -939,6 +939,46 @@
 .falta-f { display: grid; gap: 3px; padding: 10px 14px; }
 .falta-f__nom { font-size: 16px; line-height: 1.25; }
 .falta-f small { font-size: 13.5px; font-weight: 600; line-height: 1.3; color: var(--ambar); }
+/* el nombre que lleva a la ficha del chico */
+.link-chico { padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer;
+  text-decoration: underline; text-decoration-color: rgb(27 95 209 / 35%); text-underline-offset: 3px; }
+.link-chico:hover { color: var(--azul); text-decoration-color: currentColor; }
+/* la ficha: una caja por tema, de a dos en la compu */
+.ficha-g { display: grid; gap: 14px; margin-top: 14px; }
+@media (min-width: 900px) { .ficha-g { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; } }
+.ficha-c { min-width: 0; padding: 14px 16px 16px; background: var(--sup); border: 1px solid var(--linea); border-radius: var(--radio); }
+.ficha-c .tit { margin-top: 0; }
+.ficha-c .vacio-g { margin: 0; }
+.ficha-n { display: flex; align-items: center; gap: 14px; font-size: 16px; line-height: 1.35; }
+.ficha-n small { display: block; margin-top: 2px; font-size: 14px; color: var(--suave); }
+.ficha-c .test-r { margin: 0; border: 0; border-radius: 0; }
+.ficha-c .test-f { padding: 8px 0; }
+.test-f.test-f--2 { grid-template-columns: minmax(0, 1fr) auto; }
+.ficha-c .vacio-g { padding: 2px 0; border: 0; background: none; text-align: left; }
+.ficha-docs, .ficha-l { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.ficha-docs li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 8px; align-items: start; font-size: 16px; line-height: 1.3; }
+.ficha-docs svg { width: 20px; height: 20px; }
+.ficha-docs .si svg { color: var(--verde); }
+.ficha-docs .no svg { color: var(--rojo); }
+.ficha-docs small, .ficha-l small { display: block; font-size: 13.5px; color: var(--suave); }
+.ficha-l li { display: grid; gap: 2px; }
+.ficha-l b { font-size: 16px; font-weight: 600; }
+/* contar el partido: qué se cuenta queda fijo arriba; una camiseta grande por jugador con su número de veces */
+.cnt-acc.chips-g { position: sticky; top: 0; z-index: 3; margin: 8px -16px 0; padding: 10px 16px; background: var(--fondo); border-bottom: 1px solid var(--linea); }
+.cnt-g { list-style: none; margin: 12px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+@media (min-width: 900px) { .cnt-g { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+.cnt-g > li { display: flex; }
+.cnt-b { position: relative; flex: 1; min-height: 96px; display: grid; justify-items: center; align-content: center; gap: 2px; padding: 10px 6px 8px;
+  border: 1px solid var(--linea); border-radius: 14px; background: var(--sup); color: var(--texto); cursor: pointer; touch-action: manipulation; user-select: none; }
+.cnt-b:active { background: var(--azul-claro); }
+.cnt-b__n { font: 700 32px/1 var(--cond); color: var(--azul); }
+.cnt-b__nom { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13.5px; font-weight: 600; }
+.cnt-b__v { position: absolute; top: 6px; right: 6px; min-width: 28px; padding: 3px 7px; border-radius: 999px; background: var(--azul); color: #fff; font: 700 17px/1 var(--cond); text-align: center; }
+.cnt-b--suma { animation: cnt-suma 280ms ease-out; }
+@keyframes cnt-suma { from { background: #d4efdd; border-color: var(--verde); } to { background: var(--sup); border-color: var(--linea); } }
+.cnt-b__v--0 { background: #eef1f6; color: var(--suave); }
+.cnt-res { margin-top: 12px; }
+@media (prefers-reduced-motion: reduce) { .cnt-b--suma { animation: none; } }
 /* con 8 áreas, en la compu van de a cuatro (dos filas parejas) */
 @media (min-width: 900px) { .areas--6:has(> li:nth-child(8):last-child) { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 /* tests físicos: un botón por test para cargarlo; los resultados de mejor a peor, con el color del tercio */

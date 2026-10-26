@@ -5,11 +5,13 @@
    GET  /api/asistencia?cat=M16  -> { horarios, entrenamientos, listas, chicos } de esa categoría
    GET  /api/asistencia          -> { resumen: { M16: { listas, presentes, ultima } }, chicos: { M16: { alta, baja } } } para la lista de categorías
    GET  /api/asistencia?respaldo=1  -> todas las tablas (la copia de seguridad de respaldo_asistencia.py)
+   GET  /api/asistencia?conteos=1  -> lo contado en los partidos del último año: [{ cat, fecha, id, accion, n }]
    GET  /api/asistencia?docs=1  -> los documentos y cursos de todos los chicos: [{ id, doc, anio, fecha }]
    GET  /api/asistencia?tests=1&cat=M16  -> los tests físicos de la categoría: [{ fecha, test, id, valor }]
    GET  /api/asistencia?equipos=1  -> los equipos armados para los partidos (de 60 días para atrás en adelante)
    GET  /api/asistencia?notas=1  -> las notas de feedback (más nuevas primero); "mia" dice si la escribió quien pregunta (encabezado x-dueno)
-   POST /api/asistencia  { cat, accion, ..., por? } -> guarda (accion: horarios | entrenamiento | lista | borrar_lista | chico | nota | borrar_nota | equipo | test | docs)
+   POST /api/asistencia  { cat, accion, ..., por? } -> guarda (accion: horarios | entrenamiento | lista | borrar_lista | chico | nota | borrar_nota | equipo | test | docs | conteo)
+     conteo: { equipo, fecha, conteos: { id: { tackles: 3, … } } } — reemplaza lo contado en ese partido
      docs: { cat, doc (medica | autoriza | dni | conmocion | antidoping | primera), fecha, sumar: [ids], sacar: [ids] } — solo lo que cambió
      test: { cat, fecha, test (m10 | m30 | m40 | salto | bronco | cmj), valores: { id: número } } — reemplaza lo de ese test ese día
      equipo: { equipo (Primera, M16…), fecha, rival, jugadores: { "1": id, … "23": id }, cambios: { "16": { por, min } } } — sin jugadores, se borra
@@ -29,6 +31,8 @@ const ESQUEMA = [
   // notas de feedback entre entrenadores: "dueno" es un código del celular de quien la escribió (nunca se devuelve), para que solo ella o él pueda borrarla
   // el equipo de un partido: jugadores = { número de camiseta: número de jugador }; cambios = { suplente: { por: titular, min: minuto } }
   "CREATE TABLE IF NOT EXISTS equipos (cat TEXT NOT NULL, fecha TEXT NOT NULL, rival TEXT, jugadores TEXT NOT NULL, cambios TEXT, por TEXT, ts TEXT NOT NULL, PRIMARY KEY (cat, fecha))",
+  // lo contado en un partido: cuántas veces hizo cada acción (tackles, contactos…) cada jugador
+  "CREATE TABLE IF NOT EXISTS conteos (cat TEXT NOT NULL, fecha TEXT NOT NULL, id TEXT NOT NULL, accion TEXT NOT NULL, n INTEGER NOT NULL, por TEXT, ts TEXT NOT NULL, PRIMARY KEY (cat, fecha, id, accion))",
   // documentos y cursos de cada chico: la ficha médica y la autorización son del año (anio = "2026"); el DNI y los cursos, "siempre"
   "CREATE TABLE IF NOT EXISTS docs (id TEXT NOT NULL, doc TEXT NOT NULL, anio TEXT NOT NULL, cat TEXT, fecha TEXT NOT NULL, por TEXT, ts TEXT NOT NULL, PRIMARY KEY (id, doc, anio))",
   // tests de campo: un valor por chico, test y día (segundos, metros o centímetros; el Bronco en segundos)
@@ -37,6 +41,7 @@ const ESQUEMA = [
 ];
 const NOTA_CATS = ["General", ...CATS], DUENO = /^[\w-]{8,64}$/, EQUIPO = /^[\p{L}\d][\p{L}\d .-]{0,29}$/u, EQ_MAX = 30;
 const TESTS = ["m10", "m30", "m40", "salto", "bronco", "cmj"];
+const ACCIONES = ["tackles", "errados", "contactos", "rucks", "pases", "quiebres", "recuperadas"];
 const DOCS = ["medica", "autoriza", "dni", "conmocion", "antidoping", "primera"], DOCS_ANUAL = ["medica", "autoriza"];
 const objeto = (o) => !!o && typeof o === "object" && !Array.isArray(o);
 const FECHA = /^\d{4}-\d{2}-\d{2}$/, HORA = /^([01]\d|2[0-3]):[0-5]\d$/, ID = /^[\w-]{1,40}$/;
@@ -73,10 +78,11 @@ export async function onRequest({ request, env }) {
     const q = new URL(request.url).searchParams, cat = q.get("cat");
     // la copia de seguridad (respaldo_asistencia.py, en la actualización automática): todas las tablas
     if (q.get("respaldo")) {
-      const tablas = ["horarios", "entrenamientos", "listas", "chicos", "cambios", "notas", "equipos", "tests", "docs"];
+      const tablas = ["horarios", "entrenamientos", "listas", "chicos", "cambios", "notas", "equipos", "tests", "docs", "conteos"];
       const filas = await Promise.all(tablas.map((x) => todo(`SELECT * FROM ${x}`)));
       return json({ fecha: new Date().toISOString(), ...Object.fromEntries(tablas.map((x, i) => [x, filas[i]])) });
     }
+    if (q.get("conteos")) return json({ conteos: await todo("SELECT cat, fecha, id, accion, n FROM conteos WHERE fecha >= date('now', '-400 days')") });
     if (q.get("docs")) return json({ docs: await todo("SELECT id, doc, anio, fecha FROM docs") });
     if (q.get("tests")) {
       if (!CATS.includes(cat)) return json({ error: "datos" }, 400);
@@ -147,6 +153,23 @@ export async function onRequest({ request, env }) {
       : db.prepare("DELETE FROM equipos WHERE cat = ? AND fecha = ?").bind(eq, fecha),
     db.prepare("INSERT INTO cambios (ts, cat, accion, detalle, por) VALUES (?, ?, 'equipo', ?, ?)").bind(ts, eq, JSON.stringify({ fecha, jugadores: cuantos }), por)]);
     return json({ ok: true, ts });
+  }
+  if (b && b.accion === "conteo") {
+    // lo contado en un partido (desde el equipo): reemplaza lo que había de ese partido
+    const eq = texto(b.equipo, 30), { fecha } = b, cs = b.conteos;
+    if (!EQUIPO.test(eq) || !FECHA.test(fecha || "") || !objeto(cs) || Object.keys(cs).length > EQ_MAX) return mal();
+    const filas = [];
+    for (const [id, o] of Object.entries(cs)) {
+      if (!ID.test(id) || !objeto(o)) return mal();
+      for (const [a, n] of Object.entries(o)) {
+        if (!ACCIONES.includes(a) || !Number.isInteger(n) || n < 0 || n > 500) return mal();
+        if (n) filas.push([id, a, n]);
+      }
+    }
+    await db.batch([db.prepare("DELETE FROM conteos WHERE cat = ? AND fecha = ?").bind(eq, fecha),
+      ...filas.map(([id, a, n]) => db.prepare("INSERT INTO conteos (cat, fecha, id, accion, n, por, ts) VALUES (?, ?, ?, ?, ?, ?, ?)").bind(eq, fecha, id, a, n, por, ts)),
+      db.prepare("INSERT INTO cambios (ts, cat, accion, detalle, por) VALUES (?, ?, 'conteo', ?, ?)").bind(ts, eq, JSON.stringify({ fecha, filas: filas.length }), por)]);
+    return json({ ok: true });
   }
   if (b && b.accion === "nota") {
     const t = String(b.texto == null ? "" : b.texto).split(/\r?\n/).map((x) => x.replace(/\s+/g, " ").trim()).join("\n").replace(/\n{3,}/g, "\n\n").trim().slice(0, 600);
