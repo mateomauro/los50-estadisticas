@@ -652,6 +652,15 @@
 .asis-chicos__fuera { margin: 0 -14px; padding: 8px 14px !important; background: #f7f8fa; }
 .asis-chicos__fuera .asis-chicos__nom { color: var(--suave); }
 /* tomar lista: cada chico es un botón grande; el que vino queda verde, con borde y tilde (se distingue al sol) */
+.lista-info--ojo { background: var(--ambar-fondo); color: var(--ambar); }
+.lista-junta { margin: 0 0 10px; }
+.lista-junta[aria-pressed="true"] { border-color: var(--azul); background: var(--azul-claro); color: var(--azul); }
+.lista-modo { margin: 0 0 10px; }
+/* lesionado: vino pero no entrena (naranja; no cuenta en su porcentaje) */
+.lista-it--les { background: var(--ambar-fondo); border-color: #e7b24a; }
+.lista-it--les .lista-it__ic { background: #c98f00; border-color: #c98f00; color: #fff; }
+.lista-it__les { display: block; font-size: 13px; font-weight: 700; color: var(--ambar); }
+.ficha-les { margin: 8px 0 0; font-size: 14.5px; font-weight: 600; color: var(--ambar); }
 .lista-info svg { flex: none; width: 18px; height: 18px; margin-top: 2px; }
 .lista-info { display: flex; gap: 8px; align-items: flex-start; margin: 0 0 12px; padding: 12px 14px; border-radius: 12px; background: var(--azul-claro); color: var(--azul-900); font-size: 16px; line-height: 1.4; }
 .lista-cab { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 44px; margin: 0 0 8px; font-size: 16px; color: var(--suave); }

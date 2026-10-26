@@ -457,7 +457,10 @@
       "Las notas las puede leer cualquiera que entre con la clave. Quedan guardadas para siempre.", "Podés borrar solo las que escribiste vos, desde este mismo celular."]],
     asistencia: () => ["Asistencia", ["Para tomar lista en cada entrenamiento y ver cuánto viene cada chico.",
       "El porcentaje es sobre los entrenamientos de este año en los que se tomó lista. Los suspendidos no cuentan.",
-      "La lista de chicos arranca con los fichados en la UAR para este año. Cada entrenador puede sumar o sacar chicos."]],
+      "La lista de chicos arranca con los fichados en la UAR para este año. Cada entrenador puede sumar o sacar chicos.",
+      "Lesionado: vino pero no entrena. Arriba de la lista elegí “Lesionado” y tocalo. Ese día no le cuenta en el porcentaje.",
+      "Si dos categorías entrenan juntas (M15 y M16, por ejemplo), en la lista de una tocá “Tomar las dos listas juntas”: se marca a todos en una sola lista y se guarda cada una por su lado.",
+      "Si un chico que venía faltó a los últimos 3 entrenamientos, aparece en “Para mirar” para que lo llamen."]],
     asisCat: () => ["Cómo se lee", ["Al lado de cada chico: a cuántos entrenamientos vino, de los que se tomó lista.",
       "Verde: viene el 80% o más. Amarillo: entre 60% y 80%. Rojo: menos del 60%. Los que menos vienen están arriba.",
       "Los entrenamientos suspendidos no cuentan, y un día que no se tomó lista tampoco. Un chico sumado a mano cuenta desde el día que se sumó.",
@@ -671,6 +674,8 @@
       const p = act && porcentajes(d, [act])[0], ult = listasValidas(d).filter((l) => l.presentes.includes(id)).map((l) => l.fecha).sort().at(-1);
       asis = !act ? nada("Ya no está en la lista de asistencia") : !p.de ? nada("Todavía no hay listas este año")
         : `<div class="ficha-n">${porcHTML(p.pct, p.de >= 3)}<span>Vino a <b>${p.vino}</b> de ${p.de} entrenamientos este año${ult ? `<small>La última vez: ${corta(ult)}</small>` : ""}</span></div>`;
+      const ul = listasValidas(d).filter((l) => l.fecha <= hoyISO()).sort((x, y) => x.fecha.localeCompare(y.fecha)).at(-1);
+      if (act && ul && ul.presentes.includes(LES(id))) asis += `<p class="ficha-les">Estuvo lesionado en el último entrenamiento (${corta(ul.fecha)})</p>`;
     }
     // sus partidos oficiales (planillas de la UAR)
     const jr = D.jug.filter((j) => String(j.pid) === id || claveNombre(j.nombre) === claveNombre(c.nombre)).sort((x, y) => y.anio - x.anio || y.pj - x.pj);
@@ -1299,14 +1304,20 @@
   /** lo que se necesita para dibujar cada chico en la lista para elegir */
   function eqCtx() {
     const e = eqActual(S.eqcat, S.eqfecha);
-    const pl = eqPlantel(S.eqcat), med = DOC.lista ? docTienen("medica") : new Map();
-    return { num: S.eqn, pl, al: eqAlertas(), en: new Map(Object.entries(e.jugadores).map(([n, id]) => [id, +n])), med, usaMed: pl.some((c) => med.has(c.id)) };
+    const pl = eqPlantel(S.eqcat), med = DOC.lista ? docTienen("medica") : new Map(), da = ASIS.cats[eqAsis(S.eqcat)];
+    // esta semana: los entrenamientos con lista de lunes a hoy; y las listas de las últimas 3 semanas, para ver si está lesionado
+    const lunes = masDias(hoyISO(), -((dia(hoyISO()).getDay() + 6) % 7)), ls = da ? listasValidas(da).filter((l) => l.fecha <= hoyISO()).sort((a, b) => a.fecha.localeCompare(b.fecha)) : [];
+    const semana = ls.filter((l) => l.fecha >= lunes), recientes = ls.filter((l) => l.fecha >= masDias(hoyISO(), -21));
+    return { num: S.eqn, pl, al: eqAlertas(), en: new Map(Object.entries(e.jugadores).map(([n, id]) => [id, +n])), med, usaMed: pl.some((c) => med.has(c.id)), semana, recientes };
   }
   function eqFila(c, otra, x) {
     const a = x.al.get(claveNombre(c.nombre)), ya = x.en.get(c.id);
     const det = [ya ? (ya === x.num ? "Está en este número" : `Ya está de ${ya}`) : "", eqJuegaTxt(c.id)].filter(Boolean).map(esc);
     if (a) det.push(`<span class="eq-al eq-al--${a.n}">${esc(a.t)}</span>`);
     if (x.usaMed && !x.med.has(c.id)) det.push(`<span class="eq-al">Sin ficha médica</span>`);
+    if (x.semana && x.semana.length) det.push(esc(`Esta semana: ${x.semana.filter((l) => l.presentes.includes(c.id)).length} de ${x.semana.length}`));
+    const ul = x.recientes && [...x.recientes].reverse().find((l) => l.presentes.includes(c.id) || l.presentes.includes(LES(c.id)));
+    if (ul && ul.presentes.includes(LES(c.id))) det.push(`<span class="eq-al">Lesionado (${corta(ul.fecha)})</span>`);
     return `<li data-q="${esc(norm(c.nombre))}"><button type="button" class="eq-it eq-it--elegir${ya === x.num ? " eq-it--este" : ""}" data-eq-id="${esc(c.id)}">
       <span class="eq-it__txt"><span class="eq-it__nom">${nombreHTML(c.nombre)}${otra ? ` <span class="chip chip--cat">${esc(otra)}</span>` : ""}</span>${det.length ? `<small>${det.join(" · ")}</small>` : ""}</span>
       ${c.pct !== undefined ? porcHTML(c.pct, c.de >= 3) : ""}</button></li>`;
@@ -1514,6 +1525,7 @@
     A_.tarjetas.filter((x) => x.t === "A" && x.f >= masDias(hoy, -60)).forEach((x) => (am[x.j] ??= []).push(x));
     Object.entries(am).filter(([, v]) => v.length >= 2).forEach(([j, v]) =>
       out.push({ n: 2, j, c: v[0].c, t: `${v.length} amarillas en los últimos 60 días (la última, el ${corta(v[0].f)})` }));
+    Object.entries(ASIS.cats).forEach(([cat, d]) => { if (d) dejaronDe(cat, d).forEach((c) => out.push({ n: 2, j: c.nombre, c: cat, t: "Faltó a los últimos 3 entrenamientos: llamalo" })); });
     return out.sort((a, b) => b.n - a.n || (a.c || "").localeCompare(b.c || "") || a.j.localeCompare(b.j, "es"));
   }
   const alertaFila = (a) => `<li class="alerta alerta--${a.n}"><span class="alerta__ic">${IC.alerta}</span><span class="alerta__txt">
@@ -2831,7 +2843,7 @@
       .catch((e) => { ASIS.error[k] = e.message === "clave" ? avisoError(e) : e.message === "servidor" ? "No se pudo cargar. Probá de nuevo en un rato." : "No se pudo cargar: no hay señal."; })
       .finally(() => {
         ASIS.cargando.delete(k);
-        const aca = cat ? (S.acat === cat && ["asis", "lista", "chicos"].includes(S.ver)) || (S.ver === "inicio" && enCel.get(ULTIMA) === cat) || (S.ver === "plan" && S.pcat === cat) || (S.ver === "equipo" && eqAsis(S.eqcat) === cat) || (["tests", "toma"].includes(S.ver) && S.tcat === cat) || (["docs", "doclista"].includes(S.ver) && S.dcat === cat) || (S.ver === "chico" && S.chcat === cat) || S.ver === "asistencia" : S.ver === "asistencia";
+        const aca = cat ? (S.acat === cat && ["asis", "lista", "chicos"].includes(S.ver)) || (S.ver === "inicio" && enCel.get(ULTIMA) === cat) || (S.ver === "plan" && S.pcat === cat) || (S.ver === "equipo" && eqAsis(S.eqcat) === cat) || (["tests", "toma"].includes(S.ver) && S.tcat === cat) || (["docs", "doclista"].includes(S.ver) && S.dcat === cat) || (S.ver === "chico" && S.chcat === cat) || (S.ver === "lista" && S.ajunta && compa(S.acat) === cat) || S.ver === "asistencia" : S.ver === "asistencia";
         if (aca) render();
       });
   }
@@ -2901,9 +2913,35 @@
   function porcentajes(d, chicos) {
     const ls = listasValidas(d);
     return chicos.map((c) => {
-      const base = ls.filter((l) => l.fecha >= c.desde), vino = base.filter((l) => l.presentes.includes(c.id)).length;
+      const base = ls.filter((l) => l.fecha >= c.desde && !l.presentes.includes(LES(c.id))), vino = base.filter((l) => l.presentes.includes(c.id)).length;
       return { ...c, vino, de: base.length, pct: base.length ? Math.round((vino / base.length) * 100) : null };
     });
+  }
+  // las categorías que entrenan juntas (los grupos de las prácticas de Magali): se puede tomar una sola lista con las dos
+  const JUNTAS = [["M17", "M19"], ["M15", "M16"], ["M13", "M14"], ["M11", "M12"], ["M9", "M10"]];
+  const compa = (cat) => { const j = JUNTAS.find((x) => x.includes(cat)); return j ? j.find((x) => x !== cat) : null; };
+  // los lesionados van en la lista como "les-<id>": vino pero no entrena; ese entrenamiento no le cuenta en el porcentaje
+  const LES = (id) => `les-${id}`;
+  /** de una lista, solo los de una categoría (los presentes y los lesionados) */
+  const soloDe = (cat, xs) => { const d = ASIS.cats[cat], ids = new Set(d ? chicosDe(cat, d).activos.map((c) => c.id) : []); return xs.filter((x) => ids.has(x.startsWith("les-") ? x.slice(4) : x)); };
+  /** lo que queda en el celular mientras se toma lista (con la base de la otra categoría si se toman juntas) */
+  const borrLista = () => ({ marcas: [...S.marcas], base: S.base || [], ...(S.ajunta && compa(S.acat) ? { base2: S.base2 || [] } : {}) });
+  /** los que dejaron de venir: venían y faltaron a los últimos 3 entrenamientos con lista (sin contar si estaban lesionados) */
+  function dejaronDe(cat, d) {
+    const ls = listasValidas(d).filter((l) => l.fecha <= hoyISO()).sort((a, b) => a.fecha.localeCompare(b.fecha));
+    if (ls.length < 4) return [];
+    const ult = ls.slice(-3), antes = ls.slice(0, -3);
+    return chicosDe(cat, d).activos.filter((c) => antes.some((l) => l.fecha >= c.desde && l.presentes.includes(c.id))
+      && ult.every((l) => !l.presentes.includes(c.id) && !l.presentes.includes(LES(c.id))));
+  }
+  /** un chico en la lista: verde si vino; naranja si está lesionado */
+  function pintarItem(t, id) {
+    const les = S.marcas.has(LES(id)), s = t.querySelector(".lista-it__les");
+    t.setAttribute("aria-pressed", S.marcas.has(id));
+    t.classList.toggle("lista-it--les", les);
+    t.querySelector(".lista-it__ic").innerHTML = les ? IC.alerta : IC.tilde;
+    if (les && !s) t.querySelector(".lista-it__nom").insertAdjacentHTML("beforeend", `<small class="lista-it__les">Lesionado</small>`);
+    if (!les && s) s.remove();
   }
   /** "martes y jueves a las 18:30" (de lunes a domingo) */
   function horariosTxt(hs) {
@@ -3142,9 +3180,24 @@
       const b = borrador(cat, f), guardados = s.lista ? s.lista.presentes : [];
       S.marcas = new Set(b ? b.marcas : guardados);
       S.base = b ? b.base : guardados;
+      S.base2 = b && b.base2 ? b.base2 : null;
+      S.amodo = "vino";
+      S.ajunta = !!compa(cat) && enCel.get(`los50-junta:${cat}`) === "1";
     }
     S.guardados = s.lista ? s.lista.presentes : [];
-    const n = activos.filter((c) => S.marcas.has(c.id)).length;
+    // con la otra categoría que entrena junta: sus chicos en la misma lista (al guardar, cada una por su lado)
+    const otra = compa(cat), junta = !!otra && S.ajunta && !futuro && !canc, d2 = junta ? ASIS.cats[otra] : null;
+    if (junta && !d2 && !ASIS.error[otra]) cargarAsis(otra);
+    let activos2 = [];
+    if (d2) {
+      const s2 = sesiones(d2, f, f)[0], g2 = s2 && s2.lista ? s2.lista.presentes : [];
+      if (S.base2 == null) { const b2 = borrador(otra, f); (b2 ? b2.marcas : g2).forEach((x) => S.marcas.add(x)); S.base2 = b2 ? b2.base : g2; guardarBorrador(cat, f, borrLista()); }
+      S.guardados = [...S.guardados, ...g2];
+      const ya = new Set(activos.map((c) => c.id));
+      activos2 = chicosEn(chicosDe(otra, d2).activos, f).filter((c) => !ya.has(c.id));
+    }
+    const n = [...activos, ...activos2].filter((c) => S.marcas.has(c.id)).length;
+    const dej = [...dejaronDe(cat, d), ...(d2 ? dejaronDe(otra, d2) : [])];
     const acciones = s.estado === "nuevo" ? "" : S.aform === `suspender:${f}` ? (s.estado === "extra" ? formBorrarExtra(s) : formSuspender(s, activos))
       : S.aform === `hora:${f}` ? formHora(s)
       : `<div class="acc-2">${botonQuitar(s, "Borrar este entrenamiento")}
@@ -3158,17 +3211,25 @@
     } else {
       const borrarForm = S.aform === "borrar-lista" ? `<div class="asis-form"><span class="asis-form__l">¿Borrar la lista de este día? Se pierden los ${s.lista ? vinieron(s.lista, activos) : 0} que vinieron.</span>
           <div class="asis-form__btns"><button type="button" class="btn btn--peligro btn--alto" data-borrar-lista-ok>Borrar la lista</button>${cerrarBtn}</div></div>` : "";
+      const item = (c) => { const les = S.marcas.has(LES(c.id));
+        return `<li data-q="${esc(norm(c.nombre))}"><button type="button" class="lista-it${les ? " lista-it--les" : ""}" data-marca="${esc(c.id)}" aria-pressed="${S.marcas.has(c.id)}">
+          <span class="lista-it__ic">${les ? IC.alerta : IC.tilde}</span><span class="lista-it__nom">${nombreHTML(c.nombre)}${les ? `<small class="lista-it__les">Lesionado</small>` : ""}</span></button></li>`; };
+      const todos = total + activos2.length, les = S.amodo === "les";
       cuerpo = `
         ${s.lista ? `<p class="lista-info">${IC.tilde}<span>Vinieron ${vinieron(s.lista, activos)} de ${total} · ${tomoTxt(s.lista)}</span></p>` : ""}
-        <div class="lista-cab"><span>${s.lista ? "Tocá a los que llegaron tarde" : "Tocá a los que vinieron"}</span><button type="button" class="btn-sec btn-sec--chico" data-todos${n ? " hidden" : ""}>Marcar a todos</button></div>
-        ${total > 30 ? `<label class="buscar-g asis-buscar"><span class="sr">Buscar un chico</span>${IC.buscar}<input type="search" id="buscar-chico" placeholder="Buscar por apellido" autocomplete="off" enterkeyhint="search"></label>` : ""}
-        <ul class="lista-g" data-filtro>${activos.map((c) => `<li data-q="${esc(norm(c.nombre))}"><button type="button" class="lista-it" data-marca="${esc(c.id)}" aria-pressed="${S.marcas.has(c.id)}">
-          <span class="lista-it__ic">${IC.tilde}</span><span class="lista-it__nom">${nombreHTML(c.nombre)}</span></button></li>`).join("")}</ul>
+        ${dej.length ? `<p class="lista-info lista-info--ojo">${IC.alerta}<span>Faltaron a los últimos 3: ${dej.map((c) => `<b>${esc(c.nombre.split(",")[0])}</b>`).join(", ")}. Llamalos.</span></p>` : ""}
+        ${otra ? `<button type="button" class="btn-sec btn-sec--ancho lista-junta" data-junta aria-pressed="${junta}">${junta ? `Tomando ${esc(cat)} y ${esc(otra)} juntas · Separar` : `¿Entrenan con ${esc(otra)}? Tomar las dos listas juntas`}</button>` : ""}
+        <div class="chips-g lista-modo" role="group" aria-label="Qué marcás"><button type="button" data-amodo="vino" aria-pressed="${!les}">Vino</button><button type="button" data-amodo="les" aria-pressed="${les}">Lesionado</button></div>
+        <div class="lista-cab"><span>${les ? "Tocá a los lesionados: vienen pero no entrenan" : s.lista ? "Tocá a los que llegaron tarde" : "Tocá a los que vinieron"}</span><button type="button" class="btn-sec btn-sec--chico" data-todos${n || les ? " hidden" : ""}>Marcar a todos</button></div>
+        ${todos > 30 ? `<label class="buscar-g asis-buscar"><span class="sr">Buscar un chico</span>${IC.buscar}<input type="search" id="buscar-chico" placeholder="Buscar por apellido" autocomplete="off" enterkeyhint="search"></label>` : ""}
+        ${junta && !d2 ? `<p class="cargando">Cargando a los de ${esc(otra)}…</p>` : ""}
+        ${activos2.length ? `<h3 class="grupo">${esc(cat)}</h3>` : ""}<ul class="lista-g" data-filtro>${activos.map(item).join("")}</ul>
+        ${activos2.length ? `<h3 class="grupo">${esc(otra)}</h3><ul class="lista-g" data-filtro>${activos2.map(item).join("")}</ul>` : ""}
         ${sinChicos}
         <div class="lista-mas"><h3 class="grupo">¿Cómo salió?</h3>${comoSalioHTML(cat, f)}</div>
         <div class="lista-mas"><h3 class="grupo">Este entrenamiento</h3>${acciones}
           ${s.lista && S.aform !== "borrar-lista" ? `<button type="button" class="btn-sec btn-sec--ancho" data-form="borrar-lista">Borrar la lista de este día</button>` : ""}${borrarForm}</div>
-        <div class="lista-pie" id="pie-lista" role="status">${pieHTML(n, total)}</div>`;
+        <div class="lista-pie" id="pie-lista" role="status">${pieHTML(n, todos)}</div>`;
     }
     $("#vista").innerHTML = `${cab(s.hora)}<section class="sec sec--pegada asis-v">${cuerpo}</section>${avisoHTML()}`;
   }
@@ -3180,8 +3241,8 @@
       <button type="button" class="btn btn--peligro btn--grande" data-guardar-lista>Probar de nuevo</button>`;
     if (S.estadoLista === "clave") return `<span class="lista-pie__error">Hay que volver a poner la clave. Lo marcado queda en el celular.</span>
       <button type="button" class="btn btn--peligro btn--grande" data-reclave>Poner la clave</button>`;
-    const cambios = !mismos([...(S.marcas || [])], S.guardados || []);
-    return `<span><b class="num" id="cont">${n}</b> de ${total} vinieron<small class="lista-pie__ojo" id="sin-guardar"${cambios ? "" : " hidden"}>Sin guardar</small></span>
+    const cambios = !mismos([...(S.marcas || [])], S.guardados || []), nl = [...(S.marcas || [])].filter((x) => x.startsWith("les-")).length;
+    return `<span><b class="num" id="cont">${n}</b> de ${total} vinieron${nl ? ` · ${nl} ${nl === 1 ? "lesionado" : "lesionados"}` : ""}<small class="lista-pie__ojo" id="sin-guardar"${cambios ? "" : " hidden"}>Sin guardar</small></span>
       <button type="button" class="btn btn--ok btn--grande" data-guardar-lista>${IC.tilde}Guardar la lista</button>`;
   }
   function pintarPie() {
@@ -3192,17 +3253,21 @@
   }
   /** guarda la lista: manda solo lo que cambió (así si otro entrenador también tomó lista, se juntan) y, si no hay señal, no se pierde nada */
   async function guardarLista() {
-    const cat = S.acat, f = S.afecha;
-    const b = borrador(cat, f) || { marcas: [...S.marcas], base: S.base || [] };
+    const cat = S.acat, f = S.afecha, otra = S.ajunta && compa(cat) && ASIS.cats[compa(cat)] ? compa(cat) : null;
+    const b = borrador(cat, f) || borrLista();
     S.estadoLista = "guardando"; pintarPie();
     try {
-      await api({ cat, accion: "lista", fecha: f, presentes: b.marcas, base: b.base });
+      // cada categoría guarda solo a sus chicos (si se tomaron juntas, la otra con su propia base)
+      await api({ cat, accion: "lista", fecha: f, presentes: soloDe(cat, b.marcas), base: soloDe(cat, b.base) });
+      if (otra) await api({ cat: otra, accion: "lista", fecha: f, presentes: soloDe(otra, b.marcas), base: soloDe(otra, b.base2 || []) });
       guardarBorrador(cat, f, null);
+      if (otra) guardarBorrador(otra, f, null);
       ASIS.cats[cat] = await api(null, cat);
+      if (otra) ASIS.cats[otra] = await api(null, otra);
       ASIS.resumen = null;
       S.estadoLista = null;
-      const { activos } = chicosDe(cat, ASIS.cats[cat]), l = ASIS.cats[cat].listas.find((x) => x.fecha === f);
-      avisar("ok", `Lista guardada: vinieron ${l ? vinieron(l, activos) : 0} de ${activos.length}`);
+      const cuenta = (c) => { const { activos } = chicosDe(c, ASIS.cats[c]), l = ASIS.cats[c].listas.find((x) => x.fecha === f); return `${otra ? `${c}: ` : ""}vinieron ${l ? vinieron(l, activos) : 0} de ${activos.length}`; };
+      avisar("ok", `${otra ? "Listas guardadas" : "Lista guardada"}: ${[cat, otra].filter(Boolean).map(cuenta).join(" · ")}`);
       volverAtras({ ver: "asis", afecha: null, aform: null, marcas: null });
     } catch (e) {
       S.estadoLista = e.message === "clave" ? "clave" : e.message === "servidor" ? "servidor" : "error";
@@ -3237,7 +3302,7 @@
   // ---------- eventos ----------
   document.addEventListener("click", (e) => {
     if (!S) return;
-    const t = e.target.closest("[data-atras],[data-subir],[data-alcat],[data-ncat],[data-nota-ok],[data-borrar-nota-ok],[data-reintentar-notas],[data-armar],[data-armar-id],[data-ar-elegir],[data-artipo],[data-ar-ej],[data-ar-libre-ok],[data-ar-mover],[data-ar-sacar],[data-ar-guardar],[data-ar-borrar],[data-cs-ok],[data-ir-chico],[data-eq-imagen],[data-eq-contar],[data-cacc],[data-cuenta],[data-cdeshacer],[data-cres],[data-cres-compartir],[data-cguardar],[data-reintentar-cnt],[data-ir-doc],[data-dmarca],[data-docs-guardar],[data-reintentar-docs],[data-tomar],[data-tver],[data-tdia],[data-toma-guardar],[data-reintentar-tests],[data-ir-equipo],[data-eq-n],[data-eq-id],[data-eq-vaciar],[data-eq-mas],[data-eq-guardar],[data-eq-borrar],[data-eq-descartar],[data-eq-compartir],[data-reintentar-eq],[data-amistoso-ok],[data-edad],[data-area],[data-area-cat],[data-play],[data-reclave],[data-ayuda],[data-cerrar-ayuda],[data-ir],[data-ir-cat],[data-ir-guia],[data-ir-ej],[data-ir-ej-para],[data-ir-ej-tab],[data-ir-line],[data-ir-puesto],[data-ir-practica],[data-ir-practicas],[data-pgrupo],[data-ir-asis],[data-ir-hoy],[data-ir-lista],[data-ir-chicos],[data-form],[data-reintentar],[data-motivo],[data-dia],[data-marca],[data-todos],[data-cancelar-ok],[data-deshacer],[data-hora-ok],[data-agregar-ok],[data-horarios-ok],[data-guardar-lista],[data-borrar-lista-ok],[data-sacar],[data-sigue],[data-volver-chico],[data-sumar-chico],[data-compartir-pr],[data-rol],[data-quitar-para],[data-tab],[data-anio],[data-ver],[data-ordj]");
+    const t = e.target.closest("[data-atras],[data-subir],[data-alcat],[data-ncat],[data-nota-ok],[data-borrar-nota-ok],[data-reintentar-notas],[data-armar],[data-armar-id],[data-ar-elegir],[data-artipo],[data-ar-ej],[data-ar-libre-ok],[data-ar-mover],[data-ar-sacar],[data-ar-guardar],[data-ar-borrar],[data-cs-ok],[data-ir-chico],[data-eq-imagen],[data-eq-contar],[data-cacc],[data-cuenta],[data-cdeshacer],[data-cres],[data-cres-compartir],[data-cguardar],[data-reintentar-cnt],[data-ir-doc],[data-dmarca],[data-docs-guardar],[data-reintentar-docs],[data-tomar],[data-tver],[data-tdia],[data-toma-guardar],[data-reintentar-tests],[data-ir-equipo],[data-eq-n],[data-eq-id],[data-eq-vaciar],[data-eq-mas],[data-eq-guardar],[data-eq-borrar],[data-eq-descartar],[data-eq-compartir],[data-reintentar-eq],[data-amistoso-ok],[data-edad],[data-area],[data-area-cat],[data-play],[data-reclave],[data-ayuda],[data-cerrar-ayuda],[data-ir],[data-ir-cat],[data-ir-guia],[data-ir-ej],[data-ir-ej-para],[data-ir-ej-tab],[data-ir-line],[data-ir-puesto],[data-ir-practica],[data-ir-practicas],[data-pgrupo],[data-ir-asis],[data-ir-hoy],[data-ir-lista],[data-ir-chicos],[data-form],[data-reintentar],[data-motivo],[data-dia],[data-marca],[data-amodo],[data-junta],[data-todos],[data-cancelar-ok],[data-deshacer],[data-hora-ok],[data-agregar-ok],[data-horarios-ok],[data-guardar-lista],[data-borrar-lista-ok],[data-sacar],[data-sigue],[data-volver-chico],[data-sumar-chico],[data-compartir-pr],[data-rol],[data-quitar-para],[data-tab],[data-anio],[data-ver],[data-ordj]");
     if (!t || t.disabled) return;
     if (t.tagName === "A") e.preventDefault(); // el escudo de arriba: va al inicio sin recargar
     const ds = t.dataset, ir = "lado" in ds ? irSinPaso : irA; // Anterior / Siguiente no suman pasos
@@ -3415,21 +3480,29 @@
         if (on && !("guardada" in fila.dataset) && antes) fila.querySelector("select").value = antes.querySelector("select").value;
       }
     }
+    else if (ds.amodo) { S.amodo = ds.amodo; render(); }
+    else if ("junta" in ds) {
+      // juntar o separar las dos categorías; al separar, lo marcado de la otra no se guarda con esta
+      S.ajunta = !S.ajunta;
+      enCel.set(`los50-junta:${S.acat}`, S.ajunta ? "1" : null);
+      if (!S.ajunta) S.marcas = new Set(soloDe(S.acat, [...S.marcas]));
+      S.base2 = null;
+      guardarBorrador(S.acat, S.afecha, borrLista());
+      render();
+    }
     else if (ds.marca) {
       // tomar lista sin volver a dibujar la pantalla (no salta el scroll); lo marcado queda guardado en el celular
-      const on = !S.marcas.has(ds.marca);
-      if (on) S.marcas.add(ds.marca); else S.marcas.delete(ds.marca);
-      t.setAttribute("aria-pressed", on);
-      guardarBorrador(S.acat, S.afecha, { marcas: [...S.marcas], base: S.base || [] });
-      const c = $("#cont");
-      if (c) c.textContent = document.querySelectorAll(".lista-it[aria-pressed='true']").length;
+      const id = ds.marca, x = S.amodo === "les" ? LES(id) : id, y = S.amodo === "les" ? id : LES(id);
+      if (S.marcas.has(x)) S.marcas.delete(x); else { S.marcas.add(x); S.marcas.delete(y); }
+      document.querySelectorAll(`[data-marca="${CSS.escape(id)}"]`).forEach((b) => pintarItem(b, id));
+      guardarBorrador(S.acat, S.afecha, borrLista());
       const todos = $("[data-todos]");
-      if (todos) todos.hidden = !!document.querySelector(".lista-it[aria-pressed='true']");
-      const sg = $("#sin-guardar");
-      if (sg) sg.hidden = mismos([...S.marcas], S.guardados || []);
+      if (todos) todos.hidden = S.amodo === "les" || !!document.querySelector(".lista-it[aria-pressed='true']");
+      pintarPie();
     } else if ("todos" in ds) {
-      S.marcas = new Set([...document.querySelectorAll(".lista-it")].map((x) => x.dataset.marca));
-      guardarBorrador(S.acat, S.afecha, { marcas: [...S.marcas], base: S.base || [] });
+      // todos los de la lista, menos los lesionados (que quedan como estaban)
+      [...document.querySelectorAll(".lista-it")].map((x) => x.dataset.marca).filter((id) => !S.marcas.has(LES(id))).forEach((id) => S.marcas.add(id));
+      guardarBorrador(S.acat, S.afecha, borrLista());
       render();
     } else if (ds.cancelarOk) {
       const elegido = $("[data-motivo][aria-pressed='true']");

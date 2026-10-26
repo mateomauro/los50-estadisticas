@@ -18,7 +18,7 @@
      test: { cat, fecha, test (m10 | m30 | m40 | salto | bronco | cmj), valores: { id: número } } — reemplaza lo de ese test ese día
      equipo: { equipo (Primera, M16…), fecha, rival, jugadores: { "1": id, … "23": id }, cambios: { "16": { por, min } } } — sin jugadores, se borra
      nota: { cat (una categoría o "General"), texto, por, dueno } · borrar_nota: { id, dueno } — solo borra quien la escribió (dueno = un código que guarda su celular)
-     lista: { fecha, presentes, base? } — con "base" (lo que estaba guardado cuando empezó) se juntan las listas de dos entrenadores
+     lista: { fecha, presentes, base? } — los lesionados van en presentes como "les-<id>" (vino pero no entrena: no cuenta en su porcentaje); con "base" (lo que estaba guardado cuando empezó) se juntan las listas de dos entrenadores
    Todo pide la ficha de la clave de Entrenadores en el encabezado "x-ficha" (la misma de los videos: SHA-256 de la clave + ":los50-videos",
    comparada con el secreto CLAVE_ENTRENADORES de Cloudflare). Cada cambio queda anotado en la tabla "cambios" con la fecha y quién lo hizo. */
 const CATS = ["Plantel superior", "M19", "M17", "M16", "M15", "M14", "M13", "M12", "M11", "M10", "M9", "M8", "M7", "M6"];
@@ -109,7 +109,7 @@ export async function onRequest({ request, env }) {
     }
     if (!cat) {
       const resumen = {}, chicos = {};
-      for (const r of await todo("SELECT cat, COUNT(*) AS listas, SUM(json_array_length(presentes)) AS presentes, MAX(fecha) AS ultima FROM listas GROUP BY cat")) {
+      for (const r of await todo("SELECT cat, COUNT(*) AS listas, SUM((SELECT COUNT(*) FROM json_each(listas.presentes) WHERE json_each.value NOT LIKE 'les-%')) AS presentes, MAX(fecha) AS ultima FROM listas GROUP BY cat")) {
         resumen[r.cat] = { listas: r.listas, presentes: r.presentes || 0, ultima: r.ultima };
       }
       for (const r of await todo("SELECT cat, estado, COUNT(*) AS n FROM chicos GROUP BY cat, estado")) (chicos[r.cat] ??= { alta: 0, baja: 0 })[r.estado] = r.n;
