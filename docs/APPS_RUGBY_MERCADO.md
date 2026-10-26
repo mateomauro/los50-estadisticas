@@ -132,7 +132,82 @@ Lo que tienen ellas y nos falta es esto:
 
 ---
 
-## 5. Fuentes
+## 5. A fondo: estadísticas
+
+**Qué tenemos hoy.** Todo sale de las planillas de la UAR:
+- resultados, puntos y tries;
+- torneos y rivales;
+- quiénes jugaron y quién hace los tries (y en qué momento del partido);
+- si los chicos siguen jugando, el paso de M19 a plantel superior, el mes de nacimiento y el peso.
+
+Además, desde ahora, **lo contado en cada partido**: tackles, contactos, quiebres y demás.
+
+**Qué hacen los que saben:**
+- **Miran porcentajes, no cuentas.** Hacer muchos tackles puede querer decir que el equipo estuvo todo el partido defendiendo. Lo que importa es **cuántos tackles salieron bien** (tackles efectivos ÷ tackles intentados).
+- **Qué separa al que gana del que pierde:**
+  - En el rugby profesional, el que gana tiene **más % de tackles efectivos**, entra más veces a los 22 del rival y gana más lines con la tirada del otro.
+  - En el rugby amateur de Australia, tres datos alcanzaron para anticipar el resultado: **la relación de tackles, los quiebres de línea y cuánto avanza cada carrera**.
+- **Los 5 números que un entrenador recomienda mirar:**
+  1. tackles efectivos;
+  2. rucks que se retienen;
+  3. pelotas propias ganadas en line y scrum;
+  4. veces que se pasa la línea de ventaja;
+  5. cambios de dirección del ataque.
+- **El informe del partido** (Performa First Pass, World Rugby):
+  - lo que se ve primero es **line y scrum**: ganados, perdidos y torcidos;
+  - después, **la pelota**: retenida, perdida y dónde se perdió;
+  - después, tackles (altos, bajos y errados), quiebres, penales en contra y por qué, y de dónde salieron los puntos.
+  - Llega por mail en 24 a 48 horas, con gráficos de cómo fue el partido.
+- **Las tablas de "los que más"** (PlayHQ):
+  - en cada categoría, una tabla de todos los que jugaron; se ordena por cualquier número y queda arriba el que más tiene;
+  - se actualiza sola al cerrar cada partido;
+  - cada jugador ve sus números de la temporada y de toda su carrera.
+
+**Qué conviene copiar:**
+
+| # | Idea | Qué haríamos | Trabajo |
+|---|---|---|---|
+| E1 | **Porcentajes en vez de cuentas** | Con lo contado: "tackles efectivos: 87 %" del equipo y de cada jugador, en el resumen del partido y en la ficha. | Muy poco: ya contamos tackles y errados |
+| E2 | **Line y scrum en el contador** | Sumar al contador una fila "Equipo" con line propio ganado o perdido y scrum propio ganado o perdido, para tener el % de cada uno. Es lo primero que mira cualquier informe. | Poco |
+| E3 | **Informe del partido** | Una pantalla por partido que junte: el resultado, los tries y las tarjetas de la UAR, el equipo que jugó, lo contado (% de tackles, quiebres, contactos, line y scrum) y la nota del entrenador. Se manda por WhatsApp. | Medio |
+| E4 | **"Los que más" de la temporada** | Por categoría: los que más tackles, quiebres y tries hicieron y los que más vienen a entrenar. | Poco |
+| E5 | **Cómo viene el equipo** | Un gráfico con el % de tackles y de line partido a partido, para ver si mejora. | Poco (cuando haya varios partidos contados) |
+
+## 6. A fondo: planificación
+
+**Qué tenemos hoy.** Las prácticas que arma Magali en el Drive, ordenadas así:
+- la semana, con los días que entrena cada categoría y el de hoy marcado;
+- la temporada, mes por mes;
+- qué aprende cada categoría, el scrum de su edad y los juegos;
+- los 35 ejercicios dibujados.
+
+Los entrenadores **solo miran**: no pueden armar ni cambiar nada desde la app.
+
+**Qué hacen los que saben:**
+- **Armar la práctica desde una biblioteca de ejercicios** (Sportplan, Rugby Coach Weekly): se eligen ejercicios, se arrastran al orden que se quiere y se ponen los minutos. Se filtran **por edad y por nivel de contacto**.
+- **Reglas por edad** (Small Blacks de Nueva Zelanda):
+  - práctica de **menos de una hora** en infantiles, en partes de **10 a 15 minutos**;
+  - arrancar con un juego, después enseñar **una sola destreza** y después repetirla mucho;
+  - por lo menos **4 pelotas** para que todos la toquen.
+- **Planes en orden para toda la temporada:**
+  - Nueva Zelanda tiene prácticas numeradas por edad, para seguir una detrás de otra;
+  - Rugby Coaching Diary arma el año con **objetivos que se van tildando**.
+- **El contacto según la edad** (Inglaterra): tag y sin contacto hasta los 8 años; el contacto se introduce de a poco desde los 9; contacto completo desde los 14 (las reglas de cada edad las fija el reglamento de la RFU).
+- **El diario del entrenador** (World Rugby, Nueva Zelanda): después de cada práctica se anota qué salió bien, qué hay que trabajar y quién se lesionó. Dicen que es lo que más sirve para planificar lo que viene.
+
+**Qué conviene copiar:**
+
+| # | Idea | Qué haríamos | Trabajo |
+|---|---|---|---|
+| P1 | **Armar mi práctica** | El entrenador elige ejercicios de la biblioteca, les pone los minutos y la práctica queda en el día de su categoría, junto a las de Magali. Se manda por WhatsApp. | Medio |
+| P2 | **Avisos según la edad** | Mientras se arma, avisar si en infantiles pasa de una hora, si una parte dura más de 15 minutos o si un ejercicio tiene más contacto del que corresponde a la edad. | Poco (sobre P1) |
+| P3 | **"¿Cómo salió?"** | Después de tomar lista, una nota corta pegada a la práctica de ese día. La semana siguiente se ve al planificar. | Poco (usa las Notas) |
+| P4 | **Objetivos del mes con tilde** | En la temporada, cada objetivo del mes se puede marcar como logrado o "hay que volver a trabajarlo". | Poco |
+| P5 | **Ejercicios por nivel de contacto** | El filtro de la sección 4 (punto 7). | Poco |
+
+---
+
+## 7. Fuentes
 
 - Apps gratis para clubes de rugby 2026 (Sportplan): https://www.sportplan.net/drills/Rugby/guides/best-free-rugby-club-apps-2026.jsp
 - Mejores apps de entrenamiento de rugby (Framesports): https://framesports.ai/blog/best-rugby-coaching-apps/
@@ -160,3 +235,13 @@ Lo que tienen ellas y nos falta es esto:
 - App de la UAR con Dots: https://infonegocios.info/y-ademas/dots-desembarca-en-argentina-y-barcelona-con-una-app-de-la-uar
 - Cuarto Tiempo (UTN): https://www.institucional.frc.utn.edu.ar/SISTEMAS/NOTICIAS/PF/PROYECTOS/65D_5k4_paper_cuartotiempo.pdf
 - Marco de desarrollo de juveniles de Scottish Rugby: https://scottishrugby.org/wp-content/uploads/2025/02/Youth-Player-Development-Framework.pdf
+- Indicadores del rugby amateur en Australia: https://www.researchgate.net/publication/335322309_Key_performance_indicators_in_Australian_sub-elite_rugby_union
+- Indicadores de Rugby Championship y Super Rugby: https://www.researchgate.net/publication/329140463_Match_analysis_in_rugby_union_Performance_indicators_of_Rugby_Championship_and_Super_Rugby_teams
+- Qué separa al que gana del que pierde: https://www.researchgate.net/publication/233718253_Team_performance_indicators_as_a_function_of_winning_and_losing_in_rugby_union
+- Los datos del partido, explicados para hinchas: https://www.talkingrugbyunion.co.uk/how-rugby-fans-use-match-data-to-understand-team-performance/42325.htm
+- Performa First Pass, informes de rugby: https://www.performasports.com/first-pass-sports/rugby
+- PlayHQ, tablas de "los que más": https://support.playhq.com/hc/en-us/articles/23942255764508-Season-Grade-Stats-Leaderboards
+- Small Blacks, cómo planificar una práctica: https://rugbytoolbox.co.nz/the-game/small-blacks-rugby/planning-a-practice · prácticas en orden: https://www.rugbytoolbox.co.nz/the-game/small-blacks-rugby/practice-plans
+- England Rugby, rugby por edades: https://englandrugby.com/play/parents-guardians/age-grade-rugby-overview · calendario por edad: https://hertsrugby.co.uk/calendar/
+- Sportplan, prácticas de rugby: https://www.sportplan.net/drills/Rugby/Rugby-Training-Plans.jsp
+- Diario del entrenador de World Rugby: https://www.rugbyunion.cz/data/1/n/coaching-diary.pdf
