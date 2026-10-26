@@ -41,7 +41,8 @@ const ESQUEMA = [
 ];
 const NOTA_CATS = ["General", ...CATS], DUENO = /^[\w-]{8,64}$/, EQUIPO = /^[\p{L}\d][\p{L}\d .-]{0,29}$/u, EQ_MAX = 30;
 const TESTS = ["m10", "m30", "m40", "salto", "bronco", "cmj"];
-const ACCIONES = ["tackles", "errados", "contactos", "rucks", "pases", "quiebres", "recuperadas"];
+// las del jugador y, con el id "equipo", la formación fija: line y scrum con nuestra pelota, ganados y perdidos
+const ACCIONES = ["tackles", "errados", "contactos", "rucks", "pases", "quiebres", "recuperadas", "line_g", "line_p", "scrum_g", "scrum_p"];
 const DOCS = ["medica", "autoriza", "dni", "conmocion", "antidoping", "primera"], DOCS_ANUAL = ["medica", "autoriza"];
 const objeto = (o) => !!o && typeof o === "object" && !Array.isArray(o);
 const FECHA = /^\d{4}-\d{2}-\d{2}$/, HORA = /^([01]\d|2[0-3]):[0-5]\d$/, ID = /^[\w-]{1,40}$/;
@@ -157,7 +158,7 @@ export async function onRequest({ request, env }) {
   if (b && b.accion === "conteo") {
     // lo contado en un partido (desde el equipo): reemplaza lo que había de ese partido
     const eq = texto(b.equipo, 30), { fecha } = b, cs = b.conteos;
-    if (!EQUIPO.test(eq) || !FECHA.test(fecha || "") || !objeto(cs) || Object.keys(cs).length > EQ_MAX) return mal();
+    if (!EQUIPO.test(eq) || !FECHA.test(fecha || "") || !objeto(cs) || Object.keys(cs).length > EQ_MAX + 1) return mal();
     const filas = [];
     for (const [id, o] of Object.entries(cs)) {
       if (!ID.test(id) || !objeto(o)) return mal();

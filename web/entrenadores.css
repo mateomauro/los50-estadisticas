@@ -978,6 +978,23 @@
 @keyframes cnt-suma { from { background: #d4efdd; border-color: var(--verde); } to { background: var(--sup); border-color: var(--linea); } }
 .cnt-b__v--0 { background: #eef1f6; color: var(--suave); }
 .cnt-res { margin-top: 12px; }
+.cnt-res__tot td { font-weight: 700; }
+.cnt-pct { margin: 8px 0 0; font-size: 15.5px; line-height: 1.4; color: var(--texto); }
+.cnt-pct:empty { display: none; }
+/* la formación fija: cuatro botones del equipo (ganado en verde, perdido en rojo) */
+.cnt-fija { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+@media (max-width: 420px) { .cnt-fija { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.cnt-fija > li { display: flex; }
+.cnt-f { position: relative; flex: 1; min-height: 60px; display: flex; align-items: center; justify-content: flex-start; padding: 8px 44px 8px 12px; border: 1px solid #b7dfc4;
+  border-radius: 12px; background: var(--verde-fondo); color: var(--verde); font-size: 14.5px; font-weight: 700; line-height: 1.2; text-align: left; cursor: pointer; touch-action: manipulation; user-select: none; }
+.cnt-f--mal { border-color: #f3c3be; background: var(--rojo-fondo); color: var(--rojo); }
+.cnt-f .cnt-b__v { top: 50%; translate: 0 -50%; }
+/* "¿Cómo salió?": las notas del día en la lista y en la semana de Planificación */
+.cs-l { list-style: none; margin: 0 0 10px; padding: 0; display: grid; gap: 8px; }
+.cs-l li { padding: 10px 12px; background: var(--sup); border: 1px solid var(--linea); border-radius: 12px; }
+.cs-l p { margin: 0; font-size: 16px; line-height: 1.4; white-space: pre-wrap; overflow-wrap: anywhere; }
+.cs-l small { display: block; margin-top: 4px; font-size: 13.5px; color: var(--suave); }
+.prac__nota { display: block; margin-top: 3px; font-size: 13.5px; font-weight: 500; line-height: 1.3; color: var(--azul); }
 @media (prefers-reduced-motion: reduce) { .cnt-b--suma { animation: none; } }
 /* con 8 áreas, en la compu van de a cuatro (dos filas parejas) */
 @media (min-width: 900px) { .areas--6:has(> li:nth-child(8):last-child) { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
