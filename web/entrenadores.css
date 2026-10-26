@@ -994,6 +994,28 @@
 .cs-l li { padding: 10px 12px; background: var(--sup); border: 1px solid var(--linea); border-radius: 12px; }
 .cs-l p { margin: 0; font-size: 16px; line-height: 1.4; white-space: pre-wrap; overflow-wrap: anywhere; }
 .cs-l small { display: block; margin-top: 4px; font-size: 13.5px; color: var(--suave); }
+/* armar la práctica: cada parte con sus minutos, qué se hace y las flechas para ordenar */
+.ar-fila { margin-top: 10px; }
+/* los campos se achican con la pantalla (la fecha, si no, empuja todo para el costado) */
+.armar .asis-form__campo { min-width: 0; }
+.armar .asis-input { width: 100%; min-width: 0; }
+.ar-l { list-style: none; margin: 0; padding: 0; overflow: hidden; background: var(--sup); border: 1px solid var(--linea); border-radius: var(--radio); }
+.ar-f { display: grid; grid-template-columns: 84px minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 8px 10px; }
+.ar-f + .ar-f { border-top: 1px solid var(--linea); }
+.ar-min { width: 100%; min-height: 44px; padding: 4px 6px; font-size: 15.5px; }
+.ar-f__txt { display: grid; gap: 2px; min-width: 0; font-size: 15.5px; line-height: 1.3; }
+.ar-f__txt b { font-weight: 600; overflow-wrap: anywhere; }
+.ar-f__txt .link { justify-self: start; padding: 2px 0; font-size: 13.5px; }
+.ar-f__btns { display: flex; }
+.ar-b { width: 34px; height: 44px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 8px; background: none; color: var(--azul); cursor: pointer; }
+.ar-b:hover { background: var(--azul-claro); }
+.ar-b:disabled { background: none; color: #c3cad6; cursor: default; }
+.ar-b svg { width: 18px; height: 18px; }
+.ar-aviso { margin-top: 10px; }
+.ej--armar { cursor: pointer; }
+.ej--armar > svg { width: 18px; height: 18px; color: var(--azul); }
+.prac__armar { color: var(--azul); font-weight: 600; }
+.prac-cambiar { margin-top: 8px; }
 .prac__nota { display: block; margin-top: 3px; font-size: 13.5px; font-weight: 500; line-height: 1.3; color: var(--azul); }
 @media (prefers-reduced-motion: reduce) { .cnt-b--suma { animation: none; } }
 /* con 8 áreas, en la compu van de a cuatro (dos filas parejas) */

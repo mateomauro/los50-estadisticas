@@ -5,12 +5,14 @@
    GET  /api/asistencia?cat=M16  -> { horarios, entrenamientos, listas, chicos } de esa categoría
    GET  /api/asistencia          -> { resumen: { M16: { listas, presentes, ultima } }, chicos: { M16: { alta, baja } } } para la lista de categorías
    GET  /api/asistencia?respaldo=1  -> todas las tablas (la copia de seguridad de respaldo_asistencia.py)
+   GET  /api/asistencia?practicas=1  -> las prácticas que armaron los entrenadores en la app: [{ id, cat, fecha, foco, objetivo, partes, por, ts }]
    GET  /api/asistencia?conteos=1  -> lo contado en los partidos del último año: [{ cat, fecha, id, accion, n }]
    GET  /api/asistencia?docs=1  -> los documentos y cursos de todos los chicos: [{ id, doc, anio, fecha }]
    GET  /api/asistencia?tests=1&cat=M16  -> los tests físicos de la categoría: [{ fecha, test, id, valor }]
    GET  /api/asistencia?equipos=1  -> los equipos armados para los partidos (de 60 días para atrás en adelante)
    GET  /api/asistencia?notas=1  -> las notas de feedback (más nuevas primero); "mia" dice si la escribió quien pregunta (encabezado x-dueno)
-   POST /api/asistencia  { cat, accion, ..., por? } -> guarda (accion: horarios | entrenamiento | lista | borrar_lista | chico | nota | borrar_nota | equipo | test | docs | conteo)
+   POST /api/asistencia  { cat, accion, ..., por? } -> guarda (accion: horarios | entrenamiento | lista | borrar_lista | chico | nota | borrar_nota | equipo | test | docs | conteo | practica | borrar_practica)
+     practica: { cat, id?, fecha, foco, objetivo, partes: [{ min, act, ej?, det? }] } — sin id es nueva · borrar_practica: { cat, id }
      conteo: { equipo, fecha, conteos: { id: { tackles: 3, … } } } — reemplaza lo contado en ese partido
      docs: { cat, doc (medica | autoriza | dni | conmocion | antidoping | primera), fecha, sumar: [ids], sacar: [ids] } — solo lo que cambió
      test: { cat, fecha, test (m10 | m30 | m40 | salto | bronco | cmj), valores: { id: número } } — reemplaza lo de ese test ese día
@@ -31,6 +33,8 @@ const ESQUEMA = [
   // notas de feedback entre entrenadores: "dueno" es un código del celular de quien la escribió (nunca se devuelve), para que solo ella o él pueda borrarla
   // el equipo de un partido: jugadores = { número de camiseta: número de jugador }; cambios = { suplente: { por: titular, min: minuto } }
   "CREATE TABLE IF NOT EXISTS equipos (cat TEXT NOT NULL, fecha TEXT NOT NULL, rival TEXT, jugadores TEXT NOT NULL, cambios TEXT, por TEXT, ts TEXT NOT NULL, PRIMARY KEY (cat, fecha))",
+  // las prácticas armadas en la app: datos = { foco, objetivo, partes: [{ min, act (qué se hace), ej (el ejercicio de la app), det }] }
+  "CREATE TABLE IF NOT EXISTS practicas (id TEXT PRIMARY KEY, cat TEXT NOT NULL, fecha TEXT NOT NULL, datos TEXT NOT NULL, por TEXT, ts TEXT NOT NULL)",
   // lo contado en un partido: cuántas veces hizo cada acción (tackles, contactos…) cada jugador
   "CREATE TABLE IF NOT EXISTS conteos (cat TEXT NOT NULL, fecha TEXT NOT NULL, id TEXT NOT NULL, accion TEXT NOT NULL, n INTEGER NOT NULL, por TEXT, ts TEXT NOT NULL, PRIMARY KEY (cat, fecha, id, accion))",
   // documentos y cursos de cada chico: la ficha médica y la autorización son del año (anio = "2026"); el DNI y los cursos, "siempre"
@@ -43,6 +47,7 @@ const NOTA_CATS = ["General", ...CATS], DUENO = /^[\w-]{8,64}$/, EQUIPO = /^[\p{
 const TESTS = ["m10", "m30", "m40", "salto", "bronco", "cmj"];
 // las del jugador y, con el id "equipo", la formación fija: line y scrum con nuestra pelota, ganados y perdidos
 const ACCIONES = ["tackles", "errados", "contactos", "rucks", "pases", "quiebres", "recuperadas", "line_g", "line_p", "scrum_g", "scrum_p"];
+const PRACTICA = /^u-[a-z0-9]{6,24}$/;
 const DOCS = ["medica", "autoriza", "dni", "conmocion", "antidoping", "primera"], DOCS_ANUAL = ["medica", "autoriza"];
 const objeto = (o) => !!o && typeof o === "object" && !Array.isArray(o);
 const FECHA = /^\d{4}-\d{2}-\d{2}$/, HORA = /^([01]\d|2[0-3]):[0-5]\d$/, ID = /^[\w-]{1,40}$/;
@@ -79,9 +84,13 @@ export async function onRequest({ request, env }) {
     const q = new URL(request.url).searchParams, cat = q.get("cat");
     // la copia de seguridad (respaldo_asistencia.py, en la actualización automática): todas las tablas
     if (q.get("respaldo")) {
-      const tablas = ["horarios", "entrenamientos", "listas", "chicos", "cambios", "notas", "equipos", "tests", "docs", "conteos"];
+      const tablas = ["horarios", "entrenamientos", "listas", "chicos", "cambios", "notas", "equipos", "tests", "docs", "conteos", "practicas"];
       const filas = await Promise.all(tablas.map((x) => todo(`SELECT * FROM ${x}`)));
       return json({ fecha: new Date().toISOString(), ...Object.fromEntries(tablas.map((x, i) => [x, filas[i]])) });
+    }
+    if (q.get("practicas")) {
+      const filas = await todo("SELECT id, cat, fecha, datos, por, ts FROM practicas WHERE fecha >= date('now', '-400 days') ORDER BY fecha");
+      return json({ practicas: filas.map(({ datos, ...r }) => ({ ...r, ...JSON.parse(datos) })) });
     }
     if (q.get("conteos")) return json({ conteos: await todo("SELECT cat, fecha, id, accion, n FROM conteos WHERE fecha >= date('now', '-400 days')") });
     if (q.get("docs")) return json({ docs: await todo("SELECT id, doc, anio, fecha FROM docs") });
@@ -217,6 +226,21 @@ export async function onRequest({ request, env }) {
     ops = [db.prepare("INSERT OR REPLACE INTO listas (cat, fecha, presentes, por, ts) VALUES (?, ?, ?, ?, ?)").bind(cat, fecha, JSON.stringify(final), quien, ts),
       anotar({ fecha, presentes: final.length })];
     resp = { ok: true, presentes: final.length };
+  } else if (b.accion === "practica") {
+    // una práctica armada en la app (nueva o cambiada): el día, qué se trabaja y las partes con sus minutos
+    const { fecha } = b, foco = texto(b.foco, 80), objetivo = texto(b.objetivo, 200), ps = Array.isArray(b.partes) ? b.partes : null;
+    const id = b.id == null ? `u-${crypto.randomUUID().replace(/-/g, "").slice(0, 12)}` : String(b.id);
+    if (!FECHA.test(fecha || "") || foco.length < 2 || !ps || !ps.length || ps.length > 30 || !PRACTICA.test(id)) return mal();
+    const partes = ps.map((x) => ({ min: x && Number.isInteger(x.min) && x.min > 0 && x.min <= 120 ? x.min : null, act: texto(x && x.act, 120),
+      ej: texto(x && x.ej, 60) || undefined, det: texto(x && x.det, 300) || undefined }));
+    if (partes.some((x) => x.act.length < 2)) return mal();
+    ops = [db.prepare("INSERT OR REPLACE INTO practicas (id, cat, fecha, datos, por, ts) VALUES (?, ?, ?, ?, ?, ?)").bind(id, cat, fecha, JSON.stringify({ foco, objetivo, partes }), por, ts),
+      anotar({ id, fecha, partes: partes.length })];
+    resp = { ok: true, id };
+  } else if (b.accion === "borrar_practica") {
+    const id = String(b.id || "");
+    if (!PRACTICA.test(id)) return mal();
+    ops = [db.prepare("DELETE FROM practicas WHERE id = ? AND cat = ?").bind(id, cat), anotar({ id })];
   } else if (b.accion === "docs") {
     // los que se marcaron y los que se desmarcaron (así dos que marcan a la vez no se pisan)
     const { doc, fecha } = b, lista = (v) => (Array.isArray(v) ? [...new Set(v.map(String))] : null), sumar = lista(b.sumar), sacar = lista(b.sacar);
