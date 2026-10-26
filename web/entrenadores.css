@@ -892,8 +892,7 @@
 .eq-buscar { margin-bottom: 0; }
 .eq-l[hidden], .grupo[hidden] { display: none; }
 /* los titulares en la cancha: forwards arriba y backs abajo (como en Los puestos); cada camiseta se toca */
-.eq-cancha { display: grid; gap: 10px; padding: 14px 10px 18px; border: 1px solid #23633a; border-radius: var(--radio);
-  background: repeating-linear-gradient(180deg, #2e7a46 0 46px, #29703f 46px 92px); }
+.eq-cancha { display: grid; gap: 10px; padding: 14px 10px 18px; border: 1px solid #23633a; border-radius: var(--radio); background: #2b7443; }
 .eq-cancha__tit { margin: 0 4px -4px; font: 600 12px/1 var(--base); letter-spacing: .08em; text-transform: uppercase; color: rgb(255 255 255 / 80%); }
 .eq-cancha__tit--backs { margin-top: 4px; padding-top: 12px; border-top: 2px dashed rgb(255 255 255 / 45%); }
 .eq-cancha__fila { display: flex; justify-content: center; gap: 6px; }
