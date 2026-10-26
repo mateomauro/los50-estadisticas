@@ -5,8 +5,10 @@
    GET  /api/asistencia?cat=M16  -> { horarios, entrenamientos, listas, chicos } de esa categoría
    GET  /api/asistencia          -> { resumen: { M16: { listas, presentes, ultima } }, chicos: { M16: { alta, baja } } } para la lista de categorías
    GET  /api/asistencia?respaldo=1  -> todas las tablas (la copia de seguridad de respaldo_asistencia.py)
+   GET  /api/asistencia?equipos=1  -> los equipos armados para los partidos (de 60 días para atrás en adelante)
    GET  /api/asistencia?notas=1  -> las notas de feedback (más nuevas primero); "mia" dice si la escribió quien pregunta (encabezado x-dueno)
-   POST /api/asistencia  { cat, accion, ..., por? } -> guarda (accion: horarios | entrenamiento | lista | borrar_lista | chico | nota | borrar_nota)
+   POST /api/asistencia  { cat, accion, ..., por? } -> guarda (accion: horarios | entrenamiento | lista | borrar_lista | chico | nota | borrar_nota | equipo)
+     equipo: { equipo (Primera, M16…), fecha, rival, jugadores: { "1": id, … "23": id }, cambios: { "16": { por, min } } } — sin jugadores, se borra
      nota: { cat (una categoría o "General"), texto, por, dueno } · borrar_nota: { id, dueno } — solo borra quien la escribió (dueno = un código que guarda su celular)
      lista: { fecha, presentes, base? } — con "base" (lo que estaba guardado cuando empezó) se juntan las listas de dos entrenadores
    Todo pide la ficha de la clave de Entrenadores en el encabezado "x-ficha" (la misma de los videos: SHA-256 de la clave + ":los50-videos",
@@ -21,9 +23,11 @@ const ESQUEMA = [
   "CREATE TABLE IF NOT EXISTS chicos (cat TEXT NOT NULL, id TEXT NOT NULL, nombre TEXT, estado TEXT NOT NULL, ts TEXT NOT NULL, PRIMARY KEY (cat, id))",
   "CREATE TABLE IF NOT EXISTS cambios (ts TEXT NOT NULL, cat TEXT NOT NULL, accion TEXT NOT NULL, detalle TEXT, por TEXT)",
   // notas de feedback entre entrenadores: "dueno" es un código del celular de quien la escribió (nunca se devuelve), para que solo ella o él pueda borrarla
+  // el equipo de un partido: jugadores = { número de camiseta: número de jugador }; cambios = { suplente: { por: titular, min: minuto } }
+  "CREATE TABLE IF NOT EXISTS equipos (cat TEXT NOT NULL, fecha TEXT NOT NULL, rival TEXT, jugadores TEXT NOT NULL, cambios TEXT, por TEXT, ts TEXT NOT NULL, PRIMARY KEY (cat, fecha))",
   "CREATE TABLE IF NOT EXISTS notas (id INTEGER PRIMARY KEY AUTOINCREMENT, cat TEXT NOT NULL, fecha TEXT NOT NULL, texto TEXT NOT NULL, por TEXT, dueno TEXT, ts TEXT NOT NULL)",
 ];
-const NOTA_CATS = ["General", ...CATS], DUENO = /^[\w-]{8,64}$/;
+const NOTA_CATS = ["General", ...CATS], DUENO = /^[\w-]{8,64}$/, EQUIPO = /^[\p{L}\d][\p{L}\d .-]{0,29}$/u, EQ_MAX = 30;
 const FECHA = /^\d{4}-\d{2}-\d{2}$/, HORA = /^([01]\d|2[0-3]):[0-5]\d$/, ID = /^[\w-]{1,40}$/;
 
 const json = (datos, status = 200) => new Response(JSON.stringify(datos), {
@@ -58,9 +62,13 @@ export async function onRequest({ request, env }) {
     const q = new URL(request.url).searchParams, cat = q.get("cat");
     // la copia de seguridad (respaldo_asistencia.py, en la actualización automática): todas las tablas
     if (q.get("respaldo")) {
-      const tablas = ["horarios", "entrenamientos", "listas", "chicos", "cambios", "notas"];
+      const tablas = ["horarios", "entrenamientos", "listas", "chicos", "cambios", "notas", "equipos"];
       const filas = await Promise.all(tablas.map((x) => todo(`SELECT * FROM ${x}`)));
       return json({ fecha: new Date().toISOString(), ...Object.fromEntries(tablas.map((x, i) => [x, filas[i]])) });
+    }
+    if (q.get("equipos")) {
+      const filas = await todo("SELECT cat, fecha, rival, jugadores, cambios, por, ts FROM equipos WHERE fecha >= date('now', '-60 days') ORDER BY fecha, cat");
+      return json({ equipos: filas.map((e) => ({ ...e, jugadores: JSON.parse(e.jugadores), cambios: JSON.parse(e.cambios || "{}") })) });
     }
     if (q.get("notas")) {
       const dueno = request.headers.get("x-dueno") || "";
@@ -100,6 +108,30 @@ export async function onRequest({ request, env }) {
     await db.batch([db.prepare("DELETE FROM notas WHERE id = ?").bind(id),
       db.prepare("INSERT INTO cambios (ts, cat, accion, detalle, por) VALUES (?, ?, 'borrar_nota', ?, ?)").bind(ts, "General", JSON.stringify({ id }), por)]);
     return json({ ok: true });
+  }
+  if (b && b.accion === "equipo") {
+    const eq = texto(b.equipo, 30), { fecha } = b, j = b.jugadores, cb = b.cambios || {};
+    const objeto = (o) => o && typeof o === "object" && !Array.isArray(o);
+    if (!EQUIPO.test(eq) || !FECHA.test(fecha || "") || !objeto(j) || !objeto(cb)) return mal();
+    const jug = {}, camb = {}, ids = new Set();
+    for (const [n, id] of Object.entries(j)) {
+      if (!/^\d{1,2}$/.test(n) || +n < 1 || +n > EQ_MAX || !ID.test(String(id)) || ids.has(String(id))) return mal();
+      ids.add(String(id));
+      jug[+n] = String(id);
+    }
+    // el cambio de un suplente: por qué titular entra y en qué minuto (cualquiera de los dos puede quedar sin decidir)
+    for (const [n, c] of Object.entries(cb)) {
+      const num = (v, max) => (v == null || v === "" ? null : Number.isInteger(+v) && +v >= 1 && +v <= max ? +v : NaN);
+      const por = num(c && c.por, 15), min = num(c && c.min, 90);
+      if (Number.isNaN(por) || Number.isNaN(min)) return mal();
+      if (jug[n] && +n > 15 && (por != null || min != null)) camb[+n] = { por, min };
+    }
+    const cuantos = Object.keys(jug).length;
+    await db.batch([cuantos
+      ? db.prepare("INSERT OR REPLACE INTO equipos (cat, fecha, rival, jugadores, cambios, por, ts) VALUES (?, ?, ?, ?, ?, ?, ?)").bind(eq, fecha, texto(b.rival, 80) || null, JSON.stringify(jug), JSON.stringify(camb), por, ts)
+      : db.prepare("DELETE FROM equipos WHERE cat = ? AND fecha = ?").bind(eq, fecha),
+    db.prepare("INSERT INTO cambios (ts, cat, accion, detalle, por) VALUES (?, ?, 'equipo', ?, ?)").bind(ts, eq, JSON.stringify({ fecha, jugadores: cuantos }), por)]);
+    return json({ ok: true, ts });
   }
   if (b && b.accion === "nota") {
     const t = String(b.texto == null ? "" : b.texto).split(/\r?\n/).map((x) => x.replace(/\s+/g, " ").trim()).join("\n").replace(/\n{3,}/g, "\n\n").trim().slice(0, 600);

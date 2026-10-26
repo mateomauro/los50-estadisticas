@@ -29,7 +29,7 @@ from armar_sitios import ENTRENADORES
 HERE = Path(__file__).parent
 CARPETA = HERE / "respaldos"
 COPIA = CARPETA / "asistencia.cifrada"
-TABLAS = ["horarios", "entrenamientos", "listas", "chicos", "cambios", "notas"]
+TABLAS = ["horarios", "entrenamientos", "listas", "chicos", "cambios", "notas", "equipos"]
 VUELTAS = 310_000
 
 

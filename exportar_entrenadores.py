@@ -103,6 +103,34 @@ def jugadores(p, i, d):
     return tabla(base[["pid", "nombre", "cat", "anio", "pj", "tit", "tries", "conv", "pen", "drops", "pts", "am", "ro"]])
 
 
+def camisetas(p, d):
+    """En qué puesto juega cada chico, por su número de jugador de la UAR (el mismo de la lista de asistencia). El equipo del partido
+    lo usa para sugerir quién va en cada número. Dos datos:
+      "j": los números con los que arrancó (del 1 al 15), los dos que más usó en la temporada en curso (si no, en la anterior).
+           Solo de los partidos donde el orden de la planilla es la camiseta (Primera, Intermedia, Pre-Intermedia y M19; en M13 a M17
+           la UAR pone otro orden y el número no dice el puesto).
+      "f": el puesto que figura en su ficha de la UAR (01 a 15; "Primera linea" cuenta como 1)."""
+    pl = d["planteles"]
+    pl = pl[(pl.equipo == "Los 50") & pl.player_id.notna()].merge(p[["mid", "anio"]], on="mid")
+    unif = dict(zip(d["jugadores"].player_id, d["jugadores"].player_id_unificado))
+    pl = pl.assign(pid=pl.player_id.map(lambda x: str(unif.get(x, x))), n=pd.to_numeric(pl.orden, errors="coerce"),
+                   dor=pd.to_numeric(pl.dorsal, errors="coerce"))
+    # un partido sirve si en casi toda la planilla el orden es la camiseta
+    sirve = pl.assign(ok=pl.n == pl.dor).groupby("mid").ok.mean()
+    tit = pl[pl.mid.isin(sirve[sirve >= 0.9].index) & pl.n.between(1, 15)]
+    ult, out = int(p.anio.max()), {}
+    for anio in (ult - 1, ult):  # la temporada en curso pisa a la anterior
+        g = tit[tit.anio == anio].groupby(["pid", "n"]).size().reset_index(name="k").sort_values(["pid", "k", "n"], ascending=[True, False, True])
+        for pid, gg in g.groupby("pid"):
+            out[pid] = {"j": [int(x) for x in gg.n.head(2)]}
+    ficha = pl[pl.anio >= ult - 1].groupby("pid").pos.agg(lambda x: x.mode().iloc[0] if len(x.mode()) else None)
+    for pid, pos in ficha.items():
+        n = 1 if pos == "Primera linea" else int(pos) if str(pos).isdigit() and 1 <= int(pos) <= 15 else None
+        if n:
+            out.setdefault(pid, {})["f"] = n
+    return out
+
+
 def no_siguieron(p, i, d):
     """Por categoría y año: los chicos que estuvieron en planillas y no volvieron a aparecer la temporada siguiente
     (misma cuenta que analisis_metricas.retencion)."""
@@ -155,6 +183,7 @@ def main():
         "partidos": partidos(p, i),
         "jugadores": jugadores(p, i, d),
         "no_siguieron": no_siguieron(p, i, d),
+        "camisetas": camisetas(p, d),  # con qué número arranca cada chico (para sugerir en el equipo del partido)
         "diagnostico": R.DIAGNOSTICO, "diag_web": R.DIAG_WEB, "expertos": R.EXPERTOS, "a_medir": R.A_MEDIR, "fuentes": R.FUENTES,
         "glosario": A.GLOSARIO, "notas": A.NOTAS,
         "proximos": PP.proximos(),  # el fixture que ya cargó la UAR (la página muestra solo los de hoy en adelante)

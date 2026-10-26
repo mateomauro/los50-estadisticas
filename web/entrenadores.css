@@ -853,6 +853,44 @@
 .nota__txt { margin: 0; font-size: 16.5px; line-height: 1.45; white-space: pre-wrap; overflow-wrap: anywhere; }
 .nota__borrar { justify-self: start; }
 .asis-input--nota { min-height: 112px; resize: vertical; line-height: 1.4; }
+/* el equipo de un partido: en cada próximo partido, el botón para armarlo */
+.res__eq { grid-column: 1 / -1; display: grid; grid-template-columns: 20px minmax(0, 1fr) 16px; align-items: center; gap: 10px; min-height: 46px; margin-top: 2px;
+  padding: 0 12px; border: 1px solid #c9d6ee; border-radius: 10px; background: var(--azul-claro); color: var(--azul); font: 600 15px/1.25 var(--base); text-align: left; cursor: pointer; }
+.res__eq > svg { width: 18px; height: 18px; }
+.res__eq:hover { border-color: var(--azul); }
+.res__eq-ojo { display: block; font-size: 12.5px; font-weight: 700; color: var(--ambar); }
+.eq-otro { margin-top: 12px; }
+/* cada número es un renglón que se toca; el número en un cuadrado azul (vacío: claro) */
+.eq-partido { margin: 0 0 4px; }
+.eq-guardado { display: flex; align-items: center; gap: 6px; margin: 0 0 4px; }
+.eq-guardado svg { width: 16px; height: 16px; color: var(--verde); }
+.eq-l { list-style: none; margin: 0; padding: 0; overflow: hidden; background: var(--sup); border: 1px solid var(--linea); border-radius: var(--radio); }
+.eq-l > li + li { border-top: 1px solid var(--linea); }
+.eq-it { width: 100%; display: grid; grid-template-columns: 40px minmax(0, 1fr) 18px; align-items: center; gap: 12px; min-height: 60px; padding: 8px 14px;
+  background: none; border: 0; color: var(--texto); text-align: left; cursor: pointer; touch-action: manipulation; }
+.eq-it:hover { background: #f6f8fb; }
+.eq-it:active { background: var(--azul-claro); }
+.eq-it:focus-visible { outline-offset: -3px; }
+.eq-it > svg { justify-self: end; width: 18px; height: 18px; color: var(--azul); }
+.eq-it__n { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 10px; background: var(--azul); color: #fff; font: 700 21px/1 var(--cond); }
+.eq-f--vacio .eq-it__n { background: var(--azul-claro); color: var(--azul); }
+.eq-it__txt { display: grid; gap: 2px; min-width: 0; }
+.eq-it__nom { font-size: 16.5px; line-height: 1.25; overflow-wrap: anywhere; }
+.eq-it__vacio { font-size: 16.5px; font-weight: 600; color: var(--azul); }
+.eq-it__txt small { font-size: 14px; line-height: 1.3; color: var(--suave); }
+.eq-al { font-weight: 700; color: var(--ambar); }
+.eq-al--3 { color: var(--rojo); }
+.eq-cambio { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; padding: 0 14px 12px 66px; }
+.eq-cambio label { display: grid; gap: 4px; font-size: 13.5px; font-weight: 600; color: var(--suave); }
+.eq-cambio .asis-input { width: 100%; min-width: 0; min-height: 44px; padding: 6px 8px; font-size: 15.5px; }
+.eq-acc { display: grid; justify-items: start; gap: 6px; margin-top: 16px; }
+.eq-acc .btn-sec--ancho, .eq-acc .asis-form { justify-self: stretch; }
+/* elegir: el nombre y, a la derecha, cuánto viene a entrenar */
+.eq-it--elegir { grid-template-columns: minmax(0, 1fr) auto; }
+.eq-it--este { background: var(--azul-claro); }
+.eq-vaciar { margin-bottom: 12px; }
+.eq-buscar { margin-bottom: 0; }
+.eq-l[hidden], .grupo[hidden] { display: none; }
 /* hoy entrena tu categoría: la tarjeta abre la lista y "Otra categoría" lleva a elegir */
 .area-li { position: relative; }
 .area__otra { position: absolute; top: 10px; right: 8px; min-height: 44px; padding: 0 8px; font-size: 13px; font-weight: 600; }
