@@ -5,9 +5,11 @@
    GET  /api/asistencia?cat=M16  -> { horarios, entrenamientos, listas, chicos } de esa categoría
    GET  /api/asistencia          -> { resumen: { M16: { listas, presentes, ultima } }, chicos: { M16: { alta, baja } } } para la lista de categorías
    GET  /api/asistencia?respaldo=1  -> todas las tablas (la copia de seguridad de respaldo_asistencia.py)
+   GET  /api/asistencia?tests=1&cat=M16  -> los tests físicos de la categoría: [{ fecha, test, id, valor }]
    GET  /api/asistencia?equipos=1  -> los equipos armados para los partidos (de 60 días para atrás en adelante)
    GET  /api/asistencia?notas=1  -> las notas de feedback (más nuevas primero); "mia" dice si la escribió quien pregunta (encabezado x-dueno)
-   POST /api/asistencia  { cat, accion, ..., por? } -> guarda (accion: horarios | entrenamiento | lista | borrar_lista | chico | nota | borrar_nota | equipo)
+   POST /api/asistencia  { cat, accion, ..., por? } -> guarda (accion: horarios | entrenamiento | lista | borrar_lista | chico | nota | borrar_nota | equipo | test)
+     test: { cat, fecha, test (m10 | m30 | m40 | salto | bronco | cmj), valores: { id: número } } — reemplaza lo de ese test ese día
      equipo: { equipo (Primera, M16…), fecha, rival, jugadores: { "1": id, … "23": id }, cambios: { "16": { por, min } } } — sin jugadores, se borra
      nota: { cat (una categoría o "General"), texto, por, dueno } · borrar_nota: { id, dueno } — solo borra quien la escribió (dueno = un código que guarda su celular)
      lista: { fecha, presentes, base? } — con "base" (lo que estaba guardado cuando empezó) se juntan las listas de dos entrenadores
@@ -25,9 +27,13 @@ const ESQUEMA = [
   // notas de feedback entre entrenadores: "dueno" es un código del celular de quien la escribió (nunca se devuelve), para que solo ella o él pueda borrarla
   // el equipo de un partido: jugadores = { número de camiseta: número de jugador }; cambios = { suplente: { por: titular, min: minuto } }
   "CREATE TABLE IF NOT EXISTS equipos (cat TEXT NOT NULL, fecha TEXT NOT NULL, rival TEXT, jugadores TEXT NOT NULL, cambios TEXT, por TEXT, ts TEXT NOT NULL, PRIMARY KEY (cat, fecha))",
+  // tests de campo: un valor por chico, test y día (segundos, metros o centímetros; el Bronco en segundos)
+  "CREATE TABLE IF NOT EXISTS tests (cat TEXT NOT NULL, fecha TEXT NOT NULL, test TEXT NOT NULL, id TEXT NOT NULL, valor REAL NOT NULL, por TEXT, ts TEXT NOT NULL, PRIMARY KEY (cat, fecha, test, id))",
   "CREATE TABLE IF NOT EXISTS notas (id INTEGER PRIMARY KEY AUTOINCREMENT, cat TEXT NOT NULL, fecha TEXT NOT NULL, texto TEXT NOT NULL, por TEXT, dueno TEXT, ts TEXT NOT NULL)",
 ];
 const NOTA_CATS = ["General", ...CATS], DUENO = /^[\w-]{8,64}$/, EQUIPO = /^[\p{L}\d][\p{L}\d .-]{0,29}$/u, EQ_MAX = 30;
+const TESTS = ["m10", "m30", "m40", "salto", "bronco", "cmj"];
+const objeto = (o) => !!o && typeof o === "object" && !Array.isArray(o);
 const FECHA = /^\d{4}-\d{2}-\d{2}$/, HORA = /^([01]\d|2[0-3]):[0-5]\d$/, ID = /^[\w-]{1,40}$/;
 
 const json = (datos, status = 200) => new Response(JSON.stringify(datos), {
@@ -62,9 +68,13 @@ export async function onRequest({ request, env }) {
     const q = new URL(request.url).searchParams, cat = q.get("cat");
     // la copia de seguridad (respaldo_asistencia.py, en la actualización automática): todas las tablas
     if (q.get("respaldo")) {
-      const tablas = ["horarios", "entrenamientos", "listas", "chicos", "cambios", "notas", "equipos"];
+      const tablas = ["horarios", "entrenamientos", "listas", "chicos", "cambios", "notas", "equipos", "tests"];
       const filas = await Promise.all(tablas.map((x) => todo(`SELECT * FROM ${x}`)));
       return json({ fecha: new Date().toISOString(), ...Object.fromEntries(tablas.map((x, i) => [x, filas[i]])) });
+    }
+    if (q.get("tests")) {
+      if (!CATS.includes(cat)) return json({ error: "datos" }, 400);
+      return json({ tests: await todo("SELECT fecha, test, id, valor FROM tests WHERE cat = ? ORDER BY fecha", cat) });
     }
     if (q.get("equipos")) {
       const filas = await todo("SELECT cat, fecha, rival, jugadores, cambios, por, ts FROM equipos WHERE fecha >= date('now', '-60 days') ORDER BY fecha, cat");
@@ -111,7 +121,6 @@ export async function onRequest({ request, env }) {
   }
   if (b && b.accion === "equipo") {
     const eq = texto(b.equipo, 30), { fecha } = b, j = b.jugadores, cb = b.cambios || {};
-    const objeto = (o) => o && typeof o === "object" && !Array.isArray(o);
     if (!EQUIPO.test(eq) || !FECHA.test(fecha || "") || !objeto(j) || !objeto(cb)) return mal();
     const jug = {}, camb = {}, ids = new Set();
     for (const [n, id] of Object.entries(j)) {
@@ -178,6 +187,15 @@ export async function onRequest({ request, env }) {
     ops = [db.prepare("INSERT OR REPLACE INTO listas (cat, fecha, presentes, por, ts) VALUES (?, ?, ?, ?, ?)").bind(cat, fecha, JSON.stringify(final), quien, ts),
       anotar({ fecha, presentes: final.length })];
     resp = { ok: true, presentes: final.length };
+  } else if (b.accion === "test") {
+    // un test de un día: reemplaza lo que había (sin valores, se borra esa toma)
+    const { fecha, test } = b, v = b.valores;
+    if (!FECHA.test(fecha || "") || !TESTS.includes(test) || !objeto(v) || Object.keys(v).length > 300) return mal();
+    const filas = Object.entries(v).map(([id, x]) => [id, Number(x)]);
+    if (filas.some(([id, x]) => !ID.test(id) || !Number.isFinite(x) || x <= 0 || x > 1000)) return mal();
+    ops = [db.prepare("DELETE FROM tests WHERE cat = ? AND fecha = ? AND test = ?").bind(cat, fecha, test),
+      ...filas.map(([id, x]) => db.prepare("INSERT INTO tests (cat, fecha, test, id, valor, por, ts) VALUES (?, ?, ?, ?, ?, ?, ?)").bind(cat, fecha, test, id, x, por, ts)),
+      anotar({ fecha, test, chicos: filas.length })];
   } else if (b.accion === "borrar_lista") {
     if (!FECHA.test(b.fecha || "")) return mal();
     ops = [db.prepare("DELETE FROM listas WHERE cat = ? AND fecha = ?").bind(cat, b.fecha), anotar({ fecha: b.fecha })];

@@ -136,7 +136,7 @@
     $("#candado").hidden = true;
     $("#app").hidden = false;
     S = { ver: "inicio", cat: null, temp: null, gcat: null, tab: null, q: "", ordenJ: "pj", verJ: false, verP: false, verN: false, verR: false, rol: null, para: null, ej: null, puesto: null, practica: null, pgrupo: null, qp: "", qe: "", abiertos: new Set(),
-      acat: null, afecha: null, aform: null, marcas: null, base: null, aviso: null, estadoLista: null, recien: new Set(), area: null, pcat: null, mcat: null, alcat: null, pedad: null, ncat: null, eqcat: null, eqfecha: null, eqn: null, eqmas: 0, eqfoco: null };
+      acat: null, afecha: null, aform: null, marcas: null, base: null, aviso: null, estadoLista: null, recien: new Set(), area: null, pcat: null, mcat: null, alcat: null, pedad: null, ncat: null, eqcat: null, eqfecha: null, eqn: null, eqmas: 0, eqfoco: null, tcat: null, ttest: null, tfecha: null, tver: null, tdia: null };
     // al abrir la sección (un link, la dirección escrita o que el navegador completó) arranca en el inicio;
     // al recargar o al volver con "atrás" sigue donde estaba (por ejemplo, en medio de una lista)
     const nav = performance.getEntriesByType ? performance.getEntriesByType("navigation")[0] : null;
@@ -176,13 +176,17 @@
     S.pcat = D.guia ? ASIS_CATS.find((x) => slug(x) === p.get("plan")) || null : null;
     S.mcat = ["Todas", "Plantel superior", ...D.cats.filter((x) => !PS.includes(x))].find((x) => slug(x) === p.get("partidos")) || null;
     if (S.area) vistas.push("area");
+    // los tests físicos: ?tests=m16 (y &test=m10&fecha=2026-10-26 mientras se carga uno)
+    S.tcat = D.fichados ? testCats().find((x) => slug(x) === p.get("tests")) || null : null;
+    S.ttest = S.tcat && testDe(p.get("test")) ? p.get("test") : null;
+    S.tfecha = S.ttest && fechaOk(p.get("fecha") || "") && p.get("fecha") <= hoyISO() ? p.get("fecha") : null;
     // el equipo de un partido: ?equipo=m16&fecha=2026-11-01 (y &n=9 mientras se elige quién juega de 9)
     const eqc = D.fichados && p.get("equipo") ? [...new Set([...D.prox.map((x) => x.cat), ...D.cats])].find((x) => slug(x) === p.get("equipo") && eqAsis(x)) : null;
     S.eqcat = eqc || null;
     S.eqfecha = eqc && fechaOk(p.get("fecha") || "") ? p.get("fecha") : null;
     S.eqn = S.eqfecha && +p.get("n") >= 1 && +p.get("n") <= EQ_MAX ? +p.get("n") : null;
     S.ver = c ? "cat" : g ? "guia" : ej ? "ejercicio" : pu ? "puesto" : pr ? "practica" : ac ? (S.afecha ? "lista" : p.get("chicos") ? "chicos" : "asis")
-      : S.eqfecha ? "equipo" : S.pcat ? "plan" : S.mcat ? "partidos" : vistas.includes(p.get("ver")) ? p.get("ver") : "inicio";
+      : S.tcat ? (S.tfecha ? "toma" : "tests") : S.eqfecha ? "equipo" : S.pcat ? "plan" : S.mcat ? "partidos" : vistas.includes(p.get("ver")) ? p.get("ver") : "inicio";
     S.temp = /^\d{4}$/.test(p.get("temp") || "") ? +p.get("temp") : null;
     S.tab = p.get("tab");
     S.rol = p.get("rol");
@@ -199,6 +203,7 @@
     else if (S.ver === "area") { p.set("ver", "area"); p.set("area", S.area); }
     else if (S.ver === "plan") p.set("plan", slug(S.pcat));
     else if (S.ver === "partidos") p.set("partidos", slug(S.mcat));
+    else if (S.ver === "tests" || S.ver === "toma") { p.set("tests", slug(S.tcat)); if (S.ver === "toma") { p.set("test", S.ttest); p.set("fecha", S.tfecha); } }
     else if (S.ver === "equipo") { p.set("equipo", slug(S.eqcat)); p.set("fecha", S.eqfecha); if (S.eqn) p.set("n", S.eqn); }
     else if (["asis", "lista", "chicos"].includes(S.ver)) { p.set("asistencia", slug(S.acat)); if (S.ver === "lista") p.set("fecha", S.afecha); if (S.ver === "chicos") p.set("chicos", "1"); }
     else if (S.ver === "ejercicios") { p.set("ver", S.ver); if (S.tab) p.set("tab", S.tab); if (S.rol) p.set("rol", S.rol); if (S.para) p.set("para", S.para); }
@@ -224,7 +229,7 @@
     const ej = S.ver === "ejercicio" && D.guia.ejercicios.find((x) => x.id === S.ej), pu = S.ver === "puesto" && puestoDe(S.puesto);
     return ({ inicio: "Inicio", cat: S.cat, club: "Todo el club", consejos: "Consejos", guia: S.gcat || "Qué aprende cada categoría",
       cantos: "Cantos y zonas", scrum: "Scrum seguro", ejercicios: "Ejercicios", ejercicio: ej && ej.nombre, puestos: "Los puestos", puesto: pu && pu.nombre,
-      practicas: "Prácticas", practica: "Práctica", pase: "De M19 a plantel superior", alertas: "Para mirar", area: AREAS[S.area], plan: `Planificación ${S.pcat}`, partidos: S.mcat === "Todas" ? "Partidos" : `Partidos de ${S.mcat}`, guiaclub: "Guía del club", notas: "Notas", equipo: S.eqn ? `El ${S.eqn}` : `Equipo de ${S.eqcat}`,
+      practicas: "Prácticas", practica: "Práctica", pase: "De M19 a plantel superior", alertas: "Para mirar", area: AREAS[S.area], plan: `Planificación ${S.pcat}`, partidos: S.mcat === "Todas" ? "Partidos" : `Partidos de ${S.mcat}`, guiaclub: "Guía del club", notas: "Notas", equipo: S.eqn ? `El ${S.eqn}` : `Equipo de ${S.eqcat}`, tests: `Tests de ${S.tcat}`, toma: S.ttest && testDe(S.ttest).nom,
       asistencia: "Todas las categorías", asis: S.acat, lista: `Lista de ${S.acat}`, chicos: `Los chicos de ${S.acat}` })[S.ver] || "Volver";
   }
 
@@ -367,12 +372,12 @@
     }
     listaAbierta = S.ver === "lista" ? { cat: S.acat, fecha: S.afecha } : null;
     // todo el ancho en la compu (y el pie se alinea con eso); la tabla de estadísticas no, que queda muy estirada
-    $("#app").classList.toggle("app--ancha", S.ver === "inicio" || S.ver === "partidos" || S.ver === "plan" || S.ver === "pase" || (S.ver === "equipo" && !S.eqn) || (S.ver === "area" && S.area !== "estadisticas"));
+    $("#app").classList.toggle("app--ancha", S.ver === "inicio" || S.ver === "partidos" || S.ver === "plan" || S.ver === "pase" || (S.ver === "equipo" && !S.eqn) || S.ver === "tests" || (S.ver === "area" && S.area !== "estadisticas"));
     GRAF.pend = [];
     soltarVideos();
     $("#vista").dataset.pantalla = S.ver; // ojo: no "data-ver", que es el de los botones "Ver todos"
     ({ inicio: vInicio, cat: vCategoria, club: vClub, consejos: vConsejos, guia: vGuia, cantos: vCantos, scrum: vScrum, ejercicios: vEjercicios, ejercicio: vEjercicio, puestos: vPuestos, puesto: vPuesto, practicas: vPracticas, practica: vPractica,
-      asistencia: vAsistencia, asis: vAsis, lista: vLista, chicos: vChicos, area: vArea, plan: vPlan, partidos: vPartidos, guiaclub: vGuiaClub, pase: vPase, alertas: vAlertas, notas: vNotas, equipo: vEquipo })[S.ver]();
+      asistencia: vAsistencia, asis: vAsis, lista: vLista, chicos: vChicos, area: vArea, plan: vPlan, partidos: vPartidos, guiaclub: vGuiaClub, pase: vPase, alertas: vAlertas, notas: vNotas, equipo: vEquipo, tests: vTests, toma: vToma })[S.ver]();
     dibujarGraficos();
     ponerFotos();
   }
@@ -406,6 +411,14 @@
       "Para cada puesto aparecen primero los que jugaron de ese número esta temporada (Primera, Intermedia y M19, de las planillas de la UAR) o lo tienen en su ficha de la UAR. Al lado, cuánto vienen a entrenar.",
       "Si un chico está sancionado o tiene tarjetas, se avisa en amarillo o en rojo.",
       "Lo que elegís queda en este celular hasta que tocás “Guardar”. Ahí lo ven los otros entrenadores. Con “Mandar por WhatsApp” se lo pasás al grupo."]],
+    tests: () => ["Tests físicos", ["Se toman dos veces al año, en marzo y en septiembre, como en las academias de la UAR: 10 metros, 30 metros (forwards), 40 metros (backs), salto horizontal y Bronco. El salto vertical, si hay una app para medirlo.",
+      "Para cargar, tocá un test y anotá el resultado de cada chico. Lo que cargás queda en el celular hasta que tocás “Guardar”: no se pierde si en la cancha no hay señal."]],
+    testsColor: () => ["Los colores", ["Cada chico se compara con los de su categoría ese mismo día: el tercio mejor en verde, el del medio en amarillo y el de abajo en rojo. Con menos de 6 chicos no hay color.",
+      "Las referencias de la UAR son de M18 en adelante (están en Guía del club → Los puestos → Tests físicos). Para los más chicos sirve más compararlos entre ellos y con ellos mismos.",
+      "Si un chico ya tenía una toma anterior de ese test, abajo de su nombre dice si mejoró o empeoró."]],
+    toma: () => ["Cómo cargar", ["10, 30 y 40 metros: en segundos, por ejemplo 1,85. Salto horizontal: en metros (2,10) o en centímetros (210). Salto vertical: en centímetros.",
+      "Bronco: en minutos y segundos, por ejemplo 5,20 o 5:20 (5 minutos y 20 segundos).",
+      "Al que no hizo el test, dejalo vacío. Si un número no tiene sentido para ese test, se marca en rojo y no se guarda hasta corregirlo."]],
     notas: () => ["Notas", ["Para dejarles un mensaje corto a los otros entrenadores: lo que salió bien, lo que habría que cambiar, algo que viste en un entrenamiento o en un partido.",
       "Las notas las puede leer cualquiera que entre con la clave. Quedan guardadas para siempre.", "Podés borrar solo las que escribiste vos, desde este mismo celular."]],
     asistencia: () => ["Asistencia", ["Para tomar lista en cada entrenamiento y ver cuánto viene cada chico.",
@@ -548,7 +561,7 @@
   // Seis áreas, una por cosa que hace un entrenador. Asistencia, Planificación y Partidos piden la categoría
   // (con botones grandes; queda marcada la última que elegiste); Estadísticas muestra la tabla de categorías;
   // Ejercicios y la Guía del club son iguales para todos.
-  const AREAS = { asistencia: "Asistencia", planificacion: "Planificación", partidos: "Partidos", estadisticas: "Estadísticas" };
+  const AREAS = { asistencia: "Asistencia", planificacion: "Planificación", partidos: "Partidos", estadisticas: "Estadísticas", tests: "Tests físicos" };
   const AREA_IR = (a) => ({ ver: "area", area: a, ...LIMPIO });
   /** la última categoría que se eligió en cada área (queda en el celular) */
   const claveArea = (a) => `los50-ent-cat:${a}`;
@@ -577,8 +590,146 @@
         ${tarjeta('data-area="partidos"', IC.trofeo, "Partidos", "Próximos y resultados")}
         ${tarjeta('data-area="estadisticas"', IC.barras, "Estadísticas", "Números y jugadores")}
         ${g ? tarjeta('data-ir="guiaclub"', IC.libro, "Guía del club", "Puestos, scrum y cantos") : ""}
+        ${D.fichados ? tarjeta('data-area="tests"', IC.reloj, "Tests físicos", "10 m, salto y Bronco") : ""}
         ${D.fichados ? tarjeta('data-ir="notas"', IC.nota, "Notas", "Lo que viste en los entrenamientos") : ""}
       </ul></section>`;
+  }
+
+  // ---------- tests de campo (functions/api/asistencia.js, tabla "tests" de D1) ----------
+  // Dos veces al año (marzo y septiembre), como en las academias de la UAR: 10 m, 30 m (forwards), 40 m (backs), salto horizontal,
+  // Bronco y, si hay con qué, salto vertical. Se carga por estación: un test y todos los chicos (la lista de Asistencia).
+  // El color compara con los chicos de la misma categoría ese día (las referencias de la UAR son desde M18): el tercio mejor en verde,
+  // el del medio en amarillo y el de abajo en rojo. Lo cargado queda en el celular hasta guardarlo (en la cancha suele no haber señal).
+  const TESTS = [
+    { k: "m10", nom: "10 metros", u: "s", menos: true, min: 1, max: 4, ej: "1,85" },
+    { k: "m30", nom: "30 metros", u: "s", menos: true, min: 3, max: 8, ej: "4,60", quien: "Forwards" },
+    { k: "m40", nom: "40 metros", u: "s", menos: true, min: 4, max: 10, ej: "5,90", quien: "Backs" },
+    { k: "salto", nom: "Salto horizontal", u: "m", menos: false, min: 0.8, max: 3.5, ej: "2,10" },
+    { k: "bronco", nom: "Bronco", u: "min", menos: true, min: 180, max: 720, ej: "5,20" },
+    { k: "cmj", nom: "Salto vertical", u: "cm", menos: false, min: 10, max: 90, ej: "38", quien: "Con una app" },
+  ];
+  const testCats = () => ASIS_CATS.slice(0, 7); // del plantel superior a M13
+  const testDe = (k) => TESTS.find((t) => t.k === k);
+  const TST = { cats: {}, error: {}, cargando: new Set(), guardando: false };
+  const UNIDAD = { s: "segundos", m: "metros", cm: "centímetros", min: "minutos y segundos" };
+  /** lo que se escribe: "1,85" o "1.85"; el Bronco "5,20" o "5:20" (minutos y segundos) o "320" (segundos); el salto en metros o en centímetros.
+      Si no es un número que tenga sentido para ese test, da NaN */
+  function leerValor(t, txt) {
+    const s = String(txt).trim().replace(",", ".");
+    if (!s) return null;
+    let v = +s;
+    if (t.k === "bronco") {
+      const [m, sg = "0"] = s.split(/[.:]/);
+      if (+m < 15) v = /^\d+$/.test(m) && /^\d{1,2}$/.test(sg) && +sg < 60 ? +m * 60 + +sg : NaN;
+    }
+    if (t.k === "salto" && v > 50) v /= 100; // lo escribió en centímetros
+    return Number.isFinite(v) && v >= t.min && v <= t.max ? Math.round(v * 100) / 100 : NaN;
+  }
+  const verValor = (t, v) => (t.k === "bronco" ? `${Math.floor(v / 60)}:${String(Math.round(v % 60)).padStart(2, "0")}`
+    : t.k === "cmj" ? String(Math.round(v * 10) / 10).replace(".", ",") : v.toFixed(2).replace(".", ","));
+  function cargarTests(cat) {
+    if (TST.cargando.has(cat)) return;
+    TST.cargando.add(cat); delete TST.error[cat];
+    apiD1(null, `tests=1&cat=${encodeURIComponent(cat)}`).then((d) => { TST.cats[cat] = d.tests; })
+      .catch((e) => { TST.error[cat] = errNotas(e, "No se pudieron cargar los tests", "ver los tests"); })
+      .finally(() => { TST.cargando.delete(cat); if (["tests", "toma"].includes(S.ver) && S.tcat === cat) render(); });
+  }
+  /** las tomas de un test: [fecha, Map(id → valor)], de la más nueva a la más vieja */
+  function tomasDe(cat, k) {
+    const out = new Map();
+    (TST.cats[cat] || []).filter((r) => r.test === k).forEach((r) => { if (!out.has(r.fecha)) out.set(r.fecha, new Map()); out.get(r.fecha).set(r.id, r.valor); });
+    return [...out].sort((a, b) => b[0].localeCompare(a[0]));
+  }
+  const testPlantel = (cat) => { const d = ASIS.cats[cat]; return d ? chicosDe(cat, d).activos : (D.fichados[cat] || []).map(([id, nombre]) => ({ id, nombre })).sort(porNombre); };
+  const testQuien = (id, pl) => pl.find((c) => c.id === id) || eqTodos().get(id) || { id, nombre: "Ya no está en la lista" };
+  const tomaClave = (cat, f, k) => `los50-test:${cat}|${f}|${k}`;
+  const tomaBorr = (cat, f, k) => { try { return JSON.parse(enCel.get(tomaClave(cat, f, k)) || "null"); } catch (e) { return null; } };
+  /** mientras se cargan los tests o la lista de chicos: "Cargando…" o el error */
+  const esperaTests = (cat) => {
+    if (!TST.cats[cat] && !TST.error[cat]) cargarTests(cat);
+    if (!ASIS.cats[cat] && !ASIS.error[cat]) cargarAsis(cat);
+    if (TST.error[cat]) return `<div class="hoy hoy--error"><p class="hoy__canc">${TST.error[cat]}</p><button type="button" class="btn-sec" data-reintentar-tests>Probar de nuevo</button></div>`;
+    return !TST.cats[cat] || (!ASIS.cats[cat] && !ASIS.error[cat]) ? `<p class="cargando">Cargando…</p>` : "";
+  };
+
+  // una categoría: un botón por test para cargarlo y los resultados (de mejor a peor, con el color y si mejoró)
+  function vTests() {
+    const cat = S.tcat, espera = esperaTests(cat);
+    const cab = `<div class="cab">${volver(AREAS.tests, AREA_IR("tests"))}${cabTit(`Tests físicos de ${esc(cat)}`, "tests")}</div>`;
+    if (espera) { $("#vista").innerHTML = `${cab}<section class="sec sec--pegada">${espera}</section>`; return; }
+    const pl = testPlantel(cat), hechos = TESTS.filter((t) => tomasDe(cat, t.k).length);
+    if (!hechos.some((t) => t.k === S.tver)) S.tver = hechos[0] ? hechos[0].k : null;
+    const boton = (t) => { const u = tomasDe(cat, t.k)[0];
+      return `<li><button type="button" class="test-t" data-tomar="${t.k}"><b>${t.nom}</b><small>${[t.quien, u ? `Último: ${corta(u[0])}` : "Sin tomar"].filter(Boolean).join(" · ")}</small></button></li>`; };
+    let res = `<p class="vacio-g">Todavía no hay tests cargados</p>`;
+    const t = testDe(S.tver);
+    if (t) {
+      const tomas = tomasDe(cat, t.k);
+      if (!tomas.some(([f]) => f === S.tdia)) S.tdia = tomas[0][0];
+      const i = tomas.findIndex(([f]) => f === S.tdia), [fecha, vals] = tomas[i], antes = tomas[i + 1];
+      const orden = [...vals].sort((a, b) => (t.menos ? a[1] - b[1] : b[1] - a[1])), n = orden.length;
+      const color = (r) => (n < 6 ? "gris" : r < n / 3 ? "verde" : r < (2 * n) / 3 ? "ambar" : "rojo");
+      const fila = ([id, v], r) => {
+        const prev = antes && antes[1].get(id), dif = prev != null ? Math.round((v - prev) * 100) / 100 : 0, mejor = t.menos ? dif < 0 : dif > 0;
+        return `<li class="test-f"><span class="test-f__pos num">${r + 1}</span><span class="test-f__nom"><span>${nombreHTML(testQuien(id, pl).nombre)}</span>${dif
+          ? `<small class="${mejor ? "test-f__mejor" : "test-f__peor"}">${mejor ? "Mejoró" : "Empeoró"} ${verValor(t, Math.abs(dif))} ${t.u} desde el ${corta(antes[0])}</small>` : ""}</span>
+          <span class="porc porc--${color(r)} num">${verValor(t, v)}</span></li>`;
+      };
+      res = `<div class="chips-g" role="group" aria-label="Test">${hechos.map((x) => `<button type="button" data-tver="${x.k}" aria-pressed="${x.k === t.k}">${x.nom}</button>`).join("")}</div>
+        ${tomas.length > 1 ? `<div class="chips-g chips-g--asis" role="group" aria-label="Día">${tomas.map(([f]) => `<button type="button" data-tdia="${f}" aria-pressed="${f === fecha}">${corta(f)}</button>`).join("")}</div>` : ""}
+        <p class="titular test-tit">${t.nom} del ${esc(cuandoP({ fecha }))}: <b>${n}</b> ${n === 1 ? "chico" : "chicos"}, en ${UNIDAD[t.u]}</p>
+        <ul class="test-r">${orden.map(fila).join("")}</ul>
+        <button type="button" class="link" data-tomar="${t.k}|${fecha}">Corregir esta toma</button>`;
+    }
+    $("#vista").innerHTML = `${cab}
+      <div class="dos">
+        <section class="sec sec--pegada">${tit("Cargar un test")}<ul class="tests-t">${TESTS.map(boton).join("")}</ul></section>
+        <section class="sec sec--pegada">${tit("Resultados", "testsColor")}${res}</section>
+      </div>${avisoHTML()}`;
+  }
+  // cargar un test: un renglón por chico con su resultado
+  function vToma() {
+    const cat = S.tcat, t = testDe(S.ttest), f = S.tfecha, espera = esperaTests(cat);
+    const cab = `<div class="cab">${volver(`Tests de ${esc(cat)}`, { ver: "tests", ttest: null, tfecha: null })}${cabTit(`${t.nom} · ${esc(cat)}`, "toma")}</div>`;
+    if (espera) { $("#vista").innerHTML = `${cab}<section class="sec sec--pegada">${espera}</section>`; return; }
+    const pl = testPlantel(cat), b = tomaBorr(cat, f, t.k), g = (tomasDe(cat, t.k).find(([x]) => x === f) || [])[1];
+    // los de la lista y los que tienen algo guardado ese día aunque ya no estén
+    const lista = [...pl, ...(g ? [...g.keys()].filter((id) => !pl.some((c) => c.id === id)).map((id) => testQuien(id, pl)) : [])];
+    const val = (id) => (b ? b[id] || "" : g && g.has(id) ? verValor(t, g.get(id)) : "");
+    const n = lista.filter((c) => val(c.id)).length;
+    $("#vista").innerHTML = `${cab}
+      <section class="sec sec--pegada">
+        <div class="asis-form__fila toma-cab"><label class="asis-form__campo">Día<input id="toma-fecha" class="asis-input" type="date" value="${f}" max="${hoyISO()}"></label>
+          <p class="asis-nota">En ${UNIDAD[t.u]}, por ejemplo ${t.ej}. Al que no lo hizo, dejalo vacío.</p></div>
+        <ul class="toma-l">${lista.map((c) => { const v = val(c.id), mal = v && Number.isNaN(leerValor(t, v));
+          return `<li class="toma-f"><label for="tv-${esc(c.id)}">${nombreHTML(c.nombre)}</label><input id="tv-${esc(c.id)}" class="asis-input toma-in${mal ? " toma-in--mal" : ""}" data-tv="${esc(c.id)}" inputmode="decimal" autocomplete="off" enterkeyhint="next" placeholder="${t.ej}" value="${esc(v)}"></li>`; }).join("")}</ul>
+      </section>
+      <div class="lista-pie" role="status"><span><b class="num" id="toma-n">${n}</b> de ${lista.length} cargados<small class="lista-pie__ojo" id="toma-sin"${b ? "" : " hidden"}>Sin guardar</small></span>
+        <button type="button" class="btn btn--ok btn--grande" data-toma-guardar>${IC.tilde}Guardar</button></div>
+      ${avisoHTML()}`;
+  }
+  async function guardarToma() {
+    if (TST.guardando) return;
+    const cat = S.tcat, t = testDe(S.ttest), f = S.tfecha, valores = {}, malos = [];
+    document.querySelectorAll("[data-tv]").forEach((i) => { const txt = i.value.trim(), v = leerValor(t, txt); if (!txt) return; if (Number.isNaN(v)) malos.push(i); else valores[i.dataset.tv] = v; });
+    if (malos.length) {
+      avisoSuelto(`${malos.length === 1 ? "Hay un resultado" : `Hay ${malos.length} resultados`} que no ${malos.length === 1 ? "parece" : "parecen"} de ${t.nom.toLowerCase()} (en rojo). Escribilo en ${UNIDAD[t.u]}, por ejemplo ${t.ej}.`);
+      malos[0].focus();
+      return;
+    }
+    if (!Object.keys(valores).length && !tomasDe(cat, t.k).some(([x]) => x === f)) { avisoSuelto("Anotá el resultado de al menos un chico."); return; }
+    TST.guardando = true;
+    avisoSuelto("Guardando…", "espera");
+    try {
+      await apiD1({ accion: "test", cat, fecha: f, test: t.k, valores, por: enCel.get(claveNombreNota) || "" });
+      enCel.set(tomaClave(cat, f, t.k), null);
+      TST.cats[cat] = (await apiD1(null, `tests=1&cat=${encodeURIComponent(cat)}`)).tests;
+      const n = Object.keys(valores).length;
+      avisar("ok", n ? `${t.nom}: ${n} ${n === 1 ? "chico guardado" : "chicos guardados"}` : `Se borró ${t.nom.toLowerCase()} de ese día`);
+      S.tver = t.k; S.tdia = f;
+      volverAtras({ ver: "tests", ttest: null, tfecha: null });
+    } catch (e) { avisoSuelto(`${errNotas(e, "No se pudo guardar", "guardar los tests")} Lo cargado queda en el celular.`); }
+    finally { TST.guardando = false; }
   }
 
   // ---------- el equipo de un partido: titulares, suplentes y cambios (functions/api/asistencia.js, tabla "equipos" de D1) ----------
@@ -968,7 +1119,7 @@
         ${a === "partidos" ? grupo("Todo el club", [["Todas", "Todas las categorías"]]) : ""}
         ${grupo("Plantel superior", [["Plantel superior"]])}
         ${grupo("Juveniles", juv.map((c) => [c]))}
-        ${a === "partidos" ? "" : grupo("Infantiles", ASIS_CATS.slice(7).map((c) => [c]), " elegir--4")}
+        ${a === "partidos" || a === "tests" ? "" : grupo("Infantiles", ASIS_CATS.slice(7).map((c) => [c]), " elegir--4")}
         ${a === "asistencia" ? `<button type="button" class="btn-sec btn-sec--ancho area-todas" data-ir="asistencia">Ver todas, con su porcentaje</button>` : ""}
       </section>`;
   }
@@ -2105,7 +2256,7 @@
       .catch((e) => { ASIS.error[k] = e.message === "clave" ? avisoError(e) : e.message === "servidor" ? "No se pudo cargar. Probá de nuevo en un rato." : "No se pudo cargar: no hay señal."; })
       .finally(() => {
         ASIS.cargando.delete(k);
-        const aca = cat ? (S.acat === cat && ["asis", "lista", "chicos"].includes(S.ver)) || (S.ver === "inicio" && enCel.get(ULTIMA) === cat) || (S.ver === "plan" && S.pcat === cat) || (S.ver === "equipo" && eqAsis(S.eqcat) === cat) || S.ver === "asistencia" : S.ver === "asistencia";
+        const aca = cat ? (S.acat === cat && ["asis", "lista", "chicos"].includes(S.ver)) || (S.ver === "inicio" && enCel.get(ULTIMA) === cat) || (S.ver === "plan" && S.pcat === cat) || (S.ver === "equipo" && eqAsis(S.eqcat) === cat) || (["tests", "toma"].includes(S.ver) && S.tcat === cat) || S.ver === "asistencia" : S.ver === "asistencia";
         if (aca) render();
       });
   }
@@ -2510,13 +2661,18 @@
   // ---------- eventos ----------
   document.addEventListener("click", (e) => {
     if (!S) return;
-    const t = e.target.closest("[data-atras],[data-subir],[data-alcat],[data-ncat],[data-nota-ok],[data-borrar-nota-ok],[data-reintentar-notas],[data-ir-equipo],[data-eq-n],[data-eq-id],[data-eq-vaciar],[data-eq-mas],[data-eq-guardar],[data-eq-borrar],[data-eq-descartar],[data-eq-compartir],[data-reintentar-eq],[data-amistoso-ok],[data-edad],[data-area],[data-area-cat],[data-play],[data-reclave],[data-ayuda],[data-cerrar-ayuda],[data-ir],[data-ir-cat],[data-ir-guia],[data-ir-ej],[data-ir-ej-para],[data-ir-ej-tab],[data-ir-line],[data-ir-puesto],[data-ir-practica],[data-ir-practicas],[data-pgrupo],[data-ir-asis],[data-ir-hoy],[data-ir-lista],[data-ir-chicos],[data-form],[data-reintentar],[data-motivo],[data-dia],[data-marca],[data-todos],[data-cancelar-ok],[data-deshacer],[data-hora-ok],[data-agregar-ok],[data-horarios-ok],[data-guardar-lista],[data-borrar-lista-ok],[data-sacar],[data-sigue],[data-volver-chico],[data-sumar-chico],[data-compartir-pr],[data-rol],[data-quitar-para],[data-tab],[data-anio],[data-ver],[data-ordj]");
+    const t = e.target.closest("[data-atras],[data-subir],[data-alcat],[data-ncat],[data-nota-ok],[data-borrar-nota-ok],[data-reintentar-notas],[data-tomar],[data-tver],[data-tdia],[data-toma-guardar],[data-reintentar-tests],[data-ir-equipo],[data-eq-n],[data-eq-id],[data-eq-vaciar],[data-eq-mas],[data-eq-guardar],[data-eq-borrar],[data-eq-descartar],[data-eq-compartir],[data-reintentar-eq],[data-amistoso-ok],[data-edad],[data-area],[data-area-cat],[data-play],[data-reclave],[data-ayuda],[data-cerrar-ayuda],[data-ir],[data-ir-cat],[data-ir-guia],[data-ir-ej],[data-ir-ej-para],[data-ir-ej-tab],[data-ir-line],[data-ir-puesto],[data-ir-practica],[data-ir-practicas],[data-pgrupo],[data-ir-asis],[data-ir-hoy],[data-ir-lista],[data-ir-chicos],[data-form],[data-reintentar],[data-motivo],[data-dia],[data-marca],[data-todos],[data-cancelar-ok],[data-deshacer],[data-hora-ok],[data-agregar-ok],[data-horarios-ok],[data-guardar-lista],[data-borrar-lista-ok],[data-sacar],[data-sigue],[data-volver-chico],[data-sumar-chico],[data-compartir-pr],[data-rol],[data-quitar-para],[data-tab],[data-anio],[data-ver],[data-ordj]");
     if (!t || t.disabled) return;
     if (t.tagName === "A") e.preventDefault(); // el escudo de arriba: va al inicio sin recargar
     const ds = t.dataset, ir = "lado" in ds ? irSinPaso : irA; // Anterior / Siguiente no suman pasos
     if ("atras" in ds) history.back();
     else if ("subir" in ds) irSinPaso(SUBIR);
     else if (ds.edad) { S.pedad = ds.edad; render(); }
+    else if (ds.tomar) { const [ttest, tfecha] = ds.tomar.split("|"); irA({ ver: "toma", ttest, tfecha: tfecha || hoyISO(), aviso: null }); }
+    else if (ds.tver) { S.tver = ds.tver; S.tdia = null; render(); }
+    else if (ds.tdia) { S.tdia = ds.tdia; render(); }
+    else if ("tomaGuardar" in ds) guardarToma();
+    else if ("reintentarTests" in ds) { delete TST.error[S.tcat]; delete ASIS.error[S.tcat]; render(); }
     else if (ds.irEquipo) { const [eqcat, eqfecha] = ds.irEquipo.split("|"); irA({ ver: "equipo", eqcat, eqfecha, eqn: null, eqmas: 0, aform: null, aviso: null }); }
     else if (ds.eqN) { S.eqfoco = +ds.eqN; irA({ eqn: +ds.eqN, aviso: null }); }
     else if (ds.eqId) {
@@ -2565,6 +2721,7 @@
       enCel.set(claveArea(S.area), v);
       if (S.area === "asistencia") irA({ ver: "asis", acat: v, afecha: null, aform: null, marcas: null, aviso: null, estadoLista: null });
       else if (S.area === "planificacion") irA({ ver: "plan", pcat: v, qp: "" });
+      else if (S.area === "tests") irA({ ver: "tests", tcat: v, tver: null, tdia: null });
       else irA({ ver: "partidos", mcat: v });
     }
     else if (ds.play) reproducir(ds.play);
@@ -2699,6 +2856,15 @@
 
   // buscador de cantos: filtra sin volver a dibujar la pantalla (así no se pierde el teclado)
   // el suplente: por quién entra y el minuto se guardan en el celular apenas se eligen (sin volver a dibujar la pantalla)
+  // tests: al cambiar el día de la toma, lo cargado (sin guardar) pasa al día nuevo
+  document.addEventListener("change", (e) => {
+    if (!S || S.ver !== "toma" || e.target.id !== "toma-fecha") return;
+    const f = e.target.value, k = S.ttest;
+    if (!fechaOk(f) || f > hoyISO()) { e.target.value = S.tfecha; avisoSuelto("Elegí un día de hoy para atrás."); return; }
+    const b = tomaBorr(S.tcat, S.tfecha, k);
+    if (b && !tomaBorr(S.tcat, f, k)) { enCel.set(tomaClave(S.tcat, f, k), JSON.stringify(b)); enCel.set(tomaClave(S.tcat, S.tfecha, k), null); }
+    irSinPaso({ tfecha: f });
+  });
   document.addEventListener("change", (e) => {
     if (!S || S.ver !== "equipo") return;
     const t = e.target, num = t.dataset.eqPor || t.dataset.eqMin;
@@ -2715,6 +2881,15 @@
     if (e.target.id === "buscar-canto") { S.q = e.target.value; filtrarCantos(); }
     if (e.target.id === "buscar-ej") { S.qe = e.target.value; filtrarEj(); }
     if (e.target.id === "buscar-pr") { S.qp = e.target.value; filtrarPr(); }
+    if ("tv" in e.target.dataset) {
+      // lo cargado queda en el celular al momento; en rojo lo que no tiene sentido para ese test
+      const t = testDe(S.ttest), b = {};
+      e.target.classList.toggle("toma-in--mal", !!e.target.value.trim() && Number.isNaN(leerValor(t, e.target.value)));
+      document.querySelectorAll("[data-tv]").forEach((i) => { if (i.value.trim()) b[i.dataset.tv] = i.value.trim(); });
+      enCel.set(tomaClave(S.tcat, S.tfecha, S.ttest), JSON.stringify(b));
+      $("#toma-n").textContent = Object.keys(b).length;
+      $("#toma-sin").hidden = false;
+    }
     if (e.target.id === "buscar-eq") {
       const q = norm(e.target.value.trim());
       let total = 0;
