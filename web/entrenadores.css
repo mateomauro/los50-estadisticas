@@ -1424,7 +1424,26 @@ html:has(#vista[data-pantalla="equipo"]) { scroll-padding-bottom: 150px; }
 .eq-siempre-b { display: flex; align-items: center; gap: 10px; text-align: left; min-height: 56px; }
 .eq-siempre-b svg { flex: none; width: 22px; height: 22px; }
 .eq-siempre-b small { display: block; font-size: 14px; font-weight: 500; color: var(--suave); }
-@media (max-width: 360px) { .larga { display: none; } }
+@media (max-width: 420px) { .larga { display: none; } }
 .cnt-p--nuevo { box-shadow: 0 0 0 3px var(--azul); }
-html:has(#vista[data-cnt="1"]) .top { display: none; }
 .eq-jug__nom { overflow-wrap: normal; word-break: normal; hyphens: auto; }
+
+/* ---------- Partidos: quinta vuelta ---------- */
+.cnt-pie__btns > * > span { display: inline; }
+.elegir__cat.elegir__cat--hoy { background: var(--azul-claro); } /* juega hoy: el fondo; la última que usaste: el borde */
+.elegir__cat--hoy small { color: var(--azul); font-weight: 700; }
+.cnt-deshacer span { display: grid; line-height: 1.1; text-align: left; }
+.cnt-deshacer small { font-size: 12.5px; font-weight: 600; color: var(--suave); max-width: 9em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cnt-extra { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
+.cnt-extra .btn-sec { min-height: 48px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 15px; }
+.cnt-extra svg { width: 18px; height: 18px; }
+.cnt-corr { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.cnt-corr li { display: grid; gap: 8px; padding: 12px; background: var(--sup); border: 1px solid var(--linea); border-radius: var(--radio); }
+.cnt-corr li > b { font-size: 17px; }
+.cnt-corr li > span { display: flex; flex-wrap: wrap; gap: 8px; }
+.cnt-quitar { min-height: 48px; padding: 0 14px; font-size: 16px; }
+.cnt-quitar span { font-size: 22px; font-weight: 700; color: var(--rojo); margin-left: 4px; }
+.eq-tag { font-size: 14px; }
+@media (max-width: 400px) { .hoy-juega { grid-template-columns: 28px minmax(0, 1fr); } .hoy-juega__acc { grid-column: 2; } }
+#eq-estado:focus { outline: 2px solid var(--azul); outline-offset: 2px; }
+@media (max-width: 420px) { .cnt-extra { grid-template-columns: 1fr; } }
