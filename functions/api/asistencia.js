@@ -13,10 +13,13 @@
    GET  /api/asistencia?notas=1  -> las notas de feedback (más nuevas primero); "mia" dice si la escribió quien pregunta (encabezado x-dueno)
    POST /api/asistencia  { cat, accion, ..., por? } -> guarda (accion: horarios | entrenamiento | lista | borrar_lista | chico | nota | borrar_nota | equipo | test | docs | conteo | practica | borrar_practica)
      practica: { cat, id?, fecha, foco, objetivo, partes: [{ min, act, ej?, det? }] } — sin id es nueva · borrar_practica: { cat, id }
-     conteo: { equipo, fecha, conteos: { id: { tackles: 3, … } } } — reemplaza lo contado en ese partido
+     conteo: { equipo, fecha, sumar: { id: { tackles: 2, errados: -1, … } }, lote } — suma lo contado desde la última vez (dos que cuentan
+       el mismo partido no se pisan; "lote" hace que un envío repetido no sume dos veces). Devuelve lo contado de ese partido.
+       La forma vieja, { conteos: { id: { tackles: 3 } } }, reemplaza todo (la usan los celulares con la página anterior).
      docs: { cat, doc (medica | autoriza | dni | conmocion | antidoping | primera), fecha, sumar: [ids], sacar: [ids] } — solo lo que cambió
      test: { cat, fecha, test (m10 | m30 | m40 | salto | bronco | cmj), valores: { id: número } } — reemplaza lo de ese test ese día
-     equipo: { equipo (Primera, M16…), fecha, rival, jugadores: { "1": id, … "23": id }, cambios: { "16": { por, min } } } — sin jugadores, se borra
+     equipo: { equipo (Primera, M16…), fecha, rival, jugadores: { "1": id, … "23": id }, cambios: { "16": { por, min } }, base } — sin jugadores, se borra.
+       "base" es el ts de lo guardado que tenía el celular: si otro lo cambió después, responde 409 (no lo pisa sin avisar)
      nota: { cat (una categoría o "General"), texto, por, dueno } · borrar_nota: { id, dueno } — solo borra quien la escribió (dueno = un código que guarda su celular)
      lista: { fecha, presentes, base? } — los lesionados van en presentes como "les-<id>" (vino pero no entrena: no cuenta en su porcentaje); con "base" (lo que estaba guardado cuando empezó) se juntan las listas de dos entrenadores
    Todo pide la ficha de la clave de Entrenadores en el encabezado "x-ficha" (la misma de los videos: SHA-256 de la clave + ":los50-videos",
@@ -37,6 +40,8 @@ const ESQUEMA = [
   "CREATE TABLE IF NOT EXISTS practicas (id TEXT PRIMARY KEY, cat TEXT NOT NULL, fecha TEXT NOT NULL, datos TEXT NOT NULL, por TEXT, ts TEXT NOT NULL)",
   // lo contado en un partido: cuántas veces hizo cada acción (tackles, contactos…) cada jugador
   "CREATE TABLE IF NOT EXISTS conteos (cat TEXT NOT NULL, fecha TEXT NOT NULL, id TEXT NOT NULL, accion TEXT NOT NULL, n INTEGER NOT NULL, por TEXT, ts TEXT NOT NULL, PRIMARY KEY (cat, fecha, id, accion))",
+  // los envíos de lo contado que ya se sumaron (si se cortó la señal antes de la respuesta, el celular lo manda de nuevo y no se suma dos veces)
+  "CREATE TABLE IF NOT EXISTS conteos_lotes (lote TEXT PRIMARY KEY, ts TEXT NOT NULL)",
   // documentos y cursos de cada chico: la ficha médica y la autorización son del año (anio = "2026"); el DNI y los cursos, "siempre"
   "CREATE TABLE IF NOT EXISTS docs (id TEXT NOT NULL, doc TEXT NOT NULL, anio TEXT NOT NULL, cat TEXT, fecha TEXT NOT NULL, por TEXT, ts TEXT NOT NULL, PRIMARY KEY (id, doc, anio))",
   // tests de campo: un valor por chico, test y día (segundos, metros o centímetros; el Bronco en segundos)
@@ -173,14 +178,40 @@ export async function onRequest({ request, env }) {
       if (jug[n] && +n > 15 && (por != null || min != null)) camb[+n] = { por, min };
     }
     const cuantos = Object.keys(jug).length;
+    const ya = await db.prepare("SELECT jugadores, cambios, rival, por, ts FROM equipos WHERE cat = ? AND fecha = ?").bind(eq, fecha).first();
+    // lo mismo que ya está guardado (un envío repetido cuando se cortó la señal): no hace falta nada
+    if (ya && cuantos && ya.jugadores === JSON.stringify(jug) && (ya.cambios || "{}") === JSON.stringify(camb) && (ya.rival || "") === (texto(b.rival, 80) || "")) return json({ ok: true, ts: ya.ts });
+    // otro entrenador lo guardó (o lo borró) después de que este celular lo trajo: no se pisa sin avisar
+    if ("base" in b && (ya ? ya.ts : null) !== (b.base || null)) return json({ error: "choque", ts: ya ? ya.ts : null, por: ya ? ya.por : null }, 409);
     await db.batch([cuantos
       ? db.prepare("INSERT OR REPLACE INTO equipos (cat, fecha, rival, jugadores, cambios, por, ts) VALUES (?, ?, ?, ?, ?, ?, ?)").bind(eq, fecha, texto(b.rival, 80) || null, JSON.stringify(jug), JSON.stringify(camb), por, ts)
       : db.prepare("DELETE FROM equipos WHERE cat = ? AND fecha = ?").bind(eq, fecha),
     db.prepare("INSERT INTO cambios (ts, cat, accion, detalle, por) VALUES (?, ?, 'equipo', ?, ?)").bind(ts, eq, JSON.stringify({ fecha, jugadores: cuantos }), por)]);
     return json({ ok: true, ts });
   }
+  if (b && b.accion === "conteo" && objeto(b.sumar)) {
+    // lo contado desde el último envío (puede ser negativo: "Deshacer" después de guardar) se suma a lo que ya había
+    const eq = texto(b.equipo, 30), { fecha } = b, cs = b.sumar, lote = String(b.lote || "");
+    if (!EQUIPO.test(eq) || !FECHA.test(fecha || "") || !/^[\w-]{8,64}$/.test(lote) || Object.keys(cs).length > EQ_MAX + 1) return mal();
+    const filas = [];
+    for (const [id, o] of Object.entries(cs)) {
+      if (!ID.test(id) || !objeto(o)) return mal();
+      for (const [a, n] of Object.entries(o)) {
+        if (!ACCIONES.includes(a) || !Number.isInteger(n) || n < -500 || n > 500) return mal();
+        if (n) filas.push([id, a, n]);
+      }
+    }
+    const delPartido = () => todo("SELECT cat, fecha, id, accion, n FROM conteos WHERE cat = ? AND fecha = ?", eq, fecha);
+    if (await db.prepare("SELECT 1 FROM conteos_lotes WHERE lote = ?").bind(lote).first()) return json({ ok: true, conteos: await delPartido() });
+    await db.batch([db.prepare("INSERT INTO conteos_lotes (lote, ts) VALUES (?, ?)").bind(lote, ts),
+      ...filas.map(([id, a, n]) => db.prepare("INSERT INTO conteos (cat, fecha, id, accion, n, por, ts) VALUES (?1, ?2, ?3, ?4, MAX(?5, 0), ?6, ?7) ON CONFLICT (cat, fecha, id, accion) DO UPDATE SET n = MAX(conteos.n + ?5, 0), por = ?6, ts = ?7")
+        .bind(eq, fecha, id, a, n, por, ts)),
+      db.prepare("DELETE FROM conteos WHERE cat = ? AND fecha = ? AND n <= 0").bind(eq, fecha),
+      db.prepare("INSERT INTO cambios (ts, cat, accion, detalle, por) VALUES (?, ?, 'conteo', ?, ?)").bind(ts, eq, JSON.stringify({ fecha, sumar: filas.length }), por)]);
+    return json({ ok: true, conteos: await delPartido() });
+  }
   if (b && b.accion === "conteo") {
-    // lo contado en un partido (desde el equipo): reemplaza lo que había de ese partido
+    // la forma vieja: reemplaza lo que había de ese partido
     const eq = texto(b.equipo, 30), { fecha } = b, cs = b.conteos;
     if (!EQUIPO.test(eq) || !FECHA.test(fecha || "") || !objeto(cs) || Object.keys(cs).length > EQ_MAX + 1) return mal();
     const filas = [];
