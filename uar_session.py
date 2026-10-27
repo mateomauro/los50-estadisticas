@@ -41,8 +41,17 @@ def login() -> requests.Session:
 
 
 def get(s: requests.Session, path: str, **kw) -> requests.Response:
-    time.sleep(DELAY)
+    """Si la UAR se cae un rato (503, sin respuesta), espera y prueba de nuevo: hasta 4 veces."""
     url = path if path.startswith("http") else f"{BASE}{path}"
-    r = s.get(url, timeout=60, **kw)
+    for intento in range(4):
+        time.sleep(DELAY if intento == 0 else 20 * intento)
+        try:
+            r = s.get(url, timeout=60, **kw)
+        except (requests.ConnectionError, requests.Timeout):
+            if intento == 3:
+                raise
+            continue
+        if r.status_code < 500:
+            break
     r.raise_for_status()
     return r
