@@ -153,7 +153,7 @@
     render();
     addEventListener("popstate", () => {
       if (ayudaAbierta()) { cerrarAyuda(false); return; } // el "atrás" del celular cierra la ayuda y deja la pantalla como estaba
-      cerrarImagen();
+      if ($("#foto-eq")) { cerrarImagen(false); return; } // y la imagen del equipo
       if (saltarPop) { saltarPop = false; return; }        // la ayuda se cerró con "Entendido": no hay que redibujar
       leerURL(); render(); volverAFila();
     });
@@ -257,7 +257,7 @@
     const ej = S.ver === "ejercicio" && D.guia.ejercicios.find((x) => x.id === S.ej), pu = S.ver === "puesto" && puestoDe(S.puesto);
     return ({ inicio: "Inicio", cat: S.cat, club: "Todo el club", consejos: "Consejos", guia: S.gcat || "Qué aprende cada categoría",
       cantos: "Cantos y zonas", scrum: "Scrum seguro", ejercicios: S.para ? `Juegos de ${S.para}` : "Ejercicios", ejercicio: ej && ej.nombre, puestos: "Los puestos", puesto: pu && pu.nombre,
-      practicas: "Prácticas", practica: (todasPr().find((x) => x.id === S.practica) || {}).foco || "Práctica", pase: "De M19 a plantel superior", alertas: "Para mirar", area: AREAS[S.area], plan: `Planificación de ${S.pcat}`, partidos: S.mcat === "Todas" ? "Partidos" : `Partidos de ${S.mcat}`, guiaclub: "Guía del club", notas: "Notas", equipo: S.eqn ? `El ${S.eqn}` : S.eqcontar ? "Contar el partido" : `Equipo de ${S.eqcat}`, chico: ((S.chico && chicoDe(S.chico, S.chcat)) || { nombre: "Ficha" }).nombre.split(",")[0], tests: `Tests de ${S.tcat}`, docs: `Documentos de ${S.dcat}`, doclista: S.ddoc && docDe(S.ddoc).nom, toma: S.ttest && testDe(S.ttest).nom,
+      practicas: "Prácticas", practica: (todasPr().find((x) => x.id === S.practica) || {}).foco || "Práctica", pase: "De M19 a plantel superior", alertas: "Para mirar", area: AREAS[S.area], plan: `Planificación de ${S.pcat}`, partidos: S.mcat === "Todas" ? "Partidos" : `Partidos de ${S.mcat}`, guiaclub: "Guía del club", notas: "Notas", equipo: S.eqn ? `El ${S.eqn}` : S.eqcontar ? cntTitulo() : S.eqfecha < hoyISO() ? `Quién jugó en ${S.eqcat}` : `Equipo de ${S.eqcat}`, chico: ((S.chico && chicoDe(S.chico, S.chcat)) || { nombre: "Ficha" }).nombre.split(",")[0], tests: `Tests de ${S.tcat}`, docs: `Documentos de ${S.dcat}`, doclista: S.ddoc && docDe(S.ddoc).nom, toma: S.ttest && testDe(S.ttest).nom,
       asistencia: "Todas las categorías", asis: S.acat, lista: `Lista de ${S.acat}`, chicos: `Los chicos de ${S.acat}` })[S.ver] || "Volver";
   }
 
@@ -674,11 +674,12 @@
     // si todavía no se sabe cuál es tu categoría: las que juegan hoy, para elegir
     const hoyHay = juega || misCats.length ? [] : [...new Set(proxTodos().filter((x) => x.fecha === hoyISO() && eqAsis(x.cat)).map((x) => x.cat))];
     const ij = juega && eqInfo(juega.cat, juega.fecha), rfh = juega && (D.partidos.find((p) => p.cat === juega.cat && p.fecha === juega.fecha) || (ij.pf !== "" && ij.pf != null ? { pf: +ij.pf, pc: +ij.pc } : null));
+    const enJuego = juega && !rfh && empezo(juega) && Object.keys(eqActual(juega.cat, juega.fecha).jugadores).length > 0;
     const provH = rfh && !D.partidos.some((p) => p.cat === juega.cat && p.fecha === juega.fecha) && !ij.amistoso;
     const resHoy = rfh ? `${rfh.pf > rfh.pc ? "Ganó" : rfh.pf < rfh.pc ? "Perdió" : "Empató"} ${rfh.pf}–${rfh.pc}${provH ? " (provisorio)" : ""}` : "";
     $("#vista").innerHTML = `
       <div class="cab">${cabTit("¿Qué querés hacer?")}</div>${avisoHTML()}
-      ${juega ? `<section class="sec sec--pegada"><button type="button" class="hoy-juega" data-ir-${resHoy ? "salio" : "equipo"}="${esc(juega.cat)}|${juega.fecha}">${IC.trofeo}<span class="hoy-juega__txt"><b>${resHoy ? `Hoy jugó ${esc(juega.cat)}` : `Hoy juega ${esc(juega.cat)}`}</b><small>${resHoy ? `${esc(resHoy)} vs ${esc(nombreRival(juega.rival))}` : `vs ${esc(nombreRival(juega.rival))}${juega.hora ? ` · ${esc(juega.hora)}` : ""} · ${dondeTxt(juega)}`}</small></span><span class="hoy-juega__acc">${resHoy ? "Mandar cómo salió" : "El equipo y contar"}${IC.adelante}</span></button>${!resHoy && porTerminar(juega) ? `<button type="button" class="btn-sec btn-sec--ancho hoy-juega__res" data-ir-res="${esc(juega.cat)}|${juega.fecha}">${IC.trofeo}¿Terminó? Cargar el resultado</button>` : ""}</section>`
+      ${juega ? `<section class="sec sec--pegada"><button type="button" class="hoy-juega" data-ir-${resHoy ? "salio" : enJuego ? "contar" : "equipo"}="${esc(juega.cat)}|${juega.fecha}">${IC.trofeo}<span class="hoy-juega__txt"><b>${resHoy ? `Hoy jugó ${esc(juega.cat)}` : enJuego ? `Jugando ahora: ${esc(juega.cat)}` : `Hoy juega ${esc(juega.cat)}`}</b><small>${resHoy ? `${esc(resHoy)} vs ${esc(nombreRival(juega.rival))}` : `vs ${esc(nombreRival(juega.rival))}${juega.hora ? ` · ${esc(juega.hora)}` : ""} · ${dondeTxt(juega)}`}</small></span><span class="hoy-juega__acc">${resHoy ? "Mandar cómo salió" : enJuego ? "Contar el partido" : "El equipo y contar"}${IC.adelante}</span></button>${!resHoy && porTerminar(juega) ? `<button type="button" class="btn-sec btn-sec--ancho hoy-juega__res" data-ir-res="${esc(juega.cat)}|${juega.fecha}">${IC.trofeo}¿Terminó? Cargar el resultado</button>` : ""}</section>`
         : hoyHay.length ? `<section class="sec sec--pegada"><button type="button" class="hoy-juega" data-area="partidos">${IC.trofeo}<span class="hoy-juega__txt"><b>Hoy hay partido</b><small>${esc(hoyHay.join(" · "))}</small></span><span class="hoy-juega__acc">Elegí tu categoría${IC.adelante}</span></button></section>` : ""}
       ${alertasInicio()}
       <section class="sec sec--pegada"><ul class="areas areas--6">
@@ -942,7 +943,8 @@
     const s = $("#cnt-estado"), [c, t] = estadoCnt(cat, f);
     if (s) { s.className = `cnt-estado cnt-estado--${c}`; s.innerHTML = `${c === "ok" ? IC.tilde : c === "ojo" ? IC.alerta : ""}${t}`; }
     const d = $("[data-cdeshacer]"), u = k.h[k.h.length - 1];
-    if (d) { d.disabled = !u; d.innerHTML = `${IC.deshacer}<span>Deshacer${u ? `<small>${u[0] === "equipo" ? esc((FIJA.find((y) => y[0] === u[1]) || [, ""])[1].toLowerCase()) : esc(apellido(eqQuien(u[0], eqPlantel(cat)).nombre))}</small>` : ""}</span>`; }
+    if (d) { d.disabled = !u; const quien = u && u[0] !== "equipo" ? esc(apellido(eqQuien(u[0], eqPlantel(cat)).nombre)) : "";
+      d.innerHTML = `${IC.deshacer}<span>Deshacer${u ? `<small>${u[2] === "-" ? `devolver ${UNO_C[u[1]] || ""}${quien ? ` a ${quien}` : ""}` : `${UNO_C[u[1]] || ""}${quien ? ` de ${quien}` : ""}`}</small>` : ""}</span>`; }
   }
   function vContar() {
     const cat = S.eqcat, f = S.eqfecha, modo = modoCnt(), acc = ACCIONES.find((x) => x[0] === modo) || ACCIONES[0], hoy = hoyISO();
@@ -971,9 +973,9 @@
       const tot = cntEquipo(k), q = k.c.equipo || {}, enEq = new Map(ns.map((n) => [e.jugadores[n], n])), va = vaDe(cat, f);
       // los tantos: al terminar, el resultado; mientras se juega, cómo va (opcional: solo para el mensaje)
       const resCaja = (t, b, mientras) => `<div class="asis-form eq-res"><p class="asis-form__l">${t}</p>
-            <div class="asis-form__fila"><label class="asis-form__campo">Los 50<input id="eq-pf" class="asis-input" type="number" inputmode="numeric" min="0" max="300" value="${mientras && va ? va[0] : ""}"></label>
-              <label class="asis-form__campo">${esc(inf.rival || "Rival")}<input id="eq-pc" class="asis-input" type="number" inputmode="numeric" min="0" max="300" value="${mientras && va ? va[1] : ""}"></label></div>
-            ${mientras ? `<p class="asis-nota">Si lo ponés, va en el mensaje al grupo.</p>` : ""}
+            <div class="asis-form__fila"><label class="asis-form__campo">Los 50<input id="eq-pf" class="asis-input" type="number" inputmode="numeric" min="0" max="300" aria-describedby="eq-res-error" value="${mientras && va ? va[0] : ""}"></label>
+              <label class="asis-form__campo">${esc(inf.rival || "Rival")}<input id="eq-pc" class="asis-input" type="number" inputmode="numeric" min="0" max="300" aria-describedby="eq-res-error" value="${mientras && va ? va[1] : ""}"></label></div>
+            ${mientras ? `<p class="asis-nota">Va en el mensaje al grupo. Cuando termina, guardalo como resultado.</p>` : ""}
             <p class="asis-form__error" id="eq-res-error" role="alert" hidden></p>
             <div class="asis-form__btns"><button type="button" class="${mientras ? "btn-sec" : "btn btn--ok"} btn--alto" data-eq-res-ok>${IC.tilde}${b}</button></div></div>`;
       const big = [pctDe(tot.tackles || 0, tot.errados || 0) != null && [`${pctDe(tot.tackles || 0, tot.errados || 0)}%`, "Tackles bien hechos", `${tot.tackles || 0} de ${(tot.tackles || 0) + (tot.errados || 0)}`],
@@ -986,16 +988,15 @@
       $("#vista").innerHTML = `${cab}${sinSenal}
         <section class="sec sec--pegada">
           ${resTxt ? `<p class="cnt-resultado cnt-resultado--${rf[0] > rf[1] ? "G" : rf[0] < rf[1] ? "P" : "E"}">${IC.trofeo}<b>${resTxt}</b>${prov ? "<small>provisorio, falta la UAR</small>" : ""}${pu ? "" : `<button type="button" class="link" data-ir-res="${esc(cat)}|${f}" aria-label="Cambiar el resultado">Cambiar</button>`}</p>` : ""}
-          ${!rf && f < hoy ? resCaja("¿Cómo salió?", "Guardar el resultado") : ""}
+          ${!rf ? (f < hoy ? resCaja("¿Cómo salió?", "Guardar el resultado") : resCaja("El tanteador", "Terminó: es el resultado final", true)) : ""}
           ${big.length ? `<ul class="cnt-big cnt-big--${big.length}">${big.map(([n, l, s]) => `<li><b class="num">${n}</b><span>${l}</span>${s ? `<small>${s}</small>` : ""}</li>`).join("")}</ul>` : `<p class="vacio-g">Todavía no se contó nada</p>`}
           ${tk.length ? `<h3 class="grupo" id="cnt-tk-t">Tackles, jugador por jugador</h3><div class="tabla-e-wrap cnt-res" tabindex="0" role="region" aria-labelledby="cnt-tk-t"><table class="tabla-e"><thead><tr><th scope="col" class="izq">Jugador</th><th scope="col"><span class="sr">Bien hechos</span>${IC.tilde}</th><th scope="col"><span class="sr">Errados</span>${IC.cruz}</th><th scope="col">%</th></tr></thead>
             <tbody>${tk.map((id) => `<tr><td class="izq">${quien(id)}</td><td>${val(id, "tackles")}</td><td>${val(id, "errados")}</td><td><b>${pctDe(val(id, "tackles"), val(id, "errados"))}%</b></td></tr>`).join("")}</tbody></table></div>` : ""}
           ${otras.length ? `<h3 class="grupo">Lo demás</h3><ul class="cnt-otras-l">${otras.map(([plu, l]) => `<li><b>${mayus(plu)}:</b> ${l.join(" · ")}</li>`).join("")}</ul>` : ""}
-          ${!rf && f >= hoy ? resCaja("El tanteador", "Terminó: es el resultado final", true) : ""}
           <div class="cnt-res-acc lista-pie">
-            ${f >= hoy ? `<button type="button" class="btn btn--ok btn--alto btn--ancho" data-cres="0">${IC.barras}Seguir contando</button>` : ""}
-            ${big.length || rf || f >= hoy ? `<button type="button" class="${f >= hoy ? "btn-sec btn-sec--ancho cnt-wa" : "btn btn--wa btn--alto btn--ancho"}" data-cres-compartir>${IC.compartir}Mandar al grupo</button>` : ""}
-            ${f < hoy && big.length ? `<button type="button" class="btn-sec btn-sec--ancho" data-cnt-corr="1">Corregir lo contado</button>` : ""}
+            ${f >= hoy ? `<button type="button" class="btn btn--ok btn--alto" data-cres="0">${IC.barras}Seguir contando</button>` : ""}
+            ${big.length || rf || f >= hoy ? `<button type="button" class="${f >= hoy ? "btn-sec cnt-wa" : "btn btn--wa btn--alto"}" data-cres-compartir>${IC.compartir}Mandar al grupo</button>` : ""}
+            ${f < hoy && big.length ? `<button type="button" class="btn-sec" data-cnt-corr="1">Corregir lo contado</button>` : ""}
           </div>
         </section>${avisoHTML()}`;
       return;
@@ -1004,9 +1005,9 @@
     const tarjeta = (n) => {
       const id = typeof n === "string" ? n : e.jugadores[n], nom = esc(ap(id)), cab2 = typeof n === "string" ? `<span class="cnt-p__cab"><span class="cnt-p__nom">${nom}</span></span>` : `<span class="cnt-p__cab"><b class="cnt-p__n num">${n}</b><span class="cnt-p__nom">${nom}</span></span>`;
       if (modo === "tackles") return `<li class="cnt-p">${cab2}<span class="cnt-p__btns">
-        <button type="button" class="cnt-t cnt-t--ok" data-cuenta="${esc(id)}" data-cacion="tackles" data-nom="${nom}" aria-label="${n}, ${nom}: tackle bien hecho. Lleva ${val(id, "tackles")}">${IC.tilde}<b class="cnt-b__v${v0(val(id, "tackles"))} num">${val(id, "tackles")}</b></button>
-        <button type="button" class="cnt-t cnt-t--mal" data-cuenta="${esc(id)}" data-cacion="errados" data-nom="${nom}" aria-label="${n}, ${nom}: tackle errado. Lleva ${val(id, "errados")}">${IC.cruz}<b class="cnt-b__v${v0(val(id, "errados"))} num">${val(id, "errados")}</b></button></span></li>`;
-      return `<li class="cnt-p">${cab2}<span class="cnt-p__btns cnt-p__btns--uno"><button type="button" class="cnt-t cnt-t--mas" data-cuenta="${esc(id)}" data-cacion="${modo}" data-nom="${nom}" aria-label="${n}, ${nom}: ${esc(acc[1].toLowerCase())}. Lleva ${val(id, modo)}">${IC.mas}<b class="cnt-b__v${v0(val(id, modo))} num">${val(id, modo)}</b></button></span></li>`;
+        <button type="button" class="cnt-t cnt-t--ok" data-cuenta="${esc(id)}" data-cacion="tackles" data-nom="${nom}" aria-label="${typeof n === "string" ? "" : `${n}, `}${nom}: tackle bien hecho. Lleva ${val(id, "tackles")}">${IC.tilde}<b class="cnt-b__v${v0(val(id, "tackles"))} num">${val(id, "tackles")}</b></button>
+        <button type="button" class="cnt-t cnt-t--mal" data-cuenta="${esc(id)}" data-cacion="errados" data-nom="${nom}" aria-label="${typeof n === "string" ? "" : `${n}, `}${nom}: tackle errado. Lleva ${val(id, "errados")}">${IC.cruz}<b class="cnt-b__v${v0(val(id, "errados"))} num">${val(id, "errados")}</b></button></span></li>`;
+      return `<li class="cnt-p">${cab2}<span class="cnt-p__btns cnt-p__btns--uno"><button type="button" class="cnt-t cnt-t--mas" data-cuenta="${esc(id)}" data-cacion="${modo}" data-nom="${nom}" aria-label="${typeof n === "string" ? "" : `${n}, `}${nom}: ${esc(acc[1].toLowerCase())}. Lleva ${val(id, modo)}">${IC.mas}<b class="cnt-b__v${v0(val(id, modo))} num">${val(id, modo)}</b></button></span></li>`;
     };
     const fila = (t, g, p) => `<div class="cnt-fila"><b class="cnt-fila__t">${t}</b>
       <button type="button" class="cnt-t cnt-t--ok" data-cuenta="equipo" data-cacion="${g}" data-nom="${t} ganado" aria-label="${t} ganado. Van ${val("equipo", g)}">${IC.tilde}Ganado<b class="cnt-b__v${v0(val("equipo", g))} num">${val("equipo", g)}</b></button>
@@ -1069,7 +1070,8 @@
     const pu = D.partidos.find((p) => p.cat === cat && p.fecha === f), rf = pu ? [pu.pf, pu.pc] : inf.pf !== "" && inf.pf != null ? [inf.pf, inf.pc] : null;
     const va = !rf && vaDe(cat, f);
     if (rf) l.push(`${+rf[0] > +rf[1] ? "Ganamos" : +rf[0] < +rf[1] ? "Perdimos" : "Empatamos"} ${rf[0]} a ${rf[1]}${inf.rival ? ` contra ${inf.rival}` : ""}`);
-    else if (va) l.push(`Vamos ${va[0]} a ${va[1]}${inf.rival ? ` contra ${inf.rival}` : ""} (sigue el partido)`);
+    else if (va) l.push(`Así vamos: ${va[0]} a ${va[1]}${inf.rival ? ` contra ${inf.rival}` : ""} (sigue el partido)`);
+    else if (f === hoyISO()) l.push("Así vamos (sigue el partido)");
     if (tot.tackles || tot.errados) l.push(`Tackles bien hechos: ${tklPct(tot)}`);
     if (fijaTxt(k)) l.push(fijaTxt(k));
     ACCIONES.filter(([x]) => x !== "errados").forEach(([x, , plu]) => { // los errados de cada chico no van al grupo de los padres
@@ -1152,10 +1154,12 @@
         <div class="asis-form__btns"><a class="btn btn--ok btn--alto" href="${url}" download="${archivo}">Bajar la imagen</a><button type="button" class="btn-sec btn--alto" data-eq-texto>Mandar como texto</button></div>
         <button type="button" class="ayuda__ok" data-cerrar-foto>Cerrar</button></div></div>`);
     $("#foto-eq .ayuda__ok").focus();
+    history.pushState({ foto: true }, "", location.href); // así el "atrás" del celular la cierra (como la ayuda)
   }
-  function cerrarImagen() {
+  function cerrarImagen(desdeBoton = true) {
     const c = $("#foto-eq");
     if (!c) return;
+    if (desdeBoton && history.state && history.state.foto) { saltarPop = true; history.back(); }
     const i = $("img", c); if (i) setTimeout(() => URL.revokeObjectURL(i.src), 5000);
     c.remove();
     const b = $("[data-eq-mandar]"); if (b) b.focus();
@@ -1506,6 +1510,12 @@
       .finally(() => { EQ.cargando = false; if (sinCambio) return; if (["equipo", "chico", "inicio"].includes(S.ver) || (S.ver === "partidos" && S.aform !== "amistoso") || (S.ver === "area" && S.area === "partidos")) render(); });
   }
   /** en cada partido: el equipo (cuántos hay) y, si ya se jugó, cómo salió lo contado; el día del partido, "Contar el partido" */
+  /** el nombre de la pantalla de contar en la que se está (para el título y para el "Volver" de la siguiente) */
+  function cntTitulo() {
+    const f = S.eqfecha, i = eqInfo(S.eqcat, f), salio = f < hoyISO() || D.partidos.some((p) => p.cat === S.eqcat && p.fecha === f) || (i.pf != null && i.pf !== "");
+    const ver = S.cres == null ? f < hoyISO() : S.cres;
+    return S.cntCorr ? "Corregir lo contado" : S.cntOtro ? "¿Quién entró?" : ver ? (salio ? "Cómo salió" : "Cómo va") : "Contar el partido";
+  }
   /** ya empezó (o no se sabe a qué hora): se puede cargar el resultado */
   const empezo = (x) => x.fecha < hoyISO() || (x.fecha === hoyISO() && (!x.hora || new Date().toTimeString().slice(0, 5) >= x.hora));
   /** ya está por terminar (una hora después de empezar, o no se sabe la hora): se ofrece cargar el resultado */
@@ -1577,7 +1587,7 @@
   /** el próximo sábado que esa categoría tiene libre (sin partido ni amistoso) */
   const sabadoLibre = (cs) => { let f = proxSabado(); for (let i = 0; i < 8 && cs.some((c) => eqPartido(c, f) || eqGuardado(c, f) || eqBorr.get(eqClave(c, f))); i++) f = masDias(f, 7); return f; };
   // un amistoso: el equipo, el día (también uno ya jugado, para cargarle el resultado o contarlo), la hora, el rival y dónde
-  const formAmistoso = (cs) => { const ok = cs.filter(eqAsis), mia = enCel.get(ULTIMA); return `<div class="asis-form">
+  const formAmistoso = (cs) => { const ok = cs.filter(eqAsis), mia = enCel.get(ULTIMA); return `<div class="asis-form"><p class="asis-form__l">Nuevo amistoso</p>
       ${ok.length > 1 ? `<label class="asis-form__campo">¿Qué equipo?<select id="am-cat" class="asis-input">${ok.map((c) => `<option value="${esc(c)}"${eqAsis(c) === mia ? " selected" : ""}>${esc(c)}</option>`).join("")}</select></label>`
         : `<input type="hidden" id="am-cat" value="${esc(ok[0])}">`}
       <div class="asis-form__fila"><label class="asis-form__campo">Día<input id="am-fecha" class="asis-input" type="date" value="${sabadoLibre(ok)}" min="${masDias(hoyISO(), -30)}" max="${masDias(hoyISO(), DIAS_ADELANTE)}" aria-describedby="am-error am-dia"></label>
@@ -1637,7 +1647,8 @@
     if (!CNT.lista && !CNT.error) cargarConteos();
     if (S.eqn) return vElegir();
     if (S.eqcontar) return vContar();
-    const cab = `<div class="cab">${volver(AREAS.partidos, AREA_IR("partidos"))}${cabTit(f < hoy ? `Quién jugó en ${esc(cat)}` : `Equipo de ${esc(cat)}`, "equipo")}</div>`;
+    const mc = PS.includes(cat) ? "Plantel superior" : cat;
+    const cab = `<div class="cab">${volver(`Partidos de ${esc(mc)}`, { ver: "partidos", mcat: mc, aform: null })}${cabTit(f < hoy ? `Quién jugó en ${esc(cat)}` : `Equipo de ${esc(cat)}`, "equipo")}</div>`;
     if (EQ.error || !EQ.lista) { // solo sin la clave (sin señal se ve lo del celular) o mientras carga la primera vez
       $("#vista").innerHTML = `${cab}<section class="sec sec--pegada">${EQ.error ? `<div class="hoy hoy--error"><p class="hoy__canc">${EQ.error}</p>
         <button type="button" class="btn-sec" data-reintentar-eq>Probar de nuevo</button></div>` : `<p class="cargando">Cargando…</p>`}</section>`;
@@ -1657,7 +1668,7 @@
     // abajo de la cancha: los que no deberían jugar (rojo) y lo que hay que tener en cuenta (amarillo)
     const conAv = Array.from({ length: hasta }, (_, i) => i + 1).filter((num) => e.jugadores[num]).map((num) => { const c = eqQuien(e.jugadores[num], plt); return [num, c, eqAvisos(e.jugadores[num], c, cx)]; }).filter(([, , as]) => as.length);
     const noJ = conAv.filter(([, , as]) => as.some((a) => a.duro)), fichaJ = conAv.filter(([, , as]) => !as.some((a) => a.duro) && as.some((a) => a.ficha)), ojoJ = conAv.filter(([, , as]) => !as.some((a) => a.no));
-    const lAv = (l, cls) => `<ul class="eq-avisos${cls}">${l.map(([num, c, as]) => `<li>${cls ? `<button type="button" class="eq-aviso-b" data-eq-n="${num}" aria-label="Cambiar al ${num}, ${esc(c.nombre)}: ${esc(as.map((a) => a.t).join(", "))}">` : ""}<b>${num}. ${esc(corto(c.id))}</b>: ${esc(as.map((a) => a.t).join(" · "))}${cls ? `<span class="eq-aviso-b__acc">Cambiarlo${IC.adelante}</span></button>` : ""}</li>`).join("")}</ul>`;
+    const lAv = (l, cls) => `<ul class="eq-avisos${cls}">${l.map(([num, c, as]) => `<li>${cls ? `<button type="button" class="eq-aviso-b" data-eq-n="${num}" aria-label="Cambiar al ${num}, ${esc(c.nombre)}: ${esc(as.map((a) => a.t).join(", "))}">` : ""}<span class="eq-aviso-b__t"><b>${num}. ${esc(corto(c.id))}</b>: ${esc(as.map((a) => a.t).join(" · "))}</span>${cls ? `<span class="eq-aviso-b__acc">Cambiarlo${IC.adelante}</span></button>` : ""}</li>`).join("")}</ul>`;
     const avisos = `${noJ.length ? `<h3 class="grupo grupo--no">No deberían jugar</h3>${lAv(noJ, " eq-avisos--no")}` : t15 ? `<p class="eq-ok">${IC.tilde}<span>Nadie del equipo está anotado como lesionado ni sancionado${cx.usaMed ? "" : " · Las fichas médicas todavía no se cargaron"}</span></p>` : ""}${fichaJ.length ? `<h3 class="grupo">Falta la ficha médica</h3>${lAv(fichaJ, "")}` : ""}${ojoJ.length ? `<h3 class="grupo">Para tener en cuenta</h3>${lAv(ojoJ, "")}` : ""}`;
     // otro entrenador cambió los mismos números: se pregunta solo por esos
     const ch = S.eqChoque && S.eqChoque.k === eqClave(cat, f) ? S.eqChoque : null, apN = (id) => (id ? esc(apellido(eqQuien(id, plt).nombre)) : "nadie");
@@ -1680,14 +1691,18 @@
         <label class="asis-form__campo">Dirección de la cancha<input id="eq-lugar" class="asis-input" maxlength="120" autocomplete="off" placeholder="Si no es en el club" value="${esc(e.lugar || "")}"></label>
         <div class="asis-form__btns"><button type="button" class="btn btn--ok btn--alto" data-eq-datos-ok>${IC.tilde}Guardar</button>${cerrarBtn}</div></div>` : "";
     const resForm = res && (inf.pf === "" || inf.pf == null || S.aform === "res-eq") ? `<div class="asis-form eq-res"><p class="asis-form__l">¿Cómo salió?</p>
-        <div class="asis-form__fila"><label class="asis-form__campo">Los 50<input id="eq-pf" class="asis-input" type="number" inputmode="numeric" min="0" max="300" value="${esc(inf.pf ?? "")}"></label>
-          <label class="asis-form__campo">${esc(inf.rival || "Rival")}<input id="eq-pc" class="asis-input" type="number" inputmode="numeric" min="0" max="300" value="${esc(inf.pc ?? "")}"></label></div>
+        <div class="asis-form__fila"><label class="asis-form__campo">Los 50<input id="eq-pf" class="asis-input" type="number" inputmode="numeric" min="0" max="300" aria-describedby="eq-res-error" value="${esc(inf.pf ?? "")}"></label>
+          <label class="asis-form__campo">${esc(inf.rival || "Rival")}<input id="eq-pc" class="asis-input" type="number" inputmode="numeric" min="0" max="300" aria-describedby="eq-res-error" value="${esc(inf.pc ?? "")}"></label></div>
         <p class="asis-form__error" id="eq-res-error" role="alert" hidden></p>
-        <div class="asis-form__btns"><button type="button" class="btn btn--ok btn--alto" data-eq-res-ok>${IC.tilde}Guardar el resultado</button></div></div>` : "";
+        <div class="asis-form__btns"><button type="button" class="btn btn--ok btn--alto" data-eq-res-ok>${IC.tilde}Guardar el resultado</button>${S.aform === "res-eq" ? cerrarBtn : ""}</div>
+        ${S.aform === "res-eq" && inf.pf !== "" && inf.pf != null ? `<button type="button" class="link eq-res-borrar" data-eq-res-borrar>Borrar el resultado</button>` : ""}</div>` : "";
     const resTxt = res && !resForm ? `<p class="eq-dato">${IC.trofeo}<span><b>${+inf.pf > +inf.pc ? "Ganó" : +inf.pf < +inf.pc ? "Perdió" : "Empató"} ${esc(inf.pf)}–${esc(inf.pc)}</b>${amis ? "" : " <small>(provisorio, falta la UAR)</small>"}</span><button type="button" class="link" data-form="res-eq" aria-label="Cambiar el resultado">Cambiar</button></p>` : "";
-    const lug = e.lugar || (inf.cond === "V" ? lugarDe(inf.rival) : ""), mapa = lug && !jugado ? `<a class="link eq-mapa" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lug)}" target="_blank" rel="noopener">${IC.adelante}Cómo llegar a ${esc(lug)}</a>` : "";
+    const yaEmp = f === hoy && empezo({ fecha: f, hora: inf.hora }); // ya empezó: la citación no hace falta
+    const lug = e.lugar || (inf.cond === "V" ? lugarDe(inf.rival) : ""), mapa = !lug && inf.cond === "V" && inf.rival && !jugado
+      ? `<a class="link eq-mapa" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${inf.rival} club de rugby`)}" target="_blank" rel="noopener">${IC.adelante}Buscar la cancha de ${esc(inf.rival)} en el mapa</a>`
+      : lug && !jugado ? `<a class="link eq-mapa" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lug)}" target="_blank" rel="noopener">${IC.adelante}Cómo llegar a ${esc(lug)}</a>` : "";
     const datos = datosForm || `<div class="eq-datos">${resTxt}
-        ${jugado && !amis ? "" : jugado ? `<button type="button" class="atajo eq-fila-b" data-form="datos-eq">${IC.reloj}<span>Cambiar el rival o la cancha</span>${IC.adelante}</button>`
+        ${(jugado || yaEmp) && !amis ? "" : jugado || yaEmp ? `<button type="button" class="atajo eq-fila-b" data-form="datos-eq">${IC.reloj}<span>Cambiar el rival o la cancha</span>${IC.adelante}</button>`
           : `<button type="button" class="atajo eq-fila-b" data-form="datos-eq">${IC.reloj}<span>${e.cita ? `<b>Citación:</b> ${esc(e.cita)}` : "Agregar la citación (hora y lugar)"}<small>${e.lugar ? `Cancha: ${esc(e.lugar)}` : amis ? "Tocá para cambiar el rival, la hora o la cancha" : "Y la dirección de la cancha"}</small></span>${IC.adelante}</button>`}${mapa}</div>`;
     // contar: el día del partido (o después, para ver cómo salió)
     const cuenta = t15 && (f < hoy || conRes) ? `<button type="button" class="atajo eq-contar" data-eq-contar="salio">${IC.barras}<span>Ver cómo salió</span>${IC.adelante}</button>` : "";
@@ -1696,10 +1711,10 @@
     const [ce, te, de] = estadoEq(cat, f), hoyJ = f === hoy && t15;
     const noD = S.aform === "faltan" ? noDeberian(cat, f) : [], sinCita = !e.cita && !empezo({ fecha: f, hora: inf.hora });
     const pie = S.aform === "faltan" ? `<div class="lista-pie eq-pie eq-pie--pregunta" role="alert"><p>${faltan.length ? `Faltan ${pl(faltan.length, "titular", "titulares")} (${faltan.length > 5 ? `${faltan.slice(0, 5).join(", ")}…` : faltan.join(", ").replace(/, (\d+)$/, " y $1")}). ` : ""}${noD.length ? `<span class="eq-pie__no">${noD.map(([num, c, a]) => `${num}. ${esc(corto(c.id))} (${esc(a.corto.toLowerCase())})`).join(", ")}: no debería${noD.length > 1 ? "n" : ""} jugar.</span> ` : ""}${sinCita ? "Falta la citación (hora y lugar). " : ""}¿Mandarlo igual?</p>
-        <div class="cnt-pie__btns">${sinCita ? `<button type="button" class="btn-sec" data-form="datos-eq" data-foco="eq-cita" data-despues="mandar">${IC.reloj}Poner la citación</button>` : `<button type="button" class="btn-sec" data-form="">No, todavía no</button>`}<button type="button" class="btn btn--wa" data-eq-mandar="si">Mandarlo igual</button></div>
+        <div class="cnt-pie__btns">${sinCita ? `<button type="button" class="btn-sec" data-eq-mandar="si">Mandarlo igual</button><button type="button" class="btn btn--ok" data-form="datos-eq" data-foco="eq-cita" data-despues="mandar">${IC.reloj}Poner la citación</button>` : `<button type="button" class="btn-sec" data-form="">No, todavía no</button><button type="button" class="btn btn--wa" data-eq-mandar="si">Mandarlo igual</button>`}</div>
         ${sinCita ? `<button type="button" class="link eq-pie__no-mandar" data-form="">No mandar todavía</button>` : ""}</div>`
       : `<div class="lista-pie eq-pie${hoyJ ? " eq-pie--hoy" : ""}"><div class="cnt-pie__txt"><b>${esc(cat)} · <span class="num">${t15}</span> de 15 titulares${sup ? ` + ${pl(sup, "suplente", "suplentes")}` : ""}</b><span id="eq-estado" tabindex="-1" class="cnt-estado cnt-estado--${ce}">${estadoHTML(ce, te, de)}</span></div>
-        ${hoyJ ? `<div class="cnt-pie__btns">${conRes ? `<button type="button" class="btn-sec eq-wa-sec" data-cres-compartir>${IC.compartir}<span>Mandar<span class="larga"> cómo salió</span></span></button>` : `<button type="button" class="btn-sec eq-wa-sec" data-eq-mandar>${IC.compartir}<span>Mandar<span class="larga"> al grupo</span></span></button>`}<button type="button" class="btn btn--ok" data-eq-contar>${IC.barras}<span>Contar<span class="larga"> el partido</span></span></button></div>`
+        ${hoyJ ? `<div class="cnt-pie__btns">${conRes ? `<button type="button" class="btn-sec eq-wa-sec" data-cres-compartir aria-label="Mandar cómo salió">${IC.compartir}<span>Mandar<span class="larga"> cómo salió</span></span></button>` : `<button type="button" class="btn-sec eq-wa-sec" data-eq-mandar aria-label="Mandar al grupo">${IC.compartir}<span>Mandar<span class="larga"> al grupo</span></span></button>`}<button type="button" class="btn btn--ok" data-eq-contar aria-label="Contar el partido">${IC.barras}<span>Contar<span class="larga"> el partido</span></span></button></div>`
           : jugado && res && !conRes ? `<button type="button" class="btn btn--ok btn--grande" data-ir-resultado>${IC.trofeo}Cargar el resultado</button>`
           : jugado && (t15 || conRes) ? `<button type="button" class="btn btn--wa btn--grande" data-cres-compartir>${IC.compartir}Mandar cómo salió</button>`
           : jugado ? ""
@@ -1710,7 +1725,7 @@
     $("#vista").innerHTML = `${cab}
       <p class="titular eq-partido">${[inf.rival ? `vs <b>${esc(inf.rival)}</b>` : "", f === hoy ? "<b>Hoy</b>" : esc(mayus(cuandoP({ fecha: f }))), ...infoTxt(inf).map(esc)].filter(Boolean).join(" · ")}</p>
       ${EQ.delCel || navigator.onLine === false ? `<p class="lista-info lista-info--ojo">${IC.alerta}<span>Sin señal: lo que armes queda en el celular y se manda solo cuando vuelva.</span></p>` : ""}
-      ${choque}${resForm}${cuenta}${datos}
+      ${choque}${n || S.aform === "res-eq" ? resForm : ""}${cuenta}${datos}
       <div class="dos">
         <section class="sec sec--pegada">${tit("Titulares")}${siempreB}
           <div class="eq-cancha"><span class="eq-cancha__tit">Forwards</span>${FILAS.slice(0, 3).map(filaC).join("")}
@@ -1721,12 +1736,13 @@
           <div class="eq-banco">${Array.from({ length: hasta - 15 }, (_, i) => jug(i + 16, true)).join("")}</div>
           <div class="eq-acc">
             ${hasta < EQ_MAX ? `<button type="button" class="btn-sec btn-sec--ancho" data-eq-mas>${IC.mas}Sumar un suplente</button>` : ""}
-            ${jugado && n ? `<button type="button" class="link" data-eq-mandar>Mandar el equipo al grupo</button>` : n ? `<button type="button" class="link" data-eq-texto>Mandarlo como texto</button>` : ""}
+            ${jugado && n ? `<button type="button" class="link" data-eq-mandar>Mandar el equipo al grupo</button>` : n ? `<button type="button" class="link" data-eq-texto>Mandar como texto</button>` : ""}
             ${g || n || eqBorr.get(eqClave(cat, f)) ? borrar : ""}
           </div>
           ${pideNombre}
         </section>
       </div>
+      ${!n && S.aform !== "res-eq" ? resForm : ""}
       ${pie}
       ${avisoHTML()}`;
     // al volver de elegir, queda a la vista el número que se tocó
@@ -2252,13 +2268,14 @@
     if (conEq && !EQ.lista && !EQ.error) cargarEquipos();
     if (conEq && !CNT.lista && !CNT.error) cargarConteos();
     const prox = [...proxTodos().filter((x) => cs.includes(x.cat) && !(conEq && x.fecha === hoyISO() && eqInfo(x.cat, x.fecha).pf != null && eqInfo(x.cat, x.fecha).pf !== "")), ...(conEq ? amistosos(cs) : [])].sort((a, b) => a.fecha.localeCompare(b.fecha) || (a.hora || "").localeCompare(b.hora || ""));
+    const hoyL = prox.filter((x) => x.fecha === hoyISO()), resto = prox.filter((x) => x.fecha !== hoyISO()); // el día del partido, "Hoy" va aparte
     // los resultados: los de la UAR y los amistosos con su resultado; arriba, los ya jugados que todavía no tienen resultado
     const ult = [...D.partidos.filter((x) => cs.includes(x.cat)), ...(conEq ? amistososJugados(cs) : [])].sort((a, b) => b.fecha.localeCompare(a.fecha)).slice(0, 10), jug = conEq ? jugados(cs) : [];
     $("#vista").innerHTML = `
       <div class="cab">${volver(AREAS.partidos, AREA_IR("partidos"))}${cabTit(m === "Todas" ? "Partidos de todo el club" : `Partidos de ${esc(m)}`)}</div>
       ${conEq && (EQ.delCel || navigator.onLine === false) ? `<p class="lista-info lista-info--ojo">${IC.alerta}<span>Sin señal: los equipos son los últimos que se cargaron en este celular.</span></p>` : ""}
       <div class="dos">
-        <section class="sec">${tit("Próximos", "proximos")}${prox.length ? proxHTML(prox, varias, conEq) : `<p class="vacio-g">La UAR todavía no cargó el próximo partido</p>`}
+        <section class="sec">${hoyL.length ? `${tit("Hoy", "proximos")}${proxHTML(hoyL, varias, conEq)}` : ""}${!hoyL.length || resto.length ? `${tit("Próximos", "proximos")}${resto.length ? proxHTML(resto, varias, conEq) : `<p class="vacio-g">La UAR todavía no cargó el próximo partido</p>`}` : ""}
           ${!conEq ? "" : S.aform === "amistoso" ? formAmistoso(cs) : `<button type="button" class="btn-sec btn-sec--ancho eq-otro" data-form="amistoso">${IC.mas}Sumar un amistoso</button>`}</section>
         <section class="sec">${jug.length ? `${tit("Jugados, sin resultado", "jugados")}${proxHTML(jug, varias, conEq)}` : ""}
           <div${jug.length ? ' class="eq-jugados"' : ""}>${tit("Últimos resultados", "ultimos")}${ult.length ? `<ol class="resultados">${ult.map((x, i) => `${i && ult[i - 1].fecha.slice(0, 7) === x.fecha.slice(0, 7) ? "" : `<li class="res-mes" aria-hidden="true">${mayus(MES_S[+x.fecha.slice(5, 7) - 1])}</li>`}${partidoHTML(x, varias, conEq)}`).join("")}</ol>` : `<p class="vacio-g">Todavía sin partidos</p>`}</div></section>
@@ -3439,7 +3456,7 @@
   }
   /** en el equipo y al contar, el aviso va pegado arriba de la barra de abajo: nunca tapa "Deshacer" ni "Mandar al grupo" */
   function ubicarAviso() {
-    const a = $("#vista .aviso"), p = S && S.ver === "equipo" && $("#vista > .lista-pie");
+    const a = $("#vista .aviso"), p = S && S.ver === "equipo" && [...document.querySelectorAll("#vista .lista-pie")].pop();
     if (a && p && a.parentNode !== p) p.appendChild(a);
   }
   const avisoHTML = () => (S.aviso ? `<p class="aviso aviso--${S.aviso.tipo}" role="${S.aviso.tipo === "error" ? "alert" : "status"}">${S.aviso.tipo === "ok" ? IC.tilde : ""}<span>${S.aviso.txt}</span>${S.aviso.tipo === "error" ? `<button type="button" class="aviso__x" data-cerrar-aviso aria-label="Cerrar el aviso">${IC.cruz}</button>` : ""}</p>` : "");
@@ -3920,7 +3937,7 @@
     // tocar la tarjeta de un partido (no solo su botón) abre su equipo
     const li = !ev.target.closest("button, a, input, select, label") && ev.target.closest("#vista li.res");
     if (li && li.querySelector("[data-ir-equipo]")) { li.querySelector("[data-ir-equipo]").click(); return; }
-    const t = ev.target.closest("[data-eq-siempre],[data-cnt-corr],[data-cnt-quita],[data-ir-res],[data-ir-salio],[data-ir-resultado],[data-cnt-otro],[data-cnt-entra],[data-ir-equipo],[data-ir-contar],[data-eq-n],[data-eq-id],[data-eq-no-confirmar],[data-eq-vaciar],[data-eq-mas],[data-eq-mandar],[data-eq-texto],[data-eq-borrar],[data-eq-no-borrar],[data-eq-deshacer],[data-eq-elige],[data-eq-nombre-ok],[data-eq-nombre-no],[data-eq-datos-ok],[data-eq-res-ok],[data-amistoso-ok],[data-am-abrir],[data-eq-contar],[data-cacc],[data-cmas],[data-cuenta],[data-cdeshacer],[data-cres],[data-cres-compartir],[data-reintentar-cnt],[data-reintentar-eq],[data-cerrar-foto]");
+    const t = ev.target.closest("[data-eq-siempre],[data-cnt-corr],[data-cnt-quita],[data-ir-res],[data-ir-salio],[data-ir-resultado],[data-cnt-otro],[data-cnt-entra],[data-ir-equipo],[data-ir-contar],[data-eq-n],[data-eq-id],[data-eq-no-confirmar],[data-eq-vaciar],[data-eq-mas],[data-eq-mandar],[data-eq-texto],[data-eq-borrar],[data-eq-no-borrar],[data-eq-deshacer],[data-eq-elige],[data-eq-nombre-ok],[data-eq-nombre-no],[data-eq-datos-ok],[data-eq-res-ok],[data-eq-res-borrar],[data-amistoso-ok],[data-am-abrir],[data-eq-contar],[data-cacc],[data-cmas],[data-cuenta],[data-cdeshacer],[data-cres],[data-cres-compartir],[data-reintentar-cnt],[data-reintentar-eq],[data-cerrar-foto]");
     if (!t || t.disabled) return;
     const ds = t.dataset, cat = S.eqcat, f = S.eqfecha;
     const abrir = (eqcat, eqfecha, contar, cres = null) => irA({ ver: "equipo", eqcat, eqfecha, eqn: null, eqmas: 0, eqcontar: contar, cres, cmas: false, cacc: "tackles", cntOtro: false, cntCorr: false, aform: null, aviso: null, eqChoque: null, eqConfirmar: null, eqAntes: null });
@@ -3943,7 +3960,7 @@
       // lo que pasó, con quién sale: queda abajo con su "Deshacer" hasta el próximo cambio
       const noA = antes && ya && eqAvisos(antes, eqQuien(antes, pl), eqCtx()).find((a) => a.duro); // lesionado o sancionado: no se pasa al banco
       const txt = noA ? `${ap(id)} pasa al ${num}; ${ap(antes)} (${esc(noA.corto.toLowerCase())}) sale del equipo`
-        : ya ? `${ap(id)} pasa al ${num}${antes ? ` y ${ap(antes)} al ${ya}` : `; el ${ya} quedó vacío${plan ? " (y sin su cambio)" : ""}`}` : `${ap(id)} juega de ${num}${antes ? `, sale ${ap(antes)}` : ""}`;
+        : ya ? `${ap(id)} pasa al ${num}${antes ? ` y ${ap(antes)} al ${ya}` : `; el ${ya} quedó vacío${plan ? " (y sin su cambio)" : ""}`}` : `${ap(id)} al ${num}${antes ? `, sale ${ap(antes)}` : ""}`;
       const previo = JSON.parse(JSON.stringify(e));
       if (ya) { if (antes && !noA) e.jugadores[ya] = antes; else { delete e.jugadores[ya]; delete e.cambios[ya]; } }
       e.jugadores[num] = id;
@@ -3959,7 +3976,11 @@
       eqAnotar(e);
       volverAtras({ ver: "equipo", eqn: null });
     }
-    else if ("eqMas" in ds) { S.eqmas = eqHasta(eqActual(cat, f)) - 22; render(); }
+    else if ("eqMas" in ds) {
+      const e = eqActual(cat, f), h = eqHasta(e), libre = Array.from({ length: h - 15 }, (_, i) => i + 16).find((x) => !e.jugadores[x]);
+      if (!libre) S.eqmas = h - 22; // el banco está lleno: un número más
+      S.eqfoco = libre || h + 1; irA({ eqn: libre || h + 1, aviso: null, eqConfirmar: null });
+    }
     else if ("eqMandar" in ds) mandarAlGrupo(ds.eqMandar === "si");
     else if ("eqTexto" in ds) { cerrarImagen(); compartir(`Equipo de ${cat}`, textoEquipo()); }
     else if ("eqBorrar" in ds) borrarEquipo();
@@ -3973,7 +3994,7 @@
     else if ("eqSiempre" in ds) {
       const previo = JSON.parse(JSON.stringify(eqActual(cat, f))), { e, n, afuera } = completarDeSiempre();
       if (!n) { avisoSuelto("No hay más sugeridos para los que faltan: elegilos tocando cada número.", "ojo"); return; }
-      S.eqAntes = { k: eqClave(cat, f), e: previo, txt: `${n === 1 ? "1 puesto" : `${n} puestos`} con los de siempre` };
+      S.eqAntes = { k: eqClave(cat, f), e: previo, txt: `${n === 1 ? "1 puesto" : `${n} puestos`} con los de siempre${afuera.length ? `; afuera: ${esc(afuera.join(", "))}` : ""}` };
       eqAnotar(e); render();
       if (afuera.length) avisoSuelto(`Quedó afuera: ${esc(afuera.join(", "))}.`, "ojo");
     }
@@ -4007,22 +4028,23 @@
       const a = $("#eq-pf").value.trim(), b = $("#eq-pc").value.trim(), ok = (v) => /^\d{1,3}$/.test(v);
       if (!ok(a) || !ok(b)) {
         const er = $("#eq-res-error"), mal = ok(a) ? $("#eq-pc") : $("#eq-pf");
-        $("#eq-pf").toggleAttribute("aria-invalid", !ok(a)); $("#eq-pc").toggleAttribute("aria-invalid", !ok(b));
+        $("#eq-pf").setAttribute("aria-invalid", String(!ok(a))); $("#eq-pc").setAttribute("aria-invalid", String(!ok(b)));
         if (er) { er.hidden = false; er.textContent = "Poné los tantos de los dos (por ejemplo, 24 y 10)."; }
         mal.focus(); return;
       }
       const e = eqActual(cat, f); e.pf = +a; e.pc = +b;
       eqAnotar(e); S.aform = null; avisar("ok", "Resultado guardado"); render();
     }
+    else if ("eqResBorrar" in ds) { const e = eqActual(cat, f); e.pf = ""; e.pc = ""; eqAnotar(e); S.aform = null; avisar("ok", "Resultado borrado"); render(); }
     else if ("amistosoOk" in ds) {
       const c = $("#am-cat").value, fecha = $("#am-fecha").value, rival = $("#am-rival").value.trim().slice(0, 60), err = $("#am-error"), fi = $("#am-fecha");
       const hora = /^([01]\d|2[0-3]):[0-5]\d$/.test($("#am-hora").value) ? $("#am-hora").value : "", lado = $('input[name="am-cond"]:checked'), cond = lado ? lado.value : "";
       const desde = masDias(hoyISO(), -30);
       let mal = !fechaOk(fecha) ? "Elegí el día del partido." : fecha < desde ? `Elegí un día desde el ${corta(desde)} en adelante.` : "";
       const px = !mal && eqPartido(c, fecha), ya = !mal && !px && (eqGuardado(c, fecha) || eqBorr.get(eqClave(c, fecha)));
-      if (px) { err.hidden = false; fi.setAttribute("aria-invalid", ""); err.innerHTML = `Ese día ${esc(c)} ya juega con ${esc(nombreRival(px.rival))} (partido de la UAR). <button type="button" class="link" data-ir-equipo="${esc(c)}|${fecha}">Abrir ese partido</button>`; fi.focus(); return; }
+      if (px) { err.hidden = false; fi.setAttribute("aria-invalid", "true"); err.innerHTML = `Ese día ${esc(c)} ya juega con ${esc(nombreRival(px.rival))} (partido de la UAR). <button type="button" class="link" data-ir-equipo="${esc(c)}|${fecha}">Abrir ese partido</button>`; fi.focus(); return; }
       // el error queda al lado del campo, sin irse solo; si ya hay un amistoso ese día, se ofrece abrirlo (nunca se pisa)
-      fi.toggleAttribute("aria-invalid", !!(mal || ya)); err.hidden = !(mal || ya);
+      fi.setAttribute("aria-invalid", String(!!(mal || ya))); err.hidden = !(mal || ya);
       if (ya) { const i = eqInfo(c, fecha); err.innerHTML = `Ese día ${esc(c)} ya tiene un amistoso con ${esc(i.rival || "rival a definir")}${ya.por ? ` (lo cargó ${esc(ya.por)})` : ""}. Por ahora va uno por día. <button type="button" class="link" data-am-abrir="${esc(c)}|${fecha}">Abrir ese amistoso</button>`; fi.focus(); return; }
       if (mal) { err.textContent = mal; fi.focus(); return; }
       const k = eqClave(c, fecha);
@@ -4081,7 +4103,15 @@
     else if ("cresCompartir" in ds) {
       // en "Cómo va", el tanteador que se escribió (si están los dos) va en el mensaje
       const a = $("#eq-pf"), b = $("#eq-pc"), ok = (v) => /^\d{1,3}$/.test(v);
-      if (a && b && S.eqcontar && S.eqfecha >= hoyISO()) enCel.set(vaClave(cat, f), ok(a.value.trim()) && ok(b.value.trim()) ? JSON.stringify([+a.value.trim(), +b.value.trim()]) : null);
+      if (a && b && S.eqcontar && S.eqfecha >= hoyISO()) {
+        enCel.set(vaClave(cat, f), ok(a.value.trim()) && ok(b.value.trim()) ? JSON.stringify([+a.value.trim(), +b.value.trim()]) : null);
+        // sin el tanteador: se pregunta una vez (el segundo toque lo manda igual)
+        if (!a.value.trim() && !b.value.trim() && S.vaPregunta !== `${cat}|${f}`) {
+          S.vaPregunta = `${cat}|${f}`; const er = $("#eq-res-error");
+          if (er) { er.hidden = false; er.textContent = "¿Cómo va el tanteador? Ponelo acá arriba, o tocá “Mandar al grupo” de nuevo para mandarlo sin."; }
+          a.scrollIntoView({ block: "center" }); a.focus({ preventScroll: true }); return;
+        }
+      }
       compartir(`Partido de ${cat}`, textoConteo());
     }
     else if ("reintentarCnt" in ds) { CNT.error = null; EQ.error = null; render(); }
@@ -4362,6 +4392,11 @@
     if (e.target.id === "buscar-canto") { S.q = e.target.value; filtrarCantos(); }
     if (e.target.id === "buscar-ej") { S.qe = e.target.value; filtrarEj(); }
     if (e.target.id === "buscar-pr") { S.qp = e.target.value; filtrarPr(); }
+    // el tanteador de "Cómo va" queda guardado mientras se escribe (si se sigue contando, no se pierde)
+    if ((e.target.id === "eq-pf" || e.target.id === "eq-pc") && S.ver === "equipo" && S.eqcontar && S.eqfecha >= hoyISO()) {
+      const a = $("#eq-pf").value.trim(), b = $("#eq-pc").value.trim(), ok = (v) => /^\d{1,3}$/.test(v);
+      if ((ok(a) && ok(b)) || (!a && !b)) enCel.set(vaClave(S.eqcat, S.eqfecha), a ? JSON.stringify([+a, +b]) : null);
+    }
     if (e.target.id === "am-rival") { const l = $("#am-pc-l"); if (l) l.textContent = e.target.value.trim() || "El rival"; }
     if (e.target.id === "am-fecha") {
       const d = $("#am-dia"), v = e.target.value, paso = fechaOk(v) && v < hoyISO();

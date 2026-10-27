@@ -1433,7 +1433,7 @@ html:has(#vista[data-pantalla="equipo"]) { scroll-padding-bottom: 150px; }
 .elegir__cat.elegir__cat--hoy { background: var(--azul-claro); } /* juega hoy: el fondo; la última que usaste: el borde */
 .elegir__cat--hoy small { color: var(--azul); font-weight: 700; }
 .cnt-deshacer span { display: grid; line-height: 1.1; text-align: left; }
-.cnt-deshacer small { font-size: 12.5px; font-weight: 600; color: var(--suave); max-width: 9em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cnt-deshacer small { font-size: 12.5px; font-weight: 600; color: var(--suave); max-width: 13em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .cnt-extra { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
 .cnt-extra .btn-sec { min-height: 48px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 15px; }
 .cnt-extra svg { width: 18px; height: 18px; }
@@ -1499,3 +1499,13 @@ html:has(#vista[data-pantalla="equipo"]) { scroll-padding-bottom: 150px; }
 .cnt-corr--ult .cnt-quitar { width: 100%; display: flex; align-items: center; gap: 8px; }
 .cnt-corr--ult .cnt-quitar span { margin-left: auto; }
 .res-mes { list-style: none; padding: 14px 4px 4px; font: 700 14px/1 var(--base); letter-spacing: .06em; text-transform: uppercase; color: var(--suave); border: 0; }
+
+/* ---------- Partidos: novena vuelta ---------- */
+/* Line y scrum en el celular: el título arriba y los dos botones anchos (el número no se sale) */
+@media (max-width: 400px) { .cnt-fila { grid-template-columns: repeat(2, minmax(0, 1fr)); } .cnt-fila__t { grid-column: 1 / -1; } }
+/* Cómo va / Cómo salió: los botones uno al lado del otro */
+.cnt-res-acc.lista-pie { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+.cnt-res-acc .btn, .cnt-res-acc .btn-sec { margin: 0; min-height: 52px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.eq-aviso-b__t { flex: 1 1 14em; min-width: 0; }
+.eq-res-borrar { margin-top: 10px; min-height: 44px; color: var(--rojo); }
+@media (max-width: 400px) { .cnt-res-acc svg { display: none; } .cnt-res-acc .btn, .cnt-res-acc .btn-sec { padding: 0 8px; } }
