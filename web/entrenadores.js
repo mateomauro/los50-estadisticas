@@ -462,6 +462,12 @@
       "En “Todas las categorías”, los partidos de todo el club juntos."]],
     chico: () => ["La ficha", ["Todo lo que hay de este chico en un lugar: cuánto viene a entrenar, sus partidos oficiales, sus tests, sus papeles, en qué equipos está y lo que se contó en los partidos.",
       "Los partidos y las tarjetas salen de las planillas de la UAR; lo demás, de lo que cargan los entrenadores en esta app."]],
+    corregir: () => ["Corregir lo contado", ["Cada toque en un botón le saca uno a ese jugador (el número es lo que tiene ahora).",
+      "Si sacaste de más, “Deshacer” lo devuelve. Cuando termines, “Listo” vuelve a contar."]],
+    quienEntro: () => ["¿Quién entró?", ["Elegí al chico que entró y no estaba en el equipo: queda en el primer número libre del banco y ya lo podés contar.",
+      "Si subió de otra categoría, buscalo por el nombre."]],
+    comoVa: () => ["Cómo va", ["Los tackles bien hechos de todos los intentados, los lines y scrums ganados con nuestra pelota, y cada jugador.",
+      "Cuando termina, cargá el resultado: si es un partido de la UAR queda como provisorio hasta que la UAR lo cargue. “Mandar al grupo” lo manda por WhatsApp."]],
     contar: () => ["Contar el partido", ["En cada jugador: el tilde cuando hace un tackle bien y la cruz cuando lo erra. En “Line y scrum”, los ganados y los perdidos cuando la pelota es nuestra; en “Contactos y más”, contactos, rucks, pases, quiebres de línea y pelotas recuperadas.",
       "Si te equivocás, “Deshacer” saca el último toque; “Corregir a uno” saca uno de cualquier jugador. Si entra un chico que no estaba, “Sumar a uno que entró”.",
       "Se guarda solo, también sin señal (se manda cuando vuelve). Pueden contar dos a la vez: se suma todo.",
@@ -519,7 +525,7 @@
       "“Para revisar”: es un primer dibujo hecho a partir de lo que está escrito; falta que Coordinación lo confirme."]],
     proximos: () => ["Próximos partidos", ["Los que cargó la UAR, con el día y la hora (la cancha no la dice). Se actualiza los lunes, martes y miércoles.",
       "Los amistosos los sumás vos, con “Sumar un amistoso”.",
-      "En cada partido, “Armar el equipo” para elegir quién juega y mandarlo al grupo. El día del partido aparece “Contar el partido”."]],
+      "Tocá “Equipo” en cada partido para elegir quién juega y mandarlo al grupo. El día del partido aparece “Contar el partido” y, cuando empieza, “Cargar el resultado”."]],
     ultimos: () => ["Últimos resultados", [`Datos al ${D.act}.`,
       "Si un partido del fin de semana no aparece, es porque todavía no cargaron su planilla en la página de la UAR.",
       "Siempre va primero Los 50, y el resultado en el mismo orden.",
@@ -662,11 +668,14 @@
     const misCats = [...new Set([...D.prox.map((x) => x.cat), ...(EQ.lista || []).map((x) => x.cat)])]
       .filter((c) => (ult && eqAsis(c) === ult) || (enPartidos && enPartidos !== "Todas" && catsUAR(enPartidos).includes(c)) || deEq.includes(c));
     const juega = misCats.length ? [...proxTodos().filter((x) => x.fecha === hoyISO() && misCats.includes(x.cat)), ...(EQ.lista ? amistosos(misCats, true).filter((x) => x.fecha === hoyISO()) : [])][0] : null;
-    const ij = juega && eqInfo(juega.cat, juega.fecha), rfh = juega && (D.partidos.find((p) => p.cat === juega.cat && p.fecha === juega.fecha) || (ij.amistoso && ij.pf !== "" && ij.pf != null ? { pf: +ij.pf, pc: +ij.pc } : null));
+    // si todavía no se sabe cuál es tu categoría: las que juegan hoy, para elegir
+    const hoyHay = juega || misCats.length ? [] : [...new Set(proxTodos().filter((x) => x.fecha === hoyISO() && eqAsis(x.cat)).map((x) => x.cat))];
+    const ij = juega && eqInfo(juega.cat, juega.fecha), rfh = juega && (D.partidos.find((p) => p.cat === juega.cat && p.fecha === juega.fecha) || (ij.pf !== "" && ij.pf != null ? { pf: +ij.pf, pc: +ij.pc } : null));
     const resHoy = rfh ? `${rfh.pf > rfh.pc ? "Ganó" : rfh.pf < rfh.pc ? "Perdió" : "Empató"} ${rfh.pf}–${rfh.pc}` : "";
     $("#vista").innerHTML = `
       <div class="cab">${cabTit("¿Qué querés hacer?")}</div>${avisoHTML()}
-      ${juega ? `<section class="sec sec--pegada"><button type="button" class="hoy-juega" data-ir-${resHoy ? "contar" : "equipo"}="${esc(juega.cat)}|${juega.fecha}">${IC.trofeo}<span class="hoy-juega__txt"><b>${resHoy ? `Hoy jugó ${esc(juega.cat)}` : `Hoy juega ${esc(juega.cat)}`}</b><small>${resHoy ? `${esc(resHoy)} vs ${esc(nombreRival(juega.rival))}` : `vs ${esc(nombreRival(juega.rival))}${juega.hora ? ` · ${esc(juega.hora)}` : ""} · ${dondeTxt(juega)}`}</small></span><span class="hoy-juega__acc">${resHoy ? "Mandar cómo salió" : "El equipo y contar"}${IC.adelante}</span></button></section>` : ""}
+      ${juega ? `<section class="sec sec--pegada"><button type="button" class="hoy-juega" data-ir-${resHoy ? "contar" : "equipo"}="${esc(juega.cat)}|${juega.fecha}">${IC.trofeo}<span class="hoy-juega__txt"><b>${resHoy ? `Hoy jugó ${esc(juega.cat)}` : `Hoy juega ${esc(juega.cat)}`}</b><small>${resHoy ? `${esc(resHoy)} vs ${esc(nombreRival(juega.rival))}` : `vs ${esc(nombreRival(juega.rival))}${juega.hora ? ` · ${esc(juega.hora)}` : ""} · ${dondeTxt(juega)}`}</small></span><span class="hoy-juega__acc">${resHoy ? "Mandar cómo salió" : "El equipo y contar"}${IC.adelante}</span></button>${!resHoy && empezo(juega) ? `<button type="button" class="btn-sec btn-sec--ancho hoy-juega__res" data-ir-res="${esc(juega.cat)}|${juega.fecha}">${IC.trofeo}¿Terminó? Cargar el resultado</button>` : ""}</section>`
+        : hoyHay.length ? `<section class="sec sec--pegada"><button type="button" class="hoy-juega" data-area="partidos">${IC.trofeo}<span class="hoy-juega__txt"><b>Hoy hay partido</b><small>${esc(hoyHay.join(" · "))}</small></span><span class="hoy-juega__acc">Elegí tu categoría${IC.adelante}</span></button></section>` : ""}
       ${alertasInicio()}
       <section class="sec sec--pegada"><ul class="areas areas--6">
         ${!D.fichados ? "" : !hoy ? tarjeta('data-area="asistencia"', IC.lista, "Asistencia", "Tomar lista")
@@ -784,19 +793,18 @@
     ["quiebres", "Quiebre", "quiebres", "quiebra la línea"], ["recuperadas", "Recuperada", "pelotas recuperadas", "recupera una pelota"]];
   // la formación fija se cuenta para el equipo (id "equipo"): line y scrum con nuestra pelota, ganados y perdidos
   const FIJA = [["line_g", "Line ganado"], ["line_p", "Line perdido"], ["scrum_g", "Scrum ganado"], ["scrum_p", "Scrum perdido"]];
+  /** uno de cada cosa, para decirlo en una frase ("le sacaste un tackle errado") */
+  const UNO_C = { tackles: "tackle", errados: "tackle errado", contactos: "contacto", rucks: "ruck", pases: "pase", quiebres: "quiebre de línea", recuperadas: "pelota recuperada", line_g: "line ganado", line_p: "line perdido", scrum_g: "scrum ganado", scrum_p: "scrum perdido" };
   /** "5 de 6 (83%)": cuántos salieron bien de los intentados */
   const deCuantos = (bien, mal) => (bien + mal ? `${bien} de ${bien + mal} (${Math.round((100 * bien) / (bien + mal))}%)` : "");
   /** los tackles bien hechos: los que salieron bien de todos los intentados (con los errados) */
   const tklPct = (o) => deCuantos(o.tackles || 0, o.errados || 0);
   const pctDe = (bien, mal) => (bien + mal ? Math.round((100 * bien) / (bien + mal)) : null);
-  const PARTICULAS = new Set(["de", "del", "la", "las", "los", "di", "da", "van", "von", "san", "mac", "mc"]);
-  /** el primer apellido, con su partícula ("De Solay", "Del Valle") */
-  const primerApellido = (n) => { const w = n.split(",")[0].trim().split(/\s+/); let i = 0; while (i < w.length - 1 && PARTICULAS.has(w[i].toLowerCase())) i++; return w.slice(0, i + 1).join(" "); };
-  /** los nombres cortos de un grupo de chicos: el primer apellido y, si dos lo comparten, la inicial del nombre ("Garcia P.") */
+  /** los nombres cortos de un grupo de chicos (la cancha, el contador y la imagen dicen lo mismo): el apellido y, si dos lo comparten, la inicial del nombre ("Garcia T.") */
   const nombresCortos = (ids, pl) => {
-    const base = new Map(ids.map((id) => [id, primerApellido(eqQuien(id, pl).nombre)])), cuenta = {};
+    const base = new Map(ids.map((id) => [id, apellido(eqQuien(id, pl).nombre)])), cuenta = {};
     base.forEach((a) => { cuenta[a] = (cuenta[a] || 0) + 1; });
-    return (id) => { const a = base.get(id) || primerApellido(eqQuien(id, pl).nombre), n = (eqQuien(id, pl).nombre.split(",")[1] || "").trim(); return cuenta[a] > 1 && n ? `${a} ${n[0]}.` : a; };
+    return (id) => { const a = base.get(id) || apellido(eqQuien(id, pl).nombre), n = (eqQuien(id, pl).nombre.split(",")[1] || "").trim(); return cuenta[a] > 1 && n ? `${a} ${n[0]}.` : a; };
   };
   /** "Line 5 de 6 · Scrum 3 de 4" */
   const fijaTxt = (k) => { const q = k.c.equipo || {}, t = (g, p, n) => (g + p ? `${n} ${g} de ${g + p}` : "");
@@ -818,11 +826,12 @@
   };
   const cntSinGuardar = (cat, f) => { const b = cntBorr(cat, f); return !!b && (!!b.c || !!b.envio || hayAlgo(b.d)); };
   /** un toque (n = 1) o deshacer uno (n = -1) */
-  function cntSumar(cat, f, id, x, n) {
+  function cntSumar(cat, f, id, x, n, hist) { // hist: "quita" (se sacó en "Corregir": se puede deshacer) o "no" (deshaciendo)
     const b = cntBorr(cat, f) || { d: {}, h: [] };
     if (b.c) { const o = (b.c[id] ??= {}); o[x] = Math.max(0, (o[x] || 0) + n); } else { const o = ((b.d ??= {})[id] ??= {}); o[x] = (o[x] || 0) + n; }
     b.h = b.h || [];
-    if (n > 0) { b.h.push([id, x]); if (b.h.length > 300) b.h.shift(); }
+    if (hist === "quita") b.h.push([id, x, "-"]); else if (n > 0 && hist !== "no") b.h.push([id, x]);
+    if (b.h.length > 300) b.h.shift();
     enCel.set(cntClave(cat, f), JSON.stringify(b));
   }
   const nuevoLote = () => [...crypto.getRandomValues(new Uint8Array(12))].map((x) => x.toString(16).padStart(2, "0")).join("");
@@ -924,24 +933,24 @@
     const cat = S.eqcat, f = S.eqfecha, k = cntActual(cat, f), e = eqActual(cat, f), modo = modoCnt();
     const tot = cntEquipo(k), sum = (x) => tot[x] || 0, acc = ACCIONES.find((a) => a[0] === modo) || ACCIONES[0]; // los mismos números que "Cómo va" (también los que salieron)
     const p = $("#cnt-pie-txt");
-    if (p) p.textContent = modo === "tackles" ? `${pl(sum("tackles"), "tackle", "tackles")} · ${pl(sum("errados"), "errado", "errados")}`
+    if (p) p.textContent = modo === "tackles" ? `Tackles: ${sum("tackles")} bien · ${pl(sum("errados"), "errado", "errados")}`
       : modo === "fija" ? fijaTxt(k) || "Line y scrum" : pl(sum(modo), acc[1].toLowerCase(), acc[2]);
     const s = $("#cnt-estado"), [c, t] = estadoCnt(cat, f);
     if (s) { s.className = `cnt-estado cnt-estado--${c}`; s.innerHTML = `${c === "ok" ? IC.tilde : c === "ojo" ? IC.alerta : ""}${t}`; }
     const d = $("[data-cdeshacer]"), u = k.h[k.h.length - 1];
-    if (d) { d.disabled = !u; d.innerHTML = `${IC.deshacer}<span>Deshacer${u ? `<small>${u[0] === "equipo" ? esc((FIJA.find((y) => y[0] === u[1]) || [, ""])[1].toLowerCase()) : esc(primerApellido(eqQuien(u[0], eqPlantel(cat)).nombre))}</small>` : ""}</span>`; }
+    if (d) { d.disabled = !u; d.innerHTML = `${IC.deshacer}<span>Deshacer${u ? `<small>${u[0] === "equipo" ? esc((FIJA.find((y) => y[0] === u[1]) || [, ""])[1].toLowerCase()) : esc(apellido(eqQuien(u[0], eqPlantel(cat)).nombre))}</small>` : ""}</span>`; }
   }
   function vContar() {
     const cat = S.eqcat, f = S.eqfecha, modo = modoCnt(), acc = ACCIONES.find((x) => x[0] === modo) || ACCIONES[0], hoy = hoyISO();
     if (!CNT.lista && !CNT.error) cargarConteos();
     const inf = eqInfo(cat, f);
     // el resultado (de la UAR o el que se cargó en el amistoso)
-    const pu = D.partidos.find((p) => p.cat === cat && p.fecha === f), rf = pu ? [pu.pf, pu.pc] : inf.amistoso && inf.pf !== "" && inf.pf != null ? [+inf.pf, +inf.pc] : null;
+    const pu = D.partidos.find((p) => p.cat === cat && p.fecha === f), rf = pu ? [pu.pf, pu.pc] : inf.pf !== "" && inf.pf != null ? [+inf.pf, +inf.pc] : null;
     const resTxt = rf ? `${rf[0] > rf[1] ? "Ganó" : rf[0] < rf[1] ? "Perdió" : "Empató"} ${rf[0]}–${rf[1]}` : "";
     const salio = f < hoy || !!rf;
     // un partido que ya pasó (o con el resultado cargado) se abre en el resumen ("Cómo salió"); el del día, contando
-    const ver = S.cres == null ? salio : S.cres;
-    const cab = `<div class="cab cab--corta">${volver(`Equipo de ${esc(cat)}`, { ver: "equipo", eqcontar: false, cres: null })}<h2 class="cab__cat cab__cat--chica">${conAyuda(S.cntCorr ? "Corregir lo contado" : S.cntOtro ? "¿Quién entró?" : ver ? (salio ? "Cómo salió" : "Cómo va") : "Contar el partido", "contar")}</h2>
+    const ver = !S.cntCorr && !S.cntOtro && (S.cres == null ? salio : S.cres); // "Corregir" y "¿Quién entró?" van primero
+    const cab = `<div class="cab cab--corta">${volver(`Equipo de ${esc(cat)}`, { ver: "equipo", eqcontar: false, cres: null })}<h2 class="cab__cat cab__cat--chica">${conAyuda(S.cntCorr ? "Corregir lo contado" : S.cntOtro ? "¿Quién entró?" : ver ? (salio ? "Cómo salió" : "Cómo va") : "Contar el partido", S.cntCorr ? "corregir" : S.cntOtro ? "quienEntro" : ver ? "comoVa" : "contar")}</h2>
       <p class="eq-donde">${esc(cat)}${inf.rival ? ` vs ${esc(inf.rival)}` : ""} · ${f === hoy ? "Hoy" : esc(corta(f))}</p></div>`;
     if ((!CNT.lista && !cntBorr(cat, f)) || (!EQ.lista && !eqBorr.get(eqClave(cat, f)))) {
       const err = CNT.error || EQ.error;
@@ -965,7 +974,7 @@
       $("#vista").innerHTML = `${cab}${sinSenal}
         <section class="sec sec--pegada">
           ${resTxt ? `<p class="cnt-resultado cnt-resultado--${rf[0] > rf[1] ? "G" : rf[0] < rf[1] ? "P" : "E"}">${IC.trofeo}<b>${resTxt}</b></p>` : ""}
-          ${!rf && inf.amistoso ? `<div class="asis-form eq-res"><p class="asis-form__l">¿Terminó? Cargá el resultado</p>
+          ${!rf ? `<div class="asis-form eq-res"><p class="asis-form__l">¿Terminó? Cargá el resultado</p>
             <div class="asis-form__fila"><label class="asis-form__campo">Los 50<input id="eq-pf" class="asis-input" type="number" inputmode="numeric" min="0" max="300"></label>
               <label class="asis-form__campo">${esc(inf.rival || "Rival")}<input id="eq-pc" class="asis-input" type="number" inputmode="numeric" min="0" max="300"></label></div>
             <p class="asis-form__error" id="eq-res-error" role="alert" hidden></p>
@@ -974,7 +983,7 @@
           ${tk.length ? `<h3 class="grupo">Tackles, jugador por jugador</h3><div class="tabla-e-wrap cnt-res"><table class="tabla-e"><thead><tr><th scope="col" class="izq">Jugador</th><th scope="col"><span class="sr">Bien hechos</span>${IC.tilde}</th><th scope="col"><span class="sr">Errados</span>${IC.cruz}</th><th scope="col">%</th></tr></thead>
             <tbody>${tk.map((id) => `<tr><td class="izq">${quien(id)}</td><td>${val(id, "tackles")}</td><td>${val(id, "errados")}</td><td><b>${pctDe(val(id, "tackles"), val(id, "errados"))}%</b></td></tr>`).join("")}</tbody></table></div>` : ""}
           ${otras.length ? `<h3 class="grupo">Lo demás</h3><ul class="cnt-otras-l">${otras.map(([plu, l]) => `<li><b>${mayus(plu)}:</b> ${l.join(" · ")}</li>`).join("")}</ul>` : ""}
-          <div class="cnt-res-acc">
+          <div class="cnt-res-acc lista-pie">
             ${big.length ? `<button type="button" class="btn btn--wa btn--alto btn--ancho" data-cres-compartir>${IC.compartir}Mandar al grupo</button>` : ""}
             ${salio ? `<button type="button" class="btn-sec btn-sec--ancho" data-cnt-corr="1">Corregir lo contado</button>` : `<button type="button" class="btn-sec btn-sec--ancho" data-cres="0">Seguir contando</button>`}
           </div>
@@ -983,7 +992,7 @@
     }
     // contando: dos columnas en el celular, siempre igual (en "Tackles", el tilde y la cruz; en lo demás, un botón)
     const tarjeta = (n) => {
-      const id = e.jugadores[n], nom = esc(ap(id)), cab2 = `<span class="cnt-p__cab"><b class="cnt-p__n num">${n}</b><span class="cnt-p__nom">${nom}</span></span>`;
+      const id = typeof n === "string" ? n : e.jugadores[n], nom = esc(ap(id)), cab2 = typeof n === "string" ? `<span class="cnt-p__cab"><span class="cnt-p__nom">${nom}</span></span>` : `<span class="cnt-p__cab"><b class="cnt-p__n num">${n}</b><span class="cnt-p__nom">${nom}</span></span>`;
       if (modo === "tackles") return `<li class="cnt-p">${cab2}<span class="cnt-p__btns">
         <button type="button" class="cnt-t cnt-t--ok" data-cuenta="${esc(id)}" data-cacion="tackles" data-nom="${nom}" aria-label="${n}, ${nom}: tackle bien hecho. Lleva ${val(id, "tackles")}">${IC.tilde}<b class="cnt-b__v${v0(val(id, "tackles"))} num">${val(id, "tackles")}</b></button>
         <button type="button" class="cnt-t cnt-t--mal" data-cuenta="${esc(id)}" data-cacion="errados" data-nom="${nom}" aria-label="${n}, ${nom}: tackle errado. Lleva ${val(id, "errados")}">${IC.cruz}<b class="cnt-b__v${v0(val(id, "errados"))} num">${val(id, "errados")}</b></button></span></li>`;
@@ -992,23 +1001,27 @@
     const fila = (t, g, p) => `<div class="cnt-fila"><b class="cnt-fila__t">${t}</b>
       <button type="button" class="cnt-t cnt-t--ok" data-cuenta="equipo" data-cacion="${g}" data-nom="${t} ganado" aria-label="${t} ganado. Van ${val("equipo", g)}">${IC.tilde}Ganado<b class="cnt-b__v${v0(val("equipo", g))} num">${val("equipo", g)}</b></button>
       <button type="button" class="cnt-t cnt-t--mal" data-cuenta="equipo" data-cacion="${p}" data-nom="${t} perdido" aria-label="${t} perdido. Van ${val("equipo", p)}">${IC.cruz}Perdido<b class="cnt-b__v${v0(val("equipo", p))} num">${val("equipo", p)}</b></button></div>`;
-    const otra = OTRAS_C.find(([x]) => x === modo);
+    const otra = OTRAS_C.find(([x]) => x === modo), enEq0 = new Set(Object.values(e.jugadores));
+    const salieron = Object.keys(k.c).filter((id) => id !== "equipo" && !enEq0.has(id) && ACCIONES.some(([x]) => val(id, x))); // contados que ya no están en el equipo
     // corregir: cada jugador con lo que tiene contado y un "Sacar uno" por cada cosa
     if (S.cntCorr) {
       const fil = [...new Set([...Object.values(e.jugadores), ...Object.keys(k.c).filter((x) => x !== "equipo")])].filter((id) => ACCIONES.some(([x]) => val(id, x)));
-      const quitar = (id, x, l) => `<button type="button" class="btn-sec cnt-quitar" data-cnt-quita="${esc(id)}|${x}" aria-label="Sacarle un ${esc(l.toLowerCase())} a ${esc(id === "equipo" ? "el equipo" : ap(id))}">${l} <b class="num">${val(id, x)}</b> <span aria-hidden="true">−</span></button>`;
+      const quitar = (id, x, l) => `<button type="button" class="btn-sec cnt-quitar" data-cnt-quita="${esc(id)}|${x}" aria-label="${id === "equipo" ? `Sacar un ${UNO_C[x]}` : `Sacarle un ${UNO_C[x]} a ${esc(ap(id))}`}. Tiene ${val(id, x)}">${l} <b class="num">${val(id, x)}</b> <span aria-hidden="true">−</span></button>`;
       $("#vista").innerHTML = `${cab}<section class="sec sec--pegada">
         <p class="asis-nota">Tocá lo que quieras sacar: se saca uno por toque.</p>
         ${fil.length || FIJA.some(([x]) => val("equipo", x)) ? `<ul class="cnt-corr">${fil.map((id) => `<li><b>${esc(ap(id))}</b><span>${ACCIONES.filter(([x]) => val(id, x)).map(([x, l]) => quitar(id, x, x === "tackles" ? "Tackles" : x === "errados" ? "Errados" : (OTRAS_C.find((o) => o[0] === x) || [, l])[1])).join("")}</span></li>`).join("")}
           ${FIJA.some(([x]) => val("equipo", x)) ? `<li><b>Line y scrum</b><span>${FIJA.filter(([x]) => val("equipo", x)).map(([x, l]) => quitar("equipo", x, l)).join("")}</span></li>` : ""}</ul>` : `<p class="vacio-g">Todavía no se contó nada</p>`}
-        <button type="button" class="btn btn--ok btn--alto btn--ancho cnt-volver" data-cnt-corr="0">${IC.tilde}Listo</button></section>${avisoHTML()}`;
+        <div class="cnt-pie__btns cnt-corr__btns"><button type="button" class="btn-sec cnt-deshacer" data-cdeshacer${k.h.length ? "" : " disabled"}>${IC.deshacer}Deshacer</button><button type="button" class="btn btn--ok btn--alto cnt-volver" data-cnt-corr="0">${IC.tilde}Listo</button></div></section>${avisoHTML()}`;
+      pintarPieCnt();
       return;
     }
     // uno que entró y no estaba en el equipo: se elige y queda en el primer número libre del banco
     if (S.cntOtro) {
-      const enEq = new Set(Object.values(e.jugadores)), libres = pl.filter((c) => !enEq.has(c.id)).sort(porNombre), cx = eqCtx();
+      const cx = eqCtx(), enEq = new Set(Object.values(e.jugadores)), noP = (c) => (eqAvisos(c.id, c, cx).some((a) => a.duro) ? 1 : 0), libres = pl.filter((c) => !enEq.has(c.id)).sort((a, b) => noP(a) - noP(b) || porNombre(a, b));
       $("#vista").innerHTML = `${cab}<section class="sec sec--pegada">
-        ${libres.length ? `<ul class="eq-l">${libres.map((c) => `<li><button type="button" class="eq-it eq-it--elegir" data-cnt-entra="${esc(c.id)}"><span class="eq-it__txt">${eqAvisos(c.id, c, cx).filter((a) => a.duro).map((a) => `<span class="eq-tag eq-tag--no">${esc(a.corto)}</span>`).join("")}<span class="eq-it__nom">${nombreHTML(c.nombre)}</span></span>${IC.mas}</button></li>`).join("")}</ul>` : `<p class="vacio-g">Ya están todos en el equipo</p>`}
+        <label class="buscar-g eq-buscar"><span class="sr">Buscar un chico</span>${IC.buscar}<input type="search" id="buscar-entra" placeholder="Buscar un chico" autocomplete="off" enterkeyhint="search"></label>
+        ${libres.length ? `<ul class="eq-l" data-filtro-entra>${libres.map((c) => `<li data-q="${esc(qNom(c.nombre))}"><button type="button" class="eq-it eq-it--elegir" data-cnt-entra="${esc(c.id)}"><span class="eq-it__txt"><span class="eq-it__nom">${nombreHTML(c.nombre)}</span>${eqAvisos(c.id, c, cx).filter((a) => a.duro).map((a) => `<small class="eq-it__no">${esc(a.t)}</small>`).join("")}</span>${IC.mas}</button></li>`).join("")}</ul>` : `<p class="vacio-g">Ya están todos en el equipo</p>`}
+        <p class="vacio-g" id="entra-nadie" hidden>Nadie con ese nombre</p><div id="entra-otros"></div>
         <button type="button" class="btn-sec btn-sec--ancho cnt-volver" data-cnt-otro="0">Volver a contar</button></section>${avisoHTML()}`;
       $("#vista").dataset.cnt = "otro";
       return;
@@ -1021,10 +1034,10 @@
       </div>
       <section class="sec sec--pegada cnt-sec">
         <p class="asis-nota cnt-ayuda">${modo === "tackles" ? `${IC.tilde}bien hecho · ${IC.cruz}errado` : modo === "fija" ? "Cuando la pelota es nuestra" : `Tocá al jugador cada vez que ${acc[3]}`}</p>
-        ${modo === "fija" ? `<div class="cnt-fija2">${fila("Line", "line_g", "line_p")}${fila("Scrum", "scrum_g", "scrum_p")}</div>` : `<ul class="cnt-g cnt-g--par">${ns.map(tarjeta).join("")}</ul>
-          <div class="cnt-extra"><button type="button" class="btn-sec cnt-otro" data-cnt-otro="1">${IC.mas}Sumar a uno que entró</button><button type="button" class="btn-sec cnt-otro" data-cnt-corr="1">${IC.deshacer}Corregir a uno</button></div>`}
+        ${modo === "fija" ? `<div class="cnt-fija2">${fila("Line", "line_g", "line_p")}${fila("Scrum", "scrum_g", "scrum_p")}</div>` : `<ul class="cnt-g cnt-g--par">${ns.filter((n) => n <= 15).map(tarjeta).join("")}${ns.some((n) => n > 15) ? `<li class="cnt-g__sep">Suplentes</li>${ns.filter((n) => n > 15).map(tarjeta).join("")}` : ""}${salieron.length ? `<li class="cnt-g__sep">Salieron del equipo</li>${salieron.map(tarjeta).join("")}` : ""}</ul>
+          <button type="button" class="btn-sec btn-sec--ancho cnt-otro" data-cnt-otro="1">${IC.mas}Sumar a uno que entró</button>`}
       </section>
-      <div class="lista-pie cnt-pie"><div class="cnt-pie__txt"><b id="cnt-pie-txt"></b><span id="cnt-estado" class="cnt-estado"></span></div>
+      <div class="lista-pie cnt-pie"><div class="cnt-pie__fila"><div class="cnt-pie__txt"><b id="cnt-pie-txt"></b><span id="cnt-estado" class="cnt-estado"></span></div><button type="button" class="btn-sec cnt-corr-b" data-cnt-corr="1">Corregir</button></div>
         <div class="cnt-pie__btns"><button type="button" class="btn-sec cnt-deshacer" data-cdeshacer${k.h.length ? "" : " disabled"}>${IC.deshacer}Deshacer</button>
           <button type="button" class="btn btn--ok cnt-va" data-cres="1">${IC.barras}${f < hoy ? "Cómo salió" : "Cómo va"}</button></div></div>
       <p class="sr" aria-live="polite" id="cnt-voz"></p>
@@ -1037,7 +1050,7 @@
   function textoConteo() {
     const cat = S.eqcat, f = S.eqfecha, pl = eqPlantel(cat), k = cntActual(cat, f), inf = eqInfo(cat, f), ap = (id) => eqQuien(id, pl).nombre.split(",")[0], tot = cntEquipo(k);
     const l = [`*Los 50 · ${cat}*`, [inf.rival && `vs ${inf.rival}`, mayus(cuandoP({ fecha: f })), ...infoTxt(inf)].filter(Boolean).join(" · "), ""];
-    const pu = D.partidos.find((p) => p.cat === cat && p.fecha === f), rf = pu ? [pu.pf, pu.pc] : inf.amistoso && inf.pf !== "" && inf.pf != null ? [inf.pf, inf.pc] : null;
+    const pu = D.partidos.find((p) => p.cat === cat && p.fecha === f), rf = pu ? [pu.pf, pu.pc] : inf.pf !== "" && inf.pf != null ? [inf.pf, inf.pc] : null;
     if (rf) l.push(`${+rf[0] > +rf[1] ? "Ganamos" : +rf[0] < +rf[1] ? "Perdimos" : "Empatamos"} ${rf[0]} a ${rf[1]}${inf.rival ? ` contra ${inf.rival}` : ""}`);
     if (tot.tackles || tot.errados) l.push(`Tackles bien hechos: ${tklPct(tot)}`);
     if (fijaTxt(k)) l.push(fijaTxt(k));
@@ -1049,13 +1062,12 @@
   }
 
   // ---------- el equipo como imagen: la cancha con los apellidos, los suplentes y el escudo (como Rugby Animator) ----------
-  const cortoNom = (n) => { const [a, b = ""] = n.split(",").map((x) => x.trim()); return b ? `${a} ${b[0]}.` : a; }; // el apellido entero ("Barrionuevo Castro B.")
   async function imagenEquipo() {
-    const cat = S.eqcat, f = S.eqfecha, e = eqActual(cat, f), pl = eqPlantel(cat), inf = eqInfo(cat, f), nom = (id) => cortoNom(eqQuien(id, pl).nombre);
+    const cat = S.eqcat, f = S.eqfecha, e = eqActual(cat, f), pl = eqPlantel(cat), inf = eqInfo(cat, f), nom = nombresCortos(Object.values(e.jugadores), pl); // como en la cancha
     try { await Promise.all(['700 60px "Barlow Condensed"', '600 30px "Barlow"', '500 24px "Barlow"'].map((x) => document.fonts.load(x))); } catch (err) { /* sin las letras del club: las del sistema */ }
     const escudo = await new Promise((ok) => { const i = new Image(); i.onload = () => ok(i); i.onerror = () => ok(null); i.src = "img/escudo-160.webp"; });
     const sup = Object.keys(e.jugadores).map(Number).filter((n) => n > 15).sort((x, y) => x - y);
-    const citaH = e.cita ? 60 : 0, W = 1080, campoY = 210 + citaH, campoH = 1200, supY = campoY + campoH + 30, H = supY + (sup.length ? 80 + Math.ceil(sup.length / 2) * 52 : 0) + 70;
+    const citaH = e.cita || e.lugar ? 60 : 0, W = 1080, campoY = 210 + citaH, campoH = 1200, supY = campoY + campoH + 30, H = supY + (sup.length ? 80 + Math.ceil(sup.length / 2) * 52 : 0) + 70;
     const cv = Object.assign(document.createElement("canvas"), { width: W, height: H }), x = cv.getContext("2d");
     const COND = '"Barlow Condensed", "Arial Narrow", sans-serif', BASE = '"Barlow", system-ui, sans-serif';
     x.fillStyle = "#0b0d12"; x.fillRect(0, 0, W, H);
@@ -1075,8 +1087,8 @@
     x.beginPath(); x.moveTo(72, campoY + 522); x.lineTo(W - 72, campoY + 522); x.stroke(); x.setLineDash([]);
     const ys = [campoY + 112, campoY + 257, campoY + 402, campoY + 645, campoY + 790, campoY + 935, campoY + 1080]; // una fila cada 145 px: el apellido no pisa la de abajo
     const xs = { 1: [540], 2: [420, 660], 3: [300, 540, 780], 4: [180, 420, 660, 900] };
-    FORMACION.forEach((fila, i) => fila.forEach((n, j) => {
-      const cx = xs[fila.length][j], cy = ys[i], id = e.jugadores[n];
+    CANCHA.forEach((fila, i) => fila.forEach((n, j) => {
+      const cx = fila[0] === 11 ? [200, 880][j] : xs[fila.length][j], cy = ys[i], id = e.jugadores[n];
       x.beginPath(); x.arc(cx, cy, 42, 0, Math.PI * 2);
       if (id) { x.fillStyle = "#fff"; x.fill(); } else { x.setLineDash([8, 8]); x.strokeStyle = "rgba(255,255,255,.75)"; x.lineWidth = 3; x.stroke(); x.setLineDash([]); }
       x.textAlign = "center"; x.textBaseline = "middle"; x.fillStyle = id ? "#1b5fd1" : "#fff"; x.font = `700 46px ${COND}`; x.fillText(String(n), cx, cy + 3);
@@ -1403,7 +1415,7 @@
   const eqGuardado = (cat, f) => (EQ.lista || []).find((e) => e.cat === cat && e.fecha === f) || null;
   const eqPartido = (cat, f) => D.prox.find((x) => x.cat === cat && x.fecha === f) || null;
   // en un partido de la UAR, de lo que se carga acá solo cuentan la citación y la cancha (rival, hora y lugar los pone la UAR)
-  const datosDe = (x, oficial) => (oficial ? ["cita", "lugar"] : DATOS).map((k) => (x && x[k] != null && x[k] !== "" ? String(x[k]) : ""));
+  const datosDe = (x, oficial) => (oficial ? ["cita", "lugar", "pf", "pc"] : DATOS).map((k) => (x && x[k] != null && x[k] !== "" ? String(x[k]) : ""));
   const copiaEq = (g) => ({ jugadores: { ...g.jugadores }, cambios: { ...(g.cambios || {}) }, ...Object.fromEntries(DATOS.map((k) => [k, g[k] ?? ""])), ts: g.ts });
   /** lo que se está armando: lo del celular (si hay algo sin mandar) o lo guardado */
   function eqActual(cat, f) {
@@ -1414,11 +1426,11 @@
   /** los datos del partido: los de la UAR o, en un amistoso, los que se cargaron (rival, hora, de local o de visitante, resultado) */
   function eqInfo(cat, f) {
     const px = eqPartido(cat, f), e = eqActual(cat, f);
-    if (px) return { rival: nombreRival(px.rival), hora: px.hora || "", cond: px.cond, amistoso: false, cita: e.cita || "", lugar: e.lugar || "" };
+    if (px) return { rival: nombreRival(px.rival), hora: px.hora || "", cond: px.cond, amistoso: false, cita: e.cita || "", pf: e.pf, pc: e.pc, lugar: e.lugar || "" };
     return { rival: e.rival || "", hora: e.hora || "", cond: e.cond || "", amistoso: true, cita: e.cita || "", pf: e.pf, pc: e.pc, lugar: e.lugar || "" };
   }
-  /** "15:30 · Local" o "Amistoso de visitante" */
-  const infoTxt = (i) => [i.hora, i.amistoso ? (i.cond ? `Amistoso de ${condTxt(i.cond).toLowerCase()}` : "Amistoso") : condTxt(i.cond)].filter(Boolean);
+  /** "15:30 · Local" o "Amistoso · Visitante" */
+  const infoTxt = (i) => [i.hora, i.amistoso && "Amistoso", i.cond && condTxt(i.cond)].filter(Boolean);
   const mismoEq = (a, g, oficial) => JSON.stringify([a.jugadores, a.cambios || {}, datosDe(a, oficial)]) === JSON.stringify([g ? g.jugadores : {}, g ? g.cambios || {} : {}, datosDe(g, oficial)]);
   const eqSinGuardar = (cat, f) => { const b = eqBorr.get(eqClave(cat, f)); return !!b && !mismoEq(b, eqGuardado(cat, f), !!eqPartido(cat, f)); };
   /** anota un cambio en el celular y lo manda en un rato; "base" es lo guardado que había cuando se empezó a cambiar (para juntar con otro) */
@@ -1454,6 +1466,7 @@
     if (EQ.cargando) return;
     EQ.cargando = true; EQ.error = null;
     const t0 = Date.now();
+    let sinCambio = false;
     apiD1(null, "equipos=1").then((d) => {
       // un equipo que se mandó mientras se traía la lista queda como se mandó
       const nuevos = new Set(Object.keys(EQ_AL).filter((k) => EQ_AL[k] > t0)), de = (x) => nuevos.has(eqClave(x.cat, x.fecha));
@@ -1466,13 +1479,17 @@
       .catch((e) => {
         if (e.message === "clave") { EQ.error = errNotas(e, "No se pudieron cargar los equipos", "ver los equipos"); return; }
         // sin señal: los últimos que se trajeron en este celular (y se puede seguir armando)
+        EQ.ts = Date.now(); // se vuelve a probar en un minuto (o al volver la señal), no enseguida
+        if (EQ.delCel && EQ.lista) { sinCambio = true; return; } // ya se ve la copia del celular: nada que redibujar
         let c = null;
         try { c = JSON.parse(enCel.get("los50-equipos") || "null"); } catch (x) { /* nada guardado */ }
         EQ.lista = c || []; EQ.delCel = true;
       })
-      .finally(() => { EQ.cargando = false; if (["equipo", "chico", "inicio"].includes(S.ver) || (S.ver === "partidos" && S.aform !== "amistoso") || (S.ver === "area" && S.area === "partidos")) render(); });
+      .finally(() => { EQ.cargando = false; if (sinCambio) return; if (["equipo", "chico", "inicio"].includes(S.ver) || (S.ver === "partidos" && S.aform !== "amistoso") || (S.ver === "area" && S.area === "partidos")) render(); });
   }
   /** en cada partido: el equipo (cuántos hay) y, si ya se jugó, cómo salió lo contado; el día del partido, "Contar el partido" */
+  /** ya empezó (o no se sabe a qué hora): se puede cargar el resultado */
+  const empezo = (x) => x.fecha < hoyISO() || (x.fecha === hoyISO() && (!x.hora || new Date().toTimeString().slice(0, 5) >= x.hora));
   function eqBtn(x) {
     const e = eqActual(x.cat, x.fecha), t15 = Object.keys(e.jugadores).filter((n) => +n <= 15).length, sup = Object.keys(e.jugadores).length - t15, k = `${x.cat}|${x.fecha}`, p = pendientes(), hoy = hoyISO();
     const ojo = p.includes(`eq:${k}`) || p.includes(`cnt:${k}`) ? "Sin señal: se manda solo cuando vuelva" : eqSinGuardar(x.cat, x.fecha) ? "Guardando…" : "";
@@ -1480,10 +1497,10 @@
     if (x.fecha <= hoy) (CNT.lista || []).filter((r) => r.cat === x.cat && r.fecha === x.fecha).forEach((r) => { if (r.id === "equipo") eqp[r.accion] = r.n; else c[r.accion] = (c[r.accion] || 0) + r.n; });
     const cont = [pctDe(c.tackles || 0, c.errados || 0) != null && `Tackles ${pctDe(c.tackles || 0, c.errados || 0)}%`, (eqp.line_g || eqp.line_p) && `Line ${eqp.line_g || 0} de ${(eqp.line_g || 0) + (eqp.line_p || 0)}`].filter(Boolean).join(" · ");
     const txt = !t15 && !sup ? (x.fecha < hoy ? "Cargar quién jugó" : "Equipo: sin armar todavía") : t15 === 15 ? `Equipo: 15${sup ? ` + ${pl(sup, "suplente", "suplentes")}` : " titulares"}` : `Equipo: faltan ${pl(15 - t15, "titular", "titulares")}`;
-    const i = x.amistoso ? eqInfo(x.cat, x.fecha) : null, sinRes = i && x.fecha < hoy && (i.pf === "" || i.pf == null);
-    const salio = x.pf != null && x.pf !== ""; // hoy, con el resultado ya cargado
-    const contar = t15 && x.fecha === hoy ? `<button type="button" class="${salio ? "btn-sec" : "btn btn--ok"} btn--alto res__contar" data-ir-contar="${esc(x.cat)}|${x.fecha}">${IC.barras}${salio ? "Cómo salió" : "Contar el partido"}</button>`
-      : sinRes ? `<button type="button" class="btn-sec btn--alto res__contar" data-ir-equipo="${esc(x.cat)}|${x.fecha}">${IC.trofeo}Cargar el resultado</button>` : "";
+    const ii = x.pf != null ? x : eqInfo(x.cat, x.fecha), salio = ii.pf != null && ii.pf !== ""; // con el resultado ya cargado
+    const resB = !salio && empezo(x) ? `<button type="button" class="btn-sec btn--alto res__contar" data-ir-res="${esc(x.cat)}|${x.fecha}">${IC.trofeo}Cargar el resultado</button>` : "";
+    const contarB = t15 && x.fecha === hoy ? `<button type="button" class="${salio ? "btn-sec" : "btn btn--ok"} btn--alto res__contar" data-ir-contar="${esc(x.cat)}|${x.fecha}">${IC.barras}${salio ? "Cómo salió" : "Contar el partido"}</button>` : "";
+    const contar = contarB && resB ? `<span class="res__dos">${contarB}${resB}</span>` : contarB || resB;
     return `<button type="button" class="res__eq" data-ir-equipo="${esc(x.cat)}|${x.fecha}">${IC.camiseta}<span>${txt}${cont ? `<small class="res__eq-cnt">${cont}</small>` : ""}${ojo ? `<small class="res__eq-ojo">${ojo}</small>` : ""}</span>${IC.adelante}</button>${contar}`;
   }
   /** los ya jugados sin resultado: los de la UAR hasta que lo carguen (dos semanas), los amistosos hasta que se cargue cómo salió (dos meses) */
@@ -1493,10 +1510,11 @@
       const k = eqClave(cat, fecha), px = eqPartido(cat, fecha);
       if (vistos.has(k) || !cs.includes(cat) || fecha >= hoy || fecha < masDias(hoy, px ? -14 : -60) || D.partidos.some((p) => p.cat === cat && p.fecha === fecha)) return;
       const i = eqInfo(cat, fecha);
-      if (!px && i.pf !== "" && i.pf != null) return; // un amistoso con resultado va en "Últimos resultados"
+      if (i.pf !== "" && i.pf != null) return; // con resultado (el de un amistoso o el que cargó un entrenador) va en "Últimos resultados"
       vistos.add(k);
       out.push(px ? { ...px } : amistosoDe(cat, fecha));
     };
+    D.prox.forEach((x) => { if (eqAsis(x.cat)) sumar(x.cat, x.fecha); });
     (EQ.lista || []).forEach((e) => sumar(e.cat, e.fecha));
     eqBorradores().forEach(([cat, fecha]) => sumar(cat, fecha));
     return out.sort((a, b) => b.fecha.localeCompare(a.fecha));
@@ -1516,17 +1534,17 @@
     eqBorradores().forEach(([cat, fecha]) => sumar(cat, fecha));
     return out;
   }
-  /** los amistosos con resultado, como un resultado más */
+  /** los amistosos con resultado (y los de la UAR con el que cargó un entrenador, hasta que lo cargue la UAR), como un resultado más */
   function amistososJugados(cs) {
     const out = [], vistos = new Set();
     [...(EQ.lista || []).map((e) => [e.cat, e.fecha]), ...eqBorradores().map(([c, f]) => [c, f])].forEach(([cat, fecha]) => {
       const k = eqClave(cat, fecha);
-      if (vistos.has(k) || !cs.includes(cat) || eqPartido(cat, fecha) || fecha > hoyISO()) return;
+      if (vistos.has(k) || !cs.includes(cat) || D.partidos.some((p) => p.cat === cat && p.fecha === fecha) || fecha > hoyISO()) return;
       const i = eqInfo(cat, fecha);
       if (i.pf === "" || i.pf == null || i.pc === "" || i.pc == null) return;
       vistos.add(k);
       const pf = +i.pf, pc = +i.pc;
-      out.push({ cat, fecha, rival: i.rival || "Rival", cond: i.cond || "", pf, pc, res: pf > pc ? "G" : pf < pc ? "P" : "E", amistoso: true });
+      out.push({ cat, fecha, rival: i.rival || "Rival", cond: i.cond || "", pf, pc, res: pf > pc ? "G" : pf < pc ? "P" : "E", amistoso: i.amistoso, prov: !i.amistoso });
     });
     return out;
   }
@@ -1549,7 +1567,9 @@
       <label class="asis-form__campo">Rival<input id="am-rival" class="asis-input" maxlength="60" autocomplete="off" placeholder="Contra quién"></label>
       ${condCampo("am-cond", "")}
       <label class="asis-form__campo">Dirección de la cancha<input id="am-lugar" class="asis-input" maxlength="120" autocomplete="off" placeholder="Si no es en el club"></label>
-      <label class="asis-form__campo">Citación<input id="am-cita" class="asis-input" maxlength="80" autocomplete="off" placeholder="Por ejemplo: 10:00 en el club"></label>
+      <label class="asis-form__campo" id="am-cita-c">Citación<input id="am-cita" class="asis-input" maxlength="80" autocomplete="off" placeholder="Por ejemplo: 10:00 en el club"></label>
+      <div class="asis-form__fila" id="am-res" hidden><label class="asis-form__campo">Los 50<input id="am-pf" class="asis-input" type="number" inputmode="numeric" min="0" max="300"></label>
+        <label class="asis-form__campo">Rival<input id="am-pc" class="asis-input" type="number" inputmode="numeric" min="0" max="300"></label></div>
       <div class="asis-form__btns"><button type="button" class="btn btn--ok btn--alto" data-amistoso-ok>${IC.tilde}Guardar el amistoso</button>${cerrarBtn}</div></div>`; };
 
   /** el suplente: por quién entra y en qué minuto (se elige al tocar su número) */
@@ -1576,7 +1596,7 @@
     const k = eqClave(cat, f), g = eqGuardado(cat, f);
     if (S.eqChoque && S.eqChoque.k === k) return ["ojo", "Falta elegir: mirá arriba"];
     const sinS = pendientes().includes(`eq:${k}`) || (eqSinGuardar(cat, f) && navigator.onLine === false), va = EQ.guardando || eqSinGuardar(cat, f);
-    if (S.eqAntes && S.eqAntes.k === k && S.eqAntes.txt) return ["cambio", `${sinS ? "Sin señal" : va ? "Guardando" : "Guardado"} · ${S.eqAntes.txt}`];
+    if (S.eqAntes && S.eqAntes.k === k && S.eqAntes.txt) return [sinS ? "ojo" : va ? "va" : "ok", `${sinS ? "Sin señal" : va ? "Guardando" : "Guardado"} · ${S.eqAntes.txt}`, true];
     if (EQ.guardando) return ["va", "Guardando…"];
     if (pendientes().includes(`eq:${k}`) || (eqSinGuardar(cat, f) && navigator.onLine === false)) return ["ojo", "Sin señal: queda en el celular"];
     if (eqSinGuardar(cat, f)) return ["va", "Guardando…"];
@@ -1584,12 +1604,11 @@
     return g ? ["ok", `Guardado ${d === hoyISO() ? "hoy" : `el ${corta(d)}`} ${horaDe(g.ts)}${g.por ? ` · ${g.por}` : ""}`] : ["", ""];
   };
   /** el estado en la barra; el último cambio, con su "Deshacer" (queda hasta el próximo cambio) */
-  const estadoHTML = (c, t) => (!t ? "" : c === "cambio" ? `${IC.tilde}<span>${t}</span> <button type="button" class="btn-sec eq-deshacer" data-eq-deshacer>${IC.deshacer}Deshacer</button>`
-    : `${c === "ok" ? IC.tilde : c === "ojo" ? IC.alerta : ""}<span>${esc(t)}</span>`);
+  const estadoHTML = (c, t, d) => (!t ? "" : `${c === "ok" ? IC.tilde : c === "ojo" ? IC.alerta : ""}<span class="cnt-estado__t">${d ? t : esc(t)}</span>${d ? `<button type="button" class="btn-sec eq-deshacer" data-eq-deshacer>${IC.deshacer}Deshacer</button>` : ""}`);
   function pintarPieEq() {
     if (!(S && S.ver === "equipo" && !S.eqn && !S.eqcontar)) return;
-    const s = $("#eq-estado"), [c, t] = estadoEq(S.eqcat, S.eqfecha);
-    if (s) { s.className = `cnt-estado cnt-estado--${c}`; s.innerHTML = estadoHTML(c, t); }
+    const s = $("#eq-estado"), [c, t, d] = estadoEq(S.eqcat, S.eqfecha);
+    if (s) { s.className = `cnt-estado cnt-estado--${c}`; s.innerHTML = estadoHTML(c, t, d); }
   }
   function vEquipo() {
     const cat = S.eqcat, f = S.eqfecha, hoy = hoyISO();
@@ -1605,21 +1624,21 @@
       return;
     }
     const e = eqActual(cat, f), g = eqGuardado(cat, f), px = eqPartido(cat, f), plt = eqPlantel(cat), cx = eqCtx(), inf = eqInfo(cat, f), amis = !px;
-    const n = Object.keys(e.jugadores).length, t15 = Object.keys(e.jugadores).filter((x) => +x <= 15).length, sup = n - t15, hasta = eqHasta(e);
+    const n = Object.keys(e.jugadores).length, t15 = Object.keys(e.jugadores).filter((x) => +x <= 15).length, sup = n - t15, hasta = eqHasta(e), corto = nombresCortos(Object.values(e.jugadores), plt);
     const jug = (num, banco) => {
       const id = e.jugadores[num], c = id && eqQuien(id, plt), as = c ? eqAvisos(id, c, cx) : [], no = as.find((a) => a.no);
       return `<button type="button" class="eq-jug${id ? "" : " eq-jug--vacio"}${no ? (no.ficha ? " eq-jug--ficha" : " eq-jug--no") : ""}" data-eq-n="${num}"
         aria-label="${num}${banco ? ", suplente" : `, ${esc(eqPuesto(num))}`}: ${c ? esc(c.nombre) : "sin elegir"}${as.map((a) => `. ${esc(a.t)}`).join("")}"><span class="eq-jug__n num">${num}</span>
-        <span class="eq-jug__nom">${c ? esc(apellido(c.nombre)) : esc(eqCorto(num))}</span>${no ? `<span class="eq-jug__tag${no.ficha ? " eq-jug__tag--ficha" : ""}">${esc(no.corto)}</span>` : ""}</button>`;
+        <span class="eq-jug__nom">${c ? esc(corto(id)) : esc(eqCorto(num))}</span>${no ? `<span class="eq-jug__tag${no.ficha ? " eq-jug__tag--ficha" : ""}">${esc(no.corto)}</span>` : ""}</button>`;
     };
-    const filaC = (ns) => `<div class="eq-cancha__fila${ns.length === 4 ? " eq-cancha__fila--linea" : ""}">${ns.map((x) => jug(x)).join("")}</div>`;
+    const filaC = (ns) => `<div class="eq-cancha__fila${ns.length === 4 ? " eq-cancha__fila--linea" : ns[0] === 11 ? " eq-cancha__fila--alas" : ""}">${ns.map((x) => jug(x)).join("")}</div>`;
     // el 9 y el 10 en una misma fila: la cancha entra más en la pantalla
-    const FILAS = matchMedia("(max-width: 400px)").matches ? [[1, 2, 3], [4, 5], [6, 8, 7], [9, 10], [12, 13], [11, 14], [15]] : [[1, 2, 3], [4, 5], [6, 8, 7], [9, 10], [11, 12, 13, 14], [15]];
+    const FILAS = CANCHA;
     // abajo de la cancha: los que no deberían jugar (rojo) y lo que hay que tener en cuenta (amarillo)
     const conAv = Array.from({ length: hasta }, (_, i) => i + 1).filter((num) => e.jugadores[num]).map((num) => { const c = eqQuien(e.jugadores[num], plt); return [num, c, eqAvisos(e.jugadores[num], c, cx)]; }).filter(([, , as]) => as.length);
     const noJ = conAv.filter(([, , as]) => as.some((a) => a.duro)), fichaJ = conAv.filter(([, , as]) => !as.some((a) => a.duro) && as.some((a) => a.ficha)), ojoJ = conAv.filter(([, , as]) => !as.some((a) => a.no));
     const lAv = (l, cls) => `<ul class="eq-avisos${cls}">${l.map(([num, c, as]) => `<li><b>${num}. ${esc(apellido(c.nombre))}</b>: ${esc(as.map((a) => a.t).join(" · "))}</li>`).join("")}</ul>`;
-    const avisos = `${noJ.length ? `<h3 class="grupo grupo--no">No deberían jugar</h3>${lAv(noJ, " eq-avisos--no")}` : ""}${fichaJ.length ? `<h3 class="grupo">Falta la ficha médica</h3>${lAv(fichaJ, "")}` : ""}${ojoJ.length ? `<h3 class="grupo">Para tener en cuenta</h3>${lAv(ojoJ, "")}` : ""}`;
+    const avisos = `${noJ.length ? `<h3 class="grupo grupo--no">No deberían jugar</h3>${lAv(noJ, " eq-avisos--no")}` : t15 ? `<p class="eq-ok">${IC.tilde}<span>Nadie anotado como lesionado ni sancionado${cx.usaMed ? "" : " · Las fichas médicas todavía no se cargaron"}</span></p>` : ""}${fichaJ.length ? `<h3 class="grupo">Falta la ficha médica</h3>${lAv(fichaJ, "")}` : ""}${ojoJ.length ? `<h3 class="grupo">Para tener en cuenta</h3>${lAv(ojoJ, "")}` : ""}`;
     // otro entrenador cambió los mismos números: se pregunta solo por esos
     const ch = S.eqChoque && S.eqChoque.k === eqClave(cat, f) ? S.eqChoque : null, apN = (id) => (id ? esc(apellido(eqQuien(id, plt).nombre)) : "nadie");
     const PREG = { rival: "¿Contra quién juegan?", hora: "¿A qué hora?", cond: "¿Dónde se juega?", cita: "¿Cuál es la citación?", pf: "¿Cuántos tantos hizo Los 50?", pc: "¿Cuántos tantos hizo el rival?" };
@@ -1634,7 +1653,7 @@
         <p class="asis-nota">Lo ven los otros entrenadores: así saben quién armó el equipo.</p>
         <div class="asis-form__btns"><button type="button" class="btn btn--ok btn--alto" data-eq-nombre-ok>${IC.tilde}Listo</button><button type="button" class="link" data-eq-nombre-no>No, gracias</button></div></div>` : "";
     // los datos del partido: la citación (en todos) y, en un amistoso, rival, hora, dónde y cómo salió
-    const res = amis && f < hoy, jugado = f < hoy || (amis && inf.pf !== "" && inf.pf != null) || D.partidos.some((p) => p.cat === cat && p.fecha === f);
+    const deUAR = D.partidos.some((p) => p.cat === cat && p.fecha === f), res = !deUAR && (f < hoy || (f === hoy && (S.aform === "res-eq" || (inf.pf !== "" && inf.pf != null)))), jugado = f < hoy || (inf.pf !== "" && inf.pf != null) || deUAR;
     const datosForm = S.aform === "datos-eq" ? `<div class="asis-form">${amis ? `<label class="asis-form__campo">Rival<input id="eq-rival" class="asis-input" maxlength="60" autocomplete="off" value="${esc(inf.rival)}"></label>
         <label class="asis-form__campo">Hora del partido<input id="eq-hora" class="asis-input" type="time" step="900" value="${esc(inf.hora)}"></label>${condCampo("eq-cond", inf.cond)}` : ""}
         <label class="asis-form__campo">Citación<input id="eq-cita" class="asis-input" maxlength="80" autocomplete="off" placeholder="Por ejemplo: 10:00 en el club" value="${esc(e.cita || "")}"></label>
@@ -1648,17 +1667,18 @@
     const resTxt = res && !resForm ? `<p class="eq-dato">${IC.trofeo}<span><b>${+inf.pf > +inf.pc ? "Ganó" : +inf.pf < +inf.pc ? "Perdió" : "Empató"} ${esc(inf.pf)}–${esc(inf.pc)}</b></span><button type="button" class="link" data-form="res-eq">Cambiar</button></p>` : "";
     const datos = datosForm || `<div class="eq-datos">${resTxt}
         ${jugado && !amis ? "" : jugado ? `<button type="button" class="atajo eq-fila-b" data-form="datos-eq">${IC.reloj}<span>Cambiar el rival o la cancha</span>${IC.adelante}</button>`
-          : `<button type="button" class="atajo eq-fila-b" data-form="datos-eq">${IC.reloj}<span>${e.cita ? `<b>Citación:</b> ${esc(e.cita)}` : "Agregar la citación (hora y lugar)"}<small>${amis ? "Tocá para cambiar el rival, la hora o la cancha" : "Y la dirección de la cancha"}</small></span>${IC.adelante}</button>`}</div>`;
+          : `<button type="button" class="atajo eq-fila-b" data-form="datos-eq">${IC.reloj}<span>${e.cita ? `<b>Citación:</b> ${esc(e.cita)}` : "Agregar la citación (hora y lugar)"}<small>${e.lugar ? `Cancha: ${esc(e.lugar)}` : amis ? "Tocá para cambiar el rival, la hora o la cancha" : "Y la dirección de la cancha"}</small></span>${IC.adelante}</button>`}</div>`;
     // contar: el día del partido (o después, para ver cómo salió)
     const cuenta = t15 && f < hoy ? `<button type="button" class="atajo eq-contar" data-eq-contar>${IC.barras}<span>Ver cómo salió</span>${IC.adelante}</button>` : "";
     const siempreB = t15 < 15 ? `<button type="button" class="btn-sec btn-sec--ancho eq-siempre-b" data-eq-siempre>${IC.camiseta}<span>Completar con los de siempre<small>El que más jugó en cada número</small></span></button>` : "";
     const faltan = Array.from({ length: 15 }, (_, i) => i + 1).filter((x) => !e.jugadores[x]);
-    const [ce, te] = estadoEq(cat, f), hoyJ = f === hoy && t15;
-    const pie = S.aform === "faltan" ? `<div class="lista-pie eq-pie eq-pie--pregunta" role="alert"><p>Faltan ${pl(faltan.length, "titular", "titulares")} (${faltan.length > 5 ? `${faltan.slice(0, 5).join(", ")}…` : faltan.join(", ").replace(/, (\d+)$/, " y $1")}). ¿Mandarlo igual?</p>
-        <div class="cnt-pie__btns"><button type="button" class="btn-sec" data-form="">No, todavía no</button><button type="button" class="btn btn--wa" data-eq-mandar="si">Mandarlo igual</button></div></div>`
-      : `<div class="lista-pie eq-pie${hoyJ ? " eq-pie--hoy" : ""}"><div class="cnt-pie__txt"><b>${esc(cat)} · <span class="num">${t15}</span> de 15 titulares${sup ? ` + ${pl(sup, "suplente", "suplentes")}` : ""}</b><span id="eq-estado" tabindex="-1" class="cnt-estado cnt-estado--${ce}">${estadoHTML(ce, te)}</span></div>
+    const [ce, te, de] = estadoEq(cat, f), hoyJ = f === hoy && t15 && (inf.pf === "" || inf.pf == null); // con el resultado: "Mandar cómo salió"
+    const noD = S.aform === "faltan" ? noDeberian(cat, f) : [], sinCita = !e.cita && f >= hoy;
+    const pie = S.aform === "faltan" ? `<div class="lista-pie eq-pie eq-pie--pregunta" role="alert"><p>${faltan.length ? `Faltan ${pl(faltan.length, "titular", "titulares")} (${faltan.length > 5 ? `${faltan.slice(0, 5).join(", ")}…` : faltan.join(", ").replace(/, (\d+)$/, " y $1")}). ` : ""}${noD.length ? `<span class="eq-pie__no">${noD.map(([num, c, a]) => `${num}. ${esc(corto(c.id))} (${esc(a.corto.toLowerCase())})`).join(", ")}: no debería${noD.length > 1 ? "n" : ""} jugar.</span> ` : ""}${sinCita ? "Falta la citación (hora y lugar). " : ""}¿Mandarlo igual?</p>
+        <div class="cnt-pie__btns">${sinCita ? `<button type="button" class="btn-sec" data-form="datos-eq">${IC.reloj}Poner la citación</button>` : `<button type="button" class="btn-sec" data-form="">No, todavía no</button>`}<button type="button" class="btn btn--wa" data-eq-mandar="si">Mandarlo igual</button></div></div>`
+      : `<div class="lista-pie eq-pie${hoyJ ? " eq-pie--hoy" : ""}"><div class="cnt-pie__txt"><b>${esc(cat)} · <span class="num">${t15}</span> de 15 titulares${sup ? ` + ${pl(sup, "suplente", "suplentes")}` : ""}</b><span id="eq-estado" tabindex="-1" class="cnt-estado cnt-estado--${ce}">${estadoHTML(ce, te, de)}</span></div>
         ${hoyJ ? `<div class="cnt-pie__btns"><button type="button" class="btn-sec eq-wa-sec" data-eq-mandar>${IC.compartir}<span>Mandar<span class="larga"> al grupo</span></span></button><button type="button" class="btn btn--ok" data-eq-contar>${IC.barras}<span>Contar<span class="larga"> el partido</span></span></button></div>`
-          : jugado && t15 && amis && (inf.pf === "" || inf.pf == null) ? `<button type="button" class="btn btn--ok btn--grande" data-ir-resultado>${IC.trofeo}Cargar el resultado</button>`
+          : jugado && t15 && res && (inf.pf === "" || inf.pf == null) ? `<button type="button" class="btn btn--ok btn--grande" data-ir-resultado>${IC.trofeo}Cargar el resultado</button>`
           : jugado && t15 ? `<button type="button" class="btn btn--wa btn--grande" data-cres-compartir>${IC.compartir}Mandar cómo salió</button>`
           : `<button type="button" class="btn btn--wa btn--grande" data-eq-mandar${n ? "" : " disabled"}>${IC.compartir}Mandar al grupo</button>`}</div>`;
     const borrar = S.aform === "borrar-eq" ? `<div class="asis-form"><span class="asis-form__l">${amis ? "¿Borrar este amistoso, su equipo y lo que se contó?" : "¿Borrar el equipo de este partido?"}</span>
@@ -1734,11 +1754,11 @@
     $("#vista").innerHTML = `
       <div class="cab">${volver(`Equipo de ${esc(S.eqcat)}`, { ver: "equipo", eqn: null })}${cabTit(`¿Quién juega de ${num}?`)}</div>
       <p class="titular eq-partido">${esc(eqPuesto(num))} · ${esc(S.eqcat)}${inf.rival ? ` vs ${esc(inf.rival)}` : ""}</p>
-      ${actual ? `<div class="eq-ahora"><p>Ahora: <b>${nombreHTML(actual.nombre)}</b></p><button type="button" class="btn-sec" data-eq-vaciar>Sacarlo</button></div>` : ""}
+      ${actual ? `<div class="eq-ahora"><p>Ahora: <b>${nombreHTML(actual.nombre)}</b>${eqAvisos(actual.id, actual, x).filter((a) => a.no).map((a) => ` <span class="eq-tag ${a.ficha ? "eq-tag--ficha" : "eq-tag--no"}">${esc(a.corto)}</span>`).join("")}</p><button type="button" class="btn-sec" data-eq-vaciar>Sacarlo</button></div>` : ""}
       ${confirma}
       ${num > 15 && actual ? eqCambioHTML(num, e, x.pl) : ""}
       <section class="sec sec--pegada">
-        <label class="buscar-g eq-buscar"><span class="sr">Buscar un chico</span>${IC.buscar}<input type="search" id="buscar-eq" placeholder="Buscar por nombre o apellido" autocomplete="off" enterkeyhint="search"></label>
+        <label class="buscar-g eq-buscar"><span class="sr">Buscar un chico</span>${IC.buscar}<input type="search" id="buscar-eq" placeholder="Buscar un chico" autocomplete="off" enterkeyhint="search"></label>
         ${sug.length ? `<h3 class="grupo">Juegan de ${num}</h3><ul class="eq-l" data-filtro-eq>${sug.map((c) => eqFila(c, "", x)).join("")}</ul>` : ""}
         <h3 class="grupo">${sug.length ? "Los demás" : "Todos"} de ${esc(ac)}</h3><ul class="eq-l" data-filtro-eq>${resto.map((c) => eqFila(c, "", x)).join("")}</ul>
         <p class="vacio-g" id="eq-nadie" hidden>Nadie con ese nombre en ${esc(ac)} ni en ${esc(vecinas(ac).join(" ni en "))}</p>
@@ -1751,7 +1771,7 @@
   async function mandarEquipo(cat, fecha, borrar) {
     const k = eqClave(cat, fecha), g = eqGuardado(cat, fecha), px = eqPartido(cat, fecha), b = eqBorr.get(k), e = eqActual(cat, fecha);
     const por = enCel.get(claveNombreNota) || "", base = b && "base" in b ? (b.base ? b.base.ts : null) : g ? g.ts : null;
-    const datos = px ? { rival: px.rival, cita: e.cita || "", lugar: e.lugar || "" } : { rival: e.rival || "", hora: e.hora || "", cond: e.cond || "", cita: e.cita || "", lugar: e.lugar || "", pf: numONull(e.pf), pc: numONull(e.pc) };
+    const datos = px ? { rival: px.rival, cita: e.cita || "", lugar: e.lugar || "", pf: numONull(e.pf), pc: numONull(e.pc) } : { rival: e.rival || "", hora: e.hora || "", cond: e.cond || "", cita: e.cita || "", lugar: e.lugar || "", pf: numONull(e.pf), pc: numONull(e.pc) };
     const r = await apiD1(borrar ? { accion: "equipo", equipo: cat, fecha, borrar: true, amistoso: !px, jugadores: {}, por, base: g ? g.ts : null }
       : { accion: "equipo", equipo: cat, fecha, ...datos, jugadores: e.jugadores, cambios: e.cambios, amistoso: !px, por, base });
     // queda como guardado aunque después no se pueda volver a traer la lista
@@ -1844,9 +1864,12 @@
     return { e, n };
   }
   /** "Mandar al grupo": si faltan titulares se pregunta; se guarda lo pendiente y se manda la imagen con el texto */
+  /** los del equipo que no deberían jugar (lesionado, sancionado): [número, chico, aviso] */
+  const noDeberian = (cat, f) => { const e = eqActual(cat, f), pl = eqPlantel(cat), cx = eqCtx();
+    return Object.keys(e.jugadores).map(Number).sort((a, b) => a - b).map((n) => { const c = eqQuien(e.jugadores[n], pl); return [n, c, eqAvisos(c.id, c, cx).find((a) => a.duro)]; }).filter(([, , a]) => a); };
   function mandarAlGrupo(si) {
     const cat = S.eqcat, f = S.eqfecha, e = eqActual(cat, f);
-    if (!si && Array.from({ length: 15 }, (_, i) => i + 1).some((x) => !e.jugadores[x])) { S.aform = "faltan"; render(); const b = $(".eq-pie--pregunta button"); if (b) b.focus(); return; }
+    if (!si && (Array.from({ length: 15 }, (_, i) => i + 1).some((x) => !e.jugadores[x]) || noDeberian(cat, f).length || (!e.cita && f >= hoyISO()))) { S.aform = "faltan"; render(); const b = $(".eq-pie--pregunta button"); if (b) b.focus(); return; }
     if (S.aform === "faltan") { S.aform = null; render(); }
     if (eqSinGuardar(cat, f)) { clearTimeout(EQ_T[eqClave(cat, f)]); guardarEqSolo(cat, f); }
     compartirEquipo();
@@ -2201,7 +2224,7 @@
     const conEq = !!D.fichados && cs.some(eqAsis);
     if (conEq && !EQ.lista && !EQ.error) cargarEquipos();
     if (conEq && !CNT.lista && !CNT.error) cargarConteos();
-    const prox = [...proxTodos().filter((x) => cs.includes(x.cat)), ...(conEq ? amistosos(cs) : [])].sort((a, b) => a.fecha.localeCompare(b.fecha) || (a.hora || "").localeCompare(b.hora || ""));
+    const prox = [...proxTodos().filter((x) => cs.includes(x.cat) && !(conEq && x.fecha === hoyISO() && eqInfo(x.cat, x.fecha).pf != null && eqInfo(x.cat, x.fecha).pf !== "")), ...(conEq ? amistosos(cs) : [])].sort((a, b) => a.fecha.localeCompare(b.fecha) || (a.hora || "").localeCompare(b.hora || ""));
     // los resultados: los de la UAR y los amistosos con su resultado; arriba, los ya jugados que todavía no tienen resultado
     const ult = [...D.partidos.filter((x) => cs.includes(x.cat)), ...(conEq ? amistososJugados(cs) : [])].sort((a, b) => b.fecha.localeCompare(a.fecha)).slice(0, 10), jug = conEq ? jugados(cs) : [];
     $("#vista").innerHTML = `
@@ -2426,8 +2449,9 @@
   /** abajo del partido: de local o de visitante y la instancia */
   /** dónde se juega: en el club o en la cancha del rival */
   const dondeTxt = (x) => { const l = x.lugar || (x.amistoso ? "" : (eqGuardado(x.cat, x.fecha) || {}).lugar);
-    return l ? `en ${esc(l)}` : x.cond === "L" ? "en el club" : x.cond === "V" ? `en cancha de ${esc(nombreRival(x.rival))}` : x.fecha < hoyISO() ? "" : "cancha a confirmar"; };
-  const subProx = (x) => (x.amistoso ? ["Amistoso", dondeTxt(x)].filter(Boolean).join(" · ") : `${mayus(dondeTxt(x))}${x.inst ? ` · ${esc(x.inst)}` : ""}`);
+    return l ? esc(l) : x.cond === "L" ? "en el club" : x.cond === "V" ? `en cancha de ${esc(nombreRival(x.rival))}` : x.fecha < hoyISO() ? "" : "cancha a confirmar"; };
+  /** abajo del partido, siempre en el mismo orden: amistoso, local o visitante, la cancha (y la instancia) */
+  const subProx = (x) => mayus([x.amistoso && "Amistoso", x.cond && condTxt(x.cond), dondeTxt(x), !x.amistoso && x.inst && esc(x.inst)].filter(Boolean).join(" · "));
   const DIA3 = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
   /** la fecha, lo primero que se busca: "Sáb", "31/10" grande y la hora (o "Hora a confirmar") */
   const diaBloque = (f, hora, conHora) => { const d = dia(f); return `<span class="res__dia"><small${f === hoyISO() ? ' class="res__dia-hoy"' : ""}>${f === hoyISO() ? "Hoy" : DIA3[d.getDay()]}</small><b class="num">${d.getDate()}/${d.getMonth() + 1}</b>${conHora && (hora || f >= hoyISO()) ? `<small class="res__dia-h${hora ? "" : " res__dia-h--sin"}">${hora ? esc(hora) : "Hora a confirmar"}</small>` : ""}</span>`; };
@@ -2437,7 +2461,7 @@
 
   // con "conEq": si ese partido tuvo equipo armado en la app, se puede volver a verlo (y lo contado)
   const partidoHTML = (p, conCat, conEq) => `<li class="res res--jugado">${diaBloque(p.fecha, "", false)}
-      <span class="res__cuerpo">${conCat ? `<span class="chip chip--cat">${esc(p.cat)}</span>` : ""}<span class="res__rival">${vsHTML(p)}</span><span class="res__sub">${p.amistoso ? (p.cond ? `Amistoso de ${condTxt(p.cond).toLowerCase()}` : "Amistoso") : condTxt(p.cond)}</span></span>
+      <span class="res__cuerpo">${conCat ? `<span class="chip chip--cat">${esc(p.cat)}</span>` : ""}<span class="res__rival">${vsHTML(p)}</span><span class="res__sub">${[p.amistoso && "Amistoso", p.cond && condTxt(p.cond), p.prov && "provisorio, falta la UAR"].filter(Boolean).join(" · ")}</span></span>
       <span class="res__marcador res--${p.res}"><b class="num">${p.pf}–${p.pc}</b><i>${({ G: "Ganó", E: "Empató", P: "Perdió" })[p.res]}</i></span>${conEq && eqAsis(p.cat) && (eqGuardado(p.cat, p.fecha) || eqBorr.get(eqClave(p.cat, p.fecha))) ? eqBtn(p) : ""}</li>`;
 
   // todo el club: siguen jugando, camino a Primera, nacimiento y peso
@@ -3032,6 +3056,8 @@
   // El equipo dibujado como se para en la cancha: cada número se toca y lleva a lo que se espera de ese puesto.
   const puestoDe = (n) => D.guia.puestos.find((p) => p.n.includes(n));
   const FORMACION = [[1, 2, 3], [4, 5], [6, 8, 7], [9], [10], [11, 12, 13, 14], [15]];
+  /** la cancha del equipo (pantalla e imagen): los wings abiertos, en una fila aparte de los centros */
+  const CANCHA = [[1, 2, 3], [4, 5], [6, 8, 7], [9, 10], [12, 13], [11, 14], [15]];
   // lo ideal en un partido, en este orden (NORTE VERDE no se muestra hasta saber qué es)
   const PARTIDO = [["tackles", "Tackles"], ["rucks", "Rucks en ataque"], ["contactos", "Contactos"], ["pases", "Pases"], ["quiebres", "Quiebres"], ["recuperadas", "Recuperadas"]];
   // a qué ejercicios de line lleva cada puesto (el rol que cumple en el line)
@@ -3865,7 +3891,7 @@
     // tocar la tarjeta de un partido (no solo su botón) abre su equipo
     const li = !ev.target.closest("button, a, input, select, label") && ev.target.closest("#vista li.res");
     if (li && li.querySelector("[data-ir-equipo]")) { li.querySelector("[data-ir-equipo]").click(); return; }
-    const t = ev.target.closest("[data-eq-siempre],[data-cnt-corr],[data-cnt-quita],[data-ir-resultado],[data-cnt-otro],[data-cnt-entra],[data-ir-equipo],[data-ir-contar],[data-eq-n],[data-eq-id],[data-eq-no-confirmar],[data-eq-vaciar],[data-eq-mas],[data-eq-mandar],[data-eq-texto],[data-eq-borrar],[data-eq-no-borrar],[data-eq-deshacer],[data-eq-elige],[data-eq-nombre-ok],[data-eq-nombre-no],[data-eq-datos-ok],[data-eq-res-ok],[data-amistoso-ok],[data-am-abrir],[data-eq-contar],[data-cacc],[data-cmas],[data-cuenta],[data-cdeshacer],[data-cres],[data-cres-compartir],[data-reintentar-cnt],[data-reintentar-eq],[data-cerrar-foto]");
+    const t = ev.target.closest("[data-eq-siempre],[data-cnt-corr],[data-cnt-quita],[data-ir-res],[data-ir-resultado],[data-cnt-otro],[data-cnt-entra],[data-ir-equipo],[data-ir-contar],[data-eq-n],[data-eq-id],[data-eq-no-confirmar],[data-eq-vaciar],[data-eq-mas],[data-eq-mandar],[data-eq-texto],[data-eq-borrar],[data-eq-no-borrar],[data-eq-deshacer],[data-eq-elige],[data-eq-nombre-ok],[data-eq-nombre-no],[data-eq-datos-ok],[data-eq-res-ok],[data-amistoso-ok],[data-am-abrir],[data-eq-contar],[data-cacc],[data-cmas],[data-cuenta],[data-cdeshacer],[data-cres],[data-cres-compartir],[data-reintentar-cnt],[data-reintentar-eq],[data-cerrar-foto]");
     if (!t || t.disabled) return;
     const ds = t.dataset, cat = S.eqcat, f = S.eqfecha;
     const abrir = (eqcat, eqfecha, contar) => irA({ ver: "equipo", eqcat, eqfecha, eqn: null, eqmas: 0, eqcontar: contar, cres: null, cmas: false, cacc: "tackles", cntOtro: false, cntCorr: false, aform: null, aviso: null, eqChoque: null, eqConfirmar: null, eqAntes: null });
@@ -3885,9 +3911,11 @@
       const ya = Object.keys(e.jugadores).find((n) => e.jugadores[n] === id && n !== num);
       const pl = eqPlantel(cat), ap = (x) => esc(apellido(eqQuien(x, pl).nombre)), plan = ya && !antes && e.cambios[ya];
       // lo que pasó, con quién sale: queda abajo con su "Deshacer" hasta el próximo cambio
-      const txt = ya ? `${ap(id)} pasa al ${num}${antes ? ` y ${ap(antes)} al ${ya}` : `; el ${ya} quedó vacío${plan ? " (y sin su cambio)" : ""}`}` : `${ap(id)} juega de ${num}${antes ? `, sale ${ap(antes)}` : ""}`;
+      const noA = antes && ya && eqAvisos(antes, eqQuien(antes, pl), eqCtx()).find((a) => a.duro); // lesionado o sancionado: no se pasa al banco
+      const txt = noA ? `${ap(id)} pasa al ${num}; ${ap(antes)} (${esc(noA.corto.toLowerCase())}) sale del equipo`
+        : ya ? `${ap(id)} pasa al ${num}${antes ? ` y ${ap(antes)} al ${ya}` : `; el ${ya} quedó vacío${plan ? " (y sin su cambio)" : ""}`}` : `${ap(id)} juega de ${num}${antes ? `, sale ${ap(antes)}` : ""}`;
       const previo = JSON.parse(JSON.stringify(e));
-      if (ya) { if (antes) e.jugadores[ya] = antes; else delete e.jugadores[ya]; }
+      if (ya) { if (antes && !noA) e.jugadores[ya] = antes; else { delete e.jugadores[ya]; delete e.cambios[ya]; } }
       e.jugadores[num] = id;
       S.eqAntes = antes !== id ? { k: eqClave(cat, f), e: previo, txt } : S.eqAntes;
       eqAnotar(e);
@@ -3910,6 +3938,7 @@
       // vuelve el equipo a como estaba antes del último cambio
       if (S.eqAntes && S.eqAntes.k === eqClave(cat, f)) { eqAnotar(S.eqAntes.e); S.eqAntes = null; S.aviso = null; avisar("ok", "Listo, quedó como antes"); render(); const st = $("#eq-estado"); if (st) st.focus({ preventScroll: true }); }
     }
+    else if (ds.irRes) { const [c, fe] = ds.irRes.split("|"); abrir(c, fe, false); S.aform = "res-eq"; render(); const i = $("#eq-pf"); if (i) { i.scrollIntoView({ block: "center" }); i.focus({ preventScroll: true }); } }
     else if ("irResultado" in ds) { const i = $("#eq-pf"); if (i) { i.scrollIntoView({ block: "center" }); i.focus({ preventScroll: true }); } }
     else if ("eqSiempre" in ds) {
       const previo = JSON.parse(JSON.stringify(eqActual(cat, f))), { e, n } = completarDeSiempre();
@@ -3958,24 +3987,25 @@
       const desde = masDias(hoyISO(), -30);
       let mal = !fechaOk(fecha) ? "Elegí el día del partido." : fecha < desde ? `Elegí un día desde el ${corta(desde)} en adelante.` : "";
       const px = !mal && eqPartido(c, fecha), ya = !mal && !px && (eqGuardado(c, fecha) || eqBorr.get(eqClave(c, fecha)));
-      if (px) mal = `Ese día ${c} ya juega con ${nombreRival(px.rival)}: armá el equipo desde ese partido.`;
+      if (px) { err.hidden = false; fi.setAttribute("aria-invalid", ""); err.innerHTML = `Ese día ${esc(c)} ya juega con ${esc(nombreRival(px.rival))} (partido de la UAR). <button type="button" class="link" data-ir-equipo="${esc(c)}|${fecha}">Abrir ese partido</button>`; fi.focus(); return; }
       // el error queda al lado del campo, sin irse solo; si ya hay un amistoso ese día, se ofrece abrirlo (nunca se pisa)
       fi.toggleAttribute("aria-invalid", !!(mal || ya)); err.hidden = !(mal || ya);
       if (ya) { const i = eqInfo(c, fecha); err.innerHTML = `Ese día ${esc(c)} ya tiene un amistoso con ${esc(i.rival || "rival a definir")}${ya.por ? ` (lo cargó ${esc(ya.por)})` : ""}. Por ahora va uno por día. <button type="button" class="link" data-am-abrir="${esc(c)}|${fecha}">Abrir ese amistoso</button>`; fi.focus(); return; }
       if (mal) { err.textContent = mal; fi.focus(); return; }
       const k = eqClave(c, fecha);
-      eqBorr.set(k, { jugadores: {}, cambios: {}, rival, hora, cond, cita: $("#am-cita").value.trim().slice(0, 80), lugar: $("#am-lugar").value.trim().slice(0, 120), pf: "", pc: "", base: null });
+      const paso = fecha < hoyISO(), gol = (i) => (paso && /^\d{1,3}$/.test($(i).value.trim()) ? +$(i).value.trim() : "");
+      const pf = gol("#am-pf"), pc = gol("#am-pc"), conRes = pf !== "" && pc !== "";
+      eqBorr.set(k, { jugadores: {}, cambios: {}, rival, hora, cond, cita: paso ? "" : $("#am-cita").value.trim().slice(0, 80), lugar: $("#am-lugar").value.trim().slice(0, 120), pf: conRes ? pf : "", pc: conRes ? pc : "", base: null });
       abrir(c, fecha, false);
-      guardarEqSolo(c, fecha).then(() => { if (S.eqChoque) return; const sin = pendientes().includes(`eq:${k}`); avisoSuelto(sin ? "Sin señal: el amistoso quedó en el celular y se manda solo cuando vuelva." : "Amistoso guardado: ya lo ven los otros entrenadores. Ahora elegí quién juega.", sin ? "ojo" : "ok"); });
+      guardarEqSolo(c, fecha).then(() => { if (S.eqChoque) return; const sin = pendientes().includes(`eq:${k}`); avisoSuelto(sin ? "Sin señal: el amistoso quedó en el celular y se manda solo cuando vuelva." : (fecha < hoyISO() ? "Amistoso guardado. Ahora cargá quién jugó." : "Amistoso guardado: ya lo ven los otros entrenadores. Ahora elegí quién juega."), sin ? "ojo" : "ok"); });
     }
     else if ("eqContar" in ds) { limpiarDeshacer(cat, f); irA({ eqcontar: true, eqn: null, cres: null, cmas: false, cacc: "tackles", cntOtro: false, aviso: null }); }
     else if ("cntCorr" in ds) { if (ds.cntCorr === "1") irA({ cntCorr: true, aviso: null }); else volverAtras({ cntCorr: false }); }
     else if (ds.cntQuita) {
       const [id, x] = ds.cntQuita.split("|");
       if (!((cntActual(cat, f).c[id] || {})[x])) return;
-      cntSumar(cat, f, id, x, -1); cntProgramar(cat, f);
-      const a = ACCIONES.find((y) => y[0] === x), fj = FIJA.find((y) => y[0] === x);
-      avisar("ok", id === "equipo" ? `Sacaste un ${fj[1].toLowerCase()}` : `Le sacaste un ${x === "errados" ? "tackle errado" : a[1].toLowerCase()} a ${esc(primerApellido(eqQuien(id, eqPlantel(cat)).nombre))}`);
+      cntSumar(cat, f, id, x, -1, "quita"); cntProgramar(cat, f);
+      avisar("ok", id === "equipo" ? `Sacaste un ${UNO_C[x]}` : `Le sacaste un ${UNO_C[x]} a ${esc(apellido(eqQuien(id, eqPlantel(cat)).nombre))}`);
       render();
       const b = $(`[data-cnt-quita="${CSS.escape(ds.cntQuita)}"]`) || $("[data-cnt-corr]"); if (b) b.focus({ preventScroll: true });
     }
@@ -4006,9 +4036,10 @@
       const k = cntActual(cat, f), b = cntBorr(cat, f), u = b && b.h && b.h.pop();
       if (!u) return;
       enCel.set(cntClave(cat, f), JSON.stringify(b)); // sin el último toque en la lista para deshacer
-      if ((k.c[u[0]] || {})[u[1]]) cntSumar(cat, f, u[0], u[1], -1);
-      avisar("ok", u[0] === "equipo" ? `Sacaste un ${(FIJA.find((y) => y[0] === u[1]) || [, ""])[1].toLowerCase()}`
-        : `Le sacaste un ${u[1] === "errados" ? "tackle errado" : (ACCIONES.find((y) => y[0] === u[1]) || [, ""])[1].toLowerCase()} a ${esc(apellido(eqQuien(u[0], eqPlantel(cat)).nombre))}`);
+      const vuelve = u[2] === "-"; // deshacer un "Corregir": se devuelve lo que se sacó
+      if (vuelve) cntSumar(cat, f, u[0], u[1], 1, "no"); else if ((k.c[u[0]] || {})[u[1]]) cntSumar(cat, f, u[0], u[1], -1);
+      avisar("ok", u[0] === "equipo" ? `${vuelve ? "Volvió" : "Sacaste"} un ${UNO_C[u[1]] || ""}`
+        : `${vuelve ? "Le devolviste" : "Le sacaste"} un ${UNO_C[u[1]] || ""} a ${esc(apellido(eqQuien(u[0], eqPlantel(cat)).nombre))}`);
       render(); cntProgramar(cat, f);
       const bd = $("[data-cdeshacer]"); if (bd && !bd.disabled) bd.focus({ preventScroll: true });
     }
@@ -4292,7 +4323,11 @@
     if (e.target.id === "buscar-canto") { S.q = e.target.value; filtrarCantos(); }
     if (e.target.id === "buscar-ej") { S.qe = e.target.value; filtrarEj(); }
     if (e.target.id === "buscar-pr") { S.qp = e.target.value; filtrarPr(); }
-    if (e.target.id === "am-fecha") { const d = $("#am-dia"); if (d) d.textContent = fechaOk(e.target.value) ? mayus(cuandoP({ fecha: e.target.value })) : ""; }
+    if (e.target.id === "am-fecha") {
+      const d = $("#am-dia"), v = e.target.value, paso = fechaOk(v) && v < hoyISO();
+      if (d) d.textContent = fechaOk(v) ? mayus(cuandoP({ fecha: v })) : "";
+      $("#am-cita-c").hidden = paso; $("#am-res").hidden = !paso; // ya se jugó: la citación no sirve; el resultado sí
+    }
     if (e.target.id === "cs-texto") { S.csTexto = e.target.value; enCel.set(`los50-cs:${S.acat}|${S.afecha}`, e.target.value || null); }
     if ("tv" in e.target.dataset) {
       // lo cargado queda en el celular al momento; en rojo lo que no tiene sentido para ese test
@@ -4316,6 +4351,16 @@
       const otros = q.length < 2 ? [] : [...eqTodos().values()].filter((c) => vs.includes(c.cat) && !ids.has(c.id) && qNom(c.nombre).includes(q)).sort(porNombre).slice(0, 20);
       $("#eq-nadie").hidden = total > 0 || otros.length > 0;
       $("#eq-otros").innerHTML = otros.length ? `<h3 class="grupo">${total ? "" : `En ${esc(eqAsis(S.eqcat))} no hay. `}De ${esc(vs.join(" y "))}</h3><ul class="eq-l">${otros.map((c) => eqFila(c, c.cat, x)).join("")}</ul>` : "";
+    }
+    if (e.target.id === "buscar-entra") {
+      const q = qNom(e.target.value), ul = $("[data-filtro-entra]");
+      let vis = 0;
+      if (ul) ul.querySelectorAll("li[data-q]").forEach((li) => { li.hidden = !!q && !li.dataset.q.includes(q); vis += !li.hidden; });
+      // de las categorías de al lado (el que sube o baja), solo al buscar
+      const ya = new Set([...eqPlantel(S.eqcat).map((c) => c.id), ...Object.values(eqActual(S.eqcat, S.eqfecha).jugadores)]), vs = vecinas(eqAsis(S.eqcat));
+      const otros = q.length < 2 ? [] : [...eqTodos().values()].filter((c) => vs.includes(c.cat) && !ya.has(c.id) && qNom(c.nombre).includes(q)).sort(porNombre).slice(0, 20);
+      $("#entra-nadie").hidden = !q || vis > 0 || otros.length > 0;
+      $("#entra-otros").innerHTML = otros.length ? `<h3 class="grupo">De ${esc(vs.join(" y "))}</h3><ul class="eq-l">${otros.map((c) => `<li><button type="button" class="eq-it eq-it--elegir" data-cnt-entra="${esc(c.id)}"><span class="eq-it__txt"><span class="eq-it__nom">${nombreHTML(c.nombre)}</span><small>${esc(c.cat)}</small></span>${IC.mas}</button></li>`).join("")}</ul>` : "";
     }
     if (e.target.id === "buscar-chico") {
       const q = qNom(e.target.value);

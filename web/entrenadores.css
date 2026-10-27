@@ -1424,7 +1424,7 @@ html:has(#vista[data-pantalla="equipo"]) { scroll-padding-bottom: 150px; }
 .eq-siempre-b { display: flex; align-items: center; gap: 10px; text-align: left; min-height: 56px; }
 .eq-siempre-b svg { flex: none; width: 22px; height: 22px; }
 .eq-siempre-b small { display: block; font-size: 14px; font-weight: 500; color: var(--suave); }
-@media (max-width: 420px) { .larga { display: none; } }
+@media (max-width: 340px) { .larga { display: none; } }
 .cnt-p--nuevo { box-shadow: 0 0 0 3px var(--azul); }
 .eq-jug__nom { overflow-wrap: normal; word-break: normal; hyphens: auto; }
 
@@ -1447,3 +1447,32 @@ html:has(#vista[data-pantalla="equipo"]) { scroll-padding-bottom: 150px; }
 @media (max-width: 400px) { .hoy-juega { grid-template-columns: 28px minmax(0, 1fr); } .hoy-juega__acc { grid-column: 2; } }
 #eq-estado:focus { outline: 2px solid var(--azul); outline-offset: 2px; }
 @media (max-width: 420px) { .cnt-extra { grid-template-columns: 1fr; } }
+
+/* ---------- Partidos: sexta vuelta ---------- */
+/* la barra del equipo: el estado en una línea y "Deshacer" fijo a la derecha */
+#eq-estado { display: flex; align-items: center; gap: 6px; width: 100%; min-width: 0; }
+#eq-estado .cnt-estado__t { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#eq-estado .eq-deshacer { flex: none; margin: 0; min-height: 44px; }
+.eq-pie--hoy .cnt-pie__btns > * { padding: 0 8px; gap: 5px; font-size: 15.5px; white-space: nowrap; }
+.eq-pie__no { color: var(--rojo); }
+/* la cancha: los wings abiertos */
+.eq-cancha__fila--alas { justify-content: space-between; padding: 0 4%; }
+/* contar: el que salió del equipo sigue con lo suyo */
+.cnt-p__salio { display: block; font-size: 13px; font-weight: 600; color: var(--suave); }
+.cnt-corr__btns { margin-top: 16px; }
+.cnt-corr__btns .cnt-deshacer { flex-direction: row; }
+.eq-ahora .eq-tag { vertical-align: 2px; }
+
+/* ---------- Partidos: séptima vuelta ---------- */
+.res__dos { grid-column: 1 / -1; display: grid; gap: 8px; margin-top: 8px; }
+.res__dos .res__contar { margin: 0; }
+.hoy-juega__res { margin-top: 10px; }
+.eq-ok { display: flex; align-items: flex-start; gap: 8px; margin: 14px 0 0; font-size: 15px; color: var(--verde); }
+.eq-ok svg { flex: none; width: 18px; height: 18px; margin-top: 2px; }
+.eq-it__no { display: block; color: var(--rojo); font-weight: 600; }
+.cnt-pie__fila { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.cnt-corr-b { flex: none; min-height: 44px; padding: 0 14px; font-size: 15px; }
+.cnt-g__sep { grid-column: 1 / -1; margin: 8px 2px -2px; font: 700 14px/1 var(--base); letter-spacing: .06em; text-transform: uppercase; color: var(--suave); }
+.cnt-otro.btn-sec--ancho { margin-top: 12px; min-height: 48px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.cnt-res-acc.lista-pie { display: grid; justify-content: stretch; }
+@media (max-width: 400px) { .cnt-g--par .cnt-t { min-height: 50px; } .cnt-g.cnt-g--par { gap: 8px; } .cnt-p { padding: 7px; gap: 5px; } }
