@@ -531,7 +531,7 @@
       "Tocá “Equipo” en cada partido para elegir quién juega y mandarlo al grupo. El día del partido aparece “Contar el partido” y, cuando empieza, “Cargar el resultado”."]],
     ultimos: () => ["Últimos resultados", [`Datos al ${D.act}.`,
       "Si un partido del fin de semana no aparece, es porque todavía no cargaron su planilla en la página de la UAR.",
-      "Siempre va primero Los 50, y el resultado en el mismo orden.",
+      "Primero va el local: de visitante, Los 50 está a la derecha. El resultado va en el mismo orden.",
       "Los amistosos aparecen acá cuando les cargás el resultado."]],
     comparar: () => ["Cómo se leen estos gráficos", ["Cada barra es un año. La que está resaltada es el año que estás mirando: se cambia con las flechas de arriba.",
       "La línea punteada es lo normal: el promedio de todos los años. Si la barra pasa la línea, ese año estuvo por encima de lo normal.",
@@ -1087,7 +1087,7 @@
     try { await Promise.all(['700 60px "Barlow Condensed"', '600 30px "Barlow"', '500 24px "Barlow"'].map((x) => document.fonts.load(x))); } catch (err) { /* sin las letras del club: las del sistema */ }
     const escudo = await new Promise((ok) => { const i = new Image(); i.onload = () => ok(i); i.onerror = () => ok(null); i.src = "img/escudo-160.webp"; });
     const sup = Object.keys(e.jugadores).map(Number).filter((n) => n > 15).sort((x, y) => x - y);
-    const citaH = e.cita || e.lugar ? 60 : 0, W = 1080, campoY = 210 + citaH, campoH = 1200, supY = campoY + campoH + 30, H = supY + (sup.length ? 80 + Math.ceil(sup.length / 2) * 52 : 0) + 70;
+    const citaH = 0, W = 1080, campoY = 210 + citaH, campoH = 1200, supY = campoY + campoH + 30, H = supY + (sup.length ? 80 + Math.ceil(sup.length / 2) * 52 : 0) + 70;
     const cv = Object.assign(document.createElement("canvas"), { width: W, height: H }), x = cv.getContext("2d");
     const COND = '"Barlow Condensed", "Arial Narrow", sans-serif', BASE = '"Barlow", system-ui, sans-serif';
     x.fillStyle = "#0b0d12"; x.fillRect(0, 0, W, H);
@@ -1096,7 +1096,6 @@
     x.fillStyle = "#fff"; x.font = `700 68px ${COND}`; x.fillText(`LOS 50 · ${cat.toUpperCase()}`, 204, 110, W - 250);
     x.fillStyle = "#fff"; x.font = `600 38px ${BASE}`;
     x.fillText([inf.rival && `vs ${inf.rival}`, mayus(cuandoP({ fecha: f })), ...infoTxt(inf)].filter(Boolean).join(" · "), 204, 158, W - 250);
-    if (e.cita || e.lugar) { x.fillStyle = "#fff"; x.font = `600 32px ${BASE}`; x.fillText([e.cita && `Citación: ${e.cita}`, e.lugar && `Cancha: ${e.lugar}`].filter(Boolean).join(" · "), 56, 228, W - 112); }
     // la cancha: forwards arriba y backs abajo, como en la app
     x.fillStyle = "#2b7443"; x.beginPath();
     if (x.roundRect) x.roundRect(40, campoY, W - 80, campoH, 28); else x.rect(40, campoY, W - 80, campoH);
@@ -1596,8 +1595,6 @@
       <div class="asis-form__error" id="am-error" role="alert" hidden></div>
       <label class="asis-form__campo">Rival<input id="am-rival" class="asis-input" maxlength="60" autocomplete="off" placeholder="Contra quién"></label>
       ${condCampo("am-cond", "")}
-      <label class="asis-form__campo" id="am-cita-c">Citación<input id="am-cita" class="asis-input" maxlength="80" autocomplete="off" placeholder="Por ejemplo: 10:00 en el club"></label>
-      <label class="asis-form__campo">Dirección de la cancha<input id="am-lugar" class="asis-input" maxlength="120" autocomplete="off" placeholder="Si no es en el club"></label>
       <fieldset class="asis-form__campo am-res" id="am-res" hidden><legend>¿Cómo salió?</legend><div class="asis-form__fila"><label class="asis-form__campo">Los 50<input id="am-pf" class="asis-input" type="number" inputmode="numeric" min="0" max="300"></label>
         <label class="asis-form__campo"><span id="am-pc-l">El rival</span><input id="am-pc" class="asis-input" type="number" inputmode="numeric" min="0" max="300"></label></div></fieldset>
       <div class="asis-form__btns"><button type="button" class="btn btn--ok btn--alto" data-amistoso-ok>${IC.tilde}Guardar el amistoso</button>${cerrarBtn}</div></div>`; };
@@ -1683,12 +1680,10 @@
     const pideNombre = n && !enCel.get(claveNombreNota) && !enCel.get("los50-ent-sin-nombre") ? `<div class="eq-nombre-b"><label class="asis-form__campo">Tu nombre<input id="eq-nombre" class="asis-input" maxlength="60" autocomplete="given-name" placeholder="Por ejemplo: Juan"></label>
         <p class="asis-nota">Lo ven los otros entrenadores: así saben quién armó el equipo.</p>
         <div class="asis-form__btns"><button type="button" class="btn btn--ok btn--alto" data-eq-nombre-ok>${IC.tilde}Listo</button><button type="button" class="link" data-eq-nombre-no>No, gracias</button></div></div>` : "";
-    // los datos del partido: la citación (en todos) y, en un amistoso, rival, hora, dónde y cómo salió
+    // los datos del partido: en un amistoso, rival, hora y dónde (en uno de la UAR los pone la UAR); y cómo salió
     const deUAR = D.partidos.some((p) => p.cat === cat && p.fecha === f), conRes = deUAR || (inf.pf !== "" && inf.pf != null), res = !deUAR && (f < hoy || (f === hoy && (S.aform === "res-eq" || (inf.pf !== "" && inf.pf != null)))), jugado = f < hoy || (inf.pf !== "" && inf.pf != null) || deUAR;
-    const datosForm = S.aform === "datos-eq" ? `<div class="asis-form">${amis ? `<label class="asis-form__campo">Rival<input id="eq-rival" class="asis-input" maxlength="60" autocomplete="off" value="${esc(inf.rival)}"></label>
-        <label class="asis-form__campo">Hora del partido<input id="eq-hora" class="asis-input" type="time" step="900" value="${esc(inf.hora)}"></label>${condCampo("eq-cond", inf.cond)}` : ""}
-        <label class="asis-form__campo">Citación<input id="eq-cita" class="asis-input" maxlength="80" autocomplete="off" placeholder="Por ejemplo: 10:00 en el club" value="${esc(e.cita || "")}"></label>
-        <label class="asis-form__campo">Dirección de la cancha<input id="eq-lugar" class="asis-input" maxlength="120" autocomplete="off" placeholder="Si no es en el club" value="${esc(e.lugar || "")}"></label>
+    const datosForm = S.aform === "datos-eq" && amis ? `<div class="asis-form"><label class="asis-form__campo">Rival<input id="eq-rival" class="asis-input" maxlength="60" autocomplete="off" value="${esc(inf.rival)}"></label>
+        <label class="asis-form__campo">Hora del partido<input id="eq-hora" class="asis-input" type="time" step="900" value="${esc(inf.hora)}"></label>${condCampo("eq-cond", inf.cond)}
         <div class="asis-form__btns"><button type="button" class="btn btn--ok btn--alto" data-eq-datos-ok>${IC.tilde}Guardar</button>${cerrarBtn}</div></div>` : "";
     const resForm = res && (inf.pf === "" || inf.pf == null || S.aform === "res-eq") ? `<div class="asis-form eq-res"><p class="asis-form__l">¿Cómo salió?</p>
         <div class="asis-form__fila"><label class="asis-form__campo">Los 50<input id="eq-pf" class="asis-input" type="number" inputmode="numeric" min="0" max="300" aria-describedby="eq-res-error" value="${esc(inf.pf ?? "")}"></label>
@@ -1697,22 +1692,16 @@
         <div class="asis-form__btns"><button type="button" class="btn btn--ok btn--alto" data-eq-res-ok>${IC.tilde}Guardar el resultado</button>${S.aform === "res-eq" ? cerrarBtn : ""}</div>
         ${S.aform === "res-eq" && inf.pf !== "" && inf.pf != null ? `<button type="button" class="link eq-res-borrar" data-eq-res-borrar>Borrar el resultado</button>` : ""}</div>` : "";
     const resTxt = res && !resForm ? `<p class="eq-dato">${IC.trofeo}<span><b>${+inf.pf > +inf.pc ? "Ganó" : +inf.pf < +inf.pc ? "Perdió" : "Empató"} ${esc(inf.pf)}–${esc(inf.pc)}</b>${amis ? "" : " <small>(provisorio, falta la UAR)</small>"}</span><button type="button" class="link" data-form="res-eq" aria-label="Cambiar el resultado">Cambiar</button></p>` : "";
-    const yaEmp = f === hoy && empezo({ fecha: f, hora: inf.hora }); // ya empezó: la citación no hace falta
-    const lug = e.lugar || (inf.cond === "V" ? lugarDe(inf.rival) : ""), mapa = !lug && inf.cond === "V" && inf.rival && !jugado
-      ? `<a class="link eq-mapa" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${inf.rival} club de rugby`)}" target="_blank" rel="noopener">${IC.adelante}Buscar la cancha de ${esc(inf.rival)} en el mapa</a>`
-      : lug && !jugado ? `<a class="link eq-mapa" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lug)}" target="_blank" rel="noopener">${IC.adelante}Cómo llegar a ${esc(lug)}</a>` : "";
-    const datos = datosForm || `<div class="eq-datos">${resTxt}
-        ${(jugado || yaEmp) && !amis ? "" : jugado || yaEmp ? `<button type="button" class="atajo eq-fila-b" data-form="datos-eq">${IC.reloj}<span>Cambiar el rival o la cancha</span>${IC.adelante}</button>`
-          : `<button type="button" class="atajo eq-fila-b" data-form="datos-eq">${IC.reloj}<span>${e.cita ? `<b>Citación:</b> ${esc(e.cita)}` : "Agregar la citación (hora y lugar)"}<small>${e.lugar ? `Cancha: ${esc(e.lugar)}` : amis ? "Tocá para cambiar el rival, la hora o la cancha" : "Y la dirección de la cancha"}</small></span>${IC.adelante}</button>`}${mapa}</div>`;
+    const datos = datosForm || (resTxt || amis ? `<div class="eq-datos">${resTxt}
+        ${amis ? `<button type="button" class="atajo eq-fila-b" data-form="datos-eq">${IC.reloj}<span>Cambiar el rival, la hora o dónde se juega</span>${IC.adelante}</button>` : ""}</div>` : "");
     // contar: el día del partido (o después, para ver cómo salió)
     const cuenta = t15 && (f < hoy || conRes) ? `<button type="button" class="atajo eq-contar" data-eq-contar="salio">${IC.barras}<span>Ver cómo salió</span>${IC.adelante}</button>` : "";
     const siempreB = t15 < 15 ? `<button type="button" class="btn-sec btn-sec--ancho eq-siempre-b" data-eq-siempre>${IC.camiseta}<span>Completar con los de siempre<small>El que más jugó en cada número</small></span></button>` : "";
     const faltan = Array.from({ length: 15 }, (_, i) => i + 1).filter((x) => !e.jugadores[x]);
     const [ce, te, de] = estadoEq(cat, f), hoyJ = f === hoy && t15;
-    const noD = S.aform === "faltan" ? noDeberian(cat, f) : [], sinCita = !e.cita && !empezo({ fecha: f, hora: inf.hora });
-    const pie = S.aform === "faltan" ? `<div class="lista-pie eq-pie eq-pie--pregunta" role="alert"><p>${faltan.length ? `Faltan ${pl(faltan.length, "titular", "titulares")} (${faltan.length > 5 ? `${faltan.slice(0, 5).join(", ")}…` : faltan.join(", ").replace(/, (\d+)$/, " y $1")}). ` : ""}${noD.length ? `<span class="eq-pie__no">${noD.map(([num, c, a]) => `${num}. ${esc(corto(c.id))} (${esc(a.corto.toLowerCase())})`).join(", ")}: no debería${noD.length > 1 ? "n" : ""} jugar.</span> ` : ""}${sinCita ? "Falta la citación (hora y lugar). " : ""}¿Mandarlo igual?</p>
-        <div class="cnt-pie__btns">${sinCita ? `<button type="button" class="btn-sec" data-eq-mandar="si">Mandarlo igual</button><button type="button" class="btn btn--ok" data-form="datos-eq" data-foco="eq-cita" data-despues="mandar">${IC.reloj}Poner la citación</button>` : `<button type="button" class="btn-sec" data-form="">No, todavía no</button><button type="button" class="btn btn--wa" data-eq-mandar="si">Mandarlo igual</button>`}</div>
-        ${sinCita ? `<button type="button" class="link eq-pie__no-mandar" data-form="">No mandar todavía</button>` : ""}</div>`
+    const noD = S.aform === "faltan" ? noDeberian(cat, f) : [];
+    const pie = S.aform === "faltan" ? `<div class="lista-pie eq-pie eq-pie--pregunta" role="alert"><p>${faltan.length ? `Faltan ${pl(faltan.length, "titular", "titulares")} (${faltan.length > 5 ? `${faltan.slice(0, 5).join(", ")}…` : faltan.join(", ").replace(/, (\d+)$/, " y $1")}). ` : ""}${noD.length ? `<span class="eq-pie__no">${noD.map(([num, c, a]) => `${num}. ${esc(corto(c.id))} (${esc(a.corto.toLowerCase())})`).join(", ")}: no debería${noD.length > 1 ? "n" : ""} jugar.</span> ` : ""}¿Mandarlo igual?</p>
+        <div class="cnt-pie__btns"><button type="button" class="btn-sec" data-form="">No, todavía no</button><button type="button" class="btn btn--wa" data-eq-mandar="si">Mandarlo igual</button></div></div>`
       : `<div class="lista-pie eq-pie${hoyJ ? " eq-pie--hoy" : ""}"><div class="cnt-pie__txt"><b>${esc(cat)} · <span class="num">${t15}</span> de 15 titulares${sup ? ` + ${pl(sup, "suplente", "suplentes")}` : ""}</b><span id="eq-estado" tabindex="-1" class="cnt-estado cnt-estado--${ce}">${estadoHTML(ce, te, de)}</span></div>
         ${hoyJ ? `<div class="cnt-pie__btns">${conRes ? `<button type="button" class="btn-sec eq-wa-sec" data-cres-compartir aria-label="Mandar cómo salió">${IC.compartir}<span>Mandar<span class="larga"> cómo salió</span></span></button>` : `<button type="button" class="btn-sec eq-wa-sec" data-eq-mandar aria-label="Mandar al grupo">${IC.compartir}<span>Mandar<span class="larga"> al grupo</span></span></button>`}<button type="button" class="btn btn--ok" data-eq-contar aria-label="Contar el partido">${IC.barras}<span>Contar<span class="larga"> el partido</span></span></button></div>`
           : jugado && res && !conRes ? `<button type="button" class="btn btn--ok btn--grande" data-ir-resultado>${IC.trofeo}Cargar el resultado</button>`
@@ -1910,7 +1899,7 @@
     return Object.keys(e.jugadores).map(Number).sort((a, b) => a - b).map((n) => { const c = eqQuien(e.jugadores[n], pl); return [n, c, eqAvisos(c.id, c, cx).find((a) => a.duro)]; }).filter(([, , a]) => a); };
   function mandarAlGrupo(si) {
     const cat = S.eqcat, f = S.eqfecha, e = eqActual(cat, f);
-    if (!si && (Array.from({ length: 15 }, (_, i) => i + 1).some((x) => !e.jugadores[x]) || noDeberian(cat, f).length || (!e.cita && !empezo({ fecha: f, hora: eqInfo(cat, f).hora })))) { S.aform = "faltan"; render(); const b = $(".eq-pie--pregunta button"); if (b) b.focus(); return; }
+    if (!si && (Array.from({ length: 15 }, (_, i) => i + 1).some((x) => !e.jugadores[x]) || noDeberian(cat, f).length)) { S.aform = "faltan"; render(); const b = $(".eq-pie--pregunta button"); if (b) b.focus(); return; }
     if (S.aform === "faltan") { S.aform = null; render(); }
     if (eqSinGuardar(cat, f)) { clearTimeout(EQ_T[eqClave(cat, f)]); guardarEqSolo(cat, f); }
     compartirEquipo();
@@ -1921,8 +1910,6 @@
     const ns = Object.keys(e.jugadores).map(Number).sort((a, b) => a - b), sup = ns.filter((n) => n > 15);
     const nom = (id) => { const [ape, n = ""] = eqQuien(id, pl).nombre.split(",").map((x) => x.trim()); return n ? `${n} ${ape}` : ape; }; // "Bautista Llanos", como se dice
     const l = [`*Los 50 · ${cat}*`, [inf.rival ? `vs ${inf.rival}` : "", mayus(cuandoP({ fecha: f })), ...infoTxt(inf)].filter(Boolean).join(" · ")];
-    if (e.cita) l.push(`Citación: ${e.cita}`);
-    if (e.lugar) l.push(`Cancha: ${e.lugar}`);
     l.push("");
     ns.filter((n) => n <= 15).forEach((n) => l.push(`${n}. ${nom(e.jugadores[n])}`));
     if (sup.length) l.push("", "*Suplentes*");
@@ -2488,13 +2475,11 @@
   // los nombres de la UAR vienen en mayúsculas ("UNION DEL SUR"): se muestran como se escriben ("Union del Sur")
   const CONECT = new Set(["de", "del", "la", "las", "los", "y", "el", "en"]);
   const nombreRival = (t) => (!t || /[a-zà-ÿ]/.test(t) ? t || "" : t.toLowerCase().replace(/\S+/g, (w, i) => (i && CONECT.has(w) ? w : w.charAt(0).toUpperCase() + w.slice(1))));
-  // Los 50 siempre primero (y el tanteo en el mismo orden); si es de local o de visitante lo dice abajo
-  const vsHTML = (x) => `<span class="nos">LOS 50</span> vs ${esc(nombreRival(x.rival))}`;
+  // primero el local: de visitante, Los 50 va a la derecha (y el tanteo en el mismo orden)
+  const vsHTML = (x) => (x.cond === "V" ? `${esc(nombreRival(x.rival))} vs <span class="nos">LOS 50</span>` : `<span class="nos">LOS 50</span> vs ${esc(nombreRival(x.rival))}`);
   /** abajo del partido: de local o de visitante y la instancia */
   /** dónde se juega: en el club o en la cancha del rival */
-  /** la última dirección que se cargó para ese rival (en cualquier categoría) */
-  const lugarDe = (rival) => { const n = nombreRival(rival || ""); const y = n && (EQ.lista || []).filter((z) => z.lugar && nombreRival(z.rival || "") === n && z.cond !== "L").pop(); return y ? y.lugar : ""; };
-  const dondeTxt = (x) => { const l = x.lugar || (x.amistoso ? "" : (eqGuardado(x.cat, x.fecha) || {}).lugar) || (x.cond === "V" ? lugarDe(x.rival) : "");
+  const dondeTxt = (x) => { const l = x.lugar || (x.amistoso ? "" : (eqGuardado(x.cat, x.fecha) || {}).lugar);
     return l ? esc(l) : x.cond === "L" ? "en el club" : x.cond === "V" ? `en cancha de ${esc(nombreRival(x.rival))}` : x.fecha < hoyISO() ? "" : "cancha a confirmar"; };
   /** abajo del partido, siempre en el mismo orden: amistoso, local o visitante, la cancha (y la instancia) */
   const subProx = (x) => mayus([x.amistoso && "Amistoso", x.cond && condTxt(x.cond), dondeTxt(x), !x.amistoso && x.inst && esc(x.inst)].filter(Boolean).join(" · "));
@@ -2508,7 +2493,7 @@
   // con "conEq": si ese partido tuvo equipo armado en la app, se puede volver a verlo (y lo contado)
   const partidoHTML = (p, conCat, conEq) => `<li class="res res--jugado">${diaBloque(p.fecha, "", false)}
       <span class="res__cuerpo">${conCat ? `<span class="chip chip--cat">${esc(p.cat)}</span>` : ""}<span class="res__rival">${vsHTML(p)}</span><span class="res__sub">${[p.amistoso && "Amistoso", p.cond && condTxt(p.cond), p.prov && "provisorio, falta la UAR"].filter(Boolean).join(" · ")}</span></span>
-      <span class="res__marcador res--${p.res}"><b class="num">${p.pf}–${p.pc}</b><i>${({ G: "Ganó", E: "Empató", P: "Perdió" })[p.res]}</i></span>${conEq && eqAsis(p.cat) && (eqGuardado(p.cat, p.fecha) || eqBorr.get(eqClave(p.cat, p.fecha))) ? eqBtn(p) : ""}</li>`;
+      <span class="res__marcador res--${p.res}"><b class="num">${p.cond === "V" ? `${p.pc}–${p.pf}` : `${p.pf}–${p.pc}`}</b><i>${({ G: "Ganó", E: "Empató", P: "Perdió" })[p.res]}</i></span>${conEq && eqAsis(p.cat) && (eqGuardado(p.cat, p.fecha) || eqBorr.get(eqClave(p.cat, p.fecha))) ? eqBtn(p) : ""}</li>`;
 
   // todo el club: siguen jugando, camino a Primera, nacimiento y peso
   function vClub() {
@@ -4019,10 +4004,7 @@
         const h = $("#eq-hora").value, c = $('input[name="eq-cond"]:checked');
         e.rival = $("#eq-rival").value.trim().slice(0, 60); e.hora = /^([01]\d|2[0-3]):[0-5]\d$/.test(h) ? h : ""; e.cond = c ? c.value : "";
       }
-      e.cita = $("#eq-cita").value.trim().slice(0, 80); e.lugar = $("#eq-lugar").value.trim().slice(0, 120);
-      const mandar = S.mandarDespues; S.mandarDespues = false;
       eqAnotar(e); S.aform = null; render();
-      if (mandar) mandarAlGrupo();
     }
     else if ("eqResOk" in ds) {
       const a = $("#eq-pf").value.trim(), b = $("#eq-pc").value.trim(), ok = (v) => /^\d{1,3}$/.test(v);
@@ -4050,7 +4032,7 @@
       const k = eqClave(c, fecha);
       const paso = fecha < hoyISO(), gol = (i) => (paso && /^\d{1,3}$/.test($(i).value.trim()) ? +$(i).value.trim() : "");
       const pf = gol("#am-pf"), pc = gol("#am-pc"), conRes = pf !== "" && pc !== "";
-      eqBorr.set(k, { jugadores: {}, cambios: {}, rival, hora, cond, cita: paso ? "" : $("#am-cita").value.trim().slice(0, 80), lugar: $("#am-lugar").value.trim().slice(0, 120), pf: conRes ? pf : "", pc: conRes ? pc : "", base: null });
+      eqBorr.set(k, { jugadores: {}, cambios: {}, rival, hora, cond, cita: "", lugar: "", pf: conRes ? pf : "", pc: conRes ? pc : "", base: null });
       abrir(c, fecha, false);
       guardarEqSolo(c, fecha).then(() => { if (S.eqChoque) return; const sin = pendientes().includes(`eq:${k}`); avisoSuelto(sin ? "Sin señal: el amistoso quedó en el celular y se manda solo cuando vuelva." : (fecha < hoyISO() ? "Amistoso guardado. Ahora cargá quién jugó." : "Amistoso guardado: ya lo ven los otros entrenadores. Ahora elegí quién juega."), sin ? "ojo" : "ok"); });
     }
@@ -4215,8 +4197,7 @@
       render();
       if (!abre && antes) { const o = $(`[data-form="${antes}"]`); if (o) o.focus({ preventScroll: true }); }
       const fm = abre && $(".asis-form");
-      if (fm) { fm.scrollIntoView({ block: "nearest" }); const c = (ds.foco && $(`#${ds.foco}`)) || fm.querySelector("input:not([type=hidden]), select, textarea, button"); if (c) c.focus({ preventScroll: true }); }
-      S.mandarDespues = abre && ds.despues === "mandar"; // "Poner la citación" desde "Mandar al grupo": al guardar, se manda
+      if (fm) { fm.scrollIntoView({ block: "nearest" }); const c = fm.querySelector("input:not([type=hidden]), select, textarea, button"); if (c) c.focus({ preventScroll: true }); }
     }
     else if (ds.reintentar) { delete ASIS.error[ds.reintentar]; render(); }
     else if (ds.motivo) {
@@ -4401,7 +4382,7 @@
     if (e.target.id === "am-fecha") {
       const d = $("#am-dia"), v = e.target.value, paso = fechaOk(v) && v < hoyISO();
       if (d) d.textContent = fechaOk(v) ? mayus(cuandoP({ fecha: v })) : "";
-      $("#am-cita-c").hidden = paso; $("#am-res").hidden = !paso; // ya se jugó: la citación no sirve; el resultado sí
+      $("#am-res").hidden = !paso; // ya se jugó: se carga cómo salió
     }
     if (e.target.id === "cs-texto") { S.csTexto = e.target.value; enCel.set(`los50-cs:${S.acat}|${S.afecha}`, e.target.value || null); }
     if ("tv" in e.target.dataset) {
