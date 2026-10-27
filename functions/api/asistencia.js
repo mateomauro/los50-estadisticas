@@ -75,7 +75,11 @@ function igual(a, b) {
 
 // las tablas se crean solas la primera vez
 let listo = null;
-const iniciar = (db) => (listo ??= db.batch(ESQUEMA.map((s) => db.prepare(s))).catch((e) => { listo = null; throw e; }));
+// columnas que se sumaron después: si ya están, el ALTER falla y no pasa nada
+const AGREGADAS = ["hora TEXT", "cond TEXT", "cita TEXT", "pf INTEGER", "pc INTEGER", "lugar TEXT"].map((c) => `ALTER TABLE equipos ADD COLUMN ${c}`);
+const iniciar = (db) => (listo ??= db.batch(ESQUEMA.map((s) => db.prepare(s)))
+  .then(() => Promise.all(AGREGADAS.map((s) => db.prepare(s).run().catch(() => null))))
+  .catch((e) => { listo = null; throw e; }));
 
 export async function onRequest({ request, env }) {
   if (!env.ASISTENCIA || !env.CLAVE_ENTRENADORES) return json({ error: "sin configurar" }, 503);
@@ -104,7 +108,7 @@ export async function onRequest({ request, env }) {
       return json({ tests: await todo("SELECT fecha, test, id, valor FROM tests WHERE cat = ? ORDER BY fecha", cat) });
     }
     if (q.get("equipos")) {
-      const filas = await todo("SELECT cat, fecha, rival, jugadores, cambios, por, ts FROM equipos WHERE fecha >= date('now', '-60 days') ORDER BY fecha, cat");
+      const filas = await todo("SELECT cat, fecha, rival, hora, cond, cita, pf, pc, lugar, jugadores, cambios, por, ts FROM equipos WHERE fecha >= date('now', '-60 days') ORDER BY fecha, cat");
       return json({ equipos: filas.map((e) => ({ ...e, jugadores: JSON.parse(e.jugadores), cambios: JSON.parse(e.cambios || "{}") })) });
     }
     if (q.get("notas")) {
@@ -178,14 +182,25 @@ export async function onRequest({ request, env }) {
       if (jug[n] && +n > 15 && (por != null || min != null)) camb[+n] = { por, min };
     }
     const cuantos = Object.keys(jug).length;
-    const ya = await db.prepare("SELECT jugadores, cambios, rival, por, ts FROM equipos WHERE cat = ? AND fecha = ?").bind(eq, fecha).first();
+    // en un amistoso: la hora (opcional) y si es de local (L) o de visitante (V)
+    const hora = HORA.test(String(b.hora || "")) ? b.hora : null, cond = ["L", "V"].includes(b.cond) ? b.cond : null, cita = texto(b.cita, 80) || null, lugar = texto(b.lugar, 120) || null;
+    // el resultado de un amistoso (los tantos de cada uno)
+    const gol = (v) => (v === null || v === undefined || v === "" ? null : Number.isInteger(+v) && +v >= 0 && +v <= 300 ? +v : NaN), pf = gol(b.pf), pc = gol(b.pc);
+    if (Number.isNaN(pf) || Number.isNaN(pc)) return mal();
+    // se borra si se pide; un equipo sin jugadores también, salvo un amistoso (que existe aunque todavía no tenga equipo)
+    const borra = b.borrar === true || (!cuantos && b.amistoso !== true);
+    const ya = await db.prepare("SELECT jugadores, cambios, rival, hora, cond, cita, pf, pc, lugar, por, ts FROM equipos WHERE cat = ? AND fecha = ?").bind(eq, fecha).first();
+    if (borra && !ya) return json({ ok: true, ts });
     // lo mismo que ya está guardado (un envío repetido cuando se cortó la señal): no hace falta nada
-    if (ya && cuantos && ya.jugadores === JSON.stringify(jug) && (ya.cambios || "{}") === JSON.stringify(camb) && (ya.rival || "") === (texto(b.rival, 80) || "")) return json({ ok: true, ts: ya.ts });
+    if (!borra && ya && ya.jugadores === JSON.stringify(jug) && (ya.cambios || "{}") === JSON.stringify(camb) && (ya.rival || "") === (texto(b.rival, 80) || "")
+      && (ya.hora || null) === hora && (ya.cond || null) === cond && (ya.cita || null) === cita && (ya.lugar || null) === lugar && (ya.pf ?? null) === pf && (ya.pc ?? null) === pc) return json({ ok: true, ts: ya.ts });
     // otro entrenador lo guardó (o lo borró) después de que este celular lo trajo: no se pisa sin avisar
     if ("base" in b && (ya ? ya.ts : null) !== (b.base || null)) return json({ error: "choque", ts: ya ? ya.ts : null, por: ya ? ya.por : null }, 409);
-    await db.batch([cuantos
-      ? db.prepare("INSERT OR REPLACE INTO equipos (cat, fecha, rival, jugadores, cambios, por, ts) VALUES (?, ?, ?, ?, ?, ?, ?)").bind(eq, fecha, texto(b.rival, 80) || null, JSON.stringify(jug), JSON.stringify(camb), por, ts)
+    await db.batch([!borra
+      ? db.prepare("INSERT OR REPLACE INTO equipos (cat, fecha, rival, hora, cond, cita, pf, pc, lugar, jugadores, cambios, por, ts) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)").bind(eq, fecha, texto(b.rival, 80) || null, hora, cond, cita, pf, pc, lugar, JSON.stringify(jug), JSON.stringify(camb), por, ts)
       : db.prepare("DELETE FROM equipos WHERE cat = ? AND fecha = ?").bind(eq, fecha),
+    // un amistoso que se borra no deja lo contado colgado en las fichas de los chicos
+    ...(borra && b.amistoso === true ? [db.prepare("DELETE FROM conteos WHERE cat = ? AND fecha = ?").bind(eq, fecha)] : []),
     db.prepare("INSERT INTO cambios (ts, cat, accion, detalle, por) VALUES (?, ?, 'equipo', ?, ?)").bind(ts, eq, JSON.stringify({ fecha, jugadores: cuantos }), por)]);
     return json({ ok: true, ts });
   }

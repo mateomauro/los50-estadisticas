@@ -1090,6 +1090,16 @@ details.nunca[open] .nunca__abrir { visibility: hidden; }
 .eq-choque p { margin: 0 0 6px; }
 .eq-choque ul { margin: 0 0 10px; padding-left: 18px; }
 .res__eq-cnt { display: block; font-size: 13px; font-weight: 600; color: var(--suave); }
+/* de local o de visitante: dos opciones grandes; la elegida, en negro como las pestañas */
+.eq-cond { margin: 0; padding: 0; border: 0; }
+.eq-cond legend { padding: 0; margin-bottom: 6px; }
+.ent .eq-cond__op.seg--g { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0; }
+.eq-cond__op label { position: relative; display: grid; }
+.eq-cond__op input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.eq-cond__op span { display: grid; place-items: center; min-height: 44px; border-radius: 10px; font-weight: 600; }
+.eq-cond__op input:checked + span { background: var(--negro); color: #fff; }
+.eq-cond__op input:focus-visible + span { outline: 3px solid var(--azul); outline-offset: 2px; }
+.eq-nombre { margin-top: 12px; }
 .cnt-res td.izq { white-space: nowrap; }
 .cnt-f svg { flex: none; width: 18px; height: 18px; margin-right: 6px; }
 .cnt-pie .cnt-deshacer { flex: none; display: inline-flex; align-items: center; gap: 6px; min-height: 48px; padding: 0 12px; }
@@ -1208,3 +1218,213 @@ details.nunca[open] .nunca__abrir { visibility: hidden; }
 .eq-pct small { font-size: 12px; font-weight: 600; color: var(--suave); }
 .eq-it__al { display: flex; flex-wrap: wrap; gap: 4px 6px; margin-top: 4px; }
 .eq-it--ya .eq-it__nom { color: var(--suave); }
+
+/* ---------- Partidos, para leer al sol con una mano: cuatro tamaños (15 / 17 / 22 / 32) y nada que diga algo debajo de 13 ---------- */
+/* cada partido: la fecha es el titular (día, fecha grande, hora); después el rival y el equipo */
+.res.res--prox, .res.res--jugado { grid-template-columns: 64px minmax(0, 1fr) auto; align-items: start; padding: 14px; }
+.res__dia { display: grid; justify-items: start; gap: 2px; line-height: 1.1; }
+.res__dia small { font-size: 15px; font-weight: 600; color: var(--suave); }
+.res__dia b { font: 700 24px/1 var(--cond); color: var(--texto); }
+.res__dia .res__dia-h { font: 700 17px/1.1 var(--cond); color: var(--texto); }
+.res__dia .res__dia-h--sin { font: 600 13px/1.2 var(--base); color: var(--suave); }
+.res--prox .res__rival, .res--jugado .res__rival { font-size: 18px; line-height: 1.25; }
+.res--prox .res__sub, .res--jugado .res__sub { font-size: 15px; }
+.res--jugado .res__marcador b { font-size: 24px; }
+.res--jugado .res__marcador i { font-size: 14px; padding: 4px 8px; }
+.ent .chip--cat { font-size: 13px; }
+.res__eq { font-size: 16px; }
+.res__eq-cnt, .res__eq-ojo { font-size: 14.5px; }
+.res__contar { grid-column: 1 / -1; width: 100%; margin-top: 8px; }
+/* el día del partido, en el inicio */
+.hoy-juega { width: 100%; display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; align-items: center; gap: 12px; min-height: 68px; padding: 14px 16px;
+  border: 0; border-radius: var(--radio); background: var(--azul); color: #fff; text-align: left; cursor: pointer; box-shadow: var(--sombra); }
+.hoy-juega > svg { width: 26px; height: 26px; }
+.hoy-juega__txt b { display: block; font: 700 22px/1.1 var(--cond); text-transform: uppercase; letter-spacing: .02em; }
+.hoy-juega__txt small { display: block; margin-top: 2px; font-size: 15px; }
+.hoy-juega__acc { display: inline-flex; align-items: center; gap: 2px; font-size: 15px; font-weight: 700; }
+.hoy-juega__acc svg { width: 18px; height: 18px; }
+/* elegir la categoría: la que usaste la última vez, con un borde (no parece un botón apretado) */
+.elegir__cat[aria-current="true"] { background: var(--sup); border: 2px solid var(--azul); color: var(--azul); }
+.elegir__cat[aria-current="true"] small { color: var(--suave); }
+.elegir__cat small { font-size: 14px; }
+
+/* el equipo: el estado del guardado y "Mandar al grupo" abajo, a mano */
+.eq-pie .cnt-pie__txt b { font-size: 17px; }
+.eq-pie .btn--wa { margin: 0; min-height: 52px; padding: 0 18px; }
+.eq-pie--pregunta { flex-direction: column; align-items: stretch; gap: 10px; }
+.eq-pie--pregunta p { margin: 0; font-size: 16px; font-weight: 600; }
+.cnt-pie__txt { display: grid; gap: 3px; min-width: 0; }
+.cnt-pie__txt b { font-size: 17px; line-height: 1.2; }
+.cnt-estado { display: inline-flex; align-items: center; gap: 5px; font-size: 14.5px; font-weight: 600; color: var(--suave); }
+.cnt-estado svg { flex: none; width: 16px; height: 16px; }
+.cnt-estado--ok { color: var(--verde); }
+.cnt-estado--ojo { color: var(--ambar); }
+.cnt-estado:empty { display: none; }
+[data-pantalla="equipo"] .aviso { bottom: calc(max(16px, env(safe-area-inset-bottom)) + 132px); }
+html:has(#vista[data-pantalla="equipo"]) { scroll-padding-bottom: 150px; }
+/* los datos del partido: la citación y, en un amistoso, rival, hora, dónde y cómo salió */
+.eq-datos { display: grid; gap: 6px; justify-items: start; margin-top: 10px; }
+.eq-dato { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 16px; }
+.eq-dato svg { flex: none; width: 20px; height: 20px; color: var(--azul); }
+.eq-dato .link { margin-left: 4px; }
+.eq-res, .eq-nombre-b { margin-top: 12px; }
+.eq-nombre-b { padding: 12px 14px; border: 1px solid var(--linea); border-radius: 12px; background: var(--sup); }
+.eq-nombre-b .asis-nota { margin: 6px 0 10px; }
+/* la cancha: el apellido se lee (15 px) y el que no debería jugar lleva la palabra en rojo debajo */
+.eq-jug__nom { font-size: 15px; hyphens: manual; }
+@media (max-width: 400px) { .eq-cancha__fila--linea .eq-jug__nom { font-size: 13.5px; } }
+.eq-jug__tag { margin-top: 2px; padding: 2px 7px; border-radius: 999px; background: var(--rojo); color: #fff; font-size: 13px; font-weight: 700; line-height: 1.2; }
+.eq-jug--no .eq-jug__n { box-shadow: 0 0 0 3px var(--rojo); }
+.eq-banco .eq-jug--no .eq-jug__n { box-shadow: 0 0 0 3px var(--rojo); }
+/* el banco: los suplentes como camisetas, de a cuatro */
+.eq-banco { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px 4px; padding: 14px 8px; background: var(--sup); border: 1px solid var(--linea); border-radius: var(--radio); }
+.eq-banco .eq-jug { width: auto; min-width: 0; }
+.eq-banco .eq-jug__n { background: var(--azul); color: #fff; }
+.eq-banco .eq-jug--vacio .eq-jug__n { background: none; color: var(--suave); border: 2px dashed var(--borde-campo); }
+.eq-banco .eq-jug__nom { color: var(--texto); font-size: 14px; }
+.eq-banco .eq-jug:focus-visible { outline-color: var(--azul); }
+/* abajo de la cancha: primero los que no deberían jugar, en rojo */
+.grupo.grupo--no { color: var(--rojo); }
+.eq-avisos { font-size: 15px; }
+.eq-avisos.eq-avisos--no li { background: var(--rojo-fondo); color: var(--rojo); }
+/* otro entrenador cambió los mismos números: una pregunta por número, con los dos nombres */
+.eq-choque__fila { padding: 8px 0 0; border-top: 1px solid #f0c75e; }
+.eq-choque__fila p { margin: 0 0 6px; }
+.eq-choque__fila .btn-sec small { font-weight: 500; }
+/* elegir: la pregunta antes de poner a uno que no debería jugar */
+.eq-confirmar { margin: 12px 0 0; padding: 12px 14px; border: 1px solid #f3c3be; border-radius: 12px; background: var(--rojo-fondo); color: var(--rojo); font-size: 16px; line-height: 1.4; }
+.eq-confirmar p { margin: 0 0 10px; }
+.eq-ahora { margin: 6px 0 0; font-size: 16px; }
+.eq-cambio__t { margin: 0 0 6px; font-size: 16px; font-weight: 600; }
+.eq-cambio__t small { font-weight: 500; color: var(--suave); }
+.eq-it--elegir .eq-it__nom { font-size: 17px; }
+.eq-it--elegir .eq-it__txt small { font-size: 15px; }
+.eq-it__rojo { display: inline-block; margin-bottom: 3px; padding: 2px 8px; border-radius: 999px; background: var(--rojo); color: #fff; font-size: 13px; font-weight: 700; }
+.eq-it__txt .eq-it__ojo { color: var(--ambar); font-weight: 600; }
+.eq-poco { color: var(--ambar); font-weight: 700; }
+.eq-it--no .eq-it__nom { color: var(--suave); }
+.link.eq-sacar { margin-top: 16px; font-size: 16px; }
+/* la imagen del equipo, cuando el celular no tiene "Compartir" */
+.foto-eq__img { display: block; width: 100%; max-height: 52dvh; object-fit: contain; margin: 10px 0; border-radius: 12px; background: var(--negro); }
+.foto-eq__txt { margin: 0 0 12px; font-size: 16px; line-height: 1.4; }
+.foto-eq .asis-form__btns { margin-bottom: 12px; }
+
+/* contar: título corto, arriba las opciones y abajo lo que va y "Deshacer" */
+.cab--corta { padding-top: 6px; }
+.cab__cat.cab__cat--chica { font-size: 28px; }
+.eq-donde { margin: 4px 0 0; font-size: 17px; font-weight: 600; color: var(--texto); }
+.cnt-acc { position: sticky; top: 0; z-index: 3; margin: 10px -16px 0; padding: 8px 16px; background: var(--fondo); border-bottom: 1px solid var(--linea); }
+.ent .cnt-tabs.seg--g { margin: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.cnt-tabs button { min-height: 48px; font-size: 16px; }
+.cnt-otras { margin-top: 8px; flex-wrap: wrap; }
+.cnt-otras button { min-height: 44px; }
+.cnt-sec { margin-top: 10px; }
+.cnt-ayuda { display: flex; align-items: center; gap: 6px; margin: 0 0 8px; font-size: 15px; }
+.cnt-g.cnt-g--par { margin-top: 0; }
+.cnt-p__cab { display: flex; align-items: baseline; gap: 6px; min-width: 0; }
+.cnt-p__n { font: 700 22px/1 var(--cond); color: var(--azul); }
+.cnt-p__nom { min-width: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 16px; font-weight: 600; line-height: 1.2; }
+.cnt-p__btns--uno { grid-template-columns: 1fr; }
+.cnt-t--mas { border: 1px solid #b9cdf3; background: var(--azul-claro); color: var(--azul); }
+.cnt-t--mas .cnt-b__v:not(.cnt-b__v--0) { background: var(--azul); }
+.cnt-t .cnt-b__v { font-size: 20px; min-width: 32px; }
+.cnt-fija2 { display: grid; gap: 12px; }
+.cnt-fila { display: grid; grid-template-columns: 64px repeat(2, minmax(0, 1fr)); align-items: center; gap: 10px; padding: 12px; background: var(--sup); border: 1px solid var(--borde-campo); border-radius: var(--radio); }
+.cnt-fila__t { font: 700 22px/1 var(--cond); text-transform: uppercase; }
+.cnt-fila .cnt-t { min-height: 64px; font-size: 16px; font-weight: 700; }
+.cnt-pie { flex-direction: column; align-items: stretch; gap: 8px; }
+.cnt-pie__btns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.cnt-pie__btns > * { min-height: 48px; margin: 0; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.cnt-pie__btns svg { width: 20px; height: 20px; }
+.cnt-deshacer:disabled { opacity: .45; }
+/* cómo va / cómo salió: tres números grandes y la tabla de tackles */
+.cnt-big { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+.cnt-big li { display: grid; gap: 2px; padding: 14px; background: var(--sup); border: 1px solid var(--linea); border-radius: var(--radio); }
+.cnt-big b { font: 700 32px/1 var(--cond); color: var(--texto); }
+.cnt-big span { font-size: 16px; font-weight: 600; }
+.cnt-big small { font-size: 15px; color: var(--suave); }
+.cnt-res .tabla-e th svg { width: 18px; height: 18px; vertical-align: -3px; }
+.cnt-res .tabla-e td, .cnt-res .tabla-e th { font-size: 16px; }
+.cnt-otras-l { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: 16px; line-height: 1.4; }
+.cnt-res-acc { display: grid; gap: 10px; margin-top: 18px; }
+@media (min-width: 1024px) { .cnt-res-acc { max-width: 520px; } }
+.elegir + .elegir { margin-top: 8px; }
+.eq-jug { width: clamp(76px, 24vw, 112px); }
+@media (max-width: 360px) { .eq-jug__nom { font-size: 13.5px; } }
+/* en el equipo y al contar, la barra de abajo queda siempre abajo de la pantalla (aunque haya poco), y los avisos arriba de ella */
+#vista[data-pantalla="equipo"] { display: flex; flex-direction: column; min-height: 100dvh; }
+#vista[data-pantalla="equipo"] > .lista-pie { margin-top: auto; }
+/* en un celular angosto, la barra del equipo en dos renglones: lo que va arriba y "Mandar al grupo" de lado a lado */
+@media (max-width: 380px) { .eq-pie { flex-direction: column; align-items: stretch; gap: 8px; } .eq-pie .btn--wa { width: 100%; } }
+.cnt-estado { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+
+/* ---------- Partidos: última vuelta (texto que se lea sin anteojos, botones del día del partido, avisos arriba de la barra) ---------- */
+.lista-pie > .aviso { position: absolute; left: 16px; right: 16px; bottom: calc(100% + 8px); margin: 0 auto; }
+[data-pantalla="equipo"] .lista-pie { position: sticky; }
+#vista[data-pantalla="equipo"] .link, #vista[data-pantalla="partidos"] .link { font-size: 16px; }
+#vista[data-pantalla="equipo"] .grupo, #vista[data-pantalla="partidos"] .grupo { font-size: 14px; }
+.eq-cancha__tit { font-size: 13px; }
+.res__dia .res__dia-h--sin { font-size: 14px; }
+.res__dia .res__dia-hoy { color: var(--azul); font-weight: 700; }
+.eq-cambio { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 12px 0 0; }
+.eq-cambio__t { grid-column: 1 / -1; margin: 0; }
+.eq-cambio label { font-size: 15px; color: var(--texto); }
+.eq-ahora { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 8px 0 0; }
+.eq-ahora p { margin: 0; font-size: 16px; }
+.eq-ahora .btn-sec { flex: none; min-height: 44px; padding: 0 16px; }
+.eq-it__tags { display: flex; flex-wrap: wrap; gap: 4px 6px; margin-bottom: 3px; }
+.eq-tag { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 13.5px; font-weight: 700; line-height: 1.3; }
+.eq-tag--no { background: var(--rojo); color: #fff; }
+.eq-tag--ficha { background: var(--ambar-fondo); color: var(--ambar); }
+.eq-tag--siempre { background: var(--verde-fondo); color: var(--verde); }
+.eq-it--elegir .eq-it__txt small { color: var(--texto); }
+.eq-ya { font-weight: 700; color: var(--texto); }
+.eq-it--ya { background: #f6f8fb; }
+.eq-jug__tag--ficha { background: var(--ambar-fondo); color: var(--ambar); }
+.eq-jug--ficha .eq-jug__n { box-shadow: 0 0 0 3px #f2c200; }
+.eq-banco .eq-jug__n { background: #fff; color: var(--azul); border: 2px solid var(--azul); }
+.eq-siempre-b { margin: 0 0 12px; }
+.eq-fila-b small { display: block; margin-top: 2px; font-size: 14.5px; color: var(--suave); font-weight: 500; }
+.eq-fila-b span { font-size: 16px; }
+.eq-pie--hoy { flex-direction: column; align-items: stretch; gap: 8px; }
+.eq-pie--hoy .cnt-pie__btns > * { min-height: 52px; }
+.eq-wa-sec { border-color: var(--wa); color: var(--wa); }
+#eq-estado { white-space: normal; flex-wrap: wrap; }
+#eq-estado .aviso__accion { color: var(--azul); min-height: 32px; }
+.cnt-estado--cambio { color: var(--texto); }
+.cnt-resultado { display: flex; align-items: center; gap: 8px; margin: 0 0 12px; padding: 12px 14px; border-radius: var(--radio); color: #fff; font: 700 24px/1 var(--cond); }
+.cnt-resultado svg { width: 22px; height: 22px; }
+.cnt-resultado--G { background: var(--verde); } .cnt-resultado--P { background: var(--rojo); } .cnt-resultado--E { background: #6b7280; }
+.cnt-big { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.cnt-big--3 li:first-child, .cnt-big--1 li { grid-column: 1 / -1; }
+.cnt-otro { margin-top: 12px; }
+.cnt-volver { margin-top: 16px; }
+.cnt-tabs button svg { width: 16px; height: 16px; margin-left: 2px; vertical-align: -3px; }
+@media (max-width: 340px) { .cnt-tabs button { font-size: 14px; } .cnt-t .cnt-b__v { min-width: 26px; font-size: 18px; } }
+.am-dia { font-size: 14.5px; font-weight: 600; color: var(--suave); }
+.eq-nombre-b { margin-top: 20px; }
+@media (min-width: 1024px) { .eq-nombre-b { max-width: 520px; } }
+.foto-eq .ayuda__ok { background: var(--sup); color: var(--texto); border: 1px solid var(--borde-campo); }
+.foto-eq .asis-form__btns .btn { text-decoration: none; }
+#vista[data-pantalla="equipo"] > .aviso { bottom: max(16px, env(safe-area-inset-bottom)); }
+/* el estado y el último cambio se leen de corrido (con su "Deshacer"); en el celular, la barra del equipo en renglones */
+#eq-estado { display: block; line-height: 1.35; }
+#eq-estado svg { display: inline; vertical-align: -3px; margin-right: 4px; }
+@media (max-width: 480px) { .eq-pie { flex-direction: column; align-items: stretch; gap: 8px; } .eq-pie .btn--wa { width: 100%; } }
+
+/* ---------- Partidos: cuarta vuelta ---------- */
+.ent .eq-cond__op.seg--g { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; padding: 0; background: none; border: 0; }
+.eq-cond__op span { border: 1px solid var(--borde-campo); background: var(--sup); }
+.am-dia { margin: -4px 0 0; font-size: 15px; font-weight: 600; color: var(--texto); }
+.asis-form__fila { align-items: start; }
+.eq-deshacer { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; margin: 6px 0 0; padding: 0 14px; font-size: 15px; }
+.eq-deshacer svg { width: 18px; height: 18px; }
+.eq-pie { gap: 12px; }
+.eq-pie .btn[disabled] { opacity: .45; cursor: not-allowed; }
+.eq-siempre-b { display: flex; align-items: center; gap: 10px; text-align: left; min-height: 56px; }
+.eq-siempre-b svg { flex: none; width: 22px; height: 22px; }
+.eq-siempre-b small { display: block; font-size: 14px; font-weight: 500; color: var(--suave); }
+@media (max-width: 360px) { .larga { display: none; } }
+.cnt-p--nuevo { box-shadow: 0 0 0 3px var(--azul); }
+html:has(#vista[data-cnt="1"]) .top { display: none; }
+.eq-jug__nom { overflow-wrap: normal; word-break: normal; hyphens: auto; }
