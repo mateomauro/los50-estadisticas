@@ -1509,3 +1509,9 @@ html:has(#vista[data-pantalla="equipo"]) { scroll-padding-bottom: 150px; }
 .eq-aviso-b__t { flex: 1 1 14em; min-width: 0; }
 .eq-res-borrar { margin-top: 10px; min-height: 44px; color: var(--rojo); }
 @media (max-width: 400px) { .cnt-res-acc svg { display: none; } .cnt-res-acc .btn, .cnt-res-acc .btn-sec { padding: 0 8px; } }
+
+/* ---------- Estadísticas: por torneo ---------- */
+.tor-chips { margin: 4px 0 14px; }
+.tor-chips button { font-size: 15px; }
+.tor-pos { display: flex; align-items: center; gap: 8px; margin: 0 0 12px; font-size: 16px; font-weight: 600; }
+.tor-pos svg { width: 20px; height: 20px; color: var(--azul); }

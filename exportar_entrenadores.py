@@ -79,11 +79,15 @@ def partidos(p, i):
     ht_l = p.mid.map(t1.get("Los 50", pd.Series(dtype=float))).fillna(0)
     ht_r = p.mid.map(t1.get("Rival", pd.Series(dtype=float))).fillna(0)
     completo = p.detalle_los50 & p.detalle_rival
+    # los tries de cada partido (para ver un torneo solo en Estadísticas)
+    tr = i[i.incidencia.isin(["Try", "Try penal"])].groupby(["mid", "equipo"]).size().unstack(fill_value=0)
+    tf = p.mid.map(tr.get("Los 50", pd.Series(dtype=float))).fillna(0)
+    tc = p.mid.map(tr.get("Rival", pd.Series(dtype=float))).fillna(0)
     df = pd.DataFrame({
         "mid": p.mid, "cat": p.categoria, "anio": p.anio, "fecha": p.f.dt.strftime("%Y-%m-%d"), "rival": p.rival, "torneo": p.torneo,
         "cond": p.condicion.str[0], "pf": p.tantos_los50, "pc": p.tantos_rival, "res": p.resultado,
         "et_pf": ht_l.where(completo), "et_pc": ht_r.where(completo),
-        "primero": p.marco_primero.map({"Los 50": "N", "Rival": "R"}), "nivel": p.rival_arriba})
+        "primero": p.marco_primero.map({"Los 50": "N", "Rival": "R"}), "nivel": p.rival_arriba, "tf": tf, "tc": tc})
     return tabla(df.sort_values("fecha", ascending=False))
 
 

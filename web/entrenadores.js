@@ -143,7 +143,7 @@
     $("#actualizado").textContent = D.act;
     $("#candado").hidden = true;
     $("#app").hidden = false;
-    S = { ver: "inicio", cat: null, temp: null, gcat: null, tab: null, q: "", ordenJ: "pj", verJ: false, verP: false, verN: false, verR: false, rol: null, para: null, ej: null, puesto: null, practica: null, pgrupo: null, qp: "", qe: "", abiertos: new Set(),
+    S = { ver: "inicio", cat: null, temp: null, torneoE: null, gcat: null, tab: null, q: "", ordenJ: "pj", verJ: false, verP: false, verN: false, verR: false, rol: null, para: null, ej: null, puesto: null, practica: null, pgrupo: null, qp: "", qe: "", abiertos: new Set(),
       acat: null, afecha: null, aform: null, marcas: null, base: null, aviso: null, estadoLista: null, recien: new Set(), area: null, pcat: null, mcat: null, alcat: null, pedad: null, ncat: null, eqcat: null, eqfecha: null, eqn: null, eqmas: 0, eqfoco: null, tcat: null, ttest: null, tfecha: null, tver: null, tdia: null, dcat: null, ddoc: null, dmarcas: new Set(), chico: null, chcat: null, eqcontar: false, cacc: "tackles", cres: null };
     // al abrir la sección (un link, la dirección escrita o que el navegador completó) arranca en el inicio;
     // al recargar o al volver con "atrás" sigue donde estaba (por ejemplo, en medio de una lista)
@@ -2283,6 +2283,21 @@
   }
 
   // categoría: las 5 preguntas
+  /** el nombre corto de un torneo para el botón: sin el número de la UAR, el año, la categoría ni "Torneo"
+      ("12/2026 Torneo Clasificatorio M16" → "Clasificatorio", "XVI TRP A - Primera" → "Regional Pampeano A") */
+  const SIGLAS_T = new Set(["URMDP", "URBA", "UAR", "MDQ"]), CHICAS_T = new Set(["DE", "DEL", "LA", "LAS", "LOS", "Y", "AL"]);
+  const PAT_T = { Primera: "primera\\b|1ra\\.?(?=\\s|$)", Intermedia: "interme?n?dia\\b|int\\.(?=\\s|$)", "Pre-Intermedia": "pre[\\s-]*intermedia\\b" };
+  const torNom = (t, cat) => {
+    const m = cat.match(/^M(\d+)$/), pat = m ? `M\\s?-?${m[1]}\\b|Menores de ${m[1]}\\b` : PAT_T[cat] || `${cat}\\b`;
+    let x = t.replace(/^\d+\/\d+\s*/, "").replace(/^[IVXLC]+\s+/, "").replace(/\bTRP\b/g, "Regional Pampeano")
+      .replace(new RegExp(`\\s*-?\\s*(?:\\bde\\s+)?(?:${pat})`, "gi"), " ").replace(/\b(19|20)\d{2}\b/g, " ").replace(/\btorneo\s*/gi, " ")
+      // las palabras en mayúsculas, como se escriben ("COPA DE PLATA" → "Copa de Plata"); las siglas quedan
+      .replace(/\b[A-ZÁÉÍÓÚÑ]{2,}\b/g, (w) => (SIGLAS_T.has(w) ? w : CHICAS_T.has(w) ? w.toLowerCase() : w.charAt(0) + w.slice(1).toLowerCase()))
+      .replace(/\s+-\s+/g, " · ").replace(/[\s·-]+$/, "").replace(/^[\s·-]+/, "").replace(/\s+/g, " ").trim();
+    x = x.replace(/\b(Trebol|Reubicacion|Preparacion|Imagenes)\b/g, (w) => ({ Trebol: "Trébol", Reubicacion: "Reubicación", Preparacion: "Preparación", Imagenes: "Imágenes" })[w]);
+    if (!x || /^(Oro|Plata|Bronce|[A-D](-[A-D])?)$/.test(x)) x = x ? `Torneo ${x}` : "Torneo"; // "Torneo Oro", "Torneo B-C"
+    return mayus(x);
+  };
   function vCategoria() {
     const cat = S.cat, filas = filasCat(cat), anios = filas.map((r) => r["Año"]);
     if (!S.temp || !anios.includes(S.temp)) S.temp = ultimaTemp(cat);
@@ -2307,8 +2322,15 @@
       ${tendencia(r["% victorias"] - promGan, 3, fmt(promGan, "%"))}`;
     const titPts = pf == null || pc == null ? "" : `<p class="titular">Hizo <span class="junto"><i class="punto punto--a"></i><b>${fmt(pf, "d")}</b></span> y le hicieron <span class="junto"><i class="punto punto--b"></i><b>${fmt(pc, "d")}</b></span> puntos por partido</p>
       ${tendencia((pf - pc) - (promPF - promPC), 2, `${fmt(promPF, "d")} y ${fmt(promPC, "d")}`)}`;
-    // 3. partidos y rivales
-    const parts = D.partidos.filter((x) => x.cat === cat && x.anio === a), verP = S.verP ? parts : parts.slice(0, 6);
+    // 3. partidos y rivales: los del año o, si se eligió un torneo, solo los de ese torneo
+    const delAnio = D.partidos.filter((x) => x.cat === cat && x.anio === a), torneosA = [...new Set(delAnio.map((x) => x.torneo))].reverse(); // del primero al último
+    if (S.torneoE && !torneosA.includes(S.torneoE)) S.torneoE = null;
+    const tsel = S.torneoE, parts = tsel ? delAnio.filter((x) => x.torneo === tsel) : delAnio, verP = S.verP ? parts : parts.slice(0, 6);
+    // lo que muestra "Cómo le fue": del año (el resumen) o sumado de los partidos del torneo
+    const suma = (k) => parts.reduce((n, x) => n + (+x[k] || 0), 0), cuenta = (v) => parts.filter((x) => x.res === v).length;
+    const rv = tsel ? { PJ: parts.length, G: cuenta("G"), E: cuenta("E"), P: cuenta("P"), pf: suma("pf"), pc: suma("pc"), tf: parts.some((x) => x.tf != null) ? suma("tf") : null, tc: parts.some((x) => x.tc != null) ? suma("tc") : null }
+      : { PJ: r.PJ, G: r.G, E: r.E, P: r.P, pf: r["Puntos a favor"], pc: r["Puntos en contra"], tf: r["Tries a favor"], tc: r["Tries en contra"] };
+    const torSel = tsel && tor.find((t) => t.Torneo === tsel);
     const riv = D.rivales.filter((x) => x["Categoría"] === cat);
     // 4. jugadores
     const jug = D.jug.filter((x) => x.cat === cat && x.anio === a).sort((x, y) => y[S.ordenJ] - x[S.ordenJ] || y.pj - x.pj || x.nombre.localeCompare(y.nombre, "es"));
@@ -2385,18 +2407,20 @@
       </div>
 
       <section class="sec">
-        <div class="tit"><h2 class="h2">Cómo le fue en ${a}</h2><span class="tit__meta num">${pl(r.PJ, "partido", "partidos")}</span></div>
-        ${r.PJ < 5 ? `<p class="tend tend--ojo">Son pocos partidos: los números pueden engañar</p>` : ""}
+        <div class="tit"><h2 class="h2">Cómo le fue en ${a}</h2><span class="tit__meta num">${pl(rv.PJ, "partido", "partidos")}</span></div>
+        ${torneosA.length > 1 ? `<div class="chips-g tor-chips" role="group" aria-label="Torneo"><button type="button" data-torneo="" aria-pressed="${!tsel}">Todo el año</button>${torneosA.map((t) => `<button type="button" data-torneo="${esc(t)}" aria-pressed="${t === tsel}">${esc(torNom(t, cat))}</button>`).join("")}</div>` : ""}
+        ${torSel && pos(torSel) ? `<p class="tor-pos">${IC.trofeo}<span>${pos(torSel)}</span></p>` : ""}
+        ${rv.PJ < 5 ? `<p class="tend tend--ojo">Son pocos partidos: los números pueden engañar</p>` : ""}
         <div class="gep">
-          <div class="gep__c gep--g"><strong class="num">${r.G}</strong><span>${r.G === 1 ? "ganado" : "ganados"}</span></div>
-          <div class="gep__c gep--e"><strong class="num">${r.E}</strong><span>${r.E === 1 ? "empatado" : "empatados"}</span></div>
-          <div class="gep__c gep--p"><strong class="num">${r.P}</strong><span>${r.P === 1 ? "perdido" : "perdidos"}</span></div>
+          <div class="gep__c gep--g"><strong class="num">${rv.G}</strong><span>${rv.G === 1 ? "ganado" : "ganados"}</span></div>
+          <div class="gep__c gep--e"><strong class="num">${rv.E}</strong><span>${rv.E === 1 ? "empatado" : "empatados"}</span></div>
+          <div class="gep__c gep--p"><strong class="num">${rv.P}</strong><span>${rv.P === 1 ? "perdido" : "perdidos"}</span></div>
         </div>
         <div class="duelos">
-          ${duelo("Puntos", r["Puntos a favor"], r["Puntos en contra"])}
-          ${duelo("Tries", r["Tries a favor"], r["Tries en contra"])}
+          ${duelo("Puntos", rv.pf, rv.pc)}
+          ${rv.tf != null && rv.tc != null ? duelo("Tries", rv.tf, rv.tc) : ""}
         </div>
-        ${tor.length ? `<h3 class="grupo">Torneos</h3><ul class="lista">${tor.map((t) => `<li><span class="lista__txt">${esc(t.Torneo.replace(/^\d+\/\d{4}\s*/, ""))}<small class="num">${pl(t.G, "ganado", "ganados")}${t.E ? ` · ${pl(t.E, "empatado", "empatados")}` : ""} · ${pl(t.P, "perdido", "perdidos")}</small></span>${pos(t) ? `<span class="chip">${pos(t)}</span>` : ""}</li>`).join("")}</ul>` : ""}
+        ${tor.length && !tsel ? `<h3 class="grupo">Torneos</h3><ul class="lista">${tor.map((t) => `<li><span class="lista__txt">${esc(t.Torneo.replace(/^\d+\/\d{4}\s*/, ""))}<small class="num">${pl(t.G, "ganado", "ganados")}${t.E ? ` · ${pl(t.E, "empatado", "empatados")}` : ""} · ${pl(t.P, "perdido", "perdidos")}</small></span>${pos(t) ? `<span class="chip">${pos(t)}</span>` : ""}</li>`).join("")}</ul>` : ""}
       </section>
 
       <section class="sec">
@@ -4113,7 +4137,7 @@
   // ---------- eventos ----------
   document.addEventListener("click", (e) => {
     if (!S) return;
-    const t = e.target.closest("[data-atras],[data-subir],[data-alcat],[data-ncat],[data-nota-ok],[data-borrar-nota-ok],[data-reintentar-notas],[data-cs-ok],[data-ir-chico],[data-ir-doc],[data-dmarca],[data-docs-guardar],[data-reintentar-docs],[data-tomar],[data-tver],[data-tdia],[data-toma-guardar],[data-reintentar-tests],[data-edad],[data-area],[data-area-cat],[data-play],[data-reclave],[data-ayuda],[data-cerrar-ayuda],[data-ir],[data-ir-cat],[data-ir-guia],[data-ir-scrum],[data-borrar-qp],[data-ir-ej],[data-ir-ej-para],[data-ir-ej-tab],[data-ir-line],[data-ir-puesto],[data-ir-practica],[data-ir-practicas],[data-pgrupo],[data-ir-asis],[data-ir-hoy],[data-ir-lista],[data-ir-chicos],[data-form],[data-reintentar],[data-motivo],[data-dia],[data-marca],[data-amodo],[data-junta],[data-todos],[data-guardar-vacia],[data-seguir-lista],[data-cerrar-aviso],[data-cancelar-ok],[data-deshacer],[data-hora-ok],[data-agregar-ok],[data-horarios-ok],[data-guardar-lista],[data-borrar-lista-ok],[data-sacar],[data-sigue],[data-volver-chico],[data-sumar-chico],[data-compartir-pr],[data-rol],[data-quitar-para],[data-tab],[data-anio],[data-ver],[data-ordj]");
+    const t = e.target.closest("[data-atras],[data-subir],[data-alcat],[data-ncat],[data-nota-ok],[data-borrar-nota-ok],[data-reintentar-notas],[data-cs-ok],[data-ir-chico],[data-ir-doc],[data-dmarca],[data-docs-guardar],[data-reintentar-docs],[data-tomar],[data-tver],[data-tdia],[data-toma-guardar],[data-reintentar-tests],[data-edad],[data-area],[data-area-cat],[data-play],[data-reclave],[data-ayuda],[data-cerrar-ayuda],[data-ir],[data-ir-cat],[data-ir-guia],[data-ir-scrum],[data-borrar-qp],[data-ir-ej],[data-ir-ej-para],[data-ir-ej-tab],[data-ir-line],[data-ir-puesto],[data-ir-practica],[data-ir-practicas],[data-pgrupo],[data-ir-asis],[data-ir-hoy],[data-ir-lista],[data-ir-chicos],[data-form],[data-reintentar],[data-motivo],[data-dia],[data-marca],[data-amodo],[data-junta],[data-todos],[data-guardar-vacia],[data-seguir-lista],[data-cerrar-aviso],[data-cancelar-ok],[data-deshacer],[data-hora-ok],[data-agregar-ok],[data-horarios-ok],[data-guardar-lista],[data-borrar-lista-ok],[data-sacar],[data-sigue],[data-volver-chico],[data-sumar-chico],[data-compartir-pr],[data-rol],[data-quitar-para],[data-tab],[data-anio],[data-torneo],[data-ver],[data-ordj]");
     if (!t || t.disabled) return;
     if (t.tagName === "A") e.preventDefault(); // el escudo de arriba: va al inicio sin recargar
     const ds = t.dataset, ir = "lado" in ds ? irSinPaso : irA; // Anterior / Siguiente no suman pasos
@@ -4325,10 +4349,11 @@
     else if ("compartirPr" in ds) compartirPractica();
     else if ("rol" in ds) irA({ rol: ds.rol || null }, false);
     else if ("quitarPara" in ds) irA({ para: null }, false);
-    else if (ds.irCat) irA({ ver: "cat", cat: ds.irCat, temp: null, verJ: false, verP: false, verN: false, verR: false });
+    else if (ds.irCat) irA({ ver: "cat", cat: ds.irCat, temp: null, torneoE: null, verJ: false, verP: false, verN: false, verR: false });
     else if (ds.irGuia) ir({ ver: "guia", gcat: ds.irGuia, cat: null, temp: null });
     else if (ds.tab) { irA({ tab: ds.tab, rol: null, para: S.ver === "scrum" ? S.para : null }, false); $(`[data-tab="${ds.tab}"]`).focus(); }
-    else if (ds.anio) irA({ temp: +ds.anio, verJ: false, verP: false, verN: false, verR: false }, false);
+    else if (ds.anio) irA({ temp: +ds.anio, torneoE: null, verJ: false, verP: false, verN: false, verR: false }, false);
+    else if ("torneo" in ds) { S.torneoE = ds.torneo || null; S.verP = false; render(); const b = $(`[data-torneo="${CSS.escape(ds.torneo)}"]`); if (b) b.focus({ preventScroll: true }); }
     else if (ds.ver) { S["ver" + ds.ver] = !S["ver" + ds.ver]; render(); }
     else if (ds.ordj) { S.ordenJ = ds.ordj; render(); }
   });
